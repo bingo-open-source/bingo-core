@@ -158,7 +158,7 @@ public abstract class Assert {
 	public static void notNull(Object object) {
 		notNull(object, "[Assertion failed] - this argument is required; it must not be null");
 	}
-
+	
 	/**
 	 * Assert that the given String is not empty; that is, it must not be <code>null</code> and not the empty String.
 	 * 
