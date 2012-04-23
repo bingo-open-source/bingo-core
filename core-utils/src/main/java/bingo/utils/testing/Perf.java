@@ -37,7 +37,7 @@ public final class Perf {
     	
     	sw.stop();
     	
-    	System.out.println(Strings.format("[{0}] -> duration : {1}",test,DurationFormatter.formatHMS(sw.getDuration())));
+    	System.out.println(Strings.format("[{0}] -> duration : {1}",test,DurationFormatter.formatHMS(sw.getElapsedMilliseconds())));
     }	
 
     public static void run(String test,Action action,int times){
@@ -50,6 +50,6 @@ public final class Perf {
     	
     	sw.stop();
     	
-    	System.out.println(Strings.format("[{0}] -> run {1} times, duration : {2}", test,times,DurationFormatter.formatHMS(sw.getDuration())));
+    	System.out.println(Strings.format("[{0}] -> run {1} times, duration : {2}", test,times,DurationFormatter.formatHMS(sw.getElapsedMilliseconds())));
     }
 }

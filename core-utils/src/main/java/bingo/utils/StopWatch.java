@@ -33,7 +33,7 @@ package bingo.utils;
  * </ul>
  * 
  * <p>
- * It is intended that the output methods {@link #toString()} and {@link #getDuration()} should only be called after stop,
+ * It is intended that the output methods {@link #toString()} and {@link #getElapsedMilliseconds()} should only be called after stop,
  * split or suspend, however a suitable result will be returned at other points.
  * </p>
  * 
@@ -207,7 +207,7 @@ public class StopWatch {
 
 	/**
 	 * <p>
-	 * Get the time on the stopwatch.
+	 * Get the milliseconds time on the stopwatch.
 	 * </p>
 	 * 
 	 * <p>
@@ -217,8 +217,8 @@ public class StopWatch {
 	 * 
 	 * @return the time in milliseconds
 	 */
-	public long getDuration() {
-		return getDurationNano() / NANO_2_MILLIS;
+	public long getElapsedMilliseconds() {
+		return getElapsedNanoseconds() / NANO_2_MILLIS;
 	}
 
 	/**
@@ -233,7 +233,7 @@ public class StopWatch {
 	 * 
 	 * @return the time in nanoseconds
 	 */
-	public long getDurationNano() {
+	public long getElapsedNanoseconds() {
 		if (this.state == STATE_STOPPED || this.state == STATE_SUSPENDED) {
 			return this.stopTime - this.startTime;
 		} else if (this.state == STATE_UNSTARTED) {
@@ -269,6 +269,6 @@ public class StopWatch {
 	 */
 	@Override
 	public String toString() {
-		return getDuration() + "ms";
+		return getElapsedMilliseconds() + "ms";
 	}
 }
