@@ -342,91 +342,91 @@ public class StringsTest extends TestCase {
 	@Test
 	public void testRemoveStart() {
 		// Strings.removeStart("", *)        = ""
-		assertEquals("", Strings.removeStartsWith(null, null));
-		assertEquals("", Strings.removeStartsWith(null, ""));
-		assertEquals("", Strings.removeStartsWith(null, "a"));
+		assertEquals("", Strings.removeStart(null, null));
+		assertEquals("", Strings.removeStart(null, ""));
+		assertEquals("", Strings.removeStart(null, "a"));
 
 		// Strings.removeStartsWith(*, null)      = *
-		assertEquals(Strings.removeStartsWith("", null), "");
-		assertEquals(Strings.removeStartsWith("", ""), "");
-		assertEquals(Strings.removeStartsWith("", "a"), "");
+		assertEquals(Strings.removeStart("", null), "");
+		assertEquals(Strings.removeStart("", ""), "");
+		assertEquals(Strings.removeStart("", "a"), "");
 
 		// All others:
-		assertEquals(Strings.removeStartsWith("www.domain.com", "www."), "domain.com");
-		assertEquals(Strings.removeStartsWith("domain.com", "www."), "domain.com");
-		assertEquals(Strings.removeStartsWith("domain.com", ""), "domain.com");
-		assertEquals(Strings.removeStartsWith("domain.com", null), "domain.com");
+		assertEquals(Strings.removeStart("www.domain.com", "www."), "domain.com");
+		assertEquals(Strings.removeStart("domain.com", "www."), "domain.com");
+		assertEquals(Strings.removeStart("domain.com", ""), "domain.com");
+		assertEquals(Strings.removeStart("domain.com", null), "domain.com");
 	}
 
 	@Test
 	public void testremoveStartsWithIgnoreCase() {
 		// Strings.removeStartsWith("", *)        = ""
-		assertEquals("", Strings.removeStartsWithIgnoreCase(null, null));
-		assertEquals("", Strings.removeStartsWithIgnoreCase(null, ""));
-		assertEquals("", Strings.removeStartsWithIgnoreCase(null, "a"));
+		assertEquals("", Strings.removeStartIgnoreCase(null, null));
+		assertEquals("", Strings.removeStartIgnoreCase(null, ""));
+		assertEquals("", Strings.removeStartIgnoreCase(null, "a"));
 
 		// Strings.removeStartsWith(*, null)      = *
-		assertEquals("removeStartsWithIgnoreCase(\"\", null)", Strings.removeStartsWithIgnoreCase("", null), "");
-		assertEquals("removeStartsWithIgnoreCase(\"\", \"\")", Strings.removeStartsWithIgnoreCase("", ""), "");
-		assertEquals("removeStartsWithIgnoreCase(\"\", \"a\")", Strings.removeStartsWithIgnoreCase("", "a"), "");
+		assertEquals("removeStartsWithIgnoreCase(\"\", null)", Strings.removeStartIgnoreCase("", null), "");
+		assertEquals("removeStartsWithIgnoreCase(\"\", \"\")", Strings.removeStartIgnoreCase("", ""), "");
+		assertEquals("removeStartsWithIgnoreCase(\"\", \"a\")", Strings.removeStartIgnoreCase("", "a"), "");
 
 		// All others:
-		assertEquals("removeStartsWithIgnoreCase(\"www.domain.com\", \"www.\")", Strings.removeStartsWithIgnoreCase("www.domain.com", "www."),
+		assertEquals("removeStartsWithIgnoreCase(\"www.domain.com\", \"www.\")", Strings.removeStartIgnoreCase("www.domain.com", "www."),
 		        "domain.com");
-		assertEquals("removeStartsWithIgnoreCase(\"domain.com\", \"www.\")", Strings.removeStartsWithIgnoreCase("domain.com", "www."), "domain.com");
-		assertEquals("removeStartsWithIgnoreCase(\"domain.com\", \"\")", Strings.removeStartsWithIgnoreCase("domain.com", ""), "domain.com");
-		assertEquals("removeStartsWithIgnoreCase(\"domain.com\", null)", Strings.removeStartsWithIgnoreCase("domain.com", null), "domain.com");
+		assertEquals("removeStartsWithIgnoreCase(\"domain.com\", \"www.\")", Strings.removeStartIgnoreCase("domain.com", "www."), "domain.com");
+		assertEquals("removeStartsWithIgnoreCase(\"domain.com\", \"\")", Strings.removeStartIgnoreCase("domain.com", ""), "domain.com");
+		assertEquals("removeStartsWithIgnoreCase(\"domain.com\", null)", Strings.removeStartIgnoreCase("domain.com", null), "domain.com");
 
 		// Case insensitive:
-		assertEquals("removeStartsWithIgnoreCase(\"www.domain.com\", \"WWW.\")", Strings.removeStartsWithIgnoreCase("www.domain.com", "WWW."),
+		assertEquals("removeStartsWithIgnoreCase(\"www.domain.com\", \"WWW.\")", Strings.removeStartIgnoreCase("www.domain.com", "WWW."),
 		        "domain.com");
 	}
 
 	@Test
 	public void testRemoveEnd() {
 		// Strings.removeEnd("", *)        = ""
-		assertEquals("", Strings.removeEndsWith(null, null));
-		assertEquals("", Strings.removeEndsWith(null, ""));
-		assertEquals("", Strings.removeEndsWith(null, "a"));
+		assertEquals("", Strings.removeEnd(null, null));
+		assertEquals("", Strings.removeEnd(null, ""));
+		assertEquals("", Strings.removeEnd(null, "a"));
 
 		// Strings.removeEndsWith(*, null)      = *
-		assertEquals(Strings.removeEndsWith("", null), "");
-		assertEquals(Strings.removeEndsWith("", ""), "");
-		assertEquals(Strings.removeEndsWith("", "a"), "");
+		assertEquals(Strings.removeEnd("", null), "");
+		assertEquals(Strings.removeEnd("", ""), "");
+		assertEquals(Strings.removeEnd("", "a"), "");
 
 		// All others:
-		assertEquals(Strings.removeEndsWith("www.domain.com.", ".com"), "www.domain.com.");
-		assertEquals(Strings.removeEndsWith("www.domain.com", ".com"), "www.domain");
-		assertEquals(Strings.removeEndsWith("www.domain", ".com"), "www.domain");
-		assertEquals(Strings.removeEndsWith("domain.com", ""), "domain.com");
-		assertEquals(Strings.removeEndsWith("domain.com", null), "domain.com");
+		assertEquals(Strings.removeEnd("www.domain.com.", ".com"), "www.domain.com.");
+		assertEquals(Strings.removeEnd("www.domain.com", ".com"), "www.domain");
+		assertEquals(Strings.removeEnd("www.domain", ".com"), "www.domain");
+		assertEquals(Strings.removeEnd("domain.com", ""), "domain.com");
+		assertEquals(Strings.removeEnd("domain.com", null), "domain.com");
 	}
 
 	@Test
 	public void testremoveEndsWithIgnoreCase() {
 		// Strings.removeEndsWithIgnoreCase("", *)        = ""
-		assertEquals("", Strings.removeEndsWithIgnoreCase(null, null));
-		assertEquals("", Strings.removeEndsWithIgnoreCase(null, ""));
-		assertEquals("", Strings.removeEndsWithIgnoreCase(null, "a"));
+		assertEquals("", Strings.removeEndIgnoreCase(null, null));
+		assertEquals("", Strings.removeEndIgnoreCase(null, ""));
+		assertEquals("", Strings.removeEndIgnoreCase(null, "a"));
 
 		// Strings.removeEndsWith(*, null)      = *
-		assertEquals("removeEndsWithIgnoreCase(\"\", null)", Strings.removeEndsWithIgnoreCase("", null), "");
-		assertEquals("removeEndsWithIgnoreCase(\"\", \"\")", Strings.removeEndsWithIgnoreCase("", ""), "");
-		assertEquals("removeEndsWithIgnoreCase(\"\", \"a\")", Strings.removeEndsWithIgnoreCase("", "a"), "");
+		assertEquals("removeEndsWithIgnoreCase(\"\", null)", Strings.removeEndIgnoreCase("", null), "");
+		assertEquals("removeEndsWithIgnoreCase(\"\", \"\")", Strings.removeEndIgnoreCase("", ""), "");
+		assertEquals("removeEndsWithIgnoreCase(\"\", \"a\")", Strings.removeEndIgnoreCase("", "a"), "");
 
 		// All others:
-		assertEquals("removeEndsWithIgnoreCase(\"www.domain.com.\", \".com\")", Strings.removeEndsWithIgnoreCase("www.domain.com.", ".com"),
+		assertEquals("removeEndsWithIgnoreCase(\"www.domain.com.\", \".com\")", Strings.removeEndIgnoreCase("www.domain.com.", ".com"),
 		        "www.domain.com.");
-		assertEquals("removeEndsWithIgnoreCase(\"www.domain.com\", \".com\")", Strings.removeEndsWithIgnoreCase("www.domain.com", ".com"),
+		assertEquals("removeEndsWithIgnoreCase(\"www.domain.com\", \".com\")", Strings.removeEndIgnoreCase("www.domain.com", ".com"),
 		        "www.domain");
-		assertEquals("removeEndsWithIgnoreCase(\"www.domain\", \".com\")", Strings.removeEndsWithIgnoreCase("www.domain", ".com"), "www.domain");
-		assertEquals("removeEndsWithIgnoreCase(\"domain.com\", \"\")", Strings.removeEndsWithIgnoreCase("domain.com", ""), "domain.com");
-		assertEquals("removeEndsWithIgnoreCase(\"domain.com\", null)", Strings.removeEndsWithIgnoreCase("domain.com", null), "domain.com");
+		assertEquals("removeEndsWithIgnoreCase(\"www.domain\", \".com\")", Strings.removeEndIgnoreCase("www.domain", ".com"), "www.domain");
+		assertEquals("removeEndsWithIgnoreCase(\"domain.com\", \"\")", Strings.removeEndIgnoreCase("domain.com", ""), "domain.com");
+		assertEquals("removeEndsWithIgnoreCase(\"domain.com\", null)", Strings.removeEndIgnoreCase("domain.com", null), "domain.com");
 
 		// Case insensitive:
-		assertEquals("removeEndsWithIgnoreCase(\"www.domain.com\", \".COM\")", Strings.removeEndsWithIgnoreCase("www.domain.com", ".COM"),
+		assertEquals("removeEndsWithIgnoreCase(\"www.domain.com\", \".COM\")", Strings.removeEndIgnoreCase("www.domain.com", ".COM"),
 		        "www.domain");
-		assertEquals("removeEndsWithIgnoreCase(\"www.domain.COM\", \".com\")", Strings.removeEndsWithIgnoreCase("www.domain.COM", ".com"),
+		assertEquals("removeEndsWithIgnoreCase(\"www.domain.COM\", \".com\")", Strings.removeEndIgnoreCase("www.domain.COM", ".com"),
 		        "www.domain");
 	}
 

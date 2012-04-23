@@ -27,8 +27,9 @@ import org.junit.Test;
  */
 public class ToStringStyleTest {
 
+    @SuppressWarnings("serial")
     private static class ToStringStyleImpl extends ToStringStyle {
-        private static final long serialVersionUID = -7090629699640865986L;
+
     }
 
     //-----------------------------------------------------------------------

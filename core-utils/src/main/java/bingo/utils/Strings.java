@@ -90,10 +90,10 @@ public class Strings {
 	 * @return formated string , empty("") if null input.
 	 */
 	public static String format(String template, Object... args) {
-		if(isEmpty(template)){
+		if (isEmpty(template)) {
 			return EMPTY;
 		}
-		
+
 		char[] templateChars = template.toCharArray();
 
 		int templateLength = templateChars.length;
@@ -289,8 +289,8 @@ public class Strings {
 	//-----------------------------------------------------------------------
 	/**
 	 * <p>
-	 * Removes whitespace charactersfrom both ends of this String returning an empty String ("") if the String is empty
-	 * ("") after the trim or if it is {@code null}.
+	 * Removes control characters (char &lt;= 32) from both ends of this String returning an empty String ("") if the
+	 * String is empty ("") after the trim or if it is {@code null}.
 	 * 
 	 * <pre>
 	 * Strings.trim(null)          = ""
@@ -309,7 +309,151 @@ public class Strings {
 
 	/**
 	 * <p>
-	 * Removes whitespace characters from both ends of this String, handling {@code null} by returning {@code null}.
+	 * Removes any of a set of characters from the start and end of a String. This is similar to {@link String#trim()}
+	 * but allows the characters to be trimmed to be controlled.
+	 * </p>
+	 * 
+	 * <p>
+	 * A {@code null} input String returns "". An empty string ("") input returns the empty string.
+	 * </p>
+	 * 
+	 * <p>
+	 * If the trimChars String is {@code null}, whitespace is trimmed as defined by
+	 * {@link Character#isWhitespace(char)}. Alternatively use {@link #trim(String)}.
+	 * </p>
+	 * 
+	 * <pre>
+	 * Strings.trim(null, *)          = ""
+	 * Strings.trim("", *)            = ""
+	 * Strings.trim("abc", null)      = "abc"
+	 * Strings.trim("  abc", null)    = "abc"
+	 * Strings.trim("abc  ", null)    = "abc"
+	 * Strings.trim(" abc ", null)    = "abc"
+	 * Strings.trim("  abcyx", "xyz") = "  abc"
+	 * </pre>
+	 * 
+	 * @param str the String to remove characters from, may be null
+	 * @param trimChars the characters to remove, null treated as whitespace
+	 * @return the trimmed String, "" if null String input
+	 */
+	public static String trim(String str, char... trimChars) {
+		if(null == trimChars){
+			return trim(str);
+		}
+		
+		if (isEmpty(str)) {
+			return EMPTY;
+		}
+		
+		str = trimStart(str, trimChars);
+		return trimEnd(str, trimChars);
+	}
+
+	/**
+	 * <p>
+	 * Trims any of a set of characters from the start of a String.
+	 * </p>
+	 * 
+	 * <p>
+	 * A {@code null} input String returns "". An empty string ("") input returns the empty string.
+	 * </p>
+	 * 
+	 * <p>
+	 * If the trimChars String is {@code null}, whitespace is trimmed as defined by
+	 * {@link Character#isWhitespace(char)}.
+	 * </p>
+	 * 
+	 * <pre>
+	 * Strings.trimStart(null, *)          = ""
+	 * Strings.trimStart("", *)            = ""
+	 * Strings.trimStart("abc", "")        = "abc"
+	 * Strings.trimStart("abc", null)      = "abc"
+	 * Strings.trimStart("  abc", null)    = "abc"
+	 * Strings.trimStart("abc  ", null)    = "abc  "
+	 * Strings.trimStart(" abc ", null)    = "abc "
+	 * Strings.trimStart("yxabc  ", "xyz") = "abc  "
+	 * </pre>
+	 * 
+	 * @param str the String to remove characters from, may be null
+	 * @param trimChars the characters to remove, null treated as whitespace
+	 * @return the trimmed String, "" if null String input
+	 */
+	public static String trimStart(String str, char... trimChars) {
+		int strLen;
+		
+		if (str == null || (strLen = str.length()) == 0) {
+			return EMPTY;
+		}
+		
+		int start = 0;
+		if (trimChars == null) {
+			while (start != strLen && Character.isWhitespace(str.charAt(start))) {
+				start++;
+			}
+		} else if (trimChars.length == 0) {
+			return str;
+		} else {
+			while (start != strLen && Arrays.indexOf(trimChars, str.charAt(start)) != INDEX_NOT_FOUND) {
+				start++;
+			}
+		}
+		return str.substring(start);
+	}
+
+	/**
+	 * <p>
+	 * Removes any of a set of characters from the end of a String.
+	 * </p>
+	 * 
+	 * <p>
+	 * A {@code null} input String returns "". An empty string ("") input returns the empty string.
+	 * </p>
+	 * 
+	 * <p>
+	 * If the trimChars String is {@code null}, whitespace is trimmed as defined by
+	 * {@link Character#isWhitespace(char)}.
+	 * </p>
+	 * 
+	 * <pre>
+	 * Strings.trimEnd(null, *)          = ""
+	 * Strings.trimEnd("", *)            = ""
+	 * Strings.trimEnd("abc", "")        = "abc"
+	 * Strings.trimEnd("abc", null)      = "abc"
+	 * Strings.trimEnd("  abc", null)    = "  abc"
+	 * Strings.trimEnd("abc  ", null)    = "abc"
+	 * Strings.trimEnd(" abc ", null)    = " abc"
+	 * Strings.trimEnd("  abcyx", "xyz") = "  abc"
+	 * Strings.trimEnd("120.00", ".0")   = "12"
+	 * </pre>
+	 * 
+	 * @param str the String to remove characters from, may be null
+	 * @param trimChars the set of characters to remove, null treated as whitespace
+	 * @return the trimmed String, "" if null String input
+	 */
+	public static String trimEnd(String str, char... trimChars) {
+		int end;
+		if (str == null || (end = str.length()) == 0) {
+			return EMPTY;
+		}
+
+		if (trimChars == null) {
+			while (end != 0 && Character.isWhitespace(str.charAt(end - 1))) {
+				end--;
+			}
+		} else if (trimChars.length == 0) {
+			return str;
+		} else {
+			while (end != 0 && Arrays.indexOf(trimChars, str.charAt(end - 1)) != INDEX_NOT_FOUND) {
+				end--;
+			}
+		}
+		return str.substring(0, end);
+	}
+
+	/**
+	 * <p>
+	 * Removes control characters (char &lt;= 32) from both ends of this String, handling {@code null} by returning
+	 * {@code null}.
 	 * </p>
 	 * 
 	 * <pre>
@@ -330,12 +474,11 @@ public class Strings {
 
 	/**
 	 * <p>
-	 * Removes whitespace characters from both ends of this String returning {@code null} if the String is empty ("")
-	 * after the trim or if it is {@code null}.
+	 * Removes control characters (char &lt;= 32) from both ends of this String returning {@code null} if the String is
+	 * empty ("") after the trim or if it is {@code null}.
 	 * 
 	 * <p>
-	 * The String is trimmed using {@link String#trim()}. Trim removes start and end characters &lt;= 32. To strip
-	 * whitespace use {@link #stripToNull(String)}.
+	 * The String is trimmed using {@link String#trim()}. Trim removes start and end characters &lt;= 32.
 	 * </p>
 	 * 
 	 * <pre>
@@ -386,7 +529,7 @@ public class Strings {
 	public static boolean equals(String string1, String string2) {
 		return string1 == null ? string2 == null : string1.equals(string2);
 	}
-	
+
 	/**
 	 * <p>
 	 * Compares two CharSequences, returning {@code true} if they are equal.
@@ -415,7 +558,7 @@ public class Strings {
 	 * 
 	 * @return {@code true} if the CharSequences are equal, or both {@code null}
 	 */
-	public static boolean equals(String string1, String string2,boolean ignoreCase) {
+	public static boolean equals(String string1, String string2, boolean ignoreCase) {
 		return string1 == null ? string2 == null : (ignoreCase ? string1.equalsIgnoreCase(string2) : string1.equals(string2));
 	}
 
@@ -2402,13 +2545,13 @@ public class Strings {
 	 * </p>
 	 * 
 	 * <pre>
-	 * Strings.removeStartsWith(null, *)      			   = ""
-	 * Strings.removeStartsWith("", *)        			   = ""
-	 * Strings.removeStartsWith(*, null)      			   = *
-	 * Strings.removeStartsWith("www.domain.com", "www.")   = "domain.com"
-	 * Strings.removeStartsWith("domain.com", "www.")       = "domain.com"
-	 * Strings.removeStartsWith("www.domain.com", "domain") = "www.domain.com"
-	 * Strings.removeStartsWith("abc", "")    			   = "abc"
+	 * Strings.removeStart(null, *)      			   = ""
+	 * Strings.removeStart("", *)        			   = ""
+	 * Strings.removeStart(*, null)      			   = *
+	 * Strings.removeStart("www.domain.com", "www.")   = "domain.com"
+	 * Strings.removeStart("domain.com", "www.")       = "domain.com"
+	 * Strings.removeStart("www.domain.com", "domain") = "www.domain.com"
+	 * Strings.removeStart("abc", "")    			   = "abc"
 	 * </pre>
 	 * 
 	 * @param string the source String to search, may be null
@@ -2417,7 +2560,7 @@ public class Strings {
 	 * 
 	 * @return the substring with the string removed if found, "" if null String input
 	 */
-	public static String removeStartsWith(String string, String remove) {
+	public static String removeStart(String string, String remove) {
 		if (isEmpty(string)) {
 			return EMPTY;
 		}
@@ -2445,14 +2588,14 @@ public class Strings {
 	 * </p>
 	 * 
 	 * <pre>
-	 * Strings.removeStartsWithIgnoreCase(null, *)      				 = ""
-	 * Strings.removeStartsWithIgnoreCase("", *)        				 = ""
-	 * Strings.removeStartsWithIgnoreCase(*, null)      				 = *
-	 * Strings.removeStartsWithIgnoreCase("www.domain.com", "www.")   = "domain.com"
-	 * Strings.removeStartsWithIgnoreCase("www.domain.com", "WWW.")   = "domain.com"
-	 * Strings.removeStartsWithIgnoreCase("domain.com", "www.")       = "domain.com"
-	 * Strings.removeStartsWithIgnoreCase("www.domain.com", "domain") = "www.domain.com"
-	 * Strings.removeStartsWithIgnoreCase("abc", "")    				 = "abc"
+	 * Strings.removeStartIgnoreCase(null, *)      				 = ""
+	 * Strings.removeStartIgnoreCase("", *)        				 = ""
+	 * Strings.removeStartIgnoreCase(*, null)      				 = *
+	 * Strings.removeStartIgnoreCase("www.domain.com", "www.")   = "domain.com"
+	 * Strings.removeStartIgnoreCase("www.domain.com", "WWW.")   = "domain.com"
+	 * Strings.removeStartIgnoreCase("domain.com", "www.")       = "domain.com"
+	 * Strings.removeStartIgnoreCase("www.domain.com", "domain") = "www.domain.com"
+	 * Strings.removeStartIgnoreCase("abc", "")    				 = "abc"
 	 * </pre>
 	 * 
 	 * @param string the source String to search, may be null
@@ -2461,7 +2604,7 @@ public class Strings {
 	 * 
 	 * @return the substring with the string removed if found, "" if null String input
 	 */
-	public static String removeStartsWithIgnoreCase(String string, String remove) {
+	public static String removeStartIgnoreCase(String string, String remove) {
 		if (isEmpty(string)) {
 			return EMPTY;
 		}
@@ -2485,13 +2628,13 @@ public class Strings {
 	 * </p>
 	 * 
 	 * <pre>
-	 * Strings.removeEndsWith(null, *)      = ""
-	 * Strings.removeEndsWith("", *)        = ""
-	 * Strings.removeEndsWith(*, null)      = *
-	 * Strings.removeEndsWith("www.domain.com", ".com.")  = "www.domain.com"
-	 * Strings.removeEndsWith("www.domain.com", ".com")   = "www.domain"
-	 * Strings.removeEndsWith("www.domain.com", "domain") = "www.domain.com"
-	 * Strings.removeEndsWith("abc", "")    = "abc"
+	 * Strings.removeEnd(null, *)      = ""
+	 * Strings.removeEnd("", *)        = ""
+	 * Strings.removeEnd(*, null)      = *
+	 * Strings.removeEnd("www.domain.com", ".com.")  = "www.domain.com"
+	 * Strings.removeEnd("www.domain.com", ".com")   = "www.domain"
+	 * Strings.removeEnd("www.domain.com", "domain") = "www.domain.com"
+	 * Strings.removeEnd("abc", "")    = "abc"
 	 * </pre>
 	 * 
 	 * @param string the source String to search, may be null
@@ -2500,7 +2643,7 @@ public class Strings {
 	 * 
 	 * @return the substring with the string removed if found, "" if null String input
 	 */
-	public static String removeEndsWith(String string, String remove) {
+	public static String removeEnd(String string, String remove) {
 		if (isEmpty(string)) {
 			return EMPTY;
 		}
@@ -2528,15 +2671,15 @@ public class Strings {
 	 * </p>
 	 * 
 	 * <pre>
-	 * Strings.removeEndsWithIgnoreCase(null, *)      = ""
-	 * Strings.removeEndsWithIgnoreCase("", *)        = ""
-	 * Strings.removeEndsWithIgnoreCase(*, null)      = *
-	 * Strings.removeEndsWithIgnoreCase("www.domain.com", ".com.")  = "www.domain.com"
-	 * Strings.removeEndsWithIgnoreCase("www.domain.com", ".com")   = "www.domain"
-	 * Strings.removeEndsWithIgnoreCase("www.domain.com", "domain") = "www.domain.com"
-	 * Strings.removeEndsWithIgnoreCase("abc", "")    = "abc"
-	 * Strings.removeEndsWithIgnoreCase("www.domain.com", ".COM") = "www.domain")
-	 * Strings.removeEndsWithIgnoreCase("www.domain.COM", ".com") = "www.domain")
+	 * Strings.removeEndIgnoreCase(null, *)      = ""
+	 * Strings.removeEndIgnoreCase("", *)        = ""
+	 * Strings.removeEndIgnoreCase(*, null)      = *
+	 * Strings.removeEndIgnoreCase("www.domain.com", ".com.")  = "www.domain.com"
+	 * Strings.removeEndIgnoreCase("www.domain.com", ".com")   = "www.domain"
+	 * Strings.removeEndIgnoreCase("www.domain.com", "domain") = "www.domain.com"
+	 * Strings.removeEndIgnoreCase("abc", "")    = "abc"
+	 * Strings.removeEndIgnoreCase("www.domain.com", ".COM") = "www.domain")
+	 * Strings.removeEndIgnoreCase("www.domain.COM", ".com") = "www.domain")
 	 * </pre>
 	 * 
 	 * @param str the source String to search, may be null
@@ -2545,7 +2688,7 @@ public class Strings {
 	 * 
 	 * @return the substring with the string removed if found, "" if null String input
 	 */
-	public static String removeEndsWithIgnoreCase(String str, String remove) {
+	public static String removeEndIgnoreCase(String str, String remove) {
 		if (isEmpty(str)) {
 			return EMPTY;
 		}
@@ -2655,7 +2798,7 @@ public class Strings {
 		} else {
 			// given that repeat(String, int) is quite optimized, better to rely on it than try and splice this into it
 			String result = repeat(repeat + separator, length);
-			return removeEndsWith(result, separator);
+			return removeEnd(result, separator);
 		}
 	}
 
