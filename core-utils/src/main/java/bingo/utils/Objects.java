@@ -43,7 +43,7 @@ public class Objects {
 	 * </p>
 	 * 
 	 * <pre>
-	 * ObjectUtils.equals(null, null)                  = true
+	 * Objects.equals(null, null)                  = true
 	 * Objects.equals(null, "")                    = false
 	 * Objects.equals("", null)                    = false
 	 * Objects.equals("", "")                      = true
