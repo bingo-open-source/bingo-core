@@ -411,12 +411,12 @@ public class Strings {
 	 * 
 	 * @param string2 the second CharSequence, may be null
 	 * 
-	 * @param caseSensitive is the compare case sensitive
+	 * @param ignoreCase is the compare ignore case
 	 * 
 	 * @return {@code true} if the CharSequences are equal, or both {@code null}
 	 */
-	public static boolean equals(String string1, String string2,boolean caseSensitive) {
-		return string1 == null ? string2 == null : (caseSensitive ? string1.equals(string2) : string1.equalsIgnoreCase(string2));
+	public static boolean equals(String string1, String string2,boolean ignoreCase) {
+		return string1 == null ? string2 == null : (ignoreCase ? string1.equalsIgnoreCase(string2) : string1.equals(string2));
 	}
 
 	/**
