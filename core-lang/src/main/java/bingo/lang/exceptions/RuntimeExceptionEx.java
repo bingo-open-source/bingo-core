@@ -15,33 +15,47 @@
  */
 package bingo.lang.exceptions;
 
+import bingo.lang.Strings;
+
 /**
+ * <p>
+ * Extends {@link RuntimeException} to allow {@link Strings#format(String, Object...)} in constructor.
+ * </p>
+ *
+ * <pre>
+ * Examples:
  * 
+ * throw new RuntimeExceptionEx("the argument '{0}' could not be empty","name");
+ * throw new RuntimeExceptionEx(cause,"the argument '{0}' could not be empty","name");
+ * </pre>
  *
  * @author fenghm (fenghm@bingosoft.net)
  */
 public class RuntimeExceptionEx extends RuntimeException {
 
     private static final long serialVersionUID = -288751546316286455L;
-
+    
 	public RuntimeExceptionEx() {
-
+		super();
 	}
 
 	public RuntimeExceptionEx(String message) {
 		super(message);
 	}
 	
-	public RuntimeExceptionEx(String message,Object... args) {
-		
-	}
-
-	public RuntimeExceptionEx(Throwable cause) {
-		super(cause);
-	}
-
 	public RuntimeExceptionEx(String message, Throwable cause) {
 		super(message, cause);
 	}
-
+	
+	public RuntimeExceptionEx(String message,Object... args) {
+		super(Strings.format(message, args));
+	}
+	
+	public RuntimeExceptionEx(Throwable cause) {
+		super(cause);
+	}
+	
+	public RuntimeExceptionEx(Throwable cause,String message,Object... args) {
+		super(Strings.format(message, args),cause);
+	}
 }
