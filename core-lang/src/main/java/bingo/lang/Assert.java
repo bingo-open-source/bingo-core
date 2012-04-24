@@ -492,4 +492,94 @@ public abstract class Assert {
 	public static void stateValid(boolean expression) {
 		stateValid(expression, "[Assertion failed] - this state invariant must be true");
 	}
+	
+	/**
+	 * Assert that an argument value is not <code>null</code> .
+	 * 
+	 * <pre class="code">
+	 * Assert.notNull("id",id);
+	 * </pre>
+	 * 
+	 * @param argName the name of argument to check
+	 * @param argValue the object to check
+	 * 
+	 * @throws IllegalArgumentException if the value is <code>null</code>
+	 */
+	public static void argNotNull(String argName,Object argValue) {
+		if (argValue == null) {
+			throw new IllegalArgumentException(Strings.format("[Assertion failed] - the argument '{0}' is required, it must not be null",argName));
+		}
+	}
+	
+	/**
+	 * Assert that the given argument String is not empty; that is, it must not be <code>null</code> and not the empty String.
+	 * 
+	 * <pre class="code">
+	 * Assert.notEmpty("id",id);
+	 * </pre>
+	 * 
+	 * @param argName the name of argument to check
+	 * @param argValue the String value to check
+	 * 
+	 *  @throws IllegalArgumentException if the value is <code>null</code> or empty
+	 */
+	public static void argNotEmpty(String argName,String argValue) {
+		if (Strings.isEmpty(argValue)) {
+			throw new IllegalArgumentException(Strings.format("[Assertion failed] - the argument '{0}' is required, it must not be null or empty",argName));
+		}
+	}	
+
+	/**
+	 * Assert that the given argument Map is not empty; that is, it must not be <code>null</code> and not the empty String.
+	 * 
+	 * <pre class="code">
+	 * Assert.notEmpty("id",id);
+	 * </pre>
+	 * 
+	 * @param argName the name of argument to check
+	 * @param argValue the String value to check
+	 * 
+	 *  @throws IllegalArgumentException if the value is <code>null</code> or empty
+	 */
+	public static void argNotEmpty(String argName,Map<?, ?> argValue) {
+		if (null == argValue || argValue.isEmpty()) {
+			throw new IllegalArgumentException(Strings.format("[Assertion failed] - the argument '{0}' is required, it must not be null or empty",argName));
+		}
+	}
+	
+	/**
+	 * Assert that the given argument Collection is not empty; that is, it must not be <code>null</code> and not the empty String.
+	 * 
+	 * <pre class="code">
+	 * Assert.notEmpty("id",id);
+	 * </pre>
+	 * 
+	 * @param argName the name of argument to check
+	 * @param argValue the String value to check
+	 * 
+	 *  @throws IllegalArgumentException if the value is <code>null</code> or empty
+	 */
+	public static void argNotEmpty(String argName,Collection<?> argValue) {
+		if (null == argValue || argValue.isEmpty()) {
+			throw new IllegalArgumentException(Strings.format("[Assertion failed] - the argument '{0}' is required, it must not be null or empty",argName));
+		}
+	}
+	
+	/**
+	 * Assert that the given argument Array is not empty; that is, it must not be <code>null</code> and not the empty String.
+	 * 
+	 * <pre class="code">
+	 * Assert.notEmpty("id",id);
+	 * </pre>
+	 * 
+	 * @param argName the name of argument to check
+	 * @param argValue the String value to check
+	 * 
+	 *  @throws IllegalArgumentException if the value is <code>null</code> or empty
+	 */
+	public static void argNotEmpty(String argName,Object[] argValue) {
+		if (null == argValue || argValue.length == 0) {
+			throw new IllegalArgumentException(Strings.format("[Assertion failed] - the argument '{0}' is required, it must not be null or empty",argName));
+		}
+	}
 }
