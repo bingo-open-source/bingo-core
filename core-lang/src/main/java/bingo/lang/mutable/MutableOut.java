@@ -43,6 +43,12 @@ public class MutableOut<T> implements Mutable<T>, Out<T>, Serializable {
 		this.value = value;
 		this.output = true;
 	}
+	
+	public boolean setValueAndReturnTrue(T value) {
+		this.value = value;
+		this.output = true;
+		return true;
+    }
 
 	public boolean hasOutput() {
 		return output;

@@ -24,8 +24,9 @@ package bingo.lang;
  */
 public interface Out<T> extends Mutable<T>{
 
+	boolean setValueAndReturnTrue(T value);
+	
 	boolean hasOutput();
 	
 	void reset();
-
 }
