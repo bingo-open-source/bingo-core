@@ -9,13 +9,13 @@
 	</parent>
 
 	<groupId>bingo.core</groupId>
-	<artifactId>bingo-core-utils</artifactId>
+	<artifactId>bingo-utils</artifactId>
 	<packaging>jar</packaging>
 	
 	<dependencies>
 		<dependency>
 			<groupId>bingo.core</groupId>
-			<artifactId>bingo-core-lang</artifactId>
+			<artifactId>bingo-lang</artifactId>
 			<version>${project.version}</version>
 			<type>jar</type>
 			<scope>compile</scope>
