@@ -15,13 +15,6 @@
  */
 package bingo.lang.exceptions;
 
-/**
- * TODO : document me
- *
- * @author fenghm (fenghm@bingosoft.net)
- * 
- * @since 0.1
- */
 public class NotFoundException extends RuntimeExceptionEx {
 
     private static final long serialVersionUID = -3863052698325938663L;

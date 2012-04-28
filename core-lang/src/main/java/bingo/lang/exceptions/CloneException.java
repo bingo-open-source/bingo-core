@@ -18,10 +18,6 @@ package bingo.lang.exceptions;
 /**
  * Exception thrown when a clone cannot be created. In contrast to {@link CloneNotSupportedException} this is a
  * {@link RuntimeException}.
- * 
- * @author fenghm (fenghm@bingosoft.net)
- * 
- * @since 0.1
  */
 public class CloneException extends RuntimeExceptionEx {
 

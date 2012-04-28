@@ -13,30 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.lang.iterable;
+package bingo.lang;
 
-import java.util.Iterator;
-
-public abstract class AbstractIteratorWrapper<E> implements Iterator<E> {
-
-	protected final Iterator<E>	iterator;
-
-	public AbstractIteratorWrapper(Iterator<E> iterator) {
-		if (iterator == null) {
-			throw new IllegalArgumentException("Iterator must not be null");
-		}
-		this.iterator = iterator;
-	}
-
-	public boolean hasNext() {
-		return iterator.hasNext();
-	}
-
-	public E next() {
-		return iterator.next();
-	}
-
-	public void remove() {
-		iterator.remove();
-	}
+/**
+ * Base interface for decorations.
+ *
+ * <p>Implementations are expected to implement all methods of type T, and forward to the decorated instance by default.
+ */
+public interface Decorator<T> {
+	
+	/**
+	 * Gets the object being decorated by this Decorator.
+	 */
+    T getDecorated();
 }

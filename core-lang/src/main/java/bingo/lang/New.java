@@ -18,11 +18,6 @@ package bingo.lang;
 import bingo.lang.mutable.MutableObject;
 import bingo.lang.mutable.MutableOut;
 
-/**
- * TODO : document me
- *
- * @author fenghm (fenghm@bingosoft.net)
- */
 public class New {
 	
 	protected New() {

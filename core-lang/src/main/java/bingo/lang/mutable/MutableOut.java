@@ -23,10 +23,6 @@ import bingo.lang.Out;
 
 /**
  * An {@link Out} <code>Object</code> wrapper.
- * 
- * @author fenghm (fenghm@bingosoft.net)
- * 
- * @since 0.1
  */
 public class MutableOut<T> implements Mutable<T>, Out<T>, Serializable {
 
@@ -44,7 +40,7 @@ public class MutableOut<T> implements Mutable<T>, Out<T>, Serializable {
 		this.output = true;
 	}
 	
-	public boolean setValueAndReturnTrue(T value) {
+	public boolean setOutput(T value) {
 		this.value = value;
 		this.output = true;
 		return true;

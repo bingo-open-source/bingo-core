@@ -39,10 +39,6 @@ import org.junit.Test;
 
 /**
  * {@link TestCase} of {@link Strings}
- * 
- * @author fenghm (fenghm@bingosoft.net)
- * 
- * @since 0.1
  */
 public class StringsJoinSplitTest extends TestCase {
 	

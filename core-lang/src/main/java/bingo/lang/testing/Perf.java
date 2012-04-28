@@ -22,10 +22,6 @@ import bingo.lang.format.DurationFormatter;
 
 /**
  * Performance measurements utiltiy for unit test.
- *
- * @author fenghm (fenghm@bingosoft.net)
- * 
- * @since 0.1
  */
 public final class Perf {
 	

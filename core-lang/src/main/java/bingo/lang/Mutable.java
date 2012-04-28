@@ -17,6 +17,8 @@
 
 package bingo.lang;
 
+//from apache commons-lang3
+
 /**
  * 
  * Provides mutable access to a value.
@@ -30,8 +32,6 @@ package bingo.lang;
  * a collection (for example a total in a map) without needing to create new Integer/Long wrapper objects.
  * 
  * @param <T> the type to set and get 
- * 
- * @since 0.1
  */
 public interface Mutable<T> {
 

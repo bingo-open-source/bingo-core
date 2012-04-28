@@ -27,11 +27,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
-/**
- * TODO : document me
- *
- * @author fenghm (fenghm@bingosoft.net)
- */
 public class ConcurrentDateFormat extends DateFormat {
 
     private static final long serialVersionUID = -1237664759165921526L;

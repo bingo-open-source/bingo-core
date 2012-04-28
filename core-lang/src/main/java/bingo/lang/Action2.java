@@ -15,13 +15,6 @@
  */
 package bingo.lang;
 
-/**
- * TODO : document me
- *
- * @author fenghm (fenghm@bingosoft.net)
- * 
- * @since 0.1
- */
 public interface Action2<T1,T2> {
 
 	void execute(T1 input1,T2 input2);

@@ -19,10 +19,6 @@ package bingo.lang;
 
 /**
  * Defines a functor interface implemented by classes that perform a predicate test on an object.
- * 
- * @author fenghm (fenghm@bingosoft.net)
- * 
- * @since 0.1
  */
 public interface Predicate1<T,R> {
 

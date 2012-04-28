@@ -1524,6 +1524,26 @@ public class Arrays {
 	public static boolean contains(boolean[] array, boolean valueToFind) {
 		return indexOf(array, valueToFind) != INDEX_NOT_FOUND;
 	}
+	
+	/**
+	 * Copies the specified array, truncating or padding with nulls (if necessary) so the copy has the specified length.
+	 * For all indices that are valid in both the original array and the copy, the two arrays will contain identical
+	 * values. For any indices that are valid in the copy but not the original, the copy will contain <tt>null</tt>.
+	 * Such indices will exist if and only if the specified length is greater than that of the original array.
+	 * 
+	 * @param original the array to be copied
+	 * @param newLength the length of the copy to be returned
+	 * @return a copy of the original array, truncated or padded with nulls to obtain the specified length
+	 * @throws NegativeArraySizeException if <tt>newLength</tt> is negative
+	 * 
+	 * @throws NullPointerException if <tt>original</tt> is null
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> T[] copyOf(T[] original, int newLength) {
+		T[] copy = (T[]) Array.newInstance(original.getClass().getComponentType(), newLength);
+		System.arraycopy(original, 0, copy, 0, Math.min(original.length, newLength));
+		return copy;
+	}
 
 	/**
 	 * Converts a T[] array to a List<T> collection.

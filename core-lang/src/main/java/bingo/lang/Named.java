@@ -15,13 +15,6 @@
  */
 package bingo.lang;
 
-/**
- * {@link Named}
- * 
- * @author fenghm (fenghm@bingosoft.net)
- * 
- * @since 0.1
- */
 public interface Named {
 
 	String getName();

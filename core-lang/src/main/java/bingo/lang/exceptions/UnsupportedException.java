@@ -13,30 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.lang.iterable;
+package bingo.lang.exceptions;
 
-import java.util.Iterator;
+public class UnsupportedException extends RuntimeExceptionEx {
 
-public abstract class AbstractIteratorWrapper<E> implements Iterator<E> {
+    private static final long serialVersionUID = 6195386828802883127L;
 
-	protected final Iterator<E>	iterator;
+	public UnsupportedException() {
 
-	public AbstractIteratorWrapper(Iterator<E> iterator) {
-		if (iterator == null) {
-			throw new IllegalArgumentException("Iterator must not be null");
-		}
-		this.iterator = iterator;
 	}
 
-	public boolean hasNext() {
-		return iterator.hasNext();
+	public UnsupportedException(String message) {
+		super(message);
 	}
 
-	public E next() {
-		return iterator.next();
+	public UnsupportedException(String message, Throwable cause) {
+		super(message, cause);
 	}
 
-	public void remove() {
-		iterator.remove();
+	public UnsupportedException(String message, Object... args) {
+		super(message, args);
+	}
+
+	public UnsupportedException(Throwable cause) {
+		super(cause);
+	}
+
+	public UnsupportedException(Throwable cause, String message, Object... args) {
+		super(cause, message, args);
 	}
 }

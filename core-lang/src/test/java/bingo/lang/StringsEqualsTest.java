@@ -22,10 +22,6 @@ import junit.framework.TestCase;
 
 /**
  * {@link TestCase} of {@link Strings}
- * 
- * @author fenghm (fenghm@bingosoft.net)
- * 
- * @since 0.1
  */
 public class StringsEqualsTest extends TestCase {
 

@@ -9,6 +9,9 @@ import org.junit.Test;
 
 import bingo.lang.iterable.ReadOnlyIterator;
 
+/**
+ * {@link TestCase} of {@link Enumerator}
+ */
 public class EnumeratorTest extends TestCase {
 
 	@Test

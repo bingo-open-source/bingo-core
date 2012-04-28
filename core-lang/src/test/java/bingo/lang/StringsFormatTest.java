@@ -27,10 +27,6 @@ import bingo.lang.testing.Perf;
 
 /**
  * {@link TestCase} of {@link Strings#format(String, Object...)}
- *
- * @author fenghm (fenghm@bingosoft.net)
- * 
- * @since 0.1
  */
 public class StringsFormatTest {
 

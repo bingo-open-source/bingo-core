@@ -21,8 +21,6 @@ import java.util.Map.Entry;
 
 /**
  * Simple implement of {@link Map.Entry}
- *
- * @author fenghm (fenghm@bingosoft.net)
  */
 public final class SimpleEntry<K,V> implements Entry<K, V>{
     

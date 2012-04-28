@@ -15,17 +15,16 @@
  */
 package bingo.lang;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
+import bingo.lang.exceptions.UnsupportedException;
+
 /**
  * <code>null</code> safe {@link String} utility
- * 
- * @author fenghm (fenghm@bingosoft.net)
- * 
- * @since 0.1
  */
 //From apache commons-lang3, under Apache License 2.0
 public class Strings {
@@ -3120,6 +3119,37 @@ public class Strings {
 			return EMPTY;
 		}
 		return new StringBuilder(str).reverse().toString();
+	}
+	
+	// Bytes
+	//-----------------------------------------------------------------------
+	/**
+	 * <p>
+	 * unchecked version of {@link String#getBytes(String)}.
+	 * </p>
+	 * 
+	 * <pre>
+	 * Examples :
+	 * 
+	 * Strings.getBytes(null,  "UTF-8") = []
+	 * Strings.getBytes("",    "UTF-8") = []
+	 * Strings.getBytes("...", "UTF-8") = [...]
+	 * </pre>
+	 * 
+	 * @return the bytes, empty bytes [] if null or empty String input
+	 * 
+	 * @throws UnsupportedException if {@link UnsupportedEncodingException} occurs.
+	 */
+	public static byte[] getBytes(String str,String charset){
+		if(isEmpty(str)){
+			return Arrays.EMPTY_BYTE_ARRAY;
+		}
+		
+		try {
+	        return str.getBytes(charset);
+        } catch (UnsupportedEncodingException e) {
+        	throw new UnsupportedException(e.getMessage(),e);
+        }
 	}
 
 	//private methods

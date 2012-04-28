@@ -21,11 +21,6 @@ import java.util.Set;
 
 import bingo.lang.Assert;
 
-/**
- * TODO : document me
- * 
- * @author fenghm (fenghm@bingosoft.net)
- */
 public abstract class AbstractSetWrapper<E> implements Set<E> {
 
 	protected Set<E>	set;

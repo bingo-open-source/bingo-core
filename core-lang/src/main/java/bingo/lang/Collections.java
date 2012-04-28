@@ -23,11 +23,7 @@ import java.util.List;
 import bingo.lang.mutable.MutableObject;
 
 /**
- * null safe {@link Collection} utility
- * 
- * @author fenghm (fenghm@bingosoft.net)
- * 
- * @since 0.1
+ * <code>null</code> safe {@link Collection} utility.
  */
 public class Collections {
 

@@ -17,10 +17,6 @@ package bingo.lang;
 
 /**
  * Java language specification utility.
- * 
- * @author fenghm (fenghm@bingosoft.net)
- * 
- * @since 0.1
  */
 public class Java {
 

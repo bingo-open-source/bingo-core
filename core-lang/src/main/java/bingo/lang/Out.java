@@ -15,16 +15,9 @@
  */
 package bingo.lang;
 
-/**
- * TODO : document me
- *
- * @author fenghm (fenghm@bingosoft.net)
- * 
- * @since 0.1
- */
 public interface Out<T> extends Mutable<T>{
 
-	boolean setValueAndReturnTrue(T value);
+	boolean setOutput(T value);
 	
 	boolean hasOutput();
 	

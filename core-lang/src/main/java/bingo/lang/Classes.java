@@ -21,11 +21,7 @@ import java.util.Map;
 //from apache commons-lang3
 
 /**
- * {@link Class} utility.
- * 
- * @author fenghm (fenghm@bingosoft.net)
- * 
- * @since 0.1
+ * <code>null</code> safe {@link Class} utility.
  */
 public class Classes {
 

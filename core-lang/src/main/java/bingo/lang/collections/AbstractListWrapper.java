@@ -21,11 +21,6 @@ import java.util.List;
 
 import bingo.lang.Assert;
 
-/**
- * TODO : document me
- * 
- * @author fenghm (fenghm@bingosoft.net)
- */
 public abstract class AbstractListWrapper<E> implements Collection<E> {
 
 	protected List<E>	list;

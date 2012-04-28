@@ -37,13 +37,6 @@ import bingo.lang.iterable.FuncIterable;
 import bingo.lang.iterable.PredicateIterable;
 import bingo.lang.iterable.ReadOnlyIterator;
 
-/**
- * 实现{@link Enumerable}接口并提供工具类方法进行集合操作
- * 
- * @author fenghm (fenghm@bingosoft.net)
- * 
- * @since 0.1
- */
 //From org.core4j, under Apache License 2.0
 public class Enumerator<T> implements Enumerable<T> {
 

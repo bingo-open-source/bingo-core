@@ -13,30 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.lang.iterable;
+package bingo.lang.exceptions;
 
-import java.util.Iterator;
+public class NotImplementedException extends RuntimeExceptionEx {
 
-public abstract class AbstractIteratorWrapper<E> implements Iterator<E> {
+    private static final long serialVersionUID = -8372122034377909033L;
 
-	protected final Iterator<E>	iterator;
+	public NotImplementedException() {
 
-	public AbstractIteratorWrapper(Iterator<E> iterator) {
-		if (iterator == null) {
-			throw new IllegalArgumentException("Iterator must not be null");
-		}
-		this.iterator = iterator;
 	}
 
-	public boolean hasNext() {
-		return iterator.hasNext();
+	public NotImplementedException(String message) {
+		super(message);
 	}
 
-	public E next() {
-		return iterator.next();
+	public NotImplementedException(String message, Throwable cause) {
+		super(message, cause);
 	}
 
-	public void remove() {
-		iterator.remove();
+	public NotImplementedException(String message, Object... args) {
+		super(message, args);
+	}
+
+	public NotImplementedException(Throwable cause) {
+		super(cause);
+	}
+
+	public NotImplementedException(Throwable cause, String message, Object... args) {
+		super(cause, message, args);
 	}
 }

@@ -16,13 +16,6 @@
 package bingo.lang;
 
 
-/**
- * TODO : document me
- * 
- * @author fenghm (fenghm@bingosoft.net)
- * 
- * @since 0.1
- */
 public interface Func2<TInput1,TInput2,TResult> {
 
 	TResult evaluate(TInput1 input1,TInput2 input2);

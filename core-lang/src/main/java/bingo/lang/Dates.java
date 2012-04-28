@@ -22,8 +22,6 @@ package bingo.lang;
  * <p>
  * A suite of utilities surrounding the use of the {@link java.util.Calendar} and {@link java.util.Date} object.
  * </p>
- *
- * @since 0.1
  */
 public class Dates {
 

@@ -17,10 +17,6 @@ package bingo.lang;
 
 /**
  * <code>null</code> safe {@link Enum} utility.
- * 
- * @author fenghm (fenghm@bingosoft.net)
- * 
- * @since 0.1
  */
 public class Enums {
 

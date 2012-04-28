@@ -33,10 +33,6 @@ import bingo.lang.mutable.MutableObject;
 
 /**
  * {@link TestCase} of {@link Objects}
- * 
- * @author fenghm (fenghm@bingosoft.net)
- * 
- * @since 0.1
  */
 public class ObjectsTest {
 

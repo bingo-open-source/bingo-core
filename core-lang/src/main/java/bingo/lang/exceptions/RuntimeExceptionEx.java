@@ -28,8 +28,6 @@ import bingo.lang.Strings;
  * throw new RuntimeExceptionEx("the argument '{0}' could not be empty","name");
  * throw new RuntimeExceptionEx(cause,"the argument '{0}' could not be empty","name");
  * </pre>
- *
- * @author fenghm (fenghm@bingosoft.net)
  */
 public class RuntimeExceptionEx extends RuntimeException {
 

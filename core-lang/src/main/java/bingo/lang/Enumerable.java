@@ -20,10 +20,6 @@ import java.util.Set;
 
 /**
  * Iterable interface for extending {@link Iterable}
- *
- * @author fenghm (fenghm@bingosoft.net)
- *
- * @since 0.1
  */
 public interface Enumerable<T> extends Iterable<T> {
 

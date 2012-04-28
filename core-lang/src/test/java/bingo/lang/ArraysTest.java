@@ -25,10 +25,6 @@ import org.junit.Assert;
 
 /**
  * {@link TestCase} of {@link Arrays}
- * 
- * @author fenghm (fenghm@bingosoft.net)
- * 
- * @since 0.1
  */
 public class ArraysTest extends TestCase {
 

@@ -19,10 +19,6 @@ import java.util.Map;
 
 /**
  * <code>null</code> safe {@link Map} utility.
- * 
- * @author fenghm (fenghm@bingosoft.net)
- * 
- * @since 0.1
  */
 public class Maps {
 

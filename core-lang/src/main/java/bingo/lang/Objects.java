@@ -23,10 +23,6 @@ import bingo.lang.exceptions.CloneException;
 
 /**
  * null safe {@link Object} utility.
- * 
- * @author fenghm (fenghm@bingosoft.net)
- * 
- * @since 0.1
  */
 //From apache commons-lang3, under Apache License 2.0
 public class Objects {
