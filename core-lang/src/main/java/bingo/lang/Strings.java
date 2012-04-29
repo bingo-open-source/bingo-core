@@ -21,8 +21,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
-import bingo.lang.exceptions.UnsupportedException;
-
 /**
  * <code>null</code> safe {@link String} utility
  */
@@ -317,8 +315,8 @@ public class Strings {
 	 * </p>
 	 * 
 	 * <p>
-	 * If the trimChars String is {@code null}, whitespace is trimmed as defined by
-	 * {@link Character#isWhitespace(char)}. Alternatively use {@link #trim(String)}.
+	 * If the trimChars String is {@code null}, whitespace is trimmed as defined by {@link Character#isWhitespace(char)}
+	 * . Alternatively use {@link #trim(String)}.
 	 * </p>
 	 * 
 	 * <pre>
@@ -336,14 +334,14 @@ public class Strings {
 	 * @return the trimmed String, "" if null String input
 	 */
 	public static String trim(String str, char... trimChars) {
-		if(null == trimChars){
+		if (null == trimChars) {
 			return trim(str);
 		}
-		
+
 		if (isEmpty(str)) {
 			return EMPTY;
 		}
-		
+
 		str = trimStart(str, trimChars);
 		return trimEnd(str, trimChars);
 	}
@@ -358,8 +356,8 @@ public class Strings {
 	 * </p>
 	 * 
 	 * <p>
-	 * If the trimChars String is {@code null}, whitespace is trimmed as defined by
-	 * {@link Character#isWhitespace(char)}.
+	 * If the trimChars String is {@code null}, whitespace is trimmed as defined by {@link Character#isWhitespace(char)}
+	 * .
 	 * </p>
 	 * 
 	 * <pre>
@@ -379,11 +377,11 @@ public class Strings {
 	 */
 	public static String trimStart(String str, char... trimChars) {
 		int strLen;
-		
+
 		if (str == null || (strLen = str.length()) == 0) {
 			return EMPTY;
 		}
-		
+
 		int start = 0;
 		if (trimChars == null) {
 			while (start != strLen && Character.isWhitespace(str.charAt(start))) {
@@ -409,8 +407,8 @@ public class Strings {
 	 * </p>
 	 * 
 	 * <p>
-	 * If the trimChars String is {@code null}, whitespace is trimmed as defined by
-	 * {@link Character#isWhitespace(char)}.
+	 * If the trimChars String is {@code null}, whitespace is trimmed as defined by {@link Character#isWhitespace(char)}
+	 * .
 	 * </p>
 	 * 
 	 * <pre>
@@ -3120,36 +3118,151 @@ public class Strings {
 		}
 		return new StringBuilder(str).reverse().toString();
 	}
-	
-	// Bytes
+
+	// Get Bytes
 	//-----------------------------------------------------------------------
 	/**
+	 * Encodes the given string into a sequence of bytes using the named charset, storing the result into a new byte
+	 * array.
 	 * <p>
-	 * unchecked version of {@link String#getBytes(String)}.
+	 * This method catches {@link UnsupportedEncodingException} and rethrows it as {@link IllegalStateException}, which
+	 * should never happen for a required charset name. Use this method when the encoding is required to be in the JRE.
 	 * </p>
 	 * 
-	 * <pre>
-	 * Examples :
-	 * 
-	 * Strings.getBytes(null,  "UTF-8") = []
-	 * Strings.getBytes("",    "UTF-8") = []
-	 * Strings.getBytes("...", "UTF-8") = [...]
-	 * </pre>
-	 * 
-	 * @return the bytes, empty bytes [] if null or empty String input
-	 * 
-	 * @throws UnsupportedException if {@link UnsupportedEncodingException} occurs.
+	 * @param string the String to encode, may be <code>null</code>
+	 * @param charsetName The name of a required {@link java.nio.charset.Charset}
+	 * @return encoded bytes, or <code>[]</code> if the input string was <code>null</code>
+	 * @throws IllegalStateException Thrown when a {@link UnsupportedEncodingException} is caught, which should never
+	 *             happen for a required charset name.
+	 * @see String#getBytes(String)
 	 */
-	public static byte[] getBytes(String str,String charset){
-		if(isEmpty(str)){
+	public static byte[] getBytes(String str, String charset) {
+		if (isEmpty(str)) {
 			return Arrays.EMPTY_BYTE_ARRAY;
 		}
-		
+
 		try {
-	        return str.getBytes(charset);
-        } catch (UnsupportedEncodingException e) {
-        	throw new UnsupportedException(e.getMessage(),e);
-        }
+			return str.getBytes(charset);
+		} catch (UnsupportedEncodingException e) {
+			throw new IllegalStateException(e.getMessage(), e);
+		}
+	}
+	
+	/**
+	 * Encodes the given string into a sequence of bytes using the ISO-8859-1 charset, storing the result into a new
+	 * byte array.
+	 * 
+	 * @param string the String to encode, may be <code>null</code>
+	 * @return encoded bytes, or <code>null</code> if the input string was <code>null</code>
+	 * @throws IllegalStateException Thrown when the charset is missing, which should be never according the the Java
+	 *             specification.
+	 * @see <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/nio/charset/Charset.html">Standard
+	 *      charsets</a>
+	 * @see #getBytesUnchecked(String, String)
+	 */
+	public static byte[] getBytesIso8859_1(String string) {
+		return getBytes(string, Encoding.ISO_8859_1.name());
+	}
+
+	/**
+	 * Encodes the given string into a sequence of bytes using the US-ASCII charset, storing the result into a new byte
+	 * array.
+	 * 
+	 * @param string the String to encode, may be <code>null</code>
+	 * @return encoded bytes, or <code>null</code> if the input string was <code>null</code>
+	 * @throws IllegalStateException Thrown when the charset is missing, which should be never according the the Java
+	 *             specification.
+	 * @see <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/nio/charset/Charset.html">Standard
+	 *      charsets</a>
+	 * @see #getBytesUnchecked(String, String)
+	 */
+	public static byte[] getBytesUsAscii(String string) {
+		return getBytes(string, Encoding.US_ASCII.name());
+	}
+
+	/**
+	 * Encodes the given string into a sequence of bytes using the UTF-8 charset, storing the result into a new byte
+	 * array.
+	 * 
+	 * @param string the String to encode, may be <code>null</code>
+	 * @return encoded bytes, or <code>[]</code> if the input string was <code>null</code>
+	 * @throws IllegalStateException Thrown when the charset is missing, which should be never according the the Java
+	 *             specification.
+	 * @see <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/nio/charset/Charset.html">Standard
+	 *      charsets</a>
+	 * @see #getBytes(String, String)
+	 */
+	public static byte[] getBytesUtf8(String string) {
+		return getBytes(string, Encoding.UTF_8.name());
+	}
+
+	// New String
+	//-----------------------------------------------------------------------
+
+	/**
+	 * Constructs a new <code>String</code> by decoding the specified array of bytes using the given charset.
+	 * <p>
+	 * This method catches {@link UnsupportedEncodingException} and re-throws it as {@link IllegalStateException}, which
+	 * should never happen for a required charset name. Use this method when the encoding is required to be in the JRE.
+	 * </p>
+	 * 
+	 * @param bytes The bytes to be decoded into characters, may be <code>null</code>
+	 * @param charsetName The name of a required {@link java.nio.charset.Charset}
+	 * @return A new <code>String</code> decoded from the specified array of bytes using the given charset, or
+	 *         <code>""</code> if the input byte array was <code>null</code>.
+	 * @throws IllegalStateException Thrown when a {@link UnsupportedEncodingException} is caught, which should never
+	 *             happen for a required charset name.
+	 * @see String#String(byte[], String)
+	 */
+	public static String newString(byte[] bytes, String charsetName) {
+		if (bytes == null) {
+			return Strings.EMPTY;
+		}
+
+		try {
+			return new String(bytes, charsetName);
+		} catch (UnsupportedEncodingException e) {
+			throw new IllegalStateException(e.getMessage(), e);
+		}
+	}	
+	
+	/**
+	 * Constructs a new <code>String</code> by decoding the specified array of bytes using the ISO-8859-1 charset.
+	 * 
+	 * @param bytes The bytes to be decoded into characters, may be <code>null</code>
+	 * @return A new <code>String</code> decoded from the specified array of bytes using the ISO-8859-1 charset, or
+	 *         <code>""</code> if the input byte array was <code>null</code>.
+	 * @throws IllegalStateException Thrown when a {@link UnsupportedEncodingException} is caught, which should never
+	 *             happen since the charset is required.
+	 */
+	public static String newStringIso8859_1(byte[] bytes) {
+		return newString(bytes, Encoding.ISO_8859_1.name());
+	}
+
+	/**
+	 * Constructs a new <code>String</code> by decoding the specified array of bytes using the US-ASCII charset.
+	 * 
+	 * @param bytes The bytes to be decoded into characters
+	 * @return A new <code>String</code> decoded from the specified array of bytes using the US-ASCII charset, or
+	 *         <code>""</code> if the input byte array was <code>null</code>.
+	 * @throws IllegalStateException Thrown when a {@link UnsupportedEncodingException} is caught, which should never
+	 *             happen since the charset is required.
+	 */
+	public static String newStringUsAscii(byte[] bytes) {
+		return newString(bytes, Encoding.US_ASCII.name());
+	}	
+	
+	/**
+	 * Constructs a new <code>String</code> by decoding the specified array of bytes using the UTF-8 charset.
+	 * 
+	 * @param bytes The bytes to be decoded into characters
+	 * @return A new <code>String</code> decoded from the specified array of bytes using the UTF-8 charset, or
+	 *         <code>""</code> if the input byte array was <code>null</code>.
+	 * @throws IllegalStateException Thrown when a {@link UnsupportedEncodingException} is caught, which should never
+	 *             happen since the charset is required.
+	 */
+	public static String newStringUtf8(byte[] bytes) {
+		return newString(bytes, Encoding.UTF_8.name());
 	}
 
 	//private methods
