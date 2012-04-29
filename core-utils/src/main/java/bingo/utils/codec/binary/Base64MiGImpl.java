@@ -1,4 +1,4 @@
-package bingo.utils.codec;
+package bingo.utils.codec.binary;
 
 import java.util.Arrays;
 
@@ -69,7 +69,8 @@ import java.util.Arrays;
  *         Date: 2004-aug-02
  *         Time: 11:31:11
  */
-public class Base64
+
+class Base64MiGImpl
 {
 	private static final char[] CA = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".toCharArray();
 	private static final int[] IA = new int[256];
@@ -432,17 +433,10 @@ public class Base64
 
 		return dArr;
 	}
-	
+
 	// ****************************************************************************************
 	// * String version
 	// ****************************************************************************************
-	
-	/**
-	 * the same as #encodeToString(byte[], true);
-	 */
-    public final static String encode(byte[] sArr) {
-        return encodeToString(sArr, true);
-    }
 
 	/** Encodes a raw byte array into a BASE64 <code>String</code> representation i accordance with RFC 2045.
 	 * @param sArr The bytes to convert. If <code>null</code> or length 0 an empty array will be returned.
