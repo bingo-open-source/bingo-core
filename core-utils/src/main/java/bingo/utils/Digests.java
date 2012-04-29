@@ -96,7 +96,7 @@ public class Digests {
 	 * @return MD5 digest as a base64 string
 	 */
 	public static String md5Base64(byte[] data) {
-		return Base64.encodeToString(md5(data));
+		return Base64.encode(md5(data));
 	}
 	
 	/**
@@ -106,7 +106,7 @@ public class Digests {
 	 * @return MD5 digest as a base64 string
 	 */
 	public static String md5Base64(String data) {
-		return Base64.encodeToString(md5(data));
+		return Base64.encode(md5(data));
 	}	
 	
 	/**
@@ -118,7 +118,7 @@ public class Digests {
 	 * @since 1.4
 	 */
 	public static String md5Base64(InputStream data) throws IOException {
-		return Base64.encodeToString(md5(data));
+		return Base64.encode(md5(data));
 	}
 	
 	/**

@@ -202,7 +202,7 @@ public class Base64TestData {
         Random r = new Random();
         byte[] decoded = new byte[size];
         r.nextBytes(decoded);
-        byte[] encoded = Base64.encode(decoded);
+        byte[] encoded = Base64.encodeToBytes(decoded);
         return new byte[][] {decoded, encoded};
     }
 
