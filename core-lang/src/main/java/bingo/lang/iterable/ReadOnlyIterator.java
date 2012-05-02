@@ -19,14 +19,14 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import bingo.lang.Assert;
+import bingo.lang.OutObject;
 import bingo.lang.Out;
-import bingo.lang.mutable.MutableOut;
 
 public abstract class ReadOnlyIterator<T> implements Iterator<T> {
 
 	private Boolean	     hasNext	= null;
 	private T	         current	= null;
-	private MutableOut<T>	out	 	= new MutableOut<T>();
+	private OutObject<T>	out	 	= new OutObject<T>();
 
 	public boolean hasNext() {
 		if (hasNext == null) {
@@ -37,7 +37,7 @@ public abstract class ReadOnlyIterator<T> implements Iterator<T> {
 				current = out.getValue();
 				
 				if(hasNext){
-					Assert.isTrue(out.hasOutput(),"next() returns true but no output value");
+					Assert.isTrue(out.hasValue(),"next() returns true but no output value");
 				}
 				
 			} catch (Exception e) {

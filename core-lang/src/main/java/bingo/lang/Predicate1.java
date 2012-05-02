@@ -20,7 +20,7 @@ package bingo.lang;
 /**
  * Defines a functor interface implemented by classes that perform a predicate test on an object.
  */
-public interface Predicate1<T,R> {
+public interface Predicate1<T,O> {
 
     /**
      * Use the specified parameter to perform a test that returns true or false.
@@ -35,5 +35,5 @@ public interface Predicate1<T,R> {
      * 
      * @throws RuntimeException (runtime) if the predicate encounters a problem
      */
-	boolean evaluate(T object,Mutable<R> result);
+	boolean evaluate(T object,Out<O> out);
 }

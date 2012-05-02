@@ -35,6 +35,7 @@ public class ConcurrentDateFormat extends DateFormat {
     
     public ConcurrentDateFormat(String pattern){
         this.format = new SimpleDateFormat(pattern);
+        this.format.setLenient(false);
     }
     
     @Override

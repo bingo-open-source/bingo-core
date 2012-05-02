@@ -13,11 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.lang;
+package bingo.lang.converters;
 
-public interface Out<T> extends Mutable<T>{
+import bingo.lang.Enums;
+import bingo.lang.Out;
+import bingo.lang.convert.Converter;
 
-	boolean returns(T value);
-	
-	boolean hasValue();
+public class EnumConverter extends AbstractConverter<Enum<?>> implements Converter<Enum<?>> {
+
+	@SuppressWarnings("unchecked")
+	public boolean convertFrom(Object value, Class<?> targetType, Class<?> genericType, Out<Object> out) throws Throwable {
+		
+		Enum<?> enumObject = Enums.valueOf((Class<Enum<?>>)targetType, value);
+		
+		if(null != enumObject){
+			return out.returns(enumObject);
+		}
+		
+	    return false;
+    }
+
 }

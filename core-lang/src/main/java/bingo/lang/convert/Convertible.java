@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.lang;
+package bingo.lang.convert;
 
-public interface Out<T> extends Mutable<T>{
+import bingo.lang.Out;
 
-	boolean returns(T value);
+public interface Convertible {
+
+	boolean convertTo(Class<?> targetType,Class<?> genericType,Out<Object> out) throws Throwable;
 	
-	boolean hasValue();
 }

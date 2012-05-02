@@ -18,9 +18,11 @@ package bingo.lang;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-import bingo.lang.mutable.MutableObject;
+import bingo.lang.exceptions.EmptyElementException;
 
 /**
  * <code>null</code> safe {@link Collection} utility.
@@ -30,6 +32,9 @@ public class Collections {
 	protected Collections() {
 
 	}
+	
+	//isEmpty
+	//---------------------------------------------------------------------------------------------------------	
 
 	/**
 	 * Return <code>true</code> if the supplied Collection is <code>null</code> or empty. Otherwise, return
@@ -43,6 +48,16 @@ public class Collections {
 		return (collection == null || collection.isEmpty());
 	}
 
+	//toArray
+	//---------------------------------------------------------------------------------------------------------
+	public static Object[] toArray(Collection<?> collection) {
+		if (null == collection) {
+			return Arrays.EMPTY_OBJECT_ARRAY;
+		}
+
+		return collection.toArray();
+	}
+	
 	public static Object[] toArray(Iterable<?> iterable) {
 		if (null == iterable) {
 			return Arrays.EMPTY_OBJECT_ARRAY;
@@ -56,15 +71,7 @@ public class Collections {
 
 		return list.toArray();
 	}
-
-	public static Object[] toArray(Collection<?> collection) {
-		if (null == collection) {
-			return Arrays.EMPTY_OBJECT_ARRAY;
-		}
-
-		return collection.toArray();
-	}
-
+	
 	public static Object[] toArray(Enumeration<?> enumeration) {
 		ArrayList<Object> list = new ArrayList<Object>();
 
@@ -73,8 +80,42 @@ public class Collections {
 		}
 
 		return list.toArray();
-	}
+	}	
+	
+	//toList
+	//---------------------------------------------------------------------------------------------------------
+	public static <T> List<T> toList(Iterable<T> iterable) {
+		if (null == iterable) {
+			return new ArrayList<T>();
+		}
 
+		ArrayList<T> list = new ArrayList<T>();
+
+		for (T item : iterable) {
+			list.add(item);
+		}
+
+		return list;
+	}
+	
+	//toSet
+	//---------------------------------------------------------------------------------------------------------
+	public static <T> Set<T> toSet(Iterable<T> iterable) {
+		if (null == iterable) {
+			return new HashSet<T>();
+		}
+
+		HashSet<T> set = new HashSet<T>();
+
+		for (T item : iterable) {
+			set.add(item);
+		}
+
+		return set;
+	}	
+
+	//concat
+	//---------------------------------------------------------------------------------------------------------	
 	public static <T> List<T> concat(List<T>... lists) {
 		ArrayList<T> list = new ArrayList<T>();
 
@@ -88,8 +129,26 @@ public class Collections {
 
 		return list;
 	}
-
+	
+	//query
+	//---------------------------------------------------------------------------------------------------------	
+	public static <T> T first(Iterable<T> iterable){
+		if(null == iterable){
+			throw new EmptyElementException("iterable is null");
+		}
+		
+		for(T e : iterable){
+			return e;
+		}
+		
+		throw new EmptyElementException("iterable is empty");
+	}
+	
 	public static <T> T firstOrNull(Iterable<T> iterable, Predicate<T> predicate) {
+		if(null == iterable){
+			return null;
+		}
+		
 		for (T object : iterable) {
 			if (predicate.evaluate(object)) {
 				return object;
@@ -99,6 +158,10 @@ public class Collections {
 	}
 
 	public static <T> T firstOrNull(T[] array, Predicate<T> predicate) {
+		if(null == array){
+			return null;
+		}
+		
 		for (T object : array) {
 			if (predicate.evaluate(object)) {
 				return object;
@@ -107,36 +170,58 @@ public class Collections {
 		return null;
 	}
 
-	public static <T, R> R firstOrNull(Iterable<T> iterable, Predicate1<T, R> predicate) {
-		Mutable<R> result = new MutableObject<R>();
-
+	public static <T, O> O firstOrNull(Iterable<T> iterable, Predicate1<T, O> predicate) {
+		if(null == iterable){
+			return null;
+		}
+		
+		Out<O> out = new OutObject<O>();
+		
 		for (T object : iterable) {
-			if ((predicate.evaluate(object, result))) {
-				return result.getValue();
+			if ((predicate.evaluate(object, out))) {
+				return out.getValue();
 			}
 		}
 
 		return null;
 	}
 
-	public static <T, R> R firstOrNull(T[] array, Predicate1<T, R> predicate) {
-		Mutable<R> result = new MutableObject<R>();
+	public static <T, O> O firstOrNull(T[] array, Predicate1<T, O> predicate) {
+		if(null == array){
+			return null;
+		}
+		
+		Out<O> out = new OutObject<O>();
 
 		for (T object : array) {
-			if ((predicate.evaluate(object, result))) {
-				return result.getValue();
+			if ((predicate.evaluate(object, out))) {
+				return out.getValue();
 			}
 		}
 
 		return null;
 	}
 	
-	public static <T> List<T> select(Iterable<T> iterable,Predicate<T> predicate){
+	public static <T> List<T> where(Iterable<T> iterable,Predicate<T> where){
 		List<T> list = new ArrayList<T>();
 		
 		if(null != iterable){
 			for(T item : iterable){
-				if(predicate.evaluate(item)){
+				if(where.evaluate(item)){
+					list.add(item);
+				}
+			}
+		}
+		
+		return list;
+	}
+	
+	public static <T> List<T> where(T[] array,Predicate<T> where){
+		List<T> list = new ArrayList<T>();
+		
+		if(null != array){
+			for(T item : array){
+				if(where.evaluate(item)){
 					list.add(item);
 				}
 			}
@@ -145,8 +230,8 @@ public class Collections {
 		return list;
 	}
 
-	public static <T, R> List<R> select(Iterable<T> iterable, Func1<T, R> func) {
-		List<R> list = new ArrayList<R>();
+	public static <T, O> List<O> select(Iterable<T> iterable, Func1<T, O> func) {
+		List<O> list = new ArrayList<O>();
 
 		if(null != iterable){
 			for (T object : iterable) {
@@ -157,8 +242,8 @@ public class Collections {
 		return list;
 	}
 
-	public static <T, R> List<R> select(T[] array, Func1<T, R> func) {
-		List<R> list = new ArrayList<R>();
+	public static <T, O> List<O> select(T[] array, Func1<T, O> func) {
+		List<O> list = new ArrayList<O>();
 
 		if(null != array){
 			for (T object : array) {
@@ -169,7 +254,7 @@ public class Collections {
 		return list;
 	}
 
-	public static <T, R> List<R> selectMany(Iterable<T> iterable, Func1<T, Collection<R>> func) {
+	public static <T, R> Collection<R> selectMany(Iterable<T> iterable, Func1<T,Collection<R>> func) {
 		List<R> list = new ArrayList<R>();
 
 		if(null != iterable){
@@ -179,5 +264,5 @@ public class Collections {
 		}
 
 		return list;
-	}
+	}	
 }

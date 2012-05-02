@@ -62,8 +62,8 @@ public class StringsFormatTest {
 		assertEquals("Hello {world2},}world1{", Strings.format("Hello {{1}},}{0}{", "world1","world2"));		
 	}	
 	
-	@SuppressWarnings("unused")
 	@Test
+	@SuppressWarnings("unused")
 	public void testPerformanceCompares(){
 		
 		final String  arg1 = "name";
@@ -71,23 +71,22 @@ public class StringsFormatTest {
 		
 		int times = 100000;
 		
-		Perf.run("String +",new Action() {
-			public void execute() {
+		Perf.run("String +",new Runnable() {
+			public void run() {
 				String s ="argument '" + arg1 + "' must be large then " + arg2;
 			}
 		},times);
 		
-		Perf.run("MessageFormat.format",new Action() {
-			public void execute() {
+		Perf.run("MessageFormat.format",new Runnable() {
+			public void run() {
 				String s = MessageFormat.format("argument '{0}' must be large then {1}",arg1,arg2);
 			}
 		},times);	
 		
-		Perf.run("Strings.format",new Action() {
-			public void execute() {
+		Perf.run("Strings.format",new Runnable() {
+			public void run() {
 				String s = Strings.format("argument '{0}' must be large then {1}",arg1,arg2);
 			}
-		},times);			
-		
+		},times);	
 	}
 }

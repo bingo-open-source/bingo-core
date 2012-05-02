@@ -13,11 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.lang;
+package bingo.lang.converters;
 
-public interface Out<T> extends Mutable<T>{
+import bingo.lang.Classes;
+import bingo.lang.Out;
+import bingo.lang.convert.Converter;
 
-	boolean returns(T value);
+public class ClassConverter extends AbstractConverter<Class<?>> implements Converter<Class<?>> {
 	
-	boolean hasValue();
+	@Override
+    public boolean convertFrom(Object value, Class<?> targetType, Class<?> genericType, Out<Object> out) throws Throwable {
+		return out.returns(Classes.forName(value.toString()));
+    }
+
+	@Override
+    public String convertToString(Class<?> value) throws Throwable {
+		return value.getName();
+    }
+
 }

@@ -13,11 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.lang;
+package bingo.lang.converters;
 
-public interface Out<T> extends Mutable<T>{
+import java.util.Collection;
 
-	boolean returns(T value);
-	
-	boolean hasValue();
+import bingo.lang.convert.Converter;
+
+public class CollectionConverter extends AbstractConverter<Collection<?>> implements Converter<Collection<?>> {
+
+
+
 }

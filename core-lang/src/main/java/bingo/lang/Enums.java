@@ -15,11 +15,54 @@
  */
 package bingo.lang;
 
+import bingo.lang.exceptions.InvalidValueException;
+
+
 /**
  * <code>null</code> safe {@link Enum} utility.
  */
 public class Enums {
 
+	protected Enums(){
+		
+	}
 	
+	@SuppressWarnings("unchecked")
+	public static Object getValue(Enum<?> enumObject) {
+		
+		if(enumObject instanceof Valued){
+			return ((Valued)enumObject).getValue();
+		}
+		
+		return enumObject.name();
+	}
 	
+	@SuppressWarnings("unchecked")
+	public static <E extends Enum<?>> E valueOf(Class<E> enumType,Object value) throws InvalidValueException{
+        if(null == value){
+            return null;
+        }
+        
+        if(Valued.class.isAssignableFrom(enumType)){
+            for(E e : enumType.getEnumConstants()){
+            	if(((Valued)e).getValue().equals(value)){
+            		return e;
+            	}
+            }
+        }else{
+            String stringValue = value.toString();
+            
+            if(stringValue.equals("")){
+                return null;
+            }
+            
+            for(E e : enumType.getEnumConstants()){
+                if(e.toString().equals(stringValue)){
+                    return e;
+                }
+            }
+        }
+        
+        throw new InvalidValueException("invalid enum value '{0}' of type '{1}'",value,enumType.getName());
+	}
 }

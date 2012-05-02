@@ -15,37 +15,39 @@
  */
 package bingo.lang.testing;
 
-import bingo.lang.Action;
 import bingo.lang.StopWatch;
 import bingo.lang.Strings;
-import bingo.lang.format.DurationFormatter;
 
 /**
  * Performance measurements utiltiy for unit test.
  */
 public final class Perf {
 	
-    public static void run(String test,Action action){
+    public static void run(String test,Runnable action){
+    	//warmup
+    	action.run();
         
     	StopWatch sw = StopWatch.startNew();
     	
-    	action.execute();
+    	action.run();
     	
     	sw.stop();
     	
-    	System.out.println(Strings.format("[{0}] -> duration : {1}",test,DurationFormatter.formatHMS(sw.getElapsedMilliseconds())));
+    	System.out.println(Strings.format("[{0}] -> duration : {1}ms, {2}ns",test,sw.getElapsedMilliseconds(),sw.getElapsedNanoseconds()));
     }	
 
-    public static void run(String test,Action action,int times){
+    public static void run(String test,Runnable action,int times){
+    	//warmup
+    	action.run();
      
     	StopWatch sw = StopWatch.startNew();
     	
     	for(int i=0;i<times;i++){
-    		action.execute();
+    		action.run();
     	}
     	
     	sw.stop();
     	
-    	System.out.println(Strings.format("[{0}] -> run {1} times, duration : {2}", test,times,DurationFormatter.formatHMS(sw.getElapsedMilliseconds())));
+    	System.out.println(Strings.format("[{0}] -> run {1} times, duration : {2}ms, {3}ns", test,times,sw.getElapsedMilliseconds(),sw.getElapsedNanoseconds()));
     }
 }

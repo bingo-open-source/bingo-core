@@ -15,8 +15,11 @@
  */
 package bingo.lang;
 
-import bingo.lang.mutable.MutableObject;
-import bingo.lang.mutable.MutableOut;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 
 public class New {
 	
@@ -24,15 +27,58 @@ public class New {
 		
 	}
 	
-	public static Out<Object> out() {
-		return new MutableOut<Object>();
-	}
-	
-	public static <T> Out<T> out(Class<T> type) {
-		return new MutableOut<T>();
-	}
-	
-	public static Mutable<Object> mutable() {
-		return new MutableObject<Object>();
-	}
+    /**
+     * Create a new {@link ArrayList}.
+     */
+    public static <T> ArrayList<T> list() {
+        return new ArrayList<T>();
+    }
+    
+    /**
+     * Create a new {@link ArrayList}.
+     */
+    public static <T> ArrayList<T> list(T... elements) {
+        ArrayList<T> list = new ArrayList<T>();
+        
+        for(T e : elements){
+        	list.add(e);
+        }
+        
+        return list;
+    }    
+    
+    /**
+     * Create a new {@link ArrayList}.
+     */
+    public static <T> ArrayList<T> list(Collection<T> c) {
+        return new ArrayList<T>(c);
+    }
+    
+    /**
+     * Create a new {@link HashSet}.
+     */
+    public static <T> HashSet<T> set(){
+    	return new HashSet<T>();
+    }
+    
+    /**
+     * Create a new {@link HashSet}.
+     */
+    public static <T> HashSet<T> set(Collection<T> c){
+    	return new HashSet<T>(c);
+    }    
+    
+    /**
+     * Create a new {@link HashMap}
+     */
+    public static <K,V> HashMap<K,V> map(){
+    	return new HashMap<K, V>();
+    }
+    
+    /**
+     * Create a new {@link HashMap}
+     */
+    public static <K,V> HashMap<K,V> map(Map<K,V> map){
+    	return new HashMap<K, V>(map);
+    }
 }

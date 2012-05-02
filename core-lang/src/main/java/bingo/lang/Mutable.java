@@ -33,7 +33,7 @@ package bingo.lang;
  * 
  * @param <T> the type to set and get 
  */
-public interface Mutable<T> {
+public interface Mutable<T> extends Valued<T> {
 
     /**
      * Gets the value of this mutable.

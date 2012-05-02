@@ -15,9 +15,8 @@
  */
 package bingo.lang;
 
-public interface Out<T> extends Mutable<T>{
+public interface Valued<T> {
 
-	boolean returns(T value);
+	T getValue();
 	
-	boolean hasValue();
 }

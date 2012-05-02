@@ -15,8 +15,6 @@
  */
 package bingo.lang;
 
-public interface NamedValue<T> extends Named {
+public interface NamedValue<T> extends Named, Valued<T> {
 
-	T getValue();
-	
 }
