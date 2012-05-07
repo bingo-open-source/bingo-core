@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.lang.convert;
+package bingo.lang;
 
 import org.apache.commons.beanutils.ConvertUtils;
 import org.junit.Test;
@@ -21,7 +21,7 @@ import org.junit.Test;
 import bingo.lang.Converts;
 import bingo.lang.testing.Perf;
 
-public class ConvertTest {
+public class ConvertsTest {
 
 	@Test
 	public void testSimplePerformanceComparsion(){

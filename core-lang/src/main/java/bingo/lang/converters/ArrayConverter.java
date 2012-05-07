@@ -15,9 +15,100 @@
  */
 package bingo.lang.converters;
 
+import java.lang.reflect.Array;
+import java.util.Collection;
 
-public class ArrayConverter extends AbstractConverter<Object[]>{
+import bingo.lang.Converts;
+import bingo.lang.Out;
+import bingo.lang.Strings;
 
 
+public class ArrayConverter extends AbstractConverter<Object>{
+
+	@Override
+	@SuppressWarnings("unused")
+	public boolean convertFrom(Object value, Class<?> targetType, Class<?> genericType, Out<Object> out) throws Throwable {
+		Class<?> sourceType = value.getClass();
+		Class<?> componentType = targetType.getComponentType();
+
+		if (sourceType.isArray()) {
+			
+			Class<?> sourceCompoenentType = sourceType.getComponentType();
+
+			if (componentType.isAssignableFrom(sourceCompoenentType)) {
+				return out.returns(value);
+			} else {
+				int length = Array.getLength(value);
+				Object array = Array.newInstance(componentType, length);
+				for (int i = 0; i < length; i++) {
+					Array.set(array, i, Converts.convert(componentType, Array.get(value, i)));
+				}
+				return out.returns(array);
+			}
+			
+		} else if (value instanceof CharSequence) {
+			
+			return out.returns(stringToArray(value.toString(),componentType));
+			
+		} else if (value instanceof Collection<?>) {
+			Collection<?> collection = (Collection<?>)value;
+
+			return out.returns(iterableToArray(collection, componentType, collection.size()));
+			
+		} else if (value instanceof Iterable<?>) {
+			Iterable<?> iterable = (Iterable<?>) value;
+			
+			int length = 0;
+			
+			for (Object e : iterable) {
+				length++;
+			}
+			
+			return out.returns(iterableToArray(iterable, componentType, length));
+		}
+
+		return false;
+	}
+
+	@Override
+    public String convertToString(Object array) throws Throwable {
+		
+        StringBuilder string = new StringBuilder(128);
+        
+        for(int i=0;i<Array.getLength(array);i++){
+            if(i > 0){
+                string.append(',');
+            }
+            
+            string.append(Converts.toString(Array.get(array, i)));
+        }
+        
+        return string.toString();
+    }
 	
+	private static Object iterableToArray(Iterable<?> iterable,Class<?> componentType,int length){
+		Object array = Array.newInstance(componentType, length);
+
+		if(length > 0){
+			int index = 0;
+			
+			for (Object element : iterable) {
+				Array.set(array, index++, Converts.convert(componentType, element));
+			}
+		}
+
+		return array;
+	}
+	
+    private static Object stringToArray(String string,Class<?> componentType){
+        String[] strings = Strings.split(string,',');
+        
+        Object array = Array.newInstance(componentType, strings.length);
+        
+        for(int i=0;i<strings.length;i++){
+            Array.set(array, i, Converts.convert(componentType, strings[i]));
+        }
+        
+        return array;
+    }
 }

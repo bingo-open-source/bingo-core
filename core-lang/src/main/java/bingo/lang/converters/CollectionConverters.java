@@ -13,10 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.lang.reflect;
+package bingo.lang.converters;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 
-public class Reflects {
-
+@SuppressWarnings("unchecked")
+public class CollectionConverters {
 	
+	public static class ListConverter extends AbstractCollectionConverter<List> {
+
+		@Override
+        protected List<?> newInstance(Class<?> targetType) {
+	        return new ArrayList();
+        }
+		
+	}
+	
+	public static class SetConverter extends AbstractCollectionConverter<Set> {
+
+		@Override
+        protected Set newInstance(Class<?> targetType) {
+	        return new HashSet();
+        }
+		
+	}
+
 }

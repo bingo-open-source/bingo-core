@@ -48,7 +48,7 @@ public abstract class AbstractDateConverter<T extends Date> extends AbstractConv
 			return out.returns(toDate(targetType,(Calendar)value));
 		}else if(value instanceof Long){
 			return out.returns(toDate(targetType,(Long)value));
-		}else{
+		}else if(value instanceof CharSequence){
 			String stringValue = value.toString();
 			
 			if(Strings.isDigits(stringValue)){
@@ -57,6 +57,7 @@ public abstract class AbstractDateConverter<T extends Date> extends AbstractConv
 				return out.returns(toDate(targetType,stringValue));
 			}
 		}
+		return false;
     }
 
 	@Override

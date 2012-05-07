@@ -18,7 +18,9 @@ package bingo.lang;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import bingo.lang.convert.Converter;
@@ -28,7 +30,7 @@ import bingo.lang.converters.BeanConverter;
 import bingo.lang.converters.BooleanConverter;
 import bingo.lang.converters.CharacterConverter;
 import bingo.lang.converters.ClassConverter;
-import bingo.lang.converters.CollectionConverter;
+import bingo.lang.converters.CollectionConverters;
 import bingo.lang.converters.DateTimeConverters;
 import bingo.lang.converters.EnumConverter;
 import bingo.lang.converters.NumberConverters;
@@ -41,10 +43,9 @@ public class Converts {
 	
 	private static final Map<Class<?>, Converter<?>> converters = new ConcurrentHashMap<Class<?>, Converter<?>>();
 	
-	private static Converter beanConverter       = new BeanConverter();
-	private static Converter arrayConverter      = new ArrayConverter();
-	private static Converter enumConverter       = new EnumConverter();
-	private static Converter collectionConverter = new CollectionConverter();
+	private static Converter beanConverter  = new BeanConverter();
+	private static Converter arrayConverter = new ArrayConverter();
+	private static Converter enumConverter  = new EnumConverter();
 	
 	static {
 		//String , Charracter , Boolean
@@ -67,6 +68,12 @@ public class Converts {
 		register(java.sql.Date.class,  		new DateTimeConverters.SqlDateConverter());
 		register(java.sql.Timestamp.class,	new DateTimeConverters.SqlTimestampConverter());
 		register(java.sql.Time.class,		new DateTimeConverters.SqlTimeConverter());
+		
+		//Collection :  
+		register(Iterable.class,new CollectionConverters.ListConverter());
+		register(Collection.class,new CollectionConverters.ListConverter());
+		register(List.class,new CollectionConverters.ListConverter());
+		register(Set.class,new CollectionConverters.SetConverter());
 		
 		//Class
 		register(Class.class,				new ClassConverter());
@@ -105,7 +112,7 @@ public class Converts {
         Class<?> sourceType = value.getClass();
         
         //target and source type is same
-        if(targetType == sourceType){
+        if(targetType.equals(sourceType)){
         	return (T)value;
         }
         
@@ -124,7 +131,7 @@ public class Converts {
 	        //value is Convertible
 	        Out<Object> out = new OutObject<Object>();
 	        
-	        if(null != value && value instanceof Convertible) {
+	        if(value instanceof Convertible) {
 	        	if(((Convertible)value).convertTo(targetType, genericType, out)){
 	        		return (T)out.getValue();
 	        	}
@@ -136,9 +143,9 @@ public class Converts {
 	        //convert from
 	        if(null != converter && converter.convertFrom(value, targetType, genericType, out)){
 	        	return (T)out.getValue();
-	        }	
+	        }
 
-	        //get converter for value type
+	        //get converter for source type
 	        converter = findConverter(sourceType);
 	        
 	        //convert to
@@ -146,13 +153,13 @@ public class Converts {
 	        	return (T)out.getValue();
 	        }
 	        
-	        //assiable from converter
+	        //assignablefrom convert
 	        if(targetType.isAssignableFrom(sourceType)){
 	        	return (T)value;
 	        }
 	        
-	        //object target type
-	        if(targetType == Object.class){
+	        //object type convert
+	        if(targetType.equals(Object.class)){
 	            return (T)value;
 	        }
 	        
@@ -163,7 +170,7 @@ public class Converts {
         } catch (ConvertException e){
         	throw e;
         } catch (Throwable e) {
-        	throw new ConvertException(e,"error converting value '{0}' to type '{1}'",value,targetType.getName());
+        	throw new ConvertException(e,"error converting value '{0}' to '{1}'",value,targetType.getName());
         }
         
 		throw new UnsupportedException("cannot convert from '{0}' to '{1}'",sourceType.getName(),targetType.getName());
@@ -171,16 +178,16 @@ public class Converts {
 	
 	public static String toString(Object value) {
 		if(null == value){
-			return Strings.EMPTY;
+			return null;
 		}
 		
-		Class<?> valueType = value.getClass();
+		Class<?> sourceType = value.getClass();
 		
         try {
 	        //get converter for value type
-	        Converter converter = findConverter(valueType);
+	        Converter converter = findConverter(sourceType);
 	        
-	        //convert to
+	        //convert to string
 	        if(null != converter){
 	        	return converter.convertToString(value);
 	        }
@@ -189,7 +196,7 @@ public class Converts {
         } catch (ConvertException e){
         	throw e;
         } catch (Throwable e) {
-        	throw new ConvertException(e,"error converting type '{0}' to String",valueType.getName());
+        	throw new ConvertException(e,"error converting '{0}' to String",sourceType.getName());
         }
 	}
 	
@@ -205,19 +212,16 @@ public class Converts {
 		Converter converter = converters.get(type);
 		
 		if(null == converter){
-			if(type.isEnum()){
-				return enumConverter;
-			}
 			
 			if(type.isArray()){
 				return arrayConverter;
 			}
 			
-			if(Collection.class.isAssignableFrom(type)){
-				return collectionConverter;
+			if(type.isEnum()){
+				return enumConverter;
 			}
 		}
 		
 		return converter;
-	}	
+	}
 }

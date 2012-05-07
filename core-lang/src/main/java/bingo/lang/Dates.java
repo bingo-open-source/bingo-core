@@ -16,8 +16,8 @@
  */
 package bingo.lang;
 
+import java.text.DateFormat;
 import java.text.ParsePosition;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import bingo.lang.exceptions.ParseException;
@@ -103,8 +103,7 @@ public class Dates {
 			throw new IllegalArgumentException("Date and Patterns must not be null");
 		}
 
-		SimpleDateFormat parser = new SimpleDateFormat();
-		parser.setLenient(lenient);
+		DateFormat parser = null; 
 		ParsePosition pos = new ParsePosition(0);
 		for (String parsePattern : patterns) {
 
@@ -114,8 +113,10 @@ public class Dates {
 			if (parsePattern.endsWith("ZZ")) {
 				pattern = pattern.substring(0, pattern.length() - 1);
 			}
+			
+			parser = DateFormats.getFormat(pattern);
 
-			parser.applyPattern(pattern);
+			//parser.applyPattern(pattern);
 			pos.setIndex(0);
 
 			String str2 = string;

@@ -111,8 +111,11 @@
 							<goals>
 								<goal>jar-no-fork</goal>
 							</goals>
+							<configuration>
+								<encoding>UTF-8</encoding>
+							</configuration>							
 						</execution>
-					</executions>
+					</executions>					
 				</plugin>
 
 				<!-- resources -->
@@ -144,10 +147,10 @@
 								<goal>jar</goal>
 							</goals>
 							<configuration>
-								<charset>UTF-8</charset>
+								<encoding>UTF-8</encoding>
 							</configuration>
 						</execution>
-					</executions>
+					</executions>					
 				</plugin>
 
 				<!-- clean -->
@@ -206,6 +209,20 @@
 				</plugin>
 			</plugins>
 		</pluginManagement>
+		
+		<plugins>
+				<!-- source  -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-source-plugin</artifactId>
+				</plugin>	
+				
+				<!-- javadoc -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-javadoc-plugin</artifactId>
+				</plugin>
+		</plugins>
 	</build>
 
 	<dependencies>
