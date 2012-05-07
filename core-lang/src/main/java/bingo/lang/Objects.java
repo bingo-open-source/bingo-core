@@ -111,8 +111,8 @@ public class Objects {
 	 * </p>
 	 * 
 	 * <p>
-	 * This allows a hash code to be rapidly calculated for a number of objects. The hash code for a single object is
-	 * the <em>not</em> same as {@link #hashCode(Object)}. The hash code for multiple objects is the same as that
+	 * This allows a hash code to be rapidly calculated for a number of objects. The hash code for a single object is 
+	 * <em>not</em> the same as {@link #hashCode(Object)}. The hash code for multiple objects is the same as that
 	 * calculated by an {@code ArrayList} containing the specified objects.
 	 * </p>
 	 * 
@@ -166,17 +166,17 @@ public class Objects {
 	/**
 	 * <p>
 	 * Gets the toString that would be produced by {@code Object} if a class did not override toString itself. {@code
-	 * null} will return {@code null}.
+	 * null} will return an empty String "".
 	 * </p>
 	 * 
 	 * <pre>
-	 * Objects.identityToString(null)         = null
+	 * Objects.identityToString(null)         = ""
 	 * Objects.identityToString("")           = "java.lang.String@1e23"
 	 * Objects.identityToString(Boolean.TRUE) = "java.lang.Boolean@7fa"
 	 * </pre>
 	 * 
 	 * @param object the object to create a toString for, may be {@code null}
-	 * @return the default toString text, or {@code null} if {@code null} passed in
+	 * @return the default toString text, or empty String "" if {@code null} passed in
 	 */
 	public static String identityToString(Object object) {
 		if (object == null) {
