@@ -41,7 +41,7 @@ public class ConcurrentDateFormat extends DateFormat {
      * Constructs a SimpleDateFormat using the given pattern and the default date format symbols
      * for the default locale, and the parsing is not lenient as default. 
      * Note: This constructor may not support all locales. 
-     * For full coverage, use the factory methods in the {@link DateFormat} class.
+     * For full coverage, use the factory methods in the {@link DateFormats} class.
      * 
      * @param pattern the pattern describing the date and time format
      */
