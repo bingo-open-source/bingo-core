@@ -56,33 +56,79 @@ public class Dates {
 
 	}
 	
+	/**
+	 * Formats a Date into a date string using pattern "yyyy-MM-dd" as default.
+	 * @param date the date value to be formatted into a date string.
+	 * @return the formatted date string.
+	 */
 	public static String format(Date date) {
 		return DateFormats.getFormat(date.getClass()).format(date);
 	}
 	
+	/**
+	 * Formats a Date into a date string using the supplied pattern.
+	 * 
+	 * @param date the date value to be formatted into a date string.
+	 * @param pattern the pattern used to format.
+	 * @return the formatted date/time string.
+	 */
 	public static String format(Date date,String pattern) {
 		return DateFormats.getFormat(pattern).format(date);
 	}	
 	
+	/**
+	 * parses a string representing a date/time by trying a variety of different parsers.
+	 * 
+	 * if no parse patterns match, throw {@link ParseException}.
+	 * 
+	 * @param string the string to be parsed.
+	 * @return the parsed {@link Date}.
+	 * @throws ParseException if no parse patterns matches.
+	 */
 	public static Date parse(String string) throws ParseException {
 		return parse(string,DateFormats.DEFAULT_PATTERNS,true,false);
 	}
 	
+	/**
+	 * parses a string representing a date/time by trying a variety of different parsers.
+	 * 
+	 * if no parse patterns match, return null instead of throw {@link ParseException}.
+	 * 
+	 * @param string the string to be parsed.
+	 * @return the parsed {@link Date} or null if no patterns matches.
+	 */
 	public static Date parseOrNull(String string) {
         return parse(string,DateFormats.DEFAULT_PATTERNS,true,true);
 	}
 	
+	/**
+	 * parses a string representing a date/time by trying all the supplied patterns.
+	 * 
+	 * if no parse patterns match, throw {@link ParseException}.
+	 * 
+	 * @param string the string to be parsed.
+	 * @return the parsed {@link Date}.
+	 * @throws ParseException if no parse patterns matches.
+	 */
 	public static Date parse(String string,String... patterns) throws ParseException {
 		return parse(string,patterns,true,false);
 	}
 	
+	/**
+	 * parses a string representing a date/time by trying all the supplied patterns.
+	 * 
+	 * if no parse patterns match, return null instead of throw {@link ParseException}.
+	 * 
+	 * @param string the string to be parsed.
+	 * @return the parsed {@link Date} or null if no patterns matches.
+	 */
 	public static Date parseOrNull(String string,String... patterns) {
 		return parse(string,patterns,true,true);
 	}
 
 	/**
 	 * <p>
-	 * Parses a string representing a date by trying a variety of different parsers.
+	 * Parses a string representing a date/time by trying a variety of different parsers.
 	 * </p>
 	 * 
 	 * <p>

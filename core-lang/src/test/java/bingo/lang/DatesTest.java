@@ -81,10 +81,10 @@ public class DatesTest {
 		} catch (ParseException e) {
 		}
 		
-//		assertNotNull(Dates.parse("11:16:01"));
-//		assertNotNull(Dates.parse("01:01:01"));
+		assertNotNull(Dates.parse("11:16:01"));
+		assertNotNull(Dates.parse("01:01:01"));
 		
-//		assertNotNull(Dates.parse("2012-05-10 14:56:02"));
+		assertNotNull(Dates.parse("2012-05-10 14:56:02"));
 	}
 
 	/**
