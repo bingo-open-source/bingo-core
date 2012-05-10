@@ -27,12 +27,24 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
+/**
+ * concurrent DateFormat wrapped {@link SimpleDateFormat}.
+ *
+ */
 public class ConcurrentDateFormat extends DateFormat {
 
     private static final long serialVersionUID = -1237664759165921526L;
     
     private SimpleDateFormat format;
     
+    /**
+     * Constructs a SimpleDateFormat using the given pattern and the default date format symbols
+     * for the default locale, and the parsing is not lenient as default. 
+     * Note: This constructor may not support all locales. 
+     * For full coverage, use the factory methods in the {@link DateFormats} class.
+     * 
+     * @param pattern the pattern describing the date and time format
+     */
     public ConcurrentDateFormat(String pattern){
         this.format = new SimpleDateFormat(pattern);
         this.format.setLenient(false);

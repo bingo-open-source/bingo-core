@@ -1590,6 +1590,13 @@ public class Arrays {
 		return strings;
 	}
 
+	/**
+	 * cast the supplied array to an array which it's type is the type of the specific to array.
+	 * 
+	 * @param array the array to be cast.
+	 * @param to specify the type of the array after cast.
+	 * @return an array after cast.
+	 */
 	@SuppressWarnings("unchecked")
 	public static final <T> T[] cast(Object[] array, T[] to) {
 		if (to.length == array.length) {

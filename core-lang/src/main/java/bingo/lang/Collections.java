@@ -32,9 +32,6 @@ public class Collections {
 	protected Collections() {
 
 	}
-	
-	//isEmpty
-	//---------------------------------------------------------------------------------------------------------	
 
 	/**
 	 * Return <code>true</code> if the supplied Collection is <code>null</code> or empty. Otherwise, return
@@ -48,8 +45,14 @@ public class Collections {
 		return (collection == null || collection.isEmpty());
 	}
 
-	//toArray
-	//---------------------------------------------------------------------------------------------------------
+	/**
+	 * return an empty object array if the supplied {@link Collection} is null. 
+	 * Otherwise, return collection.toArray().
+	 * 
+	 *  @param collection the collection to return array.
+	 *  
+	 *  @return empty object array if collection is null or collection.toArray().
+	 */
 	public static Object[] toArray(Collection<?> collection) {
 		if (null == collection) {
 			return Arrays.EMPTY_OBJECT_ARRAY;
@@ -58,6 +61,14 @@ public class Collections {
 		return collection.toArray();
 	}
 	
+	/**
+	 * return an empty object array if the supplied {@link Iterable} is null. 
+	 * Otherwise, return an object array of all iterable.
+	 * 
+	 *  @param iterable the iterable to Array.
+	 *  
+	 *  @return empty object array if iterable is null or an object array of all iterable.
+	 */
 	public static Object[] toArray(Iterable<?> iterable) {
 		if (null == iterable) {
 			return Arrays.EMPTY_OBJECT_ARRAY;
@@ -72,6 +83,13 @@ public class Collections {
 		return list.toArray();
 	}
 	
+	/**
+	 * return an object array of all enumeration elements.
+	 * 
+	 * @param enumeration the enumeration to return array.
+	 * 
+	 * @return the object array of all enumeration elements.
+	 */
 	public static Object[] toArray(Enumeration<?> enumeration) {
 		ArrayList<Object> list = new ArrayList<Object>();
 
@@ -82,8 +100,13 @@ public class Collections {
 		return list.toArray();
 	}	
 	
-	//toList
-	//---------------------------------------------------------------------------------------------------------
+	/**
+	 * return a list containing all elements in the supplied iterable.
+	 * 
+	 * @param iterable the supplied iterable.
+	 * 
+	 * @return a list containing all elements in the supplied iterable.
+	 */
 	public static <T> List<T> toList(Iterable<T> iterable) {
 		if (null == iterable) {
 			return new ArrayList<T>();
@@ -98,8 +121,13 @@ public class Collections {
 		return list;
 	}
 	
-	//toSet
-	//---------------------------------------------------------------------------------------------------------
+	/**
+	 * return a set containing all elements in the supplied iterable.
+	 * 
+	 * @param iterable the supplied iterable.
+	 * 
+	 * @return a set containing all elements in the supplied iterable.
+	 */
 	public static <T> Set<T> toSet(Iterable<T> iterable) {
 		if (null == iterable) {
 			return new HashSet<T>();
@@ -114,8 +142,14 @@ public class Collections {
 		return set;
 	}	
 
-	//concat
-	//---------------------------------------------------------------------------------------------------------	
+	/**
+	 * concatenate lists into one list.
+	 * 
+	 *  @param lists all lists to be concatenated.
+	 *  
+	 *  @return the one list. it will never return null even the supplied lists is null or empty.
+	 *  in that case, it will return an empty list.
+	 */
 	public static <T> List<T> concat(List<T>... lists) {
 		ArrayList<T> list = new ArrayList<T>();
 
@@ -130,8 +164,15 @@ public class Collections {
 		return list;
 	}
 	
-	//query
-	//---------------------------------------------------------------------------------------------------------	
+	/**
+	 * return the first element in the supplied {@link Iterable}.
+	 * 
+	 * @param iterable get the first element from this iterable.
+	 * 
+	 * @return the first element.
+	 * 
+	 * @throws EmptyElementException if the supplied iterable is null or empty.
+	 */
 	public static <T> T first(Iterable<T> iterable){
 		if(null == iterable){
 			throw new EmptyElementException("iterable is null");
@@ -144,6 +185,7 @@ public class Collections {
 		throw new EmptyElementException("iterable is empty");
 	}
 	
+	//TODO to be documented after figure out the usage of predicate.
 	public static <T> T firstOrNull(Iterable<T> iterable, Predicate<T> predicate) {
 		if(null == iterable){
 			return null;
@@ -157,6 +199,7 @@ public class Collections {
 		return null;
 	}
 
+	//TODO to be documented after figure out the usage of predicate.
 	public static <T> T firstOrNull(T[] array, Predicate<T> predicate) {
 		if(null == array){
 			return null;
@@ -170,6 +213,7 @@ public class Collections {
 		return null;
 	}
 
+	//TODO to be documented after figure out the usage of predicate.
 	public static <T, O> O firstOrNull(Iterable<T> iterable, Predicate1<T, O> predicate) {
 		if(null == iterable){
 			return null;
@@ -186,6 +230,7 @@ public class Collections {
 		return null;
 	}
 
+	//TODO to be documented after figure out the usage of predicate.
 	public static <T, O> O firstOrNull(T[] array, Predicate1<T, O> predicate) {
 		if(null == array){
 			return null;
@@ -201,7 +246,8 @@ public class Collections {
 
 		return null;
 	}
-	
+
+	//TODO to be documented after figure out the usage of predicate.
 	public static <T> List<T> where(Iterable<T> iterable,Predicate<T> where){
 		List<T> list = new ArrayList<T>();
 		
@@ -215,7 +261,8 @@ public class Collections {
 		
 		return list;
 	}
-	
+
+	//TODO to be documented after figure out the usage of predicate.
 	public static <T> List<T> where(T[] array,Predicate<T> where){
 		List<T> list = new ArrayList<T>();
 		
@@ -230,6 +277,8 @@ public class Collections {
 		return list;
 	}
 
+
+	//TODO to be documented after figure out the usage of Func1.
 	public static <T, O> List<O> select(Iterable<T> iterable, Func1<T, O> func) {
 		List<O> list = new ArrayList<O>();
 
@@ -242,6 +291,7 @@ public class Collections {
 		return list;
 	}
 
+	//TODO to be documented after figure out the usage of Func1.
 	public static <T, O> List<O> select(T[] array, Func1<T, O> func) {
 		List<O> list = new ArrayList<O>();
 
@@ -254,6 +304,7 @@ public class Collections {
 		return list;
 	}
 
+	//TODO to be documented after figure out the usage of Func1.
 	public static <T, R> Collection<R> selectMany(Iterable<T> iterable, Func1<T,Collection<R>> func) {
 		List<R> list = new ArrayList<R>();
 

@@ -44,10 +44,10 @@ public class DateFormats {
 																   };    
     
     public static final DateFormat DATE_FORMAT      = new ConcurrentDateFormat(DATE_PATTERN);
-    public static final DateFormat TIME_FORMAT      = new ConcurrentDateFormat(DATE_PATTERN);
-    public static final DateFormat DATETIME_FORMAT  = new ConcurrentDateFormat(DATE_PATTERN);
-    public static final DateFormat TIMESTAMP_FORMAT = new ConcurrentDateFormat(DATE_PATTERN);
-    public static final DateFormat REF_DATE_FORMAT  = new ConcurrentDateFormat(DATE_PATTERN);
+    public static final DateFormat TIME_FORMAT      = new ConcurrentDateFormat(TIME_PATTERN);
+    public static final DateFormat DATETIME_FORMAT  = new ConcurrentDateFormat(DATETIME_PATTERN);
+    public static final DateFormat TIMESTAMP_FORMAT = new ConcurrentDateFormat(TIMESTAMP_PATTERN);
+    public static final DateFormat REF_DATE_FORMAT  = new ConcurrentDateFormat(RFC_DATE_PATTERN);
     
     static {
     	patternFormats.put(DATE_PATTERN,      DATE_FORMAT);
@@ -66,6 +66,12 @@ public class DateFormats {
 		
 	}
 	
+	/**
+	 * Get a date/time formatter using the supplied pattern.
+	 * 
+	 * @param pattern the pattern to format date/time.
+	 * @return the formatter using the pattern.  
+	 */
 	public static DateFormat getFormat(String pattern) {
         DateFormat format = patternFormats.get(pattern);
         
@@ -78,10 +84,22 @@ public class DateFormats {
         return format;
 	}
 	
+	/**
+	 * get a date/time formatter using the pattern of the supplied type.
+	 * the type can be {@link Timestamp}, {@link Time}, {@link Date}, {@link java.util.Date}.
+	 * @param type the type to represent the pattern.
+	 * @return the formatter using the pattern.
+	 */
 	public static DateFormat getFormat(Class<?> type) {
 		return getFormat(getPattern(type));
 	}	
 	
+	/**
+	 * get the pattern string according to the supplied type.
+	 * return pattern string "yyyy-MM-dd HH:mm:ss" if there's no pattern string matches the type.
+	 * @param type the type to get the matched pattern string.
+	 * @return the pattern string according to the supplied type.
+	 */
 	public static String getPattern(Class<?> type) {
 		String pattern = defaultPatterns.get(type);
 		
