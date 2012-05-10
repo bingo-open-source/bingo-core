@@ -15,6 +15,8 @@
  */
 package bingo.lang.converters;
 
+import java.lang.reflect.Type;
+
 import bingo.lang.Out;
 
 public abstract class AbstractNumberConverter<T extends Number> extends AbstractConverter<T> {
@@ -23,7 +25,7 @@ public abstract class AbstractNumberConverter<T extends Number> extends Abstract
     private static final Integer ONE  = new Integer(1);
 	
 	@Override
-    public boolean convertFrom(Object value, Class<?> targetType, Class<?> genericType, Out<Object> out) throws Throwable {
+    public boolean convertFrom(Object value, Class<?> targetType, Type genericType, Out<Object> out) throws Throwable {
 		if(value instanceof Number){
 			return out.returns(toNumber(targetType, ((Number)value)));
 		}else if(value instanceof Boolean){

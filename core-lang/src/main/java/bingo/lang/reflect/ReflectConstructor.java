@@ -19,9 +19,9 @@ import java.lang.reflect.Constructor;
 
 import bingo.lang.exceptions.ReflectException;
 
-public class ReflectConstructor<T> extends ReflectMember<T> {
+public class ReflectConstructor<T> extends ReflectMember {
 
-	private final Constructor<T>  javaConstructor;
+	private final Constructor<T> javaConstructor;
 	
 	protected ReflectConstructor(ReflectClass<T> reflectClass, Constructor<T> javaConstructor){
 		super(reflectClass,javaConstructor);

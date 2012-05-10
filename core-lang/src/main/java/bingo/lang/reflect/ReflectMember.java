@@ -20,19 +20,19 @@ import java.lang.reflect.Modifier;
 
 import bingo.lang.Named;
 
-public abstract class ReflectMember<T> implements Named {
+public abstract class ReflectMember implements Named {
 
-	protected final ReflectClass<T> reflectClass;
+	protected final ReflectClass<?> reflectClass;
 	protected final boolean	      isDeclared;
 	protected final boolean		  isPublic;
 	
-	protected ReflectMember(ReflectClass<T> reflectClass,Member member){
+	protected ReflectMember(ReflectClass<?> reflectClass,Member member){
 		this.reflectClass = reflectClass;
 		this.isDeclared   = member.getDeclaringClass() == reflectClass.getJavaClass();
 		this.isPublic     = Modifier.isPublic(member.getModifiers());
 	}
 
-	public ReflectClass<T> getReflectClass() {
+	public ReflectClass<?> getReflectClass() {
     	return reflectClass;
     }
 	

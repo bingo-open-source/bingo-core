@@ -20,33 +20,42 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.List;
+import java.util.WeakHashMap;
 
 import bingo.lang.Collections;
 import bingo.lang.Named;
 import bingo.lang.New;
 import bingo.lang.Predicate;
+import bingo.lang.Reflects;
 import bingo.lang.exceptions.ReflectException;
 
 public class ReflectClass<T> implements Named {
 	
-	public static <T> ReflectClass<T> forType(Class<T> type) {
-		return null;
-	}
+	private static final WeakHashMap<Class<?>, ReflectClass<?>> cache = new WeakHashMap<Class<?>, ReflectClass<?>>();
 	
-	public static <T> ReflectClass<T> forName(String name) {
-		return null;
-	}	
+	@SuppressWarnings("unchecked")
+	public synchronized static <T> ReflectClass<T> valueOf(Class<T> type) {
+		ReflectClass<?> clazz = cache.get(type);
+		
+		if(null == clazz){
+			clazz = new ReflectClass<T>(type);
+			
+			cache.put(type, clazz);
+		}
+		
+		return (ReflectClass<T>)clazz;
+	}
 	
 	private final Class<T>	         javaClass;
 	private final ReflectAccessor   accessor;
 	
 	private ReflectConstructor<T>[]	 constructors;
-	private ReflectField<T>[]		 fields;
-	private ReflectMethod<T>[]		 methods;
+	private ReflectField[]		 	 fields;
+	private ReflectMethod[]		 	 methods;
 	
 	private ReflectConstructor<T>[] declaredConstructors;
-	private ReflectField<T>[]		 declaredFields;
-	private ReflectMethod<T>[]		 declaredMethods;	
+	private ReflectField[]		 	 declaredFields;
+	private ReflectMethod[]		 	 declaredMethods;	
 	
 	private ReflectConstructor<T>	 defaultConstructor;	
 	
@@ -79,53 +88,49 @@ public class ReflectClass<T> implements Named {
 		return declaredConstructors;
 	}
 	
-	public ReflectConstructor<T> getConstructor(Class<?>... argumentTypes){
-		return null;
-	}
-	
-	public ReflectField<T>[] getFields() {
+	public ReflectField[] getFields() {
 		return fields;
 	}
 	
-	public ReflectField<T>[] getDeclaredFields(){
+	public ReflectField[] getDeclaredFields(){
 		return declaredFields;
 	}
 	
-	public ReflectField<T> getField(final String name){
-		return Collections.firstOrNull(fields, new Predicate<ReflectField<T>>() {
-			public boolean evaluate(ReflectField<T> object) {
+	public ReflectField getField(final String name){
+		return Collections.firstOrNull(fields, new Predicate<ReflectField>() {
+			public boolean evaluate(ReflectField object) {
 	            return object.getName().equals(name);
             }
 		});
 	}
 	
-	public ReflectField<T> getField(final String name,final Class<?> fieldType){
-		return Collections.firstOrNull(fields, new Predicate<ReflectField<T>>() {
-			public boolean evaluate(ReflectField<T> object) {
+	public ReflectField getField(final String name,final Class<?> fieldType){
+		return Collections.firstOrNull(fields, new Predicate<ReflectField>() {
+			public boolean evaluate(ReflectField object) {
 	            return object.getName().equals(name) && object.getJavaField().getType().equals(fieldType);
             }
 		});
 	}
 	
-	public ReflectField<T> findField(final String name){
-		return Collections.firstOrNull(fields, new Predicate<ReflectField<T>>() {
-			public boolean evaluate(ReflectField<T> object) {
+	public ReflectField findField(final String name){
+		return Collections.firstOrNull(fields, new Predicate<ReflectField>() {
+			public boolean evaluate(ReflectField object) {
 	            return object.getName().equalsIgnoreCase(name);
             }
 		});
 	}
 	
-	public ReflectMethod<T>[] getMethods(){
+	public ReflectMethod[] getMethods(){
 		return methods;
 	}
 	
-	public ReflectMethod<T>[] getDeclaredMethods(){
+	public ReflectMethod[] getDeclaredMethods(){
 		return declaredMethods;
 	}
 	
-	public ReflectMethod<T> getMethod(final String name,final Class<?>... argumentTypes){
-		return Collections.firstOrNull(methods, new Predicate<ReflectMethod<T>>() {
-			public boolean evaluate(ReflectMethod<T> object) {
+	public ReflectMethod getMethod(final String name,final Class<?>... argumentTypes){
+		return Collections.firstOrNull(methods, new Predicate<ReflectMethod>() {
+			public boolean evaluate(ReflectMethod object) {
 	            if(object.getName().equals(name)){
 	            	Method javaMethod = object.getJavaMethod();
 	            	
@@ -149,16 +154,15 @@ public class ReflectClass<T> implements Named {
 		});
 	}
 	
-	public ReflectMethod<T> getMethod(String name,Class<?> returnType,Class<?>... argumentTypes){
-		ReflectMethod<T> m = getMethod(name, argumentTypes);
+	public ReflectMethod getMethod(String name,Class<?> returnType,Class<?>... argumentTypes){
+		ReflectMethod m = getMethod(name, argumentTypes);
 		
 		return null == m ? null : (m.getJavaMethod().getReturnType().equals(returnType) ? m : null);
 	}	
 	
-	@SuppressWarnings("unchecked")
-	public ReflectMethod<T>[] getMethods(final String name) {
-		return Collections.where(methods, new Predicate<ReflectMethod<T>>() {
-			public boolean evaluate(ReflectMethod<T> object) {
+	public ReflectMethod[] getMethods(final String name) {
+		return Collections.where(methods, new Predicate<ReflectMethod>() {
+			public boolean evaluate(ReflectMethod object) {
 	            return object.getName().equals(name);
             }
 		}).toArray(new ReflectMethod[]{});
@@ -183,7 +187,7 @@ public class ReflectClass<T> implements Named {
 	private void createConstructors(){
 		List<ReflectConstructor<T>> constructorList = New.list();
 		
-		for(Constructor<T> c : javaClass.getConstructors()) {
+		for(Constructor<T> c : Reflects.getConstructors(javaClass)) {
 			if(!c.isSynthetic()){
 				ReflectConstructor<T> rc = new ReflectConstructor<T>(this,c);
 				
@@ -199,11 +203,10 @@ public class ReflectClass<T> implements Named {
 		this.declaredConstructors = getDeclaredMembers(constructorList).toArray(new ReflectConstructor[]{});
 	}
 	
-	@SuppressWarnings("unchecked")
 	private void createFields(){
-		List<ReflectField<T>> fieldList = New.list();
+		List<ReflectField> fieldList = New.list();
 		
-		for(Field f : javaClass.getFields()){
+		for(Field f : Reflects.getFields(javaClass)){
 			if(!f.isSynthetic()){
 				fieldList.add(new ReflectField(this,f));
 			}
@@ -213,11 +216,10 @@ public class ReflectClass<T> implements Named {
 		this.declaredFields = getDeclaredMembers(fieldList).toArray(new ReflectField[]{});
 	}
 	
-	@SuppressWarnings("unchecked")
 	private void createMethods(){
-		List<ReflectMethod<T>> methodList = New.list();
+		List<ReflectMethod> methodList = New.list();
 		
-		for(Method m : javaClass.getMethods()){
+		for(Method m : Reflects.getMethods(javaClass)){
 			if(m.isSynthetic() || Modifier.isAbstract(m.getModifiers())){
 				continue;
 			}
@@ -229,7 +231,7 @@ public class ReflectClass<T> implements Named {
 		this.declaredMethods = getDeclaredMembers(methodList).toArray(new ReflectMethod[]{});
 	}
 	
-	private static <T extends ReflectMember<E>,E> List<T> getDeclaredMembers(List<T> members){
+	private static <T extends ReflectMember,E> List<T> getDeclaredMembers(List<T> members){
 		return Collections.where(members, new Predicate<T>() {
 			public boolean evaluate(T object) {
 	            return object.isDeclared();

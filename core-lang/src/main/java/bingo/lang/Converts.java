@@ -15,6 +15,7 @@
  */
 package bingo.lang;
 
+import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Collection;
@@ -91,7 +92,7 @@ public class Converts {
 		return convert(targetType,null,value);
 	}
 	
-	public static <T> T convert(Class<T> targetType, Class<?> genericType, Object value) throws UnsupportedException {
+	public static <T> T convert(Class<T> targetType, Type genericType, Object value) throws UnsupportedException {
         if(null == targetType){
             throw new IllegalArgumentException("argument 'targetType' required");
         }
@@ -163,9 +164,12 @@ public class Converts {
 	            return (T)value;
 	        }
 	        
-	        //bean converter
-	        if(beanConverter.convertTo(value, targetType, genericType,out)){
-	        	return (T)out;
+	        if(beanConverter.convertFrom(value, targetType, genericType, out) ){
+	        	return (T)out.getValue();
+	        }
+	        
+	        if(beanConverter.convertTo(value, targetType, genericType, out)){
+	        	return (T)out.getValue();
 	        }
         } catch (ConvertException e){
         	throw e;

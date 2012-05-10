@@ -16,6 +16,7 @@
 package bingo.lang.converters;
 
 import java.lang.reflect.Array;
+import java.lang.reflect.Type;
 import java.util.Collection;
 
 import bingo.lang.Converts;
@@ -27,7 +28,7 @@ public class ArrayConverter extends AbstractConverter<Object>{
 
 	@Override
 	@SuppressWarnings("unused")
-	public boolean convertFrom(Object value, Class<?> targetType, Class<?> genericType, Out<Object> out) throws Throwable {
+	public boolean convertFrom(Object value, Class<?> targetType, Type genericType, Out<Object> out) throws Throwable {
 		Class<?> sourceType = value.getClass();
 		Class<?> componentType = targetType.getComponentType();
 

@@ -15,6 +15,7 @@
  */
 package bingo.lang.converters;
 
+import java.lang.reflect.Type;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -41,7 +42,7 @@ public abstract class AbstractDateConverter<T extends Date> extends AbstractConv
 	}
 
 	@Override
-    public boolean convertFrom(Object value, Class<?> targetType, Class<?> genericType, Out<Object> out) throws Throwable {
+    public boolean convertFrom(Object value, Class<?> targetType, Type genericType, Out<Object> out) throws Throwable {
 		if(value instanceof Date){
 			return out.returns(toDate(targetType,(Date)value));
 		}else if(value instanceof Calendar){

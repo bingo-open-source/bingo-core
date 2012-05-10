@@ -20,12 +20,12 @@ import java.lang.reflect.Modifier;
 
 import bingo.lang.exceptions.ReflectException;
 
-public class ReflectMethod<T> extends ReflectMember<T>{
+public class ReflectMethod extends ReflectMember{
 	
 	private final int    index;
 	private final Method javaMethod;
 	
-	protected ReflectMethod(ReflectClass<T> reflectClass,Method javaMethod) {
+	protected ReflectMethod(ReflectClass<?> reflectClass,Method javaMethod) {
 		super(reflectClass,javaMethod);
 		
 		this.javaMethod = javaMethod;

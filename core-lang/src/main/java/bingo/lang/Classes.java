@@ -15,6 +15,9 @@
  */
 package bingo.lang;
 
+import java.lang.reflect.Modifier;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -265,6 +268,58 @@ public class Classes {
 
 			throw ex;
 		}
+	}
+	
+	/**
+	 * Checks if given class is a concrete one; that is, not an interface or abstract class.
+	 */
+	public static boolean isConcrete(Class<?> clazz) {
+		if(null == clazz){
+			return false;
+		}
+		
+		return ! (Modifier.isInterface(clazz.getModifiers()) || Modifier.isAbstract(clazz.getModifiers())); 
+		
+	}
+	
+	public static boolean isString(Class<?> clazz){
+		return null == clazz ? false : clazz.equals(String.class);
+	}
+	
+	public static boolean isBoolean(Class<?> clazz){
+		return null == clazz ? false : clazz.equals(Boolean.TYPE) || clazz.equals(Boolean.class);
+	}
+	
+	public static boolean isDouble(Class<?> clazz){
+		return null == clazz ? false : clazz.equals(Double.TYPE) || clazz.equals(Double.class);
+	}
+	
+	public static boolean isInteger(Class<?> clazz){
+		return null == clazz ? false : clazz.equals(Integer.TYPE) || clazz.equals(Integer.class);
+	}
+	
+	public static boolean isLong(Class<?> clazz){
+		return null == clazz ? false : clazz.equals(Long.TYPE) || clazz.equals(Long.class);
+	}
+	
+	public static boolean isShort(Class<?> clazz){
+		return null == clazz ? false : clazz.equals(Short.TYPE) || clazz.equals(Short.class);
+	}
+	
+	public static boolean isFloat(Class<?> clazz){
+		return null == clazz ? false : clazz.equals(Float.TYPE) || clazz.equals(Float.class);
+	}
+	
+	public static boolean isBigDecimal(Class<?> clazz){
+		return null == clazz ? false : clazz.equals(BigDecimal.class);
+	}
+	
+	public static boolean isBigInteger(Class<?> clazz){
+		return null == clazz ? false : clazz.equals(BigInteger.class);
+	}
+	
+	public static boolean isCharacter(Class<?> clazz){
+		return null == clazz ? false : clazz.equals(Character.TYPE) || clazz.equals(Character.class);
 	}
 
 	// Private Methods

@@ -15,17 +15,19 @@
  */
 package bingo.lang.converters;
 
+import java.lang.reflect.Type;
+
 import bingo.lang.Out;
 import bingo.lang.Strings;
 import bingo.lang.convert.Converter;
 
 public abstract class AbstractConverter<T> implements Converter<T> {
 
-	public boolean convertFrom(Object value, Class<?> targetType, Class<?> genericType, Out<Object> out) throws Throwable {
+	public boolean convertFrom(Object value, Class<?> targetType, Type genericType, Out<Object> out) throws Throwable {
 	    return false;
     }
 
-	public boolean convertTo(T value, Class<?> targetType, Class<?> genericType, Out<Object> out) throws Throwable {
+	public boolean convertTo(T value, Class<?> targetType, Type genericType, Out<Object> out) throws Throwable {
 	    return false;
     }
 

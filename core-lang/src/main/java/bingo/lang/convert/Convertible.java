@@ -15,10 +15,12 @@
  */
 package bingo.lang.convert;
 
+import java.lang.reflect.Type;
+
 import bingo.lang.Out;
 
 public interface Convertible {
 
-	boolean convertTo(Class<?> targetType,Class<?> genericType,Out<Object> out) throws Throwable;
+	boolean convertTo(Class<?> targetType,Type genericType,Out<Object> out) throws Throwable;
 	
 }

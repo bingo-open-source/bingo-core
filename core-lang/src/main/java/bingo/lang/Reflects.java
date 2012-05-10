@@ -16,11 +16,16 @@
 package bingo.lang;
 
 import java.lang.reflect.Array;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.GenericArrayType;
+import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Reflects {
 
@@ -170,6 +175,57 @@ public class Reflects {
 		
 		return null;
 	}
+	
+	//Consturctors, Fields, Methods
+	//--------------------------------------------------------------------------------------------------------
+	
+    public static <T> List<Constructor<T>> getConstructors(Class<T> clazz){
+        List<Constructor<T>> constructors = new ArrayList<Constructor<T>>();
+        
+        for (Class<?> search = clazz; search != null; search = search.getSuperclass()) {
+            for(Constructor<T> constructor : search.getDeclaredConstructors()){
+                //exclude synthetic constructor
+                if(!constructor.isSynthetic()){
+                    constructors.add(constructor) ;
+                }
+            }
+        }
+        
+        return constructors;
+    }
+
+    public static List<Method> getMethods(Class<?> clazz){
+        List<Method> methods = new ArrayList<Method>();
+        
+        for (Class<?> search = clazz; search != null; search = search.getSuperclass()) {
+            for(Method method : search.getDeclaredMethods()){
+                //exclude synthetic method
+                if(!method.isSynthetic()){
+                    methods.add(method) ;
+                }
+            }
+        }
+        
+        return methods;
+    }
+	
+    public static List<Field> getFields(Class<?> clazz){
+        List<Field> fields = new ArrayList<Field>();
+        
+        for (Class<?> search = clazz; search != null; search = search.getSuperclass()) {
+            for(Field field : search.getDeclaredFields()){
+                //exclude synthetic field
+                if(!field.isSynthetic()){
+                    fields.add(field) ;
+                }
+            }
+        }
+        
+        return fields;
+    }
+	
+	//Internal Methods
+	//--------------------------------------------------------------------------------------------------------
 	
     /**
      * <p> Transforms the passed in type to a {@code Class} object. Type-checking method of convenience. </p>

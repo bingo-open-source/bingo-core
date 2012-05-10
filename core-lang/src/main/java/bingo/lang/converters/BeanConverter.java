@@ -15,9 +15,77 @@
  */
 package bingo.lang.converters;
 
+import java.lang.reflect.Type;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
+import bingo.lang.Classes;
+import bingo.lang.Converts;
+import bingo.lang.Out;
+import bingo.lang.reflect.ReflectClass;
+import bingo.lang.reflect.ReflectField;
+
+
+@SuppressWarnings("unchecked")
 public class BeanConverter extends AbstractConverter<Object>{
 
+	@Override
+    public boolean convertFrom(Object value, Class<?> targetType, Type genericType, Out<Object> out) throws Throwable {
+		if(!Classes.isConcrete(targetType)){
+			return false;
+		}
+		
+		if(value instanceof Map){
+			return out.returns(convertFromMap(targetType, genericType, (Map)value));
+		}
+		
+		return false;
+    }
+	
+	@Override
+    public boolean convertTo(Object value, Class<?> targetType, Type genericType, Out<Object> out) throws Throwable {
+		if(Map.class.isAssignableFrom(targetType)){
+			return out.returns(convertToMap(value));
+		}
+		return false;
+    }
 
+	protected Object convertFromMap(Class<?> targetType, Type genericType,Map map) {
+		ReflectClass<?> reflectClass = ReflectClass.valueOf(targetType);
+		
+		Object bean = reflectClass.newInstance();
+		
+        for(Object entryObject : map.entrySet()){
+            Entry entry = (Entry)entryObject;
+            
+            Object key   = entry.getKey();
+            Object param = entry.getValue();
+            
+            String name  = key.getClass().equals(String.class) ? (String)key : key.toString();
+            
+            ReflectField field = reflectClass.findField(name);
+            
+            if(null != field){
+                field.setValue(bean, Converts.convert(field.getType(),field.getGenericType(),param));
+            }
+        }
+		
+		return bean;
+	}
 
+	protected Map<String,Object> convertToMap(Object bean) {
+		
+		ReflectClass<?> reflectClass = ReflectClass.valueOf(bean.getClass());
+		
+		Map<String, Object> map = new LinkedHashMap<String, Object>();
+		
+		for(ReflectField field : reflectClass.getFields()){
+			if(field.isPublicGet()){
+				map.put(field.getName(), field.getValue(bean));
+			}
+		}
+		
+		return map;
+	}
 }

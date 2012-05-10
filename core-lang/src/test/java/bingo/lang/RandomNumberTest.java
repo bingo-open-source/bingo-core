@@ -13,24 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.lang.converters;
+package bingo.lang;
 
-import java.lang.reflect.Type;
+import static org.junit.Assert.*;
 
-import bingo.lang.Classes;
-import bingo.lang.Out;
-import bingo.lang.convert.Converter;
+import java.util.Random;
 
-public class ClassConverter extends AbstractConverter<Class<?>> implements Converter<Class<?>> {
+import org.junit.Test;
+
+import bingo.lang.testing.Perf;
+
+public class RandomNumberTest {
+
+	private static final Random RANDOM = new Random();
 	
-	@Override
-    public boolean convertFrom(Object value, Class<?> targetType, Type genericType, Out<Object> out) throws Throwable {
-		return out.returns(Classes.forName(value.toString()));
+	@Test
+    public void testNextInt() {
+		Perf.run("Randonms.nextInt", new Runnable() {
+			public void run() {
+				assertTrue(Randoms.nextInt() >= 0);
+			}
+		},100000);
+		
+		Perf.run("Random.nextInt", new Runnable() {
+			public void run() {
+				assertTrue(RANDOM.nextInt(Integer.MAX_VALUE) >= 0);
+			}
+		},100000);
     }
-
-	@Override
-    public String convertToString(Class<?> value) throws Throwable {
-		return value.getName();
-    }
-
 }

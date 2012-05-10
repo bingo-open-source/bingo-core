@@ -24,7 +24,7 @@ import bingo.lang.Arrays;
 import bingo.lang.Primitives;
 import bingo.lang.exceptions.ReflectException;
 
-public class ReflectField<T> extends ReflectMember<T> {
+public class ReflectField extends ReflectMember {
 	
 	private final Field    javaField;
 	private final Class<?> fieldType;
@@ -36,7 +36,7 @@ public class ReflectField<T> extends ReflectMember<T> {
 	private final int    setterIndex;
 	private final int    getterIndex;
 	
-	protected ReflectField(ReflectClass<T> reflectClass, Field javaField){
+	protected ReflectField(ReflectClass<?> reflectClass, Field javaField){
 		super(reflectClass,javaField);
 		
 		this.javaField = javaField;
@@ -70,6 +70,10 @@ public class ReflectField<T> extends ReflectMember<T> {
 	public boolean isStatic(){
 		return Modifier.isStatic(javaField.getModifiers());
 	}	
+	
+	public boolean isFinal(){
+		return Modifier.isFinal(javaField.getModifiers());
+	}
 	
 	public boolean hasGetter(){
 		return null != getter;

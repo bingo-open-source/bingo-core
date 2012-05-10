@@ -15,13 +15,15 @@
  */
 package bingo.lang.converters;
 
+import java.lang.reflect.Type;
+
 import bingo.lang.Out;
 import bingo.lang.convert.Converter;
 
 public class CharacterConverter extends AbstractConverter<Character> implements Converter<Character> {
 
 	@Override
-    public boolean convertFrom(Object value, Class<?> targetType, Class<?> genericType, Out<Object> out) throws Throwable {
+    public boolean convertFrom(Object value, Class<?> targetType, Type genericType, Out<Object> out) throws Throwable {
         String string = value.toString();
         
         return out.returns(string.charAt(0));

@@ -15,18 +15,19 @@
  */
 package bingo.lang.converters;
 
+import java.lang.reflect.Type;
 import java.util.Collection;
 
 import bingo.lang.Converts;
 import bingo.lang.Out;
-import bingo.lang.Strings;
 import bingo.lang.Reflects;
+import bingo.lang.Strings;
 
 @SuppressWarnings("unchecked")
 public abstract class AbstractCollectionConverter<T extends Collection> extends AbstractConverter<T>{
 
 	@Override
-    public boolean convertFrom(Object value, Class<?> targetType, Class<?> genericType, Out<Object> out) throws Throwable {
+    public boolean convertFrom(Object value, Class<?> targetType, Type genericType, Out<Object> out) throws Throwable {
 
 		Class<?> elementType = null == genericType ? Object.class : Reflects.getTypeArgument(genericType);
 		
