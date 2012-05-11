@@ -210,29 +210,7 @@ public class ReflectField extends ReflectMember {
 	
     private Object safeValue(Object value){
         if(null == value){
-            if(Integer.TYPE == fieldType){
-                return 0;
-            }
-            
-            if(Boolean.TYPE == fieldType){
-                return false;
-            }
-            
-            if(Long.TYPE == fieldType){
-                return 0L;
-            }
-            
-            if(Float.TYPE == fieldType){
-                return 0.0f;
-            }
-            
-            if(Double.TYPE == fieldType){
-                return 0.0d;
-            }
-            
-            if(Short.TYPE == fieldType){
-                return (short)0;
-            }
+        	return Primitives.defaultValue(fieldType);
         }
         return value;
     }
