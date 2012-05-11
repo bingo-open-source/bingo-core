@@ -84,6 +84,11 @@ public class Converts {
 
 	}
 	
+	/**
+	 * 注册某个类及其对应的 {@link Converter} 。
+	 * @param clazz 要注册的类。
+	 * @param converter 类对应的 {@link Converter} 。
+	 */
 	public static void register(Class<?> clazz,Converter<?> converter){
 		converters.put(clazz,converter);
 	}
@@ -180,6 +185,15 @@ public class Converts {
 		throw new UnsupportedException("cannot convert from '{0}' to '{1}'",sourceType.getName(),targetType.getName());
 	}
 	
+	/**
+	 * 返回代表该对象的字符串。
+	 * 方法将从已注册的 {@link Converter} 中寻找该类型对应的 {@link Converter}。
+	 * 如果存在对应的 {@link Converter} 的话则返回该对象的 
+	 * {@link Converter#convertToString(Object)} 方法的返回值。
+	 * 如果不存在，则直接调用该对象的 {@link Object#toString()}。
+	 * @param value 传入的该对象。
+	 * @return 若传入对象为<code>null</code>，则返回 <code>null</code>。
+	 */
 	public static String toString(Object value) {
 		if(null == value){
 			return null;
@@ -204,6 +218,14 @@ public class Converts {
         }
 	}
 	
+	/**
+	 * 返回传入的value转换为targetType所对应的基本类型的值。<br>
+	 * 如果传入的value为 <code>null</code> ，则返回targetType类型的默认值。
+	 * @param targetType 目标类型，一般为数据类型。
+	 * @param value 要转换类型的值。
+	 * @return 转换为基本类型后的值，如果之前传入的value为 <code>null</code> ，
+	 * 则返回该基本类型的默认值。
+	 */
 	static <T> T toPrimitive(Class<T> targetType, Object value) {
 		if(null == value){
 			return (T)Primitives.defaultValue(targetType);
@@ -212,6 +234,12 @@ public class Converts {
 		}
 	}
 	
+	/**
+	 * 从已注册的类中，找到某个类对应的 {@link Converter} 。
+	 * 可传入数组或枚举，返回数组和枚举对应的 {@link Converter} 。
+	 * @param type 要找到 {@link Converter} 的某个类。
+	 * @return 该类对应的 {@link Converter} 。如果找不到，则返回null。
+	 */
 	static Converter findConverter(Class<?> type) {
 		Converter converter = converters.get(type);
 		
