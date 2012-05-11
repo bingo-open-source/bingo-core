@@ -34,7 +34,7 @@ public class ReflectClass<T> implements Named {
 	private static final WeakHashMap<Class<?>, ReflectClass<?>> cache = new WeakHashMap<Class<?>, ReflectClass<?>>();
 	
 	@SuppressWarnings("unchecked")
-	public synchronized static <T> ReflectClass<T> valueOf(Class<T> type) {
+	public synchronized static <T> ReflectClass<T> get(Class<T> type) {
 		ReflectClass<?> clazz = cache.get(type);
 		
 		if(null == clazz){

@@ -38,11 +38,11 @@ public class Df {
 	}
 	
 	public static <T> T createBean(Class<T> beanType){
-		return fillBean(ReflectClass.valueOf(beanType).newInstance());
+		return fillBean(ReflectClass.get(beanType).newInstance());
 	}
 	
 	public static <T> T fillBean(T bean){
-		ReflectClass<?> reflectClass = ReflectClass.valueOf(bean.getClass());
+		ReflectClass<?> reflectClass = ReflectClass.get(bean.getClass());
 
 		for(ReflectField field : reflectClass.getFields()){
 			if(!field.isFinal()){

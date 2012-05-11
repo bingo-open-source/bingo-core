@@ -52,7 +52,7 @@ public class BeanConverter extends AbstractConverter<Object>{
     }
 
 	protected Object convertFromMap(Class<?> targetType, Type genericType,Map map) {
-		ReflectClass<?> reflectClass = ReflectClass.valueOf(targetType);
+		ReflectClass<?> reflectClass = ReflectClass.get(targetType);
 		
 		Object bean = reflectClass.newInstance();
 		
@@ -76,7 +76,7 @@ public class BeanConverter extends AbstractConverter<Object>{
 
 	protected Map<String,Object> convertToMap(Object bean) {
 		
-		ReflectClass<?> reflectClass = ReflectClass.valueOf(bean.getClass());
+		ReflectClass<?> reflectClass = ReflectClass.get(bean.getClass());
 		
 		Map<String, Object> map = new LinkedHashMap<String, Object>();
 		
