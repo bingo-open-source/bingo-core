@@ -926,6 +926,15 @@ public class StringsTest extends TestCase {
         assertTrue( Strings.containsWhitespace("\n") );
     }    
     
+    public void testTrimToNull_Object(){
+    	assertNull(Strings.trimToNull("   "));
+    	assertNotNull(Strings.trimToNull("1   "));
+    	assertNotNull(Strings.trimToNull("   1"));
+    	assertNotNull(Strings.trimToNull("  1  "));
+    	assertNull(Strings.trimToNull(""));
+    	assertEquals("123", Strings.trimToNull("   123   "));
+    }
+    
 	private static class SubStrings extends Strings {
 		public SubStrings() {
 			super();
