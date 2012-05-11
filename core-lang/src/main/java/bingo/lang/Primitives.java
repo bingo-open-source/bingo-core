@@ -61,11 +61,27 @@ public class Primitives {
 		WRAPPER_TO_PRIMITIVE_TYPE = Collections.unmodifiableMap(wrapToPrim);
 	}
 
-	private static void add(Map<Class<?>, Class<?>> forward, Map<Class<?>, Class<?>> backward, Class<?> key, Class<?> value) {
+	private static void add(Map<Class<?>, Class<?>> forward, Map<Class<?>, Class<?>> backward,
+							Class<?> key, Class<?> value) {
 		forward.put(key, value);
 		backward.put(value, key);
 	}
 	
+	/**
+	 * <p>
+	 * 	返回一个基本类型对应的默认值。
+	 * </p>
+	 * {@link Integer}的默认值为0；<br>
+	 * {@link Boolean}的默认值为 <code>false</code>；<br>
+	 * {@link Long}的默认值为0L；<br>
+	 * {@link Float}的默认值为0.0f；<br>
+	 * {@link Double}的默认值为0.0d；<br>
+	 * {@link Short}的默认值为0；<br>
+	 * {@link Byte}的默认值为0；<br>
+	 * {@link Character}的默认值为\u0000。<br>
+	 * @param type 要返回其默认值的类型。
+	 * @return 该类型对应的默认值。
+	 */
 	public static Object defaultValue(Class<?> type){
         if(Integer.TYPE == type){
             return 0;
@@ -130,34 +146,74 @@ public class Primitives {
 		return WRAPPER_TO_PRIMITIVE_TYPE.containsKey(Assert.notNull(type));
 	}
 
+	/**
+	 * 判断该类型是否为 {@link Boolean} 。
+	 * @param type 要判断的类型。
+	 * @return 如果是 {@link Boolean} 则返回 <code>true</code> 。
+	 */
 	public static boolean isBoolean(Class<?> type){
 		return Boolean.TYPE == type || Boolean.class == type;
 	}
 	
+	/**
+	 * 判断该类型是否为 {@link Integer} 。
+	 * @param type 要判断的类型。
+	 * @return 如果是 {@link Integer} 则返回 <code>true</code> 。
+	 */
 	public static boolean isInteger(Class<?> type){
 		return Integer.TYPE == type || Integer.class == type;
 	}
 	
+	/**
+	 * 判断类型是否为 {@link Long} 。
+	 * @param type 要判断的类型。
+	 * @return 如果是 {@link Long} 则返回 <code>true</code> 。
+	 */
 	public static boolean isLong(Class<?> type){
 		return Long.TYPE == type || Long.class == type;
 	}
 	
+	/**
+	 * 判断类型是否为 {@link Short} 。
+	 * @param type 要判断的类型。
+	 * @return 如果是 {@link Short} 则返回 <code>true</code> 。
+	 */
 	public static boolean isShort(Class<?> type){
 		return Short.TYPE == type || Short.class == type;
 	}
 	
+	/**
+	 * 判断类型是否为 {@link Byte} 。
+	 * @param type 要判断的类型。
+	 * @return 如果是 {@link Byte} 则返回 <code>true</code> 。
+	 */
 	public static boolean isByte(Class<?> type){
 		return Byte.TYPE == type || Byte.class == type;
 	}	
 	
+	/**
+	 * 判断类型是否为 {@link Character} 。
+	 * @param type 要判断的类型。
+	 * @return 如果是 {@link Character} 则返回 <code>true</code> 。
+	 */
 	public static boolean isCharacter(Class<?> type){
 		return Character.TYPE == type || Character.class == type;
 	}	
 	
+	/**
+	 * 判断类型是否为 {@link Float} 。
+	 * @param type 要判断的类型。
+	 * @return 如果是 {@link Float} 则返回 <code>true</code> 。
+	 */
 	public static boolean isFloat(Class<?> type){
 		return Float.TYPE == type || Float.class == type;
 	}	
 	
+	/**
+	 * 判断类型是否为 {@link Double} 。
+	 * @param type 要判断的类型。
+	 * @return 如果是 {@link Double} 则返回 <code>true</code> 。
+	 */
 	public static boolean isDouble(Class<?> type){
 		return Double.TYPE == type || Double.class == type;
 	}	
