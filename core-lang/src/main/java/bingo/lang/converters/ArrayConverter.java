@@ -42,7 +42,7 @@ public class ArrayConverter extends AbstractConverter<Object>{
 				int length = Array.getLength(value);
 				Object array = Array.newInstance(componentType, length);
 				for (int i = 0; i < length; i++) {
-					Array.set(array, i, Converts.convert(componentType, Array.get(value, i)));
+					Array.set(array, i, Converts.convert(Array.get(value, i),componentType));
 				}
 				return out.returns(array);
 			}
@@ -94,7 +94,7 @@ public class ArrayConverter extends AbstractConverter<Object>{
 			int index = 0;
 			
 			for (Object element : iterable) {
-				Array.set(array, index++, Converts.convert(componentType, element));
+				Array.set(array, index++, Converts.convert(element,componentType));
 			}
 		}
 
@@ -107,7 +107,7 @@ public class ArrayConverter extends AbstractConverter<Object>{
         Object array = Array.newInstance(componentType, strings.length);
         
         for(int i=0;i<strings.length;i++){
-            Array.set(array, i, Converts.convert(componentType, strings[i]));
+            Array.set(array, i, Converts.convert(strings[i],componentType));
         }
         
         return array;

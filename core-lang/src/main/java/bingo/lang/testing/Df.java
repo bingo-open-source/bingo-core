@@ -69,7 +69,7 @@ public class Df {
 				}else if(Classes.isBigInteger(type)){
 					field.setValue(bean, BigInteger.valueOf(Randoms.nextLong()));
 				}else if(Date.class.isAssignableFrom(type)){
-					field.setValue(bean, Converts.convert(type, Randoms.nextDateTime()));
+					field.setValue(bean, Converts.convert(Randoms.nextDateTime(),type));
 				}
 			}
 		}

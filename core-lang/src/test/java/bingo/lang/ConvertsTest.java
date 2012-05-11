@@ -33,7 +33,7 @@ public class ConvertsTest {
 	public void testSimplePerformanceComparsion(){
 		Perf.run("Convert.toType", new Runnable() {
 			public void run() {
-				Converts.convert(Integer.class, "100");
+				Converts.convert("100",Integer.class);
 			}
 		},1000000);
 		
@@ -53,7 +53,7 @@ public class ConvertsTest {
 		
 		Perf.run("Converts.bean", new Runnable() {
 			public void run() {
-				Converts.convert(Map.class, bean);
+				Converts.convert(bean,Map.class);
 			}
 		},100000);
 	}

@@ -73,7 +73,7 @@ public abstract class AbstractCollectionConverter<T extends Collection> extends 
 		T collection = newInstance(targetType);
 		
 		for(Object e : iterable){
-			collection.add(Converts.convert(elementType, e));
+			collection.add(Converts.convert(e,elementType));
 		}
 		
 		return collection;
@@ -84,7 +84,7 @@ public abstract class AbstractCollectionConverter<T extends Collection> extends 
 		T collection = newInstance(targetType);
 		
 		for(Object e : array){
-			collection.add(Converts.convert(elementType, e));
+			collection.add(Converts.convert(e,elementType));
 		}
 		
 		return collection;
@@ -98,7 +98,7 @@ public abstract class AbstractCollectionConverter<T extends Collection> extends 
 		T collection = newInstance(targetType);
 		
 		for(String string : stringArray){
-			collection.add(Converts.convert(elementType, string));
+			collection.add(Converts.convert(string,elementType));
 		}
 		
 		return collection;

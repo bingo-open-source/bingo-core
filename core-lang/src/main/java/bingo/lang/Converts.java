@@ -88,14 +88,12 @@ public class Converts {
 		converters.put(clazz,converter);
 	}
 	
-	public static <T> T convert(Class<T> targetType, Object value) throws UnsupportedException {
-		return convert(targetType,null,value);
+	public static <T> T convert(Object value,Class<T> targetType) throws UnsupportedException {
+		return convert(value,targetType,null);
 	}
 	
-	public static <T> T convert(Class<T> targetType, Type genericType, Object value) throws UnsupportedException {
-        if(null == targetType){
-            throw new IllegalArgumentException("argument 'targetType' required");
-        }
+	public static <T> T convert(Object value,Class<T> targetType, Type genericType) throws UnsupportedException {
+		Assert.notNull(targetType);
         
         //trim to null if value is String
         value = Strings.trimToNull(value);
@@ -108,7 +106,7 @@ public class Converts {
         //null value TODO: default value of null 
         if(null == value){
         	return null;
-        }        
+        }
         
         Class<?> sourceType = value.getClass();
         
@@ -208,7 +206,7 @@ public class Converts {
 		if(null == value){
 			return (T)Primitives.defaultValue(targetType);
 		}else{
-			return convert(Primitives.wrap(targetType),value);
+			return convert(value,Primitives.wrap(targetType));
 		}
 	}
 	

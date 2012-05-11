@@ -67,7 +67,7 @@ public class BeanConverter extends AbstractConverter<Object>{
             ReflectField field = reflectClass.findField(name);
             
             if(null != field){
-                field.setValue(bean, Converts.convert(field.getType(),field.getGenericType(),param));
+                field.setValue(bean, Converts.convert(param,field.getType(),field.getGenericType()));
             }
         }
 		
