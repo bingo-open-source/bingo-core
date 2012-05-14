@@ -495,6 +495,14 @@ public class Strings {
 		return isEmpty(ts) ? null : ts;
 	}
 	
+	/**
+	 * 传入一个对象，如果不是 {@link String} 的实例，则直接返回该对象。<br>
+	 * 如果是 {@link String} 的实例，则删除字符串两端的空格。删除两端空格后的字符串如果为空字符串，
+	 * 即<code> "" </code>，则返回null，否则返回删除两端空格后的字符串。
+	 * @param object 传入的对象，一般为 {@link String} 。
+	 * @return 若传入的对象为 {@link String} 的实例，则返回删除两端空格后的字符串；
+	 * 若不是，则原样返回该对象。
+	 */
 	public static Object trimToNull(Object object) {
 		return null == object ? null : object instanceof String ? trimToNull((String)object) : object;
 	}

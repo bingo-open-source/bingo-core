@@ -21,13 +21,14 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.junit.Test;
+import static org.junit.Assert.*;
 
 import bingo.lang.testing.Df;
 import bingo.lang.testing.Perf;
 
 public class ConvertsTest {
 
-	@Test
+//	@Test
 	public void testSimplePerformanceComparsion(){
 		Perf.run("Convert.toType", new Runnable() {
 			public void run() {
@@ -48,6 +49,12 @@ public class ConvertsTest {
 				Converts.convert(bean,Map.class);
 			}
 		},100000);
+	}
+	
+	@Test
+	public void testToPrimitiveClassObject(){
+		assertTrue(0 == Converts.toPrimitive(Integer.TYPE, null));
+		assertTrue(36.5d == Converts.toPrimitive(Double.TYPE, 36.5));
 	}
 	
 	static final class TesterBean  {
