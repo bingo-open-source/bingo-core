@@ -15,11 +15,21 @@
  */
 package bingo.lang;
 
+import java.io.IOException;
 import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+
+import bingo.lang.exceptions.NotFoundException;
+import bingo.lang.exceptions.WrappedIOException;
+import bingo.lang.logging.Log;
+import bingo.lang.logging.LogFactory;
+import bingo.lang.resource.Resource;
+import bingo.lang.resource.Resources;
 
 //from apache commons-lang3
 
@@ -27,6 +37,8 @@ import java.util.Map;
  * <code>null</code> safe {@link Class} utility.
  */
 public class Classes {
+	
+	private static final Log log = LogFactory.get(Classes.class);
 	
 	/**
 	 * Maps a primitive class name to its corresponding abbreviation used in array class names.
@@ -65,6 +77,9 @@ public class Classes {
 	 * </p>
 	 */
 	public static final String INNER_CLASS_SEPARATOR = String.valueOf(INNER_CLASS_SEPARATOR_CHAR);
+	
+	/** The ".class" file suffix */
+	public static final String CLASS_FILE_SUFFIX = ".class";	
 
 	/**
 	 * Add primitive type abbreviation to maps of abbreviations.
@@ -94,9 +109,95 @@ public class Classes {
 	protected Classes() {
 
 	}
+	
+	//Class scan
+	//-----------------------------------------------------------------------
+	public static Set<Class<?>> scan(String basePackage,String classpathPattern) throws WrappedIOException {
+		Assert.notEmpty(basePackage,	 "basePackage must not be empty");
+		Assert.notEmpty(classpathPattern,"classLocationPattern must not be empty");
+		
+		String basePath = basePackage.replace('.', '/');
+		String scanPath = Resources.CLASSPATH_ALL_URL_PREFIX + basePath + "/" + classpathPattern + ".class";
+		
+		StopWatch sw = StopWatch.startNew();
+		
+		Resource[] resources = Resources.scan(scanPath);
+		
+		Set<Class<?>> classes = new HashSet<Class<?>>();
+		
+		try {
+	        for(Resource resource : resources) {
+	        	if(resource.isReadable()){
+	        		classes.add(classForResource(resource,basePath));
+	        	}
+	        }
+        } catch (IOException e) {
+	        throw new WrappedIOException("Error scanning package '" + basePackage + "'",e);
+        }
+        
+        sw.stop();
+        
+        log.debug("scan {} classes in package '{}' used {}ms",classes.size(),basePackage,sw.getElapsedMilliseconds());
+		
+		return classes;
+	}
+	
+	//Class Loader
+	//-----------------------------------------------------------------------
+	/**
+	 * Return the default ClassLoader to use: typically the thread context ClassLoader, if available; the ClassLoader
+	 * that loaded the Classes class will be used as fallback.
+	 * <p>
+	 * Call this method if you intend to use the thread context ClassLoader in a scenario where you absolutely need a
+	 * non-null ClassLoader reference: for example, for class path resource loading (but not necessarily for
+	 * <code>Class.forName</code>, which accepts a <code>null</code> ClassLoader reference as well).
+	 * 
+	 * @return the default ClassLoader (never <code>null</code>)
+	 * @see java.lang.Thread#getContextClassLoader()
+	 */
+	public static ClassLoader getClassLoader() {
+		ClassLoader cl = null;
+		try {
+			cl = Thread.currentThread().getContextClassLoader();
+		} catch (Throwable ex) {
+			// Cannot access thread context ClassLoader - falling back to system class loader...
+		}
+		if (cl == null) {
+			// No thread context class loader -> use class loader of this class.
+			cl = Classes.class.getClassLoader();
+		}
+		return cl;
+	}
+	
+	public static ClassLoader getClassLoader(Class<?> clazz) {
+		ClassLoader cl = null;
+		try {
+			cl = Thread.currentThread().getContextClassLoader();
+		} catch (Throwable ex) {
+			// Cannot access thread context ClassLoader - falling back to system class loader...
+		}
+		if (cl == null) {
+			// No thread context class loader -> use class loader of this class.
+			cl = clazz.getClassLoader();
+		}
+		return cl;
+	}
 
-	// Short class name
+	// class & package name 
 	// ----------------------------------------------------------------------	
+	/**
+	 * Determine the name of the class file, relative to the containing
+	 * package: e.g. "String.class"
+	 * @param clazz the class
+	 * @return the file name of the ".class" file
+	 */
+	public static String getFileName(Class<?> clazz) {
+		Assert.notNull(clazz, "Class must not be null");
+		String className = clazz.getName();
+		int lastDotIndex = className.lastIndexOf(PACKAGE_SEPARATOR);
+		return className.substring(lastDotIndex + 1) + CLASS_FILE_SUFFIX;
+	}
+	
 	/**
 	 * <p>
 	 * Gets the class name minus the package name from a {@code Class}.
@@ -169,6 +270,33 @@ public class Classes {
 		}
 		return out + arrayPrefix;
 	}
+	
+	/**
+	 * Given an input class object, return a string which consists of the
+	 * class's package name as a pathname, i.e., all dots ('.') are replaced by
+	 * slashes ('/'). Neither a leading nor trailing slash is added. The result
+	 * could be concatenated with a slash and the name of a resource and fed
+	 * directly to <code>ClassLoader.getResource()</code>. For it to be fed to
+	 * <code>Class.getResource</code> instead, a leading slash would also have
+	 * to be prepended to the returned value.
+	 * @param clazz the input class. A <code>null</code> value or the default
+	 * (empty) package will result in an empty string ("") being returned.
+	 * @return a path which represents the package name
+	 * @see ClassLoader#getResource
+	 * @see Class#getResource
+	 */
+	public static String getPackageAsResourcePath(Class<?> clazz) {
+		if (clazz == null) {
+			return "";
+		}
+		String className = clazz.getName();
+		int packageEndIndex = className.lastIndexOf('.');
+		if (packageEndIndex == -1) {
+			return "";
+		}
+		String packageName = className.substring(0, packageEndIndex);
+		return packageName.replace('.', '/');
+	}
 
 	// Class loading
 	// ----------------------------------------------------------------------
@@ -180,16 +308,16 @@ public class Classes {
 	 * @param className the class name
 	 * @return the class represented by {@code className} using the current thread's context class loader
 	 * 
-	 * @throws ClassNotFoundException if the class is not found
+	 * @throws NotFoundException if the class is not found
 	 */
-	public static Class<?> forName(String className) throws ClassNotFoundException {
+	public static Class<?> forName(String className) throws NotFoundException {
 		return forName(className, true);
 	}
 	
 	public static Class<?> forNameOrNull(String className) {
 		try {
 	        return forName(className, true);
-        } catch (ClassNotFoundException e) {
+        } catch (NotFoundException e) {
         	return null;
         }
 	}
@@ -202,9 +330,9 @@ public class Classes {
 	 * @param className the class name
 	 * @param initialize whether the class must be initialized
 	 * @return the class represented by {@code className} using the current thread's context class loader
-	 * @throws ClassNotFoundException if the class is not found
+	 * @throws NotFoundException if the class is not found
 	 */
-	static Class<?> forName(String className, boolean initialize) throws ClassNotFoundException {
+	static Class<?> forName(String className, boolean initialize) throws NotFoundException {
 		ClassLoader contextCL = Thread.currentThread().getContextClassLoader();
 		ClassLoader loader = contextCL == null ? Classes.class.getClassLoader() : contextCL;
 		return forName(loader, className, initialize);
@@ -218,16 +346,16 @@ public class Classes {
 	 * @param classLoader the class loader to use to load the class
 	 * @param className the class name
 	 * @return the class represented by {@code className} using the {@code classLoader}
-	 * @throws ClassNotFoundException if the class is not found
+	 * @throws NotFoundException if the class is not found
 	 */
-	public static Class<?> forName(ClassLoader classLoader, String className) throws ClassNotFoundException {
+	public static Class<?> forName(ClassLoader classLoader, String className) throws NotFoundException {
 		return forName(classLoader, className, true);
 	}
 	
 	public static Class<?> forNameOrNull(ClassLoader classLoader, String className) {
 		try {
 	        return forName(classLoader, className, true);
-        } catch (ClassNotFoundException e) {
+        } catch (NotFoundException e) {
         	return null;
         }
 	}	
@@ -243,7 +371,7 @@ public class Classes {
 	 * @return the class represented by {@code className} using the {@code classLoader}
 	 * @throws ClassNotFoundException if the class is not found
 	 */
-	static Class<?> forName(ClassLoader classLoader, String className, boolean initialize) throws ClassNotFoundException {
+	static Class<?> forName(ClassLoader classLoader, String className, boolean initialize) throws NotFoundException {
 		try {
 			Class<?> clazz;
 			if (abbreviationMap.containsKey(className)) {
@@ -261,12 +389,12 @@ public class Classes {
 				try {
 					return forName(classLoader, className.substring(0, lastDotIndex) + INNER_CLASS_SEPARATOR_CHAR
 					        + className.substring(lastDotIndex + 1), initialize);
-				} catch (ClassNotFoundException ex2) { // NOPMD
+				} catch (NotFoundException ex2) { // NOPMD
 					// ignore exception
 				}
 			}
 
-			throw ex;
+			throw new NotFoundException(ex,"class '{0}' not found",className);
 		}
 	}
 	
@@ -349,4 +477,19 @@ public class Classes {
 		}
 		return className;
 	}
+	
+    private static Class<?> classForResource(Resource resource,String basePath) throws IOException,NotFoundException {
+        String fullPath = resource.getURL().toString();
+        
+        int baseIndex = fullPath.lastIndexOf(basePath + "/");
+        
+        if(baseIndex <= 0){
+            throw new IllegalStateException("invalid resource '" + fullPath + "', can not found base path '" + basePath);
+        }
+        
+        String classFile = fullPath.substring(baseIndex);
+        String className = classFile.substring(0,classFile.indexOf(".class")).replace('/', '.');
+        
+        return forName(className);
+    }	
 }

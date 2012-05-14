@@ -20,10 +20,8 @@ import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 
-import org.apache.commons.beanutils.ConvertUtils;
 import org.junit.Test;
 
-import bingo.lang.Converts;
 import bingo.lang.testing.Df;
 import bingo.lang.testing.Perf;
 
@@ -42,12 +40,6 @@ public class ConvertsTest {
 				Integer.parseInt("100");
 			}
 		},1000000);
-		
-		Perf.run("BeanUtils.convert", new Runnable() {
-			public void run() {
-				ConvertUtils.convert((Object)"100", Integer.class);
-			}
-		},1000000);		
 		
 		final TesterBean bean = Df.fillBean(new TesterBean());
 		

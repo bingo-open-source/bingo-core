@@ -15,15 +15,19 @@
  */
 package bingo.lang.reflect;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Type;
 
+import bingo.lang.Named;
 import bingo.lang.exceptions.ReflectException;
 
 public class ReflectMethod extends ReflectMember{
 	
 	private final int    index;
 	private final Method javaMethod;
+	private Parameter[]   parameters;
 	
 	protected ReflectMethod(ReflectClass<?> reflectClass,Method javaMethod) {
 		super(reflectClass,javaMethod);
@@ -31,7 +35,7 @@ public class ReflectMethod extends ReflectMember{
 		this.javaMethod = javaMethod;
 		this.index      = reflectClass.getAccessor().getMethodIndex(javaMethod);
 		
-		this.create();
+		this.initialize();
 	}
 	
 	public String getName() {
@@ -40,6 +44,10 @@ public class ReflectMethod extends ReflectMember{
 
 	public Method getJavaMethod(){
 		return this.javaMethod;
+	}
+	
+	public Parameter[] getParameters(){
+		return parameters;
 	}
 	
 	public boolean isStatic(){
@@ -70,7 +78,71 @@ public class ReflectMethod extends ReflectMember{
         }
 	}
 	
-	private void create() {
+	private void initialize() {
+		this.parameters = new Parameter[javaMethod.getParameterTypes().length];
 		
+		if(this.parameters.length > 0){
+			String[] names = reflectClass.getMetadata().getParameterNames(javaMethod);
+
+			if(null == names){
+				names = createUnknowParameterNames(parameters.length);
+			}
+
+			for(int i=0;i<parameters.length;i++){
+				Parameter p = new Parameter();
+				
+				p.index       = i+1;
+				p.name        = names[i];
+				p.type        = javaMethod.getParameterTypes()[i];
+				p.genericType = javaMethod.getGenericParameterTypes()[i];
+				p.annotations = javaMethod.getParameterAnnotations()[i];
+				
+				parameters[i] = p;
+			}
+		}
+	}
+	
+	private static String[] createUnknowParameterNames(int length){
+		String[] names = new String[length];
+		
+		for(int i=0;i<length;i++){
+			names[i] = "arg" + (i+1);
+		}
+		
+		return names;
+	}
+	
+	@Override
+    public String toString() {
+		return javaMethod.toString();
+    }	
+	
+	public static class Parameter implements Named {
+
+		private int 		  index;
+		private String 		  name;
+		private Class<?> 	  type;
+		private Type 		  genericType;
+		private Annotation[] annotations;
+
+		public final int getIndex() {
+			return index;
+		}
+
+		public final String getName() {
+			return name;
+		}
+
+		public final Class<?> getType() {
+			return type;
+		}
+		
+		public final Type getGenericType() {
+        	return genericType;
+        }
+
+		public final Annotation[] getAnnotations() {
+			return annotations;
+		}
 	}
 }

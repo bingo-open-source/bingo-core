@@ -20,6 +20,7 @@ import static bingo.lang.asm.Opcodes.ACC_PUBLIC;
 import static bingo.lang.asm.Opcodes.ACC_VARARGS;
 import static bingo.lang.asm.Opcodes.ACONST_NULL;
 import static bingo.lang.asm.Opcodes.ALOAD;
+import static bingo.lang.asm.Opcodes.ANEWARRAY;
 import static bingo.lang.asm.Opcodes.ARETURN;
 import static bingo.lang.asm.Opcodes.ASTORE;
 import static bingo.lang.asm.Opcodes.ATHROW;
@@ -41,6 +42,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 
+import bingo.lang.Primitives;
 import bingo.lang.asm.ClassWriter;
 import bingo.lang.asm.Label;
 import bingo.lang.asm.MethodVisitor;
@@ -56,7 +58,15 @@ public abstract class ReflectAccessor {
 	Method[] methods;
 	
 	public abstract Object newInstance();
-
+	
+	public abstract Object newArray(int length);
+	
+    public abstract int getArrayLength(Object array);
+	
+	public abstract Object getArrayItem(Object array,int index);
+	
+	public abstract void setArrayItem(Object array,int index,Object value);	
+	
 	public abstract Object invokeMethod(Object object, int methodIndex, Object... args);
 	
 	public abstract void setField(Object object, int fieldIndex, Object value);
@@ -85,7 +95,7 @@ public abstract class ReflectAccessor {
         ReflectLoader loader = new ReflectLoader(type.getClassLoader());
         
         String typeClassName      = type.getName();
-        String accessorClassName  = typeClassName + "$bingo_lang_accessor";
+        String accessorClassName  = getAccessorClassNameFor(type);
         Class<?> accessorClass    = null;
         
         try {
@@ -105,6 +115,14 @@ public abstract class ReflectAccessor {
             defineAccessorConstructor(accessorClassNameInternal,cw);
             
             defineNewInstance(typeClassNameInternal,cw);
+            
+            defineNewArray(type,typeClassNameInternal,cw);
+            
+            defineGetArrayLength(type, cw);
+            
+            defineGetArrayItem(type, cw);
+            
+            defineSetArrayItem(type, cw);
             
             defineInvokeMethod(typeClassNameInternal,methods, cw);
             
@@ -151,6 +169,277 @@ public abstract class ReflectAccessor {
         mv.visitMaxs(1, 1);
         mv.visitEnd();
     }
+    
+    private static void defineNewArray(Class<?> clazz, String classNameInternal,ClassWriter cw){
+        MethodVisitor mv = cw.visitMethod(ACC_PUBLIC, "newArray", "(I)Ljava/lang/Object;", null, null);
+        
+        Label l0 = new Label();
+        mv.visitLabel(l0);
+        mv.visitVarInsn(ILOAD, 1);
+        
+        if(clazz.isPrimitive()){
+        	mv.visitIntInsn(Opcodes.NEWARRAY,getPrimitiveTypeCode(clazz));
+        }else{
+        	mv.visitTypeInsn(ANEWARRAY, classNameInternal);	
+        }
+        
+        mv.visitInsn(ARETURN);
+        Label l1 = new Label();
+        mv.visitLabel(l1);
+        mv.visitLocalVariable("this", "Lbingo/lang/reflect/ReflectAccessor;", null, l0, l1, 0);
+        mv.visitLocalVariable("length", "I", null, l0, l1, 1);
+        mv.visitMaxs(1, 2);
+        mv.visitEnd();
+    }  
+    
+    private static void defineGetArrayLength(Class<?> clazz, ClassWriter cw){
+        MethodVisitor mv = cw.visitMethod(ACC_PUBLIC, "getArrayLength", "(Ljava/lang/Object;)I", null, null);
+
+        Type type = Type.getType(clazz);
+        if(clazz.isPrimitive()){
+        	
+        	String primitiveInternalName  = null;
+        	
+            switch (type.getSort()) {
+                case Type.BOOLEAN:
+                	primitiveInternalName = "Z";
+                    break;
+                case Type.BYTE:
+                	primitiveInternalName = "B";
+                    break;
+                case Type.CHAR:
+                	primitiveInternalName = "C";
+                    break;
+                case Type.SHORT:
+                	primitiveInternalName = "S";
+                    break;
+                case Type.INT:
+                	primitiveInternalName = "I";
+                    break;
+                case Type.FLOAT:
+                	primitiveInternalName = "F";
+                    break;
+                case Type.LONG:
+                	primitiveInternalName = "J";
+                    break;
+                case Type.DOUBLE:
+                	primitiveInternalName = "D";
+                    break;
+                default :
+                	throw new IllegalStateException("??? unknow primitive type '" + clazz.getName() + "'");
+            }    
+            
+            mv.visitCode();
+            Label l0 = new Label();
+            mv.visitLabel(l0);
+            mv.visitVarInsn(ALOAD, 1);
+            mv.visitTypeInsn(CHECKCAST, "[" + primitiveInternalName);
+            mv.visitInsn(Opcodes.ARRAYLENGTH);
+            mv.visitInsn(Opcodes.IRETURN);
+            Label l1 = new Label();
+            mv.visitLabel(l1);
+            mv.visitLocalVariable("this", "Lbingo/lang/reflect/ReflectAccessor;", null, l0, l1, 0);
+            mv.visitLocalVariable("array", "Ljava/lang/Object;", null, l0, l1, 1);
+            mv.visitMaxs(1, 2);
+            mv.visitEnd();
+        }else{
+        	mv.visitCode();
+        	Label l0 = new Label();
+        	mv.visitLabel(l0);
+        	mv.visitVarInsn(ALOAD, 1);
+        	mv.visitTypeInsn(CHECKCAST, "[Ljava/lang/Object;");
+        	mv.visitInsn(Opcodes.ARRAYLENGTH);
+        	mv.visitInsn(Opcodes.IRETURN);
+        	Label l1 = new Label();
+        	mv.visitLabel(l1);
+        	mv.visitLocalVariable("this", "Lbingo/lang/reflect/ReflectAccessor;", null, l0, l1, 0);
+        	mv.visitLocalVariable("array", "Ljava/lang/Object;", null, l0, l1, 1);
+        	mv.visitMaxs(1, 2);
+        	mv.visitEnd();
+        }
+    }     
+    
+    private static void defineGetArrayItem(Class<?> clazz, ClassWriter cw){
+        MethodVisitor mv = cw.visitMethod(ACC_PUBLIC, "getArrayItem", "(Ljava/lang/Object;I)Ljava/lang/Object;", null, null);
+
+        Type type = Type.getType(clazz);
+        if(clazz.isPrimitive()){
+        	
+        	int    opcode                 = -1;
+        	String primitiveInternalName  = null;
+        	String wraperTypeInternalName = Type.getType(Primitives.wrap(clazz)).getInternalName();
+        	
+            switch (type.getSort()) {
+                case Type.BOOLEAN:
+                	opcode = Opcodes.BALOAD;
+                	primitiveInternalName = "Z";
+                    break;
+                case Type.BYTE:
+                	opcode = Opcodes.BALOAD;
+                	primitiveInternalName = "B";
+                    break;
+                case Type.CHAR:
+                	opcode = Opcodes.CALOAD;
+                	primitiveInternalName = "C";
+                    break;
+                case Type.SHORT:
+                	opcode = Opcodes.SALOAD;
+                	primitiveInternalName = "S";
+                    break;
+                case Type.INT:
+                	opcode = Opcodes.IALOAD;
+                	primitiveInternalName = "I";
+                    break;
+                case Type.FLOAT:
+                	opcode = Opcodes.FALOAD;
+                	primitiveInternalName = "F";
+                    break;
+                case Type.LONG:
+                	opcode = Opcodes.BALOAD;
+                	primitiveInternalName = "J";
+                    break;
+                case Type.DOUBLE:
+                	opcode = Opcodes.DALOAD;
+                	primitiveInternalName = "D";
+                    break;
+                default :
+                	throw new IllegalStateException("??? unknow primitive type '" + clazz.getName() + "'");
+            }        	
+        	
+            mv.visitCode();
+            Label l0 = new Label();
+            mv.visitLabel(l0);
+            mv.visitVarInsn(ALOAD, 1);
+            mv.visitTypeInsn(CHECKCAST, "[" + primitiveInternalName);
+            mv.visitVarInsn(ILOAD, 2);
+            mv.visitInsn(opcode);
+            mv.visitMethodInsn(INVOKESTATIC, wraperTypeInternalName, "valueOf", "(" + primitiveInternalName + ")L" + wraperTypeInternalName + ";");
+            mv.visitInsn(ARETURN);
+            Label l1 = new Label();
+            mv.visitLabel(l1);
+            mv.visitLocalVariable("this", "Lbingo/lang/reflect/ReflectAccessor;", null, l0, l1, 0);
+            mv.visitLocalVariable("array", "Ljava/lang/Object;", null, l0, l1, 1);
+            mv.visitLocalVariable("index", "I", null, l0, l1, 2);
+            mv.visitMaxs(2, 3);
+            mv.visitEnd();
+        }else{
+        	mv.visitCode();
+        	Label l0 = new Label();
+        	mv.visitLabel(l0);
+        	mv.visitVarInsn(ALOAD, 1);
+        	mv.visitTypeInsn(CHECKCAST, "[Ljava/lang/Object;");
+        	mv.visitVarInsn(ILOAD, 2);
+        	mv.visitInsn(AALOAD);
+        	mv.visitInsn(ARETURN);
+        	Label l1 = new Label();
+        	mv.visitLabel(l1);
+        	mv.visitLocalVariable("this", "Lbingo/lang/reflect/ReflectAccessor;", null, l0, l1, 0);
+        	mv.visitLocalVariable("array", "Ljava/lang/Object;", null, l0, l1, 1);
+        	mv.visitLocalVariable("index", "I", null, l0, l1, 2);
+        	mv.visitMaxs(2, 3);
+        	mv.visitEnd(); 
+        }
+    }  
+    
+    private static void defineSetArrayItem(Class<?> clazz, ClassWriter cw){
+        MethodVisitor mv = cw.visitMethod(ACC_PUBLIC, "setArrayItem", "(Ljava/lang/Object;ILjava/lang/Object;)V", null, null);
+
+        Type type = Type.getType(clazz);
+        if(clazz.isPrimitive()){
+        	
+        	int    opcode                 = -1;
+        	String primitiveInternalName  = null;
+        	String unboxMethodName        = null;
+        	String wraperTypeInternalName = Type.getType(Primitives.wrap(clazz)).getInternalName();
+        	
+            switch (type.getSort()) {
+                case Type.BOOLEAN:
+                	opcode = Opcodes.BASTORE;
+                	primitiveInternalName = "Z";
+                	unboxMethodName       = "booleanValue";
+                    break;
+                case Type.BYTE:
+                	opcode = Opcodes.BASTORE;
+                	primitiveInternalName = "B";
+                	unboxMethodName       = "byteValue";
+                    break;
+                case Type.CHAR:
+                	opcode = Opcodes.CASTORE;
+                	primitiveInternalName = "C";
+                	unboxMethodName       = "charValue";
+                    break;
+                case Type.SHORT:
+                	opcode = Opcodes.SASTORE;
+                	primitiveInternalName = "S";
+                	unboxMethodName       = "shortValue";
+                    break;
+                case Type.INT:
+                	opcode = Opcodes.IASTORE;
+                	primitiveInternalName = "I";
+                	unboxMethodName       = "intValue";
+                    break;
+                case Type.FLOAT:
+                	opcode = Opcodes.FASTORE;
+                	primitiveInternalName = "F";
+                	unboxMethodName       = "floatValue";
+                    break;
+                case Type.LONG:
+                	opcode = Opcodes.BASTORE;
+                	primitiveInternalName = "J";
+                	unboxMethodName       = "longValue";
+                    break;
+                case Type.DOUBLE:
+                	opcode = Opcodes.DASTORE;
+                	primitiveInternalName = "D";
+                	unboxMethodName       = "doubleValue";
+                    break;
+                default :
+                	throw new IllegalStateException("??? unknow primitive type '" + clazz.getName() + "'");
+            }     
+            
+            mv.visitCode();
+            Label l0 = new Label();
+            mv.visitLabel(l0);
+            mv.visitVarInsn(ALOAD, 1);
+            mv.visitTypeInsn(CHECKCAST, "[" + primitiveInternalName);
+            mv.visitVarInsn(ILOAD, 2);
+            mv.visitVarInsn(ALOAD, 3);
+            mv.visitTypeInsn(CHECKCAST, wraperTypeInternalName);
+            mv.visitMethodInsn(INVOKEVIRTUAL, wraperTypeInternalName, unboxMethodName, "()" + primitiveInternalName);
+            mv.visitInsn(opcode);
+            Label l1 = new Label();
+            mv.visitLabel(l1);
+            mv.visitInsn(RETURN);
+            Label l2 = new Label();
+            mv.visitLabel(l2);
+            mv.visitLocalVariable("this", "Lbingo/lang/reflect/ReflectAccessor;", null, l0, l2, 0);
+            mv.visitLocalVariable("array", "Ljava/lang/Object;", null, l0, l2, 1);
+            mv.visitLocalVariable("index", "I", null, l0, l2, 2);
+            mv.visitLocalVariable("value", "Ljava/lang/Object;", null, l0, l2, 3);
+            mv.visitMaxs(3, 4);
+            mv.visitEnd();
+        }else{
+        	mv.visitCode();
+        	Label l0 = new Label();
+        	mv.visitLabel(l0);
+        	mv.visitVarInsn(ALOAD, 1);
+        	mv.visitTypeInsn(CHECKCAST, "[Ljava/lang/Object;");
+        	mv.visitVarInsn(ILOAD, 2);
+        	mv.visitVarInsn(ALOAD, 3);
+        	mv.visitInsn(Opcodes.AASTORE);
+        	Label l1 = new Label();
+        	mv.visitLabel(l1);
+        	mv.visitInsn(RETURN);
+        	Label l2 = new Label();
+        	mv.visitLabel(l2);
+        	mv.visitLocalVariable("this", "Lbingo/lang/reflect/ReflectAccessor;", null, l0, l2, 0);
+        	mv.visitLocalVariable("array", "Ljava/lang/Object;", null, l0, l2, 1);
+        	mv.visitLocalVariable("index", "I", null, l0, l2, 2);
+        	mv.visitLocalVariable("value", "Ljava/lang/Object;", null, l0, l2, 3);
+        	mv.visitMaxs(3, 4);
+        	mv.visitEnd();
+        }
+    }     
     
     private static void defineInvokeMethod(String classNameInternal,Method[] methods, ClassWriter cw){
         MethodVisitor mv = cw.visitMethod(ACC_PUBLIC + ACC_VARARGS, 
@@ -451,7 +740,7 @@ public abstract class ReflectAccessor {
         ArrayList<Method> methods = new ArrayList<Method>();
         Class<?> nextClass = type;
         
-        while (nextClass != Object.class) {
+        while (nextClass != null && nextClass != Object.class) {
             Method[] declaredMethods = nextClass.getDeclaredMethods();
             
             for (int i = 0, n = declaredMethods.length; i < n; i++) {
@@ -474,7 +763,7 @@ public abstract class ReflectAccessor {
         ArrayList<Field> fields = new ArrayList<Field>();
         Class<?> nextClass = type;
         
-        while (nextClass != Object.class) {
+        while (nextClass != null && nextClass != Object.class) {
             Field[] declaredFields = nextClass.getDeclaredFields();
             
             for (int i = 0, n = declaredFields.length; i < n; i++) {
@@ -491,6 +780,51 @@ public abstract class ReflectAccessor {
         }
         
         return fields.toArray(new Field[fields.size()]);
+    }
+    
+    private static int getPrimitiveTypeCode(Class<?> primitiveType){
+    	Type type = Type.getType(primitiveType);
+    	
+        int typeCode;
+        switch (type.getSort()) {
+            case Type.BOOLEAN:
+                typeCode = Opcodes.T_BOOLEAN;
+                break;
+            case Type.CHAR:
+                typeCode = Opcodes.T_CHAR;
+                break;
+            case Type.BYTE:
+                typeCode = Opcodes.T_BYTE;
+                break;
+            case Type.SHORT:
+                typeCode = Opcodes.T_SHORT;
+                break;
+            case Type.INT:
+                typeCode = Opcodes.T_INT;
+                break;
+            case Type.FLOAT:
+                typeCode = Opcodes.T_FLOAT;
+                break;
+            case Type.LONG:
+                typeCode = Opcodes.T_LONG;
+                break;
+            case Type.DOUBLE:
+                typeCode = Opcodes.T_DOUBLE;
+                break;
+            default : 
+            	throw new IllegalStateException("not a primitive type");
+        }
+        return typeCode;
+    }
+    
+    private static String getAccessorClassNameFor(Class<?> clazz){
+    	String className = clazz.getName();
+    	
+    	if(className.startsWith("java.") || className.startsWith("javax")){
+    		className = "bingo." + className;
+    	}
+    	
+    	return className + "$BingoReflectAccessor";
     }
     
     static final class ReflectLoader extends ClassLoader {

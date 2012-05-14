@@ -15,8 +15,8 @@
  */
 package bingo.lang;
 
-public interface Action1<T1,T2> {
+public interface Action1<T> {
 
-	void execute(T1 input1,T2 input2);
+	void execute(T input);
 	
 }

@@ -21,6 +21,7 @@ import java.util.Date;
 
 import bingo.lang.Classes;
 import bingo.lang.Converts;
+import bingo.lang.Primitives;
 import bingo.lang.Randoms;
 import bingo.lang.reflect.ReflectClass;
 import bingo.lang.reflect.ReflectField;
@@ -47,6 +48,11 @@ public class Df {
 		for(ReflectField field : reflectClass.getFields()){
 			if(!field.isFinal()){
 				Class<?> type = field.getType();
+				Object   value = field.getValue(bean);
+				
+				if(null != value && !value.equals(Primitives.defaultValue(type))){
+					continue;
+				}
 				
 				if(Classes.isString(type)){
 					field.setValue(bean, Randoms.nextString(Randoms.nextInt(1,MAX_STRING_LENGTH)));

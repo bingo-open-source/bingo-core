@@ -926,6 +926,23 @@ public class StringsTest extends TestCase {
         assertTrue( Strings.containsWhitespace("\n") );
     }    
     
+    //-----------------------------------------------------------------------
+    public void testCountOccurrences_String() {
+        assertEquals(0, Strings.countOccurrences(null, null));
+        assertEquals(0, Strings.countOccurrences("blah", null));
+        assertEquals(0, Strings.countOccurrences(null, "DD"));
+
+        assertEquals(0, Strings.countOccurrences("x", ""));
+        assertEquals(0, Strings.countOccurrences("", ""));
+
+        assertEquals(3, 
+             Strings.countOccurrences("one long someone sentence of one", "one"));
+        assertEquals(0, 
+             Strings.countOccurrences("one long someone sentence of one", "two"));
+        assertEquals(4, 
+             Strings.countOccurrences("oooooooooooo", "ooo"));
+    }
+    
 	private static class SubStrings extends Strings {
 		public SubStrings() {
 			super();

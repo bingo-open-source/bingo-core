@@ -15,7 +15,6 @@
  */
 package bingo.utils.codec.digest;
 
-import bingo.utils.Digests;
 
 public class MD5 {
 	

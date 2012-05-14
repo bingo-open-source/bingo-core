@@ -28,7 +28,7 @@ public class ReflectConstructor<T> extends ReflectMember {
 
 		this.javaConstructor = javaConstructor;
 		
-		this.create();
+		this.initialize();
 	}
 	
 	public String getName() {
@@ -47,7 +47,7 @@ public class ReflectConstructor<T> extends ReflectMember {
         }
 	}
 	
-	private void create(){
+	private void initialize(){
 		this.setAccessiable();
 	}
 	
@@ -58,4 +58,9 @@ public class ReflectConstructor<T> extends ReflectMember {
         	;
         }
 	}
+	
+	@Override
+    public String toString() {
+		return javaConstructor.toString();
+    }
 }

@@ -61,6 +61,22 @@ public class Collections {
 		return collection.toArray();
 	}
 	
+	public static <T> T[] toArray(Collection<T> collection,Class<T> elementType){
+		Assert.notNull(elementType,"elementType cannot be null");
+		
+		if(null == collection || collection.isEmpty()){
+			return Reflects.newArray(elementType, 0);
+		}else{
+			T[] array = Reflects.newArray(elementType, collection.size());
+			
+			int i=0;
+			for(T e : collection){
+				array[i++] = e;
+			}
+			return array;
+		}
+	}
+	
 	/**
 	 * return an empty object array if the supplied {@link Iterable} is null. 
 	 * Otherwise, return an object array of all iterable.

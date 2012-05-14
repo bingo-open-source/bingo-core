@@ -29,8 +29,8 @@ public class ReflectField extends ReflectMember {
 	private final Field    javaField;
 	private final Class<?> fieldType;
 	
-	private final Method setter;
-	private final Method getter;
+	private final ReflectMethod setter;
+	private final ReflectMethod getter;
 	
 	private final int    fieldIndex;
 	private final int    setterIndex;
@@ -45,20 +45,16 @@ public class ReflectField extends ReflectMember {
 		this.getter    = findGetter();
 		
 		this.fieldIndex  = reflectClass.getAccessor().getFieldIndex(javaField);
-		this.setterIndex = null == setter ? -1 : reflectClass.getAccessor().getMethodIndex(setter);
-		this.getterIndex = null == getter ? -1 : reflectClass.getAccessor().getMethodIndex(getter);
+		this.setterIndex = null == setter ? -1 : reflectClass.getAccessor().getMethodIndex(setter.getJavaMethod());
+		this.getterIndex = null == getter ? -1 : reflectClass.getAccessor().getMethodIndex(getter.getJavaMethod());
 		
-		this.create();
+		this.initialize();
 	}
 	
 	public String getName() {
 	    return javaField.getName();
     }
 
-	public Field getJavaField(){
-		return javaField;
-	}
-	
     public Class<?> getType(){
         return fieldType;
     }
@@ -66,6 +62,14 @@ public class ReflectField extends ReflectMember {
     public Type getGenericType(){
         return javaField.getGenericType();
     }
+    
+	public Field getJavaField(){
+		return javaField;
+	}
+	
+	public Class<?> getDeclaringClass(){
+		return javaField.getDeclaringClass();
+	}
 	
 	public boolean isStatic(){
 		return Modifier.isStatic(javaField.getModifiers());
@@ -83,17 +87,25 @@ public class ReflectField extends ReflectMember {
 		return null != setter;
 	}
 	
+	public ReflectMethod getGetter(){
+		return getter;
+	}
+	
+	public ReflectMethod getSetter(){
+		return setter;
+	}
+	
 	public boolean isPublicGet(){
-		return Modifier.isPublic(javaField.getModifiers()) || (null != getter && Modifier.isPublic(getter.getModifiers())); 
+		return Modifier.isPublic(javaField.getModifiers()) || (null != getter && getter.isPublic()); 
 	}
 	
 	public boolean isPublicSet(){
-		return Modifier.isPublic(javaField.getModifiers()) || (null != setter && Modifier.isPublic(setter.getModifiers())); 
+		return Modifier.isPublic(javaField.getModifiers()) || (null != setter && setter.isPublic()); 
 	}
 	
 	public boolean isPublicGetSet(){
 		return Modifier.isPublic(javaField.getModifiers()) || (
-				(null != setter && Modifier.isPublic(setter.getModifiers())) && (null != getter && Modifier.isPublic(getter.getModifiers()))); 
+				(null != setter && setter.isPublic()) && (null != getter && getter.isPublic())); 
 	}
 	
 	public void setValue(Object instance, Object value) {
@@ -124,16 +136,16 @@ public class ReflectField extends ReflectMember {
         }
 	}
 	
-	private void create(){
+	private void initialize(){
 		this.setAccessiable();
 	}
 	
-	private Method findSetter(){
+	private ReflectMethod findSetter(){
 		String   fieldName  = javaField.getName();
 		String   nameToFind = "set" + Character.toUpperCase(fieldName.charAt(0)) + (fieldName.length() > 1 ? fieldName.substring(1) : "");
 		Class<?> fieldType  = Primitives.wrap(javaField.getType());
 		
-		Method m = findSetter(fieldType, nameToFind);
+		ReflectMethod m = findSetter(fieldType, nameToFind);
 		
 		if(null == m && Primitives.isBoolean(fieldType) && fieldName.startsWith("is") && fieldName.length() > 2){
 			nameToFind = "set" + Character.toUpperCase(fieldName.charAt(2)) + (fieldName.length() > 3 ? fieldName.substring(3) : "");
@@ -148,25 +160,26 @@ public class ReflectField extends ReflectMember {
 		return m;
 	}
 	
-	private Method findSetter(Class<?> fieldType,String nameToFind){
-		for(Method m : reflectClass.getJavaClass().getMethods()){
+	private ReflectMethod findSetter(Class<?> fieldType,String nameToFind){
+		for(ReflectMethod rm : reflectClass.getMethods()){
+			Method m = rm.getJavaMethod();
 			if(m.getParameterTypes().length == 1 && 
 					fieldType.isAssignableFrom(Primitives.wrap(m.getParameterTypes()[0]))){
 				
 				if(m.getName().equals(nameToFind)){
-					return m;
+					return rm;
 				}
 			}
 		}
 		return null;		
-	}	
+	}
 	
-	private Method findGetter(){
+	private ReflectMethod findGetter(){
 		String   fieldName  = javaField.getName();
 		String   nameToFind = "get" + Character.toUpperCase(fieldName.charAt(0)) + (fieldName.length() > 1 ? fieldName.substring(1) : "");
 		Class<?> fieldType  = Primitives.wrap(javaField.getType());
 		
-		Method m = findGetter(fieldType,nameToFind);
+		ReflectMethod m = findGetter(fieldType,nameToFind);
 		
 		if(null == m && Primitives.isBoolean(fieldType)){
 			if(fieldName.startsWith("is")){
@@ -185,13 +198,14 @@ public class ReflectField extends ReflectMember {
 		return m;
 	}
 	
-	private Method findGetter(Class<?> fieldType,String nameToFind){
-		for(Method m : reflectClass.getJavaClass().getMethods()){
+	private ReflectMethod findGetter(Class<?> fieldType,String nameToFind){
+		for(ReflectMethod rm : reflectClass.getMethods()){
+			Method m = rm.getJavaMethod();
 			if(m.getParameterTypes().length == 0 && 
 					Primitives.wrap(m.getReturnType()).isAssignableFrom(fieldType)){
 				
 				if(m.getName().equals(nameToFind)){
-					return m;
+					return rm;
 				}
 			}
 		}
@@ -213,5 +227,10 @@ public class ReflectField extends ReflectMember {
         	return Primitives.defaultValue(fieldType);
         }
         return value;
+    }
+    
+	@Override
+    public String toString() {
+		return javaField.toString();
     }
 }

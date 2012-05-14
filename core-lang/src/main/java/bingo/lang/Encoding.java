@@ -22,23 +22,39 @@ import bingo.lang.exceptions.UnsupportedException;
 
 public class Encoding {
 	
-    public static final Encoding ISO_8859_1 = create("ISO-8859-1");
+	public static final Encoding ISO_8859_1 = create(Charsets.ISO_8859_1);
 
-    public static final Encoding US_ASCII = create("US-ASCII");
+	public static final Encoding US_ASCII = create(Charsets.US_ASCII);
+
+	public static final Encoding UTF_8 = create(Charsets.UTF_8);
+
+	public static final Encoding UTF_16 = create(Charsets.UTF_16);
     
-    public static final Encoding UTF_8 = create("UTF-8");    
-
-    public static final Encoding UTF_16 = create("UTF-16");
+	public static Encoding create(String name) {
+		try {
+	        return new Encoding(name);
+        } catch (Exception e) {
+        	System.err.println(Strings.format("error create encoding '{0}', unsupported charset error",name));
+        	e.printStackTrace();
+        	return new UnsupportedEncoding(name);
+        }
+	}  
 	
-	protected String  name;
+	public static Encoding create(Charset charset) {
+        return new Encoding(charset);
+	}
+	
 	protected Charset charset;
 	
 	protected Encoding(){
 		
 	}
+	
+	protected Encoding(Charset charset){
+		this.charset = charset;
+	}
 
 	protected Encoding(String name) {
-		this.name    = name;
 		this.charset = Charset.forName(name);
 	}
 	
@@ -59,26 +75,18 @@ public class Encoding {
 	}
 	
 	public String name(){
-		return name;
+		return charset.name();
 	}
 	
 	public Charset charset(){
 		return charset;
 	}
 	
-	private static Encoding create(String name) {
-		try {
-	        return new Encoding(name);
-        } catch (Exception e) {
-        	System.err.println(Strings.format("error create encoding '{0}', unsupported charset error",name));
-        	e.printStackTrace();
-        	return new UnsupportedEncoding(name);
-        }
-	}
-	
 	private static final class UnsupportedEncoding extends Encoding {
 		
 		private static final String message = "unsupported charset '{0}'";
+		
+		private String name;
 		
 		public UnsupportedEncoding(String name) {
 	        this.name = name;

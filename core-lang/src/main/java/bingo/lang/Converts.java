@@ -24,18 +24,18 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import bingo.lang.convert.ArrayConverter;
+import bingo.lang.convert.BeanConverter;
+import bingo.lang.convert.BooleanConverter;
+import bingo.lang.convert.CharacterConverter;
+import bingo.lang.convert.ClassConverter;
+import bingo.lang.convert.CollectionConverters;
 import bingo.lang.convert.Converter;
 import bingo.lang.convert.Convertible;
-import bingo.lang.converters.ArrayConverter;
-import bingo.lang.converters.BeanConverter;
-import bingo.lang.converters.BooleanConverter;
-import bingo.lang.converters.CharacterConverter;
-import bingo.lang.converters.ClassConverter;
-import bingo.lang.converters.CollectionConverters;
-import bingo.lang.converters.DateTimeConverters;
-import bingo.lang.converters.EnumConverter;
-import bingo.lang.converters.NumberConverters;
-import bingo.lang.converters.StringConverter;
+import bingo.lang.convert.DateTimeConverters;
+import bingo.lang.convert.EnumConverter;
+import bingo.lang.convert.NumberConverters;
+import bingo.lang.convert.StringConverter;
 import bingo.lang.exceptions.ConvertException;
 import bingo.lang.exceptions.UnsupportedException;
 

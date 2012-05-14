@@ -907,11 +907,11 @@ public class Strings {
 	 * </p>
 	 * 
 	 * <pre>
-	 * Stringss.split(null)       = []
-	 * Stringss.split("")         = []
-	 * Stringss.split("abc,def")  = ["abc", "def"]
-	 * Stringss.split("abc def")  = ["abc def"]
-	 * Stringss.split(" abc ")    = ["abc"]
+	 * Strings.split(null)       = []
+	 * Strings.split("")         = []
+	 * Strings.split("abc,def")  = ["abc", "def"]
+	 * Strings.split("abc def")  = ["abc def"]
+	 * Strings.split(" abc ")    = ["abc"]
 	 * </pre>
 	 * 
 	 * @param string the String to parse, may be null
@@ -919,7 +919,7 @@ public class Strings {
 	 * @return an array of parsed Strings, empty array [] if null String input
 	 */
 	public static String[] split(String string) {
-		return splitWorker(string, Chars.COMMA, false, true, false);
+		return splitWorker(string, Chars.COMMA, false, true, true);
 	}
 
 	/**
@@ -932,12 +932,12 @@ public class Strings {
 	 * </p>
 	 * 
 	 * <pre>
-	 * Stringss.split(null, *)         = []
-	 * Stringss.split("", *)           = []
-	 * Stringss.split("a.b.c", '.')    = ["a", "b", "c"]
-	 * Stringss.split("a..b.c", '.')   = ["a", "b", "c"]
-	 * Stringss.split("a:b:c", '.')    = ["a:b:c"]
-	 * Stringss.split("a b c", ' ')    = ["a", "b", "c"]
+	 * Strings.split(null, *)         = []
+	 * Strings.split("", *)           = []
+	 * Strings.split("a.b.c", '.')    = ["a", "b", "c"]
+	 * Strings.split("a..b.c", '.')   = ["a", "b", "c"]
+	 * Strings.split("a:b:c", '.')    = ["a:b:c"]
+	 * Strings.split("a b c", ' ')    = ["a", "b", "c"]
 	 * </pre>
 	 * 
 	 * @param string the String to parse, may be null
@@ -945,8 +945,36 @@ public class Strings {
 	 * @return an array of parsed Strings, empty array [] if null String input
 	 */
 	public static String[] split(String string, char separator) {
-		return splitWorker(string, separator, false, true, false);
+		return splitWorker(string, separator, false, true, true);
 	}
+	
+	/**
+	 * <p>
+	 * Splits the provided text into an array, separators specified. This is an alternative to using StringTokenizer.
+	 * </p>
+	 * 
+	 * <p>
+	 * A {@code null} input String returns empty array []. A {@code null} separatorChars splits on comma ",".
+	 * </p>
+	 * 
+	 * <pre>
+	 * Strings.split(null, *)         = []
+	 * Strings.split("", *)           = []
+	 * Strings.split("abc,def", null) = ["abc", "def"]
+	 * Strings.split("abc def", " ")  = ["abc", "def"]
+	 * Strings.split("abc  def", " ") = ["abc", "def"]
+	 * Strings.split("ab:cd:ef", ":") = ["ab", "cd", "ef"]
+	 * </pre>
+	 * 
+	 * @param string the String to parse, may be null
+	 * 
+	 * @param separator the characters used as the delimiters, {@code null} splits on whitespace
+	 * 
+	 * @return an array of parsed Strings, [] if null String input
+	 */
+	public static String[] split(String string, String separator) {
+		return splitWorker(string, separator, -1, false, true, true);
+	}	
 
 	/**
 	 * <p>
@@ -970,7 +998,7 @@ public class Strings {
 	 * @return an array of parsed Strings, empty array [] if null String input
 	 */
 	public static String[] split(String string, char separator, boolean trim) {
-		return splitWorker(string, separator, false, trim, false);
+		return splitWorker(string, separator, false, trim, true);
 	}
 
 	/**
@@ -995,9 +1023,9 @@ public class Strings {
 	 * @return an array of parsed Strings, [] if null String input
 	 */
 	public static String[] split(String string, String separator, boolean trim) {
-		return splitWorker(string, separator, -1, false, trim, false);
+		return splitWorker(string, separator, -1, false, trim, true);
 	}
-
+	
 	/**
 	 * <p>
 	 * Splits the provided text into an array, separators specified. This is an alternative to using StringTokenizer.
@@ -1008,22 +1036,21 @@ public class Strings {
 	 * </p>
 	 * 
 	 * <pre>
-	 * Stringss.split(null, *)         = []
-	 * Stringss.split("", *)           = []
-	 * Stringss.split("abc,def", null) = ["abc", "def"]
-	 * Stringss.split("abc def", " ")  = ["abc", "def"]
-	 * Stringss.split("abc  def", " ") = ["abc", "def"]
-	 * Stringss.split("ab:cd:ef", ":") = ["ab", "cd", "ef"]
+	 * See the examples here: {@link #split(String, String)}
 	 * </pre>
 	 * 
 	 * @param string the String to parse, may be null
 	 * 
 	 * @param separator the characters used as the delimiters, {@code null} splits on whitespace
 	 * 
+	 * @param trim if true then trim all the elements string in array
+	 * 
+	 * @param ignoreEmpty ignore if token is empty("")
+	 * 
 	 * @return an array of parsed Strings, [] if null String input
 	 */
-	public static String[] split(String string, String separator) {
-		return splitWorker(string, separator, -1, false, true, false);
+	public static String[] split(String string, String separator, boolean trim,boolean ignoreEmpty) {
+		return splitWorker(string, separator, -1, !ignoreEmpty, trim, ignoreEmpty);
 	}
 
 	// Substring
@@ -1318,16 +1345,16 @@ public class Strings {
 	 * StringUtils.replaceChars("abcba", 'z', 'y') = "abcba"
 	 * </pre>
 	 * 
-	 * @param string String to replace characters in, may be null
+	 * @param text String to replace characters in, may be null
 	 * @param oldChar the character to search for, may be null
 	 * @param newChar the character to replace, may be null
 	 * @return modified String, "" if null string input
 	 */
-	public static String replace(String string, char oldChar, char newChar) {
-		if (string == null) {
+	public static String replace(String text, char oldChar, char newChar) {
+		if (text == null) {
 			return EMPTY;
 		}
-		return string.replace(oldChar, newChar);
+		return text.replace(oldChar, newChar);
 	}
 
 	// Case conversion
@@ -3427,6 +3454,41 @@ public class Strings {
         // found digit it to make sure weird stuff like '.' and '1E-' doesn't pass
         return !allowSigns && foundDigit;
     }	
+    
+    // Count matches
+    //-----------------------------------------------------------------------
+    /**
+     * <p>Counts how many times the substring appears in the larger string.</p>
+     *
+     * <p>A {@code null} or empty ("") String input returns {@code 0}.</p>
+     *
+     * <pre>
+     * Strings.countOccurrences(null, *)       = 0
+     * Strings.countOccurrences("", *)         = 0
+     * Strings.countOccurrences("abba", null)  = 0
+     * Strings.countOccurrences("abba", "")    = 0
+     * Strings.countOccurrences("abba", "a")   = 2
+     * Strings.countOccurrences("abba", "ab")  = 1
+     * Strings.countOccurrences("abba", "xxx") = 0
+     * </pre>
+     *
+     * @param str  the CharSequence to check, may be null
+     * @param sub  the substring to count, may be null
+     * @return the number of occurrences, 0 if either CharSequence is {@code null}
+     * @since 3.0 Changed signature from countMatches(String, String) to countMatches(CharSequence, CharSequence)
+     */
+    public static int countOccurrences(CharSequence str, CharSequence sub) {
+        if (isEmpty(str) || isEmpty(sub)) {
+            return 0;
+        }
+        int count = 0;
+        int idx = 0;
+        while ((idx = indexOf(str, sub, idx)) != INDEX_NOT_FOUND) {
+            count++;
+            idx += sub.length();
+        }
+        return count;
+    }    
 
 	//private methods
 	//----------------------------------------------------------------------------------------------------------------------

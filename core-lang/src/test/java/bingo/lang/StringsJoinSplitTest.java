@@ -202,5 +202,12 @@ public class StringsJoinSplitTest extends TestCase {
         assertEquals("a", res[0]);
         assertEquals("b", res[1]);
         assertEquals("c", res[2]);
+        
+        str = "a^_^b^_^c";
+        res = Strings.split(str,"^_^");
+        assertEquals(3, res.length);
+        assertEquals("a", res[0]);
+        assertEquals("b", res[1]);
+        assertEquals("c", res[2]);        
     }
 }
