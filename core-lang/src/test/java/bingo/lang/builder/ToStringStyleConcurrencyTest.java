@@ -28,6 +28,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -66,16 +67,19 @@ public class ToStringStyleConcurrencyTest {
         }
     }
 
+    @Ignore
     @Test
     public void testLinkedList() throws InterruptedException, ExecutionException {
         this.testConcurrency(new CollectionHolder<List<Integer>>(new LinkedList<Integer>()));
     }
 
+    @Ignore
     @Test
     public void testArrayList() throws InterruptedException, ExecutionException {
         this.testConcurrency(new CollectionHolder<List<Integer>>(new ArrayList<Integer>()));
     }
 
+    @Ignore
     @Test
     public void testCopyOnWriteArrayList() throws InterruptedException, ExecutionException {
         this.testConcurrency(new CollectionHolder<List<Integer>>(new CopyOnWriteArrayList<Integer>()));

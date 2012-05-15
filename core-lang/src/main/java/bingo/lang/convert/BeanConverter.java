@@ -66,7 +66,7 @@ public class BeanConverter extends AbstractConverter<Object>{
             
             BeanProperty prop = beanClass.getProperty(name);
             
-            if(null != prop){
+            if(null != prop && prop.isWritable()){
                 prop.setValue(bean, Converts.convert(param,prop.getType(),prop.getGenericType()));
             }
         }

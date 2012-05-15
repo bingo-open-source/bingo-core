@@ -7,7 +7,7 @@ import junit.framework.TestCase;
 
 import org.junit.Test;
 
-import bingo.lang.iterable.ReadOnlyIterator;
+import bingo.lang.iterable.ImmutableIteratorBase;
 
 /**
  * {@link TestCase} of {@link Enumerable}
@@ -69,7 +69,7 @@ public class EnumerableTest extends TestCase {
 		});
 	}
 
-	private static class InfiniteIterator<T> extends ReadOnlyIterator<T> {
+	private static class InfiniteIterator<T> extends ImmutableIteratorBase<T> {
 
 		private final T value;
 

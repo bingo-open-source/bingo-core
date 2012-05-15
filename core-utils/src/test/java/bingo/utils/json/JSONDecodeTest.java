@@ -123,4 +123,9 @@ public class JSONDecodeTest {
             }
         }
     }
+    
+    @Test
+    public void testDecode1(){
+    	JSON.decode("[{ id : \"\", fields:[{ id:\"\",attrs:{}}]}]");
+    }
 }

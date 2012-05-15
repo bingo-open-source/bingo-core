@@ -21,7 +21,7 @@ import java.util.NoSuchElementException;
 import bingo.lang.Out;
 import bingo.lang.Predicate;
 
-public class PredicateIterator<T> extends ReadOnlyIterator<T> {
+public class PredicateIterator<T> extends ImmutableIteratorBase<T> {
 
 	private final Iterator<T>	iterator;
 	private final Predicate<T>	predicate;

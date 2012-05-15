@@ -16,26 +16,11 @@
 package bingo.lang.iterable;
 
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 
-public class ArrayIterator<T> extends ImmutableIterator<T> implements Iterator<T> {
+public abstract class ImmutableIterator<E> implements Iterator<E> {
 
-	private final T[] values;
-	private int current = -1;
-
-	public ArrayIterator(T[] values) {
-		this.values = values;
-	}
-
-	public boolean hasNext() {
-		return current < (values.length - 1);
-	}
-
-	public T next() {
-		try {
-			return values[++current];
-		} catch (ArrayIndexOutOfBoundsException e) {
-			throw new NoSuchElementException();
-		}
-	}
+	public void remove() {
+		throw new UnsupportedOperationException("remove()");
+    }
+	
 }

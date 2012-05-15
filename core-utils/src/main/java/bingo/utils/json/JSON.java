@@ -28,19 +28,19 @@ public class JSON {
     private static int ENCODE_MAXIMIZED = 0;
     private static int ENCODE_MINIMIZED = JSONSettings.IGNORE_NULL | JSONSettings.IGNORE_EMPTY | JSONSettings.KEY_NON_QUOTE;
     
-    private static final JSONEncoder encoderMinimized  = new JSONEncoder(new JSONSettings(ENCODE_MINIMIZED));
-    private static final JSONEncoder encoderMaximized  = new JSONEncoder(new JSONSettings(ENCODE_MAXIMIZED));
+//    private static final JSONEncoder encoderMinimized  = new JSONEncoder(new JSONSettings(ENCODE_MINIMIZED));
+//    private static final JSONEncoder encoderMaximized  = new JSONEncoder(new JSONSettings(ENCODE_MAXIMIZED));
     private static final JSONDecoder decoderPermissive = new JSONDecoder();
     
 	public static String encode(Object object){
-	    return encoderMinimized.encode(object);
+	    return new JSONEncoder(new JSONSettings(ENCODE_MINIMIZED)).encode(object);
 	}
 
 	public static String encode(Object object,boolean minimized){
 	    if(minimized){
-	        return encoderMinimized.encode(object);
+	        return new JSONEncoder(new JSONSettings(ENCODE_MINIMIZED)).encode(object);
 	    }
-	    return encoderMaximized.encode(object);
+	    return new JSONEncoder(new JSONSettings(ENCODE_MAXIMIZED)).encode(object);
 	}
 	
 	public static JSONObject decode(Reader reader) {

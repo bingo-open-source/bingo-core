@@ -136,6 +136,8 @@ public class NumberConverterTest {
             assertEquals(message[i] + " to Short",expected[i],Converts.convert(input[i],Short.class));
             assertEquals(message[i] + " to short",expected[i],Converts.convert(input[i],Short.TYPE));
         }
+        
+        assertEquals(Short.valueOf("0"), Converts.convert(0, Short.class));
     }	
 	
 	@Test
@@ -320,6 +322,8 @@ public class NumberConverterTest {
                 ((Double)(Converts.convert(input[i],Double.TYPE))).doubleValue(),
                 0.00001D);
         }
+        
+        assertEquals(new Double(0.0d), Converts.convert(0, Double.class));
     }	
 	
 	@Test
@@ -376,6 +380,8 @@ public class NumberConverterTest {
             assertEquals(message[i] + " to Byte",expected[i],Converts.convert(input[i],Byte.class));
             assertEquals(message[i] + " to byte",expected[i],Converts.convert(input[i],Byte.TYPE));
         }
+        
+        assertEquals(Byte.valueOf("0"), Converts.convert(0, Byte.class));
     }	
 	
 	@Test
