@@ -1626,6 +1626,28 @@ public class Arrays {
 	    return result;
 	}
 	
+	//equals
+	public static <T> boolean equals(T[] a, T[] b){
+		if((null == a && null == b) || (a == b)){
+			return true;
+		}
+		
+		if(null == a || null == b){
+			return false;
+		}
+		
+		if(a.length != b.length){
+			return false;
+		}
+		
+		for(int i=0;i<a.length;i++){
+			if(!Objects.equals(a[i], b[i])){
+				return false;
+			}
+		}
+		
+		return true;
+	}
 
 	//Private Methods
 	//---------------------------------------------------------------------------------------------	
