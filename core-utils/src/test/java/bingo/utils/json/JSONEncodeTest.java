@@ -134,6 +134,11 @@ public class JSONEncodeTest {
 		
 		public static int STATIC_FIELD = 0;
 		
+		private transient int transientField = 100;
+		
+		@JSONIgnore
+		private int ignoreField = 200;
+		
 		private String name;
 		private int    age;
 		
@@ -148,6 +153,22 @@ public class JSONEncodeTest {
 
 		public int getAge() {
         	return age;
+        }
+
+		public int getTransientField() {
+        	return transientField;
+        }
+
+		public void setTransientField(int transientField) {
+        	this.transientField = ignoreField;
+        }
+
+		public final int getIgnoreField() {
+        	return ignoreField;
+        }
+
+		public final void setIgnoreField(int ignoreField) {
+        	this.ignoreField = ignoreField;
         }
 	}
 	

@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class ReflectType implements Type {
+class ReflectType implements Type {
 	
 	private static ConcurrentHashMap<GenericTypeKey, ReflectType> genericTypeCache = new ConcurrentHashMap<GenericTypeKey, ReflectType>();
 	

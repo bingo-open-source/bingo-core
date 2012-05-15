@@ -9,6 +9,7 @@
 .settings
 .project
 .classpath
+.externalToolBuilders
 
 # Maven Fields #
 target

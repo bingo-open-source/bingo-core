@@ -192,7 +192,7 @@ class JSONEncoder {
 
             int index = 0;
             for(BeanProperty prop : beanClass.getProperties()){
-                if(prop.isReadable() && !prop.isTransient()){
+                if(prop.isReadable() && !prop.isAnnotationPresent(JSONIgnore.class) && !prop.isTransient()){
                     String propName = prop.getName();
                     
                     Object propValue = prop.getValue(bean);
