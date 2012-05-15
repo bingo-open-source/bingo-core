@@ -15,6 +15,7 @@
  */
 package bingo.lang;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -37,7 +38,7 @@ import bingo.lang.convert.EnumConverter;
 import bingo.lang.convert.NumberConverters;
 import bingo.lang.convert.StringConverter;
 import bingo.lang.exceptions.ConvertException;
-import bingo.lang.exceptions.UnsupportedException;
+import bingo.lang.exceptions.ConvertUnsupportedException;
 
 @SuppressWarnings("unchecked")
 public class Converts {
@@ -93,11 +94,11 @@ public class Converts {
 		converters.put(clazz,converter);
 	}
 	
-	public static <T> T convert(Object value,Class<T> targetType) throws UnsupportedException {
+	public static <T> T convert(Object value,Class<T> targetType) throws ConvertUnsupportedException {
 		return convert(value,targetType,null);
 	}
 	
-	public static <T> T convert(Object value,Class<T> targetType, Type genericType) throws UnsupportedException {
+	public static <T> T convert(Object value,Class<T> targetType, Type genericType) throws ConvertUnsupportedException {
 		Assert.notNull(targetType);
         
         //trim to null if value is String
@@ -105,7 +106,7 @@ public class Converts {
         
         //primitive target type
         if(targetType.isPrimitive()){
-        	return toPrimitive(targetType,value);
+        	return toPrimitive(value,targetType);
         }
         
         //null value TODO: default value of null 
@@ -129,6 +130,10 @@ public class Converts {
         if(sourceType.isEnum()){
         	value      = Enums.getValue((Enum<?>)value);
         	sourceType = value.getClass();
+        }
+        
+        if(targetType.isEnum()){
+        	return (T)Enums.valueOf((Class<? extends Enum>)targetType,value);
         }
         
         try {
@@ -177,10 +182,10 @@ public class Converts {
         } catch (ConvertException e){
         	throw e;
         } catch (Throwable e) {
-        	throw new ConvertException(e,"error converting value '{0}' to '{1}'",value,targetType.getName());
+        	throw new ConvertException(e,"Error converting '{0}' to '{1}', value : {2}",sourceType.getName(),targetType.getName(),value);
         }
         
-		throw new UnsupportedException("cannot convert from '{0}' to '{1}'",sourceType.getName(),targetType.getName());
+		throw new ConvertUnsupportedException("Cannot convert '{0}' to '{1}', value : {2}",sourceType.getName(),targetType.getName(),value.toString());
 	}
 	
 	/**
@@ -208,6 +213,21 @@ public class Converts {
 	        	return converter.convertToString(value);
 	        }
 	        
+	        if(value.getClass().isArray()){
+	            StringBuilder string = new StringBuilder();
+	            for(int i=0;i<Array.getLength(value);i++){
+	                if(i > 0){
+	                    string.append(',');
+	                }
+	                string.append(toString(Array.get(value, i)));
+	            }
+	            return string.toString();
+	        }
+
+	        if(value instanceof Iterable){
+	        	return Strings.join((Iterable)value,",");
+	        }
+	        
 	        return value.toString();
         } catch (ConvertException e){
         	throw e;
@@ -224,7 +244,7 @@ public class Converts {
 	 * @return 转换为基本类型后的值，如果之前传入的value为 <code>null</code> ，
 	 * 则返回该基本类型的默认值。
 	 */
-	static <T> T toPrimitive(Class<T> targetType, Object value) {
+	static <T> T toPrimitive(Object value,Class<T> targetType) {
 		if(null == value){
 			return (T)Primitives.defaultValue(targetType);
 		}else{

@@ -28,17 +28,17 @@ import bingo.lang.testing.Perf;
 
 public class ConvertsTest {
 
-//	@Test
+	@Test
 	public void testSimplePerformanceComparsion(){
+		Perf.run("Handcode.parse", new Runnable() {
+			public void run() {
+				Integer.parseInt("100");
+			}
+		},1000000);		
+		
 		Perf.run("Convert.toType", new Runnable() {
 			public void run() {
 				Converts.convert("100",Integer.class);
-			}
-		},1000000);
-		
-		Perf.run("Integer.parse", new Runnable() {
-			public void run() {
-				Integer.parseInt("100");
 			}
 		},1000000);
 		
@@ -53,8 +53,8 @@ public class ConvertsTest {
 	
 	@Test
 	public void testToPrimitiveClassObject(){
-		assertTrue(0 == Converts.toPrimitive(Integer.TYPE, null));
-		assertTrue(36.5d == Converts.toPrimitive(Double.TYPE, 36.5));
+		assertTrue(0 == Converts.toPrimitive(null,Integer.TYPE));
+		assertTrue(36.5d == Converts.toPrimitive(36.5,Double.TYPE));
 	}
 	
 	static final class TesterBean  {

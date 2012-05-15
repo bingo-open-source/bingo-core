@@ -91,6 +91,15 @@ public abstract class ReflectAccessor {
         return -1;
     }
     
+    int getFieldIndex(String name){
+        for (int i = 0, n = fields.length; i < n; i++) {
+            if(name.equals(fields[i].getName())){
+                return i;
+            }
+        }
+        return -1;
+    }
+    
     static ReflectAccessor createFor(Class<?> type){
         ReflectLoader loader = new ReflectLoader(type.getClassLoader());
         
@@ -643,7 +652,12 @@ public abstract class ReflectAccessor {
                         break;
                 }
 
-                mv.visitFieldInsn(PUTFIELD, classNameInternal, field.getName(), fieldType.getDescriptor());
+                if(Modifier.isStatic(field.getModifiers())){
+                	mv.visitFieldInsn(Opcodes.PUTSTATIC, classNameInternal, field.getName(), fieldType.getDescriptor());
+                }else{
+                	mv.visitFieldInsn(PUTFIELD, classNameInternal, field.getName(), fieldType.getDescriptor());	
+                }
+                
                 mv.visitInsn(RETURN);
             }
 
@@ -685,7 +699,12 @@ public abstract class ReflectAccessor {
                 mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
                 mv.visitVarInsn(ALOAD, 1);
                 mv.visitTypeInsn(CHECKCAST, classNameInternal);
-                mv.visitFieldInsn(GETFIELD, classNameInternal, field.getName(), Type.getDescriptor(field.getType()));
+                
+                if(Modifier.isStatic(field.getModifiers())){
+                	mv.visitFieldInsn(Opcodes.GETSTATIC, classNameInternal, field.getName(), Type.getDescriptor(field.getType()));
+                }else{
+                	mv.visitFieldInsn(GETFIELD, classNameInternal, field.getName(), Type.getDescriptor(field.getType()));	
+                }
 
                 Type fieldType = Type.getType(field.getType());
                 switch (fieldType.getSort()) {

@@ -100,6 +100,10 @@ public class BeanClass<T> {
 		//from fields
 		for(ReflectField field : clazz.getFields()){
 			
+			if(field.isStatic()){
+				continue;
+			}
+			
 			if(field.isPublic() || field.hasGetter() || field.hasSetter()){
 			
 				String name = field.getName();
@@ -136,6 +140,10 @@ public class BeanClass<T> {
 		//from methods
 		for(ReflectMethod rm : clazz.getMethods()){
 			Method m = rm.getJavaMethod();
+			
+			if(rm.isStatic()){
+				continue;
+			}
 			
 			if(!methods.contains(m)){
 				String methodName = rm.getName();

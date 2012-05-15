@@ -15,6 +15,8 @@
  */
 package bingo.lang.convert;
 
+import java.lang.reflect.Type;
+
 import bingo.lang.Out;
 
 public class BooleanConverter extends AbstractConverter<Boolean> implements Converter<Boolean> {
@@ -38,7 +40,8 @@ public class BooleanConverter extends AbstractConverter<Boolean> implements Conv
     	this.falseStrings = copyStrings(falseStrings);
     }
     
-	public boolean convertFrom(Object value, Class<?> targetType, Class<?> genericType, Out<Object> out) throws Throwable {
+	@Override
+    public boolean convertFrom(Object value, Class<?> targetType, Type genericType, Out<Object> out) throws Throwable {
 		String stringValue = value.toString().toLowerCase();
 		
         for(int i=0; i<trueStrings.length; ++i) {

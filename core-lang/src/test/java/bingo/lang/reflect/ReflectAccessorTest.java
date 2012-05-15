@@ -29,6 +29,22 @@ import bingo.lang.testing.Perf;
 public class ReflectAccessorTest {
 	
 	@Test
+	public void testStaticField(){
+		ReflectAccessor accessor = ReflectAccessor.createFor(Bean.class);
+		
+		int index = accessor.getFieldIndex("STATIC_FIELD");
+		
+		assertEquals(new Integer(0),accessor.getField(null, index));
+		assertEquals(new Integer(0),accessor.getField(new Bean(), index));
+		
+		accessor.setField(null, index, 10);
+		assertEquals(new Integer(10),accessor.getField(null, index));
+		
+		accessor.setField(new Bean(), index, 100);
+		assertEquals(new Integer(100),accessor.getField(null, index));
+	}
+	
+	@Test
 	@SuppressWarnings("unused")
 	public void testGetArrayLengthObjectType(){
 		final ReflectAccessor accessor = ReflectAccessor.createFor(Bean.class);
@@ -223,11 +239,10 @@ public class ReflectAccessorTest {
 	}
 	
 	static class Bean {
-		
+		public static int STATIC_FIELD = 0;
 	}
 	
 	static interface IBean {
 		
 	}
-	
 }

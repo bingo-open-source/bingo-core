@@ -109,11 +109,6 @@ public class JSONEncodeTest {
 		System.out.println(json);
 	}
 	
-	public static void main(String[] args) {
-		Object a = new int[]{};
-	    System.out.println(a instanceof Object[]);
-    }
-	
 	private static String encode(Object value){
 		return JSON.encode(value);
 	}
@@ -136,6 +131,8 @@ public class JSONEncodeTest {
 	}
 	
 	static class ParentBean {
+		
+		public static int STATIC_FIELD = 0;
 		
 		private String name;
 		private int    age;
