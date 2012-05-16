@@ -57,7 +57,6 @@ public class ReflectClass<T> implements Named {
 	private ReflectField[]		 	 fields;
 	private ReflectMethod[]		 	 methods;
 	
-	private ReflectConstructor<T>[] declaredConstructors;
 	private ReflectField[]		 	 declaredFields;
 	private ReflectMethod[]		 	 declaredMethods;	
 	
@@ -117,10 +116,6 @@ public class ReflectClass<T> implements Named {
 	
 	public ReflectConstructor<T>[] getConstructors(){
 		return constructors;
-	}
-	
-	public ReflectConstructor<T>[] getDeclaredConstructors(){
-		return declaredConstructors;
 	}
 	
 	public ReflectField[] getFields() {
@@ -230,7 +225,7 @@ public class ReflectClass<T> implements Named {
 	private void createConstructors(){
 		List<ReflectConstructor<T>> constructorList = New.list();
 		
-		for(Constructor<T> c : Reflects.getConstructors(javaClass)) {
+		for(Constructor<T> c : javaClass.getDeclaredConstructors()) {
 			if(!c.isSynthetic()){
 				ReflectConstructor<T> rc = new ReflectConstructor<T>(this,c);
 				
@@ -243,7 +238,6 @@ public class ReflectClass<T> implements Named {
 		}
 		
 		this.constructors = constructorList.toArray(new ReflectConstructor[constructorList.size()]);
-		this.declaredConstructors = getDeclaredMembers(constructorList).toArray(new ReflectConstructor[]{});
 	}
 	
 	private void createFields(){
