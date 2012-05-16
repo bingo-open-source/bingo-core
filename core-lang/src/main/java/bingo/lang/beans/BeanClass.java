@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.WeakHashMap;
 
+import bingo.lang.Arrays;
 import bingo.lang.Collections;
 import bingo.lang.Predicates;
 import bingo.lang.reflect.ReflectClass;
@@ -124,6 +125,8 @@ public class BeanClass<T> {
 
 				prop.setSetter(field.getSetter());
 				prop.setWritable(field.isPublicSet());
+				prop.setTransient(field.isTransient());
+				prop.setAnnotations(field.getJavaField().getAnnotations());
 				
 				if(prop.hasGetter()){
 					methods.add(prop.getGetter());
@@ -158,6 +161,8 @@ public class BeanClass<T> {
 							
 							if(null == prop.getGenericType()){
 								prop.setGenericType(m.getGenericParameterTypes()[0]);	
+								//TODO : duplicate annotations ?
+								prop.setAnnotations(Arrays.concat(prop.getAnnotations(), m.getAnnotations()));
 							}
 						}
 						
@@ -173,6 +178,7 @@ public class BeanClass<T> {
 							prop.setReadable(rm.isPublic());
 							if(null == prop.getGenericType()){
 								prop.setGenericType(m.getGenericReturnType());	
+								prop.setAnnotations(Arrays.concat(prop.getAnnotations(), m.getAnnotations()));
 							}							
 						}
 					}
@@ -188,6 +194,7 @@ public class BeanClass<T> {
 							prop.setReadable(rm.isPublic());
 							if(null == prop.getGenericType()){
 								prop.setGenericType(m.getGenericReturnType());	
+								prop.setAnnotations(Arrays.concat(prop.getAnnotations(), m.getAnnotations()));
 							}
 						}
 					}

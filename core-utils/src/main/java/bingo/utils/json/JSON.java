@@ -24,23 +24,21 @@ import bingo.lang.Converts;
 import bingo.lang.Strings;
 
 public class JSON {
-    
-    private static int ENCODE_MAXIMIZED = 0;
-    private static int ENCODE_MINIMIZED = JSONSettings.IGNORE_NULL | JSONSettings.IGNORE_EMPTY | JSONSettings.KEY_NON_QUOTE;
-    
-    private static final JSONEncoder encoderMinimized  = new JSONEncoder(new JSONSettings(ENCODE_MINIMIZED));
-    private static final JSONEncoder encoderMaximized  = new JSONEncoder(new JSONSettings(ENCODE_MAXIMIZED));
+	
     private static final JSONDecoder decoderPermissive = new JSONDecoder();
     
+    private static final int ENCODE_KEY_QUOTED    = JSONSettings.IGNORE_NULL | JSONSettings.IGNORE_EMPTY;
+    private static final int ENCODE_KEY_NON_QUOTE = JSONSettings.IGNORE_NULL | JSONSettings.IGNORE_EMPTY | JSONSettings.KEY_NON_QUOTE;
+    
 	public static String encode(Object object){
-	    return encoderMinimized.encode(object);
+	    return new JSONEncoder(new JSONSettings(ENCODE_KEY_NON_QUOTE)).encode(object);
 	}
 
-	public static String encode(Object object,boolean minimized){
-	    if(minimized){
-	        return encoderMinimized.encode(object);
+	public static String encode(Object object,boolean keyQuoted){
+	    if(keyQuoted){
+	        return new JSONEncoder(new JSONSettings(ENCODE_KEY_QUOTED)).encode(object);
 	    }
-	    return encoderMaximized.encode(object);
+	    return new JSONEncoder(new JSONSettings(ENCODE_KEY_NON_QUOTE)).encode(object);
 	}
 	
 	public static JSONObject decode(Reader reader) {

@@ -1608,6 +1608,46 @@ public class Arrays {
 			return toList(array).toArray(to);
 		}
 	}
+	
+	//concat
+	@SuppressWarnings("unchecked")
+	public static <T> T[] concat(T[] a, T[] b) {
+	    final int alen = a.length;
+	    final int blen = b.length;
+	    if (alen == 0) {
+	        return b;
+	    }
+	    if (blen == 0) {
+	        return a;
+	    }
+	    final T[] result = (T[]) Reflects.newArray(a.getClass().getComponentType(), alen + blen);
+	    System.arraycopy(a, 0, result, 0, alen);
+	    System.arraycopy(b, 0, result, alen, blen);
+	    return result;
+	}
+	
+	//equals
+	public static <T> boolean equals(T[] a, T[] b){
+		if((null == a && null == b) || (a == b)){
+			return true;
+		}
+		
+		if(null == a || null == b){
+			return false;
+		}
+		
+		if(a.length != b.length){
+			return false;
+		}
+		
+		for(int i=0;i<a.length;i++){
+			if(!Objects.equals(a[i], b[i])){
+				return false;
+			}
+		}
+		
+		return true;
+	}
 
 	//Private Methods
 	//---------------------------------------------------------------------------------------------	

@@ -15,6 +15,7 @@
  */
 package bingo.lang.beans;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
@@ -35,6 +36,7 @@ public class BeanProperty implements Named {
 	private boolean      writable;
 	private boolean      _transient;
 	private Type          genericType;
+	private Annotation[]  annotations = new Annotation[]{};
 	
 	protected BeanProperty(BeanClass<?> beanClass,String name){
 		this.name      = name;
@@ -57,6 +59,10 @@ public class BeanProperty implements Named {
 		return beanClass;
 	}
 	
+	public Annotation[] getAnnotations(){
+		return annotations;
+	}
+	
 	public boolean isReadable(){
 		return readable;
 	}
@@ -69,7 +75,11 @@ public class BeanProperty implements Named {
 		return _transient;
 	}
 	
-	public boolean hasField(){
+	public boolean isAnnotationPresent(Class<? extends Annotation> annotationType){
+		return getAnnotation(annotationType) != null;
+	}
+	
+	public boolean isField(){
 		return null != field;
 	}
 	
@@ -79,6 +89,15 @@ public class BeanProperty implements Named {
 	
 	public boolean hasSetter(){
 		return null != setter;
+	}
+	
+	public Annotation getAnnotation(Class<? extends Annotation> annotationType) {
+		for(Annotation a : annotations){
+			if(a.annotationType().equals(annotationType)){
+				return a;
+			}
+		}
+		return null;
 	}
 	
 	public Field getField(){
@@ -143,6 +162,10 @@ public class BeanProperty implements Named {
 	
 	protected void setTransient(boolean isTransient){
 		this._transient = isTransient;
+	}
+	
+	protected void setAnnotations(Annotation[] annotations){
+		this.annotations = annotations;
 	}
 
 	@Override

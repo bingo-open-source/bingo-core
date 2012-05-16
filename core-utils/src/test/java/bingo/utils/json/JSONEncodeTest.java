@@ -22,6 +22,7 @@ import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -104,9 +105,14 @@ public class JSONEncodeTest {
 		parent.getChilds().add(child1);
 		parent.getChilds().add(child2);
 		
-		String json = encode(parent);;
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("a", "x");
 		
-		System.out.println(json);
+		parent.getList().add(map);
+		
+		String json = encode(parent);
+		
+		JSON.decode(json);
 	}
 	
 	private static String encode(Object value){
@@ -134,6 +140,11 @@ public class JSONEncodeTest {
 		
 		public static int STATIC_FIELD = 0;
 		
+		private transient int transientField = 100;
+		
+		@JSONIgnore
+		private int ignoreField = 200;
+		
 		private String name;
 		private int    age;
 		
@@ -148,6 +159,22 @@ public class JSONEncodeTest {
 
 		public int getAge() {
         	return age;
+        }
+
+		public int getTransientField() {
+        	return transientField;
+        }
+
+		public void setTransientField(int transientField) {
+        	this.transientField = ignoreField;
+        }
+
+		public final int getIgnoreField() {
+        	return ignoreField;
+        }
+
+		public final void setIgnoreField(int ignoreField) {
+        	this.ignoreField = ignoreField;
         }
 	}
 	
@@ -178,6 +205,7 @@ public class JSONEncodeTest {
 		private String 			id;
 		private List<Category> childs = new ArrayList<Category>();
 		private Category 		parent;
+		private List<Object>   list = new ArrayList<Object>();
 		
 		public Category(String id) {
 			this.id = id;
@@ -203,6 +231,10 @@ public class JSONEncodeTest {
 		public void setChilds(List<Category> childs) {
 			this.childs = childs;
 		}
+		
+		public final List<Object> getList() {
+        	return list;
+        }
 
 		public Category getParent() {
 			return parent;

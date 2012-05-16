@@ -73,6 +73,33 @@ public class ArraysTest extends TestCase {
 		assertEquals(array[2].toString(), strings[2]);
 	}
 	
+	public void testConcat(){
+		Integer[] a = new Integer[]{};
+		Integer[] b = new Integer[]{};
+		Integer[] c = null;
+		
+		assertEquals(0, Arrays.concat(a, b).length);
+		
+		a = new Integer[]{1,2,3};
+		b = new Integer[]{};	
+		
+		assertEquals(3, Arrays.concat(a, b).length);
+		assertTrue(Arrays.equals(a,Arrays.concat(a, b)));
+		
+		a = new Integer[]{};
+		b = new Integer[]{1,2,3};
+		
+		assertEquals(3, Arrays.concat(a, b).length);
+		assertTrue(Arrays.equals(b,Arrays.concat(a, b)));	
+		
+		a = new Integer[]{1,2,3};
+		b = new Integer[]{4,5,6};
+		c = new Integer[]{1,2,3,4,5,6};
+		
+		assertEquals(6, Arrays.concat(a, b).length);
+		assertTrue(Arrays.equals(c,Arrays.concat(a, b)));
+	}
+	
 	private static class SubArrays extends Arrays {
 		public SubArrays(){
 			super();

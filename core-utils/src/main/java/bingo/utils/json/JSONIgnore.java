@@ -13,29 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.lang.iterable;
+package bingo.utils.json;
 
-import java.util.Iterator;
-import java.util.NoSuchElementException;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-public class ArrayIterator<T> extends ImmutableIterator<T> implements Iterator<T> {
+@Retention(RetentionPolicy.RUNTIME)  
+@Target(ElementType.FIELD)
+public @interface JSONIgnore {
 
-	private final T[] values;
-	private int current = -1;
-
-	public ArrayIterator(T[] values) {
-		this.values = values;
-	}
-
-	public boolean hasNext() {
-		return current < (values.length - 1);
-	}
-
-	public T next() {
-		try {
-			return values[++current];
-		} catch (ArrayIndexOutOfBoundsException e) {
-			throw new NoSuchElementException();
-		}
-	}
 }

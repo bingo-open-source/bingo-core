@@ -22,7 +22,7 @@ import bingo.lang.Assert;
 import bingo.lang.OutObject;
 import bingo.lang.Out;
 
-public abstract class ReadOnlyIterator<T> implements Iterator<T> {
+public abstract class ImmutableIteratorBase<T> implements Iterator<T> {
 
 	private Boolean	     hasNext	= null;
 	private T	         current	= null;

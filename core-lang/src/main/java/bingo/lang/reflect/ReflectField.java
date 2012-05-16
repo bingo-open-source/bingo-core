@@ -79,6 +79,10 @@ public class ReflectField extends ReflectMember {
 		return Modifier.isFinal(javaField.getModifiers());
 	}
 	
+	public boolean isTransient(){
+		return Modifier.isTransient(javaField.getModifiers());
+	}
+	
 	public boolean hasGetter(){
 		return null != getter;
 	}

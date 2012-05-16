@@ -34,9 +34,9 @@ public class NumberConverters {
 	        	throw new ConvertException("value '{0}' is too large for type '{1}'",longValue,targetType.getName());
 	        }
 	        
-	        if (longValue < Float.MIN_VALUE) {
-	        	throw new ConvertException("value '{0}' is too small for type '{1}'",longValue,targetType.getName());
-	        }
+//	        if (longValue < Float.MIN_VALUE) {
+//	        	throw new ConvertException("value '{0}' is too small for type '{1}'",longValue,targetType.getName());
+//	        }
 	        
 	        return Byte.valueOf(number.byteValue());
 	    }
@@ -57,9 +57,9 @@ public class NumberConverters {
 	        	throw new ConvertException("value '{0}' is too large for type '{1}'",longValue,targetType.getName());
 	        }
 	        
-	        if (longValue < Float.MIN_VALUE) {
-	        	throw new ConvertException("value '{0}' is too small for type '{1}'",longValue,targetType.getName());
-	        }
+//	        if (longValue < Float.MIN_VALUE) {
+//	        	throw new ConvertException("value '{0}' is too small for type '{1}'",longValue,targetType.getName());
+//	        }
 	        
 	        return Float.valueOf(number.floatValue());
 	    }
@@ -76,13 +76,14 @@ public class NumberConverters {
 	    protected Double toNumber(Class<?> targetType, Number number) {
 			long longValue = number.longValue();
 			
-	        if (longValue > Float.MAX_VALUE) {
+	        if (longValue > Double.MAX_VALUE) {
 	        	throw new ConvertException("value '{0}' is too large for type '{1}'",longValue,targetType.getName());
 	        }
 	        
-	        if (longValue < Float.MIN_VALUE) {
-	        	throw new ConvertException("value '{0}' is too small for type '{1}'",longValue,targetType.getName());
-	        }
+	        //TODO : REVIEW 
+//	        if (longValue < Double.MIN_VALUE) {
+//	        	throw new ConvertException("value '{0}' is too small for type '{1}'",longValue,targetType.getName());
+//	        }
 	        
 	        return Double.valueOf(number.doubleValue());
 	    }

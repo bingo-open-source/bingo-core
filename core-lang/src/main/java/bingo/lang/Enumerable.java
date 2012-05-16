@@ -36,7 +36,7 @@ import bingo.lang.exceptions.EmptyElementException;
 import bingo.lang.iterable.ArrayIterable;
 import bingo.lang.iterable.FuncIterable;
 import bingo.lang.iterable.PredicateIterable;
-import bingo.lang.iterable.ReadOnlyIterator;
+import bingo.lang.iterable.ImmutableIteratorBase;
 
 //From org.core4j, under Apache License 2.0
 public class Enumerable<T> implements Iterable<T> {
@@ -608,7 +608,7 @@ public class Enumerable<T> implements Iterable<T> {
 	// Private Inner Iterators
 	//------------------------------------------------------------------------------------------------------------
 
-	private static class TakeIterator<T> extends ReadOnlyIterator<T> {
+	private static class TakeIterator<T> extends ImmutableIteratorBase<T> {
 
 		private int left;
 		private Iterator<T> iterator;
@@ -636,7 +636,7 @@ public class Enumerable<T> implements Iterable<T> {
         }
 	}
 
-	private static class RangeIterator extends ReadOnlyIterator<Integer> {
+	private static class RangeIterator extends ImmutableIteratorBase<Integer> {
 
 		private final int end;
 		private Integer current;
@@ -666,7 +666,7 @@ public class Enumerable<T> implements Iterable<T> {
         }
 	}
 
-	private static class UnionIterator<T> extends ReadOnlyIterator<T> {
+	private static class UnionIterator<T> extends ImmutableIteratorBase<T> {
 
 		private final List<Iterable<T>> involved;
 
@@ -707,7 +707,7 @@ public class Enumerable<T> implements Iterable<T> {
         }
 	}
 
-	private static class SelectManyIterator<TSource, TResult> extends ReadOnlyIterator<TResult> {
+	private static class SelectManyIterator<TSource, TResult> extends ImmutableIteratorBase<TResult> {
 
 		private final Iterator<TSource> sourceIterator;
 		private final Func1<TSource, Enumerable<TResult>> selector;
@@ -795,7 +795,7 @@ public class Enumerable<T> implements Iterable<T> {
 		}
 	}
 
-	private static class DistinctIterator<T> extends ReadOnlyIterator<T> {
+	private static class DistinctIterator<T> extends ImmutableIteratorBase<T> {
 
 		private final Iterator<T> iterator;
 		private Set<T> seen;
