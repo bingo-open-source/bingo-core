@@ -16,7 +16,6 @@
 package bingo.lang;
 
 import java.lang.reflect.Array;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.InvocationTargetException;
@@ -372,21 +371,6 @@ public class Reflects {
 	//Consturctors, Fields, Methods
 	//--------------------------------------------------------------------------------------------------------
 	
-    public static <T> List<Constructor<T>> getConstructors(Class<T> clazz){
-        List<Constructor<T>> constructors = new ArrayList<Constructor<T>>();
-        
-        for (Class<?> search = clazz; search != null; search = search.getSuperclass()) {
-            for(Constructor<T> constructor : search.getDeclaredConstructors()){
-                //exclude synthetic constructor
-                if(!constructor.isSynthetic()){
-                    constructors.add(constructor) ;
-                }
-            }
-        }
-        
-        return constructors;
-    }
-
     public static List<Method> getMethods(Class<?> clazz){
         List<Method> methods = new ArrayList<Method>();
         
