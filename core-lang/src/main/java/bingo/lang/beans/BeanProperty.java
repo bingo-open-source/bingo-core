@@ -79,7 +79,7 @@ public class BeanProperty implements Named {
 		return getAnnotation(annotationType) != null;
 	}
 	
-	public boolean hasField(){
+	public boolean isField(){
 		return null != field;
 	}
 	

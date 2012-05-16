@@ -29,11 +29,13 @@ import bingo.lang.reflect.ReflectClass;
 class JSONEncoder {
 	
 	private static final Integer zero = new Integer(0);
+	private static final int MAX_DEEP = 100;
     
-    private JSONWriter writer;
-    private boolean   ignoreNull;
-    private boolean   ignoreEmpty;
-    private IdentityHashMap<Object,Integer>  stack = new IdentityHashMap<Object, Integer>();
+    private JSONWriter 						 writer;
+    private boolean   						 ignoreNull;
+    private boolean   						 ignoreEmpty;
+    private IdentityHashMap<Object,Integer> references = new IdentityHashMap<Object, Integer>();
+    private int					 		 deep       = 0;
     
     public JSONEncoder(){
         this(new JSONSettings());
@@ -55,7 +57,7 @@ class JSONEncoder {
         } else {
             StringBuilder out = new StringBuilder();
             encode(null,value, out);
-            stack.clear();
+            references.clear();
             return out.toString();
         }
     }
@@ -67,6 +69,12 @@ class JSONEncoder {
     }
 
     private void encode(String name,Object value, StringBuilder out) {
+    	deep++;
+    	
+    	if(deep >= MAX_DEEP){
+    		throw new JSONException("stack size reach '{0}', please check your object , may be some getter generate new object at every call",deep);
+    	}
+    	
         if (null == value) {
             writer.writeNull(out);
         } else if (value instanceof String) {
@@ -85,11 +93,11 @@ class JSONEncoder {
             writer.writeDate((Date) value, out);
         } else {
             //detect cyclic references
-            if(stack.containsKey(value)){
+            if(references.containsKey(value)){
             	return;
             }
         	
-        	stack.put(value, zero);
+        	references.put(value, zero);
         	
             if (value instanceof Object[]) {
                 encode(name,(Object[]) value, out);
@@ -107,6 +115,8 @@ class JSONEncoder {
                 encodeBean(name,value, out);
             }
         }
+        
+        deep--;
     }
 
     private void encode(String name,Object[] array, StringBuilder out) {
@@ -115,7 +125,7 @@ class JSONEncoder {
         	Object value = array[i];
         	
             //detect cyclic references
-            if(stack.containsKey(value)){
+            if(references.containsKey(value)){
             	continue;
             }
             
@@ -138,7 +148,7 @@ class JSONEncoder {
         	Object value = reflectClass.getArrayItem(array, i);
         	
             //detect cyclic references
-            if(stack.containsKey(value)){
+            if(references.containsKey(value)){
             	continue;
             }
             
@@ -156,7 +166,7 @@ class JSONEncoder {
         int index = 0;
         for (Object value : iterable) {
             //detect cyclic references
-            if(stack.containsKey(value)){
+            if(references.containsKey(value)){
             	continue;
             }
             
@@ -180,7 +190,7 @@ class JSONEncoder {
         	Object value = enumeration.nextElement();
         	
             //detect cyclic references
-            if(stack.containsKey(value)){
+            if(references.containsKey(value)){
             	continue;
             }
         	
@@ -212,7 +222,7 @@ class JSONEncoder {
             }
             
             //detect cyclic references
-            if(stack.containsKey(propValue)){
+            if(references.containsKey(propValue)){
             	continue;
             }            
             
@@ -237,7 +247,7 @@ class JSONEncoder {
 
             int index = 0;
             for(BeanProperty prop : beanClass.getProperties()){
-                if(prop.isReadable() && !prop.isAnnotationPresent(JSONIgnore.class) && !prop.isTransient()){
+                if(prop.isReadable() && prop.isField() && !prop.isAnnotationPresent(JSONIgnore.class) && !prop.isTransient()){
                     String propName = prop.getName();
                     
                     Object propValue = prop.getValue(bean);
@@ -251,7 +261,7 @@ class JSONEncoder {
                     }
                     
                     //detect cyclic references
-                    if(stack.containsKey(propValue)){
+                    if(references.containsKey(propValue)){
                     	continue;
                     }                    
                     
@@ -264,6 +274,8 @@ class JSONEncoder {
                     encodeNamedValue(propName, propValue, out);
                 }
             }
+        } catch (JSONException e){
+        	throw e;
         } catch (Exception e) {
             throw new JSONException("error encoding for value : " + bean.getClass().getName(), e);
         }

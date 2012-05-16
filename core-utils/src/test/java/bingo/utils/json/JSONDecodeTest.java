@@ -99,13 +99,13 @@ public class JSONDecodeTest {
     }
 
     @Test
-    public void testDecodeAll() throws Exception {
+    public void testDecodeEncodeAll() throws Exception {
         
         Resource[] resources = Resources.scan("classpath:json/**/*.json");
         
         for(Resource resource : resources){
             if(resource.exists()){
-                System.out.println("decoding json '" + resource.getURI().toString() + "'...") ;
+                System.out.println("-> decoding json '" + resource.getURI().toString() + "'...") ;
                 
                 InputStream       stream = resource.getInputStream();
                 InputStreamReader reader = null;
@@ -114,6 +114,14 @@ public class JSONDecodeTest {
                     reader = new InputStreamReader(stream);
                     
                     JSONObject json = JSON.decode(reader);
+                    
+                    assertNotNull(json);
+                    
+                    String string = JSON.encode(json.value());
+                    
+                    assertNotNull(string);
+                    
+                    json = JSON.decode(string);
                     
                     assertNotNull(json);
                 }finally{
