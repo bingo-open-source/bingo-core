@@ -41,4 +41,12 @@ public class ClassesTest {
 		assertTrue(classes1.size() > classes.size());
 	}
 	
+	@Test
+	public void testGetFileName(){
+		assertEquals("String.class", Classes.getFileName(String.class));
+		assertEquals("String.class", Classes.getFileName(java.lang.String.class));
+		assertNotSame("Classes", Classes.getFileName(Classes.class));
+		assertNotSame("Classes", Classes.getFileName(bingo.lang.Classes.class));
+	}
+	
 }
