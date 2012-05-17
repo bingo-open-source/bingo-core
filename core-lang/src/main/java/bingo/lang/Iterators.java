@@ -22,7 +22,7 @@ public class Iterators {
 	protected Iterators() {
 
 	}
-
+	
 	/**
 	 * Returns the number of elements remaining in {@code iterator}. The iterator will be left exhausted: its {@code
 	 * hasNext()} method will return {@code false}.

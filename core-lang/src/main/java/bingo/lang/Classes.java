@@ -360,6 +360,19 @@ public class Classes {
         }
 	}	
 	
+    // Inner class
+    // ----------------------------------------------------------------------
+    /**
+     * <p>Is the specified class an inner class or static nested class.</p>
+     *
+     * @param cls  the class to check, may be null
+     * @return {@code true} if the class is an inner or static nested class,
+     *  false if not or {@code null}
+     */
+    public static boolean isInnerClass(Class<?> cls) {
+        return cls != null && cls.getEnclosingClass() != null;
+    }
+	
 	/**
 	 * Returns the class represented by {@code className} using the {@code classLoader}. This implementation supports
 	 * the syntaxes "{@code java.util.Map.Entry[]}", "{@code java.util.Map$Entry[]}", "{@code [Ljava.util.Map.Entry;}

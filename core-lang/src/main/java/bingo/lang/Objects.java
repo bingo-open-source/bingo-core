@@ -213,7 +213,7 @@ public class Objects {
 	//-----------------------------------------------------------------------
 	/**
 	 * <p>
-	 * Clone an object.
+	 * Clone an object if the object implements {@link Cloneable}.
 	 * </p>
 	 * 
 	 * @param <T> the type of the object

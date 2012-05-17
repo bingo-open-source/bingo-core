@@ -36,10 +36,19 @@ import bingo.lang.Sys;
  */
 public class ToStringBuilderTest {
 
-    private final Integer base = Integer.valueOf(5);
-    private final String baseStr = base.getClass().getName() + "@" + Integer.toHexString(System.identityHashCode(base));
+//    private final Integer base = Integer.valueOf(5);
+//    private final String baseStr = base.getClass().getName() + "@" + Integer.toHexString(System.identityHashCode(base));
+    
+    private static final class Base {
+    	private Integer value  = Integer.valueOf(5);
+    	private String  string = value.getClass().getName() + "@" + Integer.toHexString(System.identityHashCode(value));
+    }
 
     //-----------------------------------------------------------------------
+    
+    private static Base base(){
+    	return new Base();
+    }
 
     @Test
     public void testConstructorEx1() {
@@ -49,14 +58,14 @@ public class ToStringBuilderTest {
     @Test
     public void testConstructorEx2() {
         assertEquals("<null>", new ToStringBuilder(null, null).toString());
-        new ToStringBuilder(this.base, null).toString();
+        new ToStringBuilder(base().value, null).toString();
     }
 
     @Test
     public void testConstructorEx3() {
         assertEquals("<null>", new ToStringBuilder(null, null, null).toString());
-        new ToStringBuilder(this.base, null, null);
-        new ToStringBuilder(this.base, ToStringStyle.DEFAULT_STYLE, null);
+        new ToStringBuilder(base().value, null, null);
+        new ToStringBuilder(base().value, ToStringStyle.DEFAULT_STYLE, null);
     }
 
     @Test
@@ -83,6 +92,10 @@ public class ToStringBuilderTest {
 
     @Test
     public void testBlank() {
+    	Base baseObject = base();
+    	Integer base = baseObject.value;
+    	String baseStr = baseObject.string;
+    	
         assertEquals(baseStr + "[]", new ToStringBuilder(base).toString());
     }
 
@@ -91,6 +104,9 @@ public class ToStringBuilderTest {
      */
     @Test
     public void testReflectionInteger() {
+    	Base baseObject = base();
+    	Integer base = baseObject.value;
+    	String baseStr = baseObject.string;    	
         assertEquals(baseStr + "[value=5]", ToStringBuilder.reflectionToString(base));
     }
 
@@ -152,6 +168,9 @@ public class ToStringBuilderTest {
 
     @Test
     public void testReflectionObjectArray() {
+    	Base baseObject = base();
+    	Integer base = baseObject.value;
+    	
         Object[] array = new Object[] { null, base, new int[] { 3, 6 } };
         String baseStr = this.toBaseString(array);
         assertEquals(baseStr + "[{<null>,5,{3,6}}]", ToStringBuilder.reflectionToString(array));
@@ -638,6 +657,10 @@ public class ToStringBuilderTest {
 
     @Test
     public void testAppendSuper() {
+    	Base baseObject = base();
+    	Integer base = baseObject.value;
+    	String baseStr = baseObject.string;
+    	
         assertEquals(baseStr + "[]", new ToStringBuilder(base).appendSuper("Integer@8888[]").toString());
         assertEquals(baseStr + "[<null>]", new ToStringBuilder(base).appendSuper("Integer@8888[<null>]").toString());
 
@@ -648,6 +671,10 @@ public class ToStringBuilderTest {
 
     @Test
     public void testAppendToString() {
+    	Base baseObject = base();
+    	Integer base = baseObject.value;
+    	String baseStr = baseObject.string;
+    	
         assertEquals(baseStr + "[]", new ToStringBuilder(base).appendToString("Integer@8888[]").toString());
         assertEquals(baseStr + "[<null>]", new ToStringBuilder(base).appendToString("Integer@8888[<null>]").toString());
 
@@ -658,6 +685,10 @@ public class ToStringBuilderTest {
 
     @Test
     public void testObject() {
+    	Base baseObject = base();
+    	Integer base = baseObject.value;
+    	String baseStr = baseObject.string;
+    	
         Integer i3 = Integer.valueOf(3);
         Integer i4 = Integer.valueOf(4);
         assertEquals(baseStr + "[<null>]", new ToStringBuilder(base).append((Object) null).toString());
@@ -676,6 +707,10 @@ public class ToStringBuilderTest {
     
     @Test
     public void testObjectBuild() {
+    	Base baseObject = base();
+    	Integer base = baseObject.value;
+    	String baseStr = baseObject.string;
+    	
         Integer i3 = Integer.valueOf(3);
         Integer i4 = Integer.valueOf(4);
         assertEquals(baseStr + "[<null>]", new ToStringBuilder(base).append((Object) null).build());
@@ -694,6 +729,10 @@ public class ToStringBuilderTest {
 
     @Test
     public void testLong() {
+    	Base baseObject = base();
+    	Integer base = baseObject.value;
+    	String baseStr = baseObject.string;
+    	
         assertEquals(baseStr + "[3]", new ToStringBuilder(base).append(3L).toString());
         assertEquals(baseStr + "[a=3]", new ToStringBuilder(base).append("a", 3L).toString());
         assertEquals(baseStr + "[a=3,b=4]", new ToStringBuilder(base).append("a", 3L).append("b", 4L).toString());
@@ -702,6 +741,10 @@ public class ToStringBuilderTest {
     @SuppressWarnings("cast") // cast is not really needed, keep for consistency
     @Test
     public void testInt() {
+    	Base baseObject = base();
+    	Integer base = baseObject.value;
+    	String baseStr = baseObject.string;
+    	
         assertEquals(baseStr + "[3]", new ToStringBuilder(base).append((int) 3).toString());
         assertEquals(baseStr + "[a=3]", new ToStringBuilder(base).append("a", (int) 3).toString());
         assertEquals(baseStr + "[a=3,b=4]", new ToStringBuilder(base).append("a", (int) 3).append("b", (int) 4).toString());
@@ -709,6 +752,10 @@ public class ToStringBuilderTest {
 
     @Test
     public void testShort() {
+    	Base baseObject = base();
+    	Integer base = baseObject.value;
+    	String baseStr = baseObject.string;
+    	
         assertEquals(baseStr + "[3]", new ToStringBuilder(base).append((short) 3).toString());
         assertEquals(baseStr + "[a=3]", new ToStringBuilder(base).append("a", (short) 3).toString());
         assertEquals(baseStr + "[a=3,b=4]", new ToStringBuilder(base).append("a", (short) 3).append("b", (short) 4).toString());
@@ -716,6 +763,10 @@ public class ToStringBuilderTest {
 
     @Test
     public void testChar() {
+    	Base baseObject = base();
+    	Integer base = baseObject.value;
+    	String baseStr = baseObject.string;
+    	
         assertEquals(baseStr + "[A]", new ToStringBuilder(base).append((char) 65).toString());
         assertEquals(baseStr + "[a=A]", new ToStringBuilder(base).append("a", (char) 65).toString());
         assertEquals(baseStr + "[a=A,b=B]", new ToStringBuilder(base).append("a", (char) 65).append("b", (char) 66).toString());
@@ -723,6 +774,10 @@ public class ToStringBuilderTest {
 
     @Test
     public void testByte() {
+    	Base baseObject = base();
+    	Integer base = baseObject.value;
+    	String baseStr = baseObject.string;
+    	
         assertEquals(baseStr + "[3]", new ToStringBuilder(base).append((byte) 3).toString());
         assertEquals(baseStr + "[a=3]", new ToStringBuilder(base).append("a", (byte) 3).toString());
         assertEquals(baseStr + "[a=3,b=4]", new ToStringBuilder(base).append("a", (byte) 3).append("b", (byte) 4).toString());
@@ -731,6 +786,10 @@ public class ToStringBuilderTest {
     @SuppressWarnings("cast")
     @Test
     public void testDouble() {
+    	Base baseObject = base();
+    	Integer base = baseObject.value;
+    	String baseStr = baseObject.string;
+    	
         assertEquals(baseStr + "[3.2]", new ToStringBuilder(base).append((double) 3.2).toString());
         assertEquals(baseStr + "[a=3.2]", new ToStringBuilder(base).append("a", (double) 3.2).toString());
         assertEquals(baseStr + "[a=3.2,b=4.3]", new ToStringBuilder(base).append("a", (double) 3.2).append("b", (double) 4.3).toString());
@@ -738,6 +797,10 @@ public class ToStringBuilderTest {
 
     @Test
     public void testFloat() {
+    	Base baseObject = base();
+    	Integer base = baseObject.value;
+    	String baseStr = baseObject.string;
+    	
         assertEquals(baseStr + "[3.2]", new ToStringBuilder(base).append((float) 3.2).toString());
         assertEquals(baseStr + "[a=3.2]", new ToStringBuilder(base).append("a", (float) 3.2).toString());
         assertEquals(baseStr + "[a=3.2,b=4.3]", new ToStringBuilder(base).append("a", (float) 3.2).append("b", (float) 4.3).toString());
@@ -745,6 +808,10 @@ public class ToStringBuilderTest {
 
     @Test
     public void testBoolean() {
+    	Base baseObject = base();
+    	Integer base = baseObject.value;
+    	String baseStr = baseObject.string;
+    	
         assertEquals(baseStr + "[true]", new ToStringBuilder(base).append(true).toString());
         assertEquals(baseStr + "[a=true]", new ToStringBuilder(base).append("a", true).toString());
         assertEquals(baseStr + "[a=true,b=false]", new ToStringBuilder(base).append("a", true).append("b", false).toString());
@@ -753,6 +820,10 @@ public class ToStringBuilderTest {
 
     @Test
     public void testObjectArray() {
+    	Base baseObject = base();
+    	Integer base = baseObject.value;
+    	String baseStr = baseObject.string;
+    	
         Object[] array = new Object[] {null, base, new int[] {3, 6}};
         assertEquals(baseStr + "[{<null>,5,{3,6}}]", new ToStringBuilder(base).append(array).toString());
         assertEquals(baseStr + "[{<null>,5,{3,6}}]", new ToStringBuilder(base).append((Object) array).toString());
@@ -763,6 +834,10 @@ public class ToStringBuilderTest {
 
     @Test
     public void testLongArray() {
+    	Base baseObject = base();
+    	Integer base = baseObject.value;
+    	String baseStr = baseObject.string;
+    	
         long[] array = new long[] {1, 2, -3, 4};
         assertEquals(baseStr + "[{1,2,-3,4}]", new ToStringBuilder(base).append(array).toString());
         assertEquals(baseStr + "[{1,2,-3,4}]", new ToStringBuilder(base).append((Object) array).toString());
@@ -773,6 +848,10 @@ public class ToStringBuilderTest {
 
     @Test
     public void testIntArray() {
+    	Base baseObject = base();
+    	Integer base = baseObject.value;
+    	String baseStr = baseObject.string;
+    	
         int[] array = new int[] {1, 2, -3, 4};
         assertEquals(baseStr + "[{1,2,-3,4}]", new ToStringBuilder(base).append(array).toString());
         assertEquals(baseStr + "[{1,2,-3,4}]", new ToStringBuilder(base).append((Object) array).toString());
@@ -783,6 +862,10 @@ public class ToStringBuilderTest {
 
     @Test
     public void testShortArray() {
+    	Base baseObject = base();
+    	Integer base = baseObject.value;
+    	String baseStr = baseObject.string;
+    	
         short[] array = new short[] {1, 2, -3, 4};
         assertEquals(baseStr + "[{1,2,-3,4}]", new ToStringBuilder(base).append(array).toString());
         assertEquals(baseStr + "[{1,2,-3,4}]", new ToStringBuilder(base).append((Object) array).toString());
@@ -793,6 +876,10 @@ public class ToStringBuilderTest {
 
     @Test
     public void testByteArray() {
+    	Base baseObject = base();
+    	Integer base = baseObject.value;
+    	String baseStr = baseObject.string;
+    	
         byte[] array = new byte[] {1, 2, -3, 4};
         assertEquals(baseStr + "[{1,2,-3,4}]", new ToStringBuilder(base).append(array).toString());
         assertEquals(baseStr + "[{1,2,-3,4}]", new ToStringBuilder(base).append((Object) array).toString());
@@ -803,6 +890,10 @@ public class ToStringBuilderTest {
 
     @Test
     public void testCharArray() {
+    	Base baseObject = base();
+    	Integer base = baseObject.value;
+    	String baseStr = baseObject.string;
+    	
         char[] array = new char[] {'A', '2', '_', 'D'};
         assertEquals(baseStr + "[{A,2,_,D}]", new ToStringBuilder(base).append(array).toString());
         assertEquals(baseStr + "[{A,2,_,D}]", new ToStringBuilder(base).append((Object) array).toString());
@@ -813,6 +904,10 @@ public class ToStringBuilderTest {
 
     @Test
     public void testDoubleArray() {
+    	Base baseObject = base();
+    	Integer base = baseObject.value;
+    	String baseStr = baseObject.string;
+    	
         double[] array = new double[] {1.0, 2.9876, -3.00001, 4.3};
         assertEquals(baseStr + "[{1.0,2.9876,-3.00001,4.3}]", new ToStringBuilder(base).append(array).toString());
         assertEquals(baseStr + "[{1.0,2.9876,-3.00001,4.3}]", new ToStringBuilder(base).append((Object) array).toString());
@@ -823,6 +918,10 @@ public class ToStringBuilderTest {
 
     @Test
     public void testFloatArray() {
+    	Base baseObject = base();
+    	Integer base = baseObject.value;
+    	String baseStr = baseObject.string;
+    	
         float[] array = new float[] {1.0f, 2.9876f, -3.00001f, 4.3f};
         assertEquals(baseStr + "[{1.0,2.9876,-3.00001,4.3}]", new ToStringBuilder(base).append(array).toString());
         assertEquals(baseStr + "[{1.0,2.9876,-3.00001,4.3}]", new ToStringBuilder(base).append((Object) array).toString());
@@ -833,6 +932,10 @@ public class ToStringBuilderTest {
 
     @Test
     public void testBooleanArray() {
+    	Base baseObject = base();
+    	Integer base = baseObject.value;
+    	String baseStr = baseObject.string;
+    	
         boolean[] array = new boolean[] {true, false, false};
         assertEquals(baseStr + "[{true,false,false}]", new ToStringBuilder(base).append(array).toString());
         assertEquals(baseStr + "[{true,false,false}]", new ToStringBuilder(base).append((Object) array).toString());
@@ -843,6 +946,10 @@ public class ToStringBuilderTest {
 
     @Test
     public void testLongArrayArray() {
+    	Base baseObject = base();
+    	Integer base = baseObject.value;
+    	String baseStr = baseObject.string;
+    	
         long[][] array = new long[][] {{1, 2}, null, {5}};
         assertEquals(baseStr + "[{{1,2},<null>,{5}}]", new ToStringBuilder(base).append(array).toString());
         assertEquals(baseStr + "[{{1,2},<null>,{5}}]", new ToStringBuilder(base).append((Object) array).toString());
@@ -853,7 +960,11 @@ public class ToStringBuilderTest {
 
     @Test
     public void testIntArrayArray() {
-        int[][] array = new int[][] {{1, 2}, null, {5}};
+    	Base baseObject = base();
+    	Integer base = baseObject.value;
+    	String baseStr = baseObject.string;
+
+    	int[][] array = new int[][] {{1, 2}, null, {5}};
         assertEquals(baseStr + "[{{1,2},<null>,{5}}]", new ToStringBuilder(base).append(array).toString());
         assertEquals(baseStr + "[{{1,2},<null>,{5}}]", new ToStringBuilder(base).append((Object) array).toString());
         array = null;
@@ -863,6 +974,10 @@ public class ToStringBuilderTest {
 
     @Test
     public void testShortArrayArray() {
+    	Base baseObject = base();
+    	Integer base = baseObject.value;
+    	String baseStr = baseObject.string;
+    	
         short[][] array = new short[][] {{1, 2}, null, {5}};
         assertEquals(baseStr + "[{{1,2},<null>,{5}}]", new ToStringBuilder(base).append(array).toString());
         assertEquals(baseStr + "[{{1,2},<null>,{5}}]", new ToStringBuilder(base).append((Object) array).toString());
@@ -873,6 +988,10 @@ public class ToStringBuilderTest {
 
     @Test
     public void testByteArrayArray() {
+    	Base baseObject = base();
+    	Integer base = baseObject.value;
+    	String baseStr = baseObject.string;
+    	
         byte[][] array = new byte[][] {{1, 2}, null, {5}};
         assertEquals(baseStr + "[{{1,2},<null>,{5}}]", new ToStringBuilder(base).append(array).toString());
         assertEquals(baseStr + "[{{1,2},<null>,{5}}]", new ToStringBuilder(base).append((Object) array).toString());
@@ -883,6 +1002,10 @@ public class ToStringBuilderTest {
 
     @Test
     public void testCharArrayArray() {
+    	Base baseObject = base();
+    	Integer base = baseObject.value;
+    	String baseStr = baseObject.string;
+    	
         char[][] array = new char[][] {{'A', 'B'}, null, {'p'}};
         assertEquals(baseStr + "[{{A,B},<null>,{p}}]", new ToStringBuilder(base).append(array).toString());
         assertEquals(baseStr + "[{{A,B},<null>,{p}}]", new ToStringBuilder(base).append((Object) array).toString());
@@ -893,6 +1016,10 @@ public class ToStringBuilderTest {
 
     @Test
     public void testDoubleArrayArray() {
+    	Base baseObject = base();
+    	Integer base = baseObject.value;
+    	String baseStr = baseObject.string;
+    	
         double[][] array = new double[][] {{1.0, 2.29686}, null, {Double.NaN}};
         assertEquals(baseStr + "[{{1.0,2.29686},<null>,{NaN}}]", new ToStringBuilder(base).append(array).toString());
         assertEquals(baseStr + "[{{1.0,2.29686},<null>,{NaN}}]", new ToStringBuilder(base).append((Object) array).toString());
@@ -903,6 +1030,10 @@ public class ToStringBuilderTest {
 
     @Test
     public void testFloatArrayArray() {
+    	Base baseObject = base();
+    	Integer base = baseObject.value;
+    	String baseStr = baseObject.string;
+    	
         float[][] array = new float[][] {{1.0f, 2.29686f}, null, {Float.NaN}};
         assertEquals(baseStr + "[{{1.0,2.29686},<null>,{NaN}}]", new ToStringBuilder(base).append(array).toString());
         assertEquals(baseStr + "[{{1.0,2.29686},<null>,{NaN}}]", new ToStringBuilder(base).append((Object) array).toString());
@@ -913,6 +1044,10 @@ public class ToStringBuilderTest {
 
     @Test
     public void testBooleanArrayArray() {
+    	Base baseObject = base();
+    	Integer base = baseObject.value;
+    	String baseStr = baseObject.string;
+    	
         boolean[][] array = new boolean[][] {{true, false}, null, {false}};
         assertEquals(baseStr + "[{{true,false},<null>,{false}}]", new ToStringBuilder(base).append(array).toString());
         assertEquals(baseStr + "[{{true,false},<null>,{false}}]", new ToStringBuilder(base).append((Object) array).toString());

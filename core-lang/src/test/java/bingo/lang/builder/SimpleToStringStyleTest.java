@@ -34,7 +34,9 @@ import bingo.lang.builder.ToStringStyleTest.Person;
  */
 public class SimpleToStringStyleTest {
 
-    private final Integer base = Integer.valueOf(5);
+    private Integer base() {
+    	return Integer.valueOf(5);
+    }
     
     @Before
     public void setUp() throws Exception {
@@ -50,11 +52,15 @@ public class SimpleToStringStyleTest {
     
     @Test
     public void testBlank() {
+    	Object base = base();
+    	
         assertEquals("", new ToStringBuilder(base).toString());
     }
 
     @Test
     public void testAppendSuper() {
+    	Object base = base();
+    	
         assertEquals("", new ToStringBuilder(base).appendSuper("").toString());
         assertEquals("<null>", new ToStringBuilder(base).appendSuper("<null>").toString());
         
@@ -65,6 +71,8 @@ public class SimpleToStringStyleTest {
     
     @Test
     public void testObject() {
+    	Object base = base();
+    	
         Integer i3 = Integer.valueOf(3);
         Integer i4 = Integer.valueOf(4);
         assertEquals("<null>", new ToStringBuilder(base).append((Object) null).toString());
@@ -92,6 +100,8 @@ public class SimpleToStringStyleTest {
 
     @Test
     public void testLong() {
+    	Object base = base();
+    	
         assertEquals("3", new ToStringBuilder(base).append(3L).toString());
         assertEquals("3", new ToStringBuilder(base).append("a", 3L).toString());
         assertEquals("3,4", new ToStringBuilder(base).append("a", 3L).append("b", 4L).toString());
@@ -99,6 +109,8 @@ public class SimpleToStringStyleTest {
 
     @Test
     public void testObjectArray() {
+    	Object base = base();
+    	
         Object[] array = new Object[] {null, base, new int[] {3, 6}};
         assertEquals("{<null>,5,{3,6}}", new ToStringBuilder(base).append(array).toString());
         assertEquals("{<null>,5,{3,6}}", new ToStringBuilder(base).append((Object) array).toString());
@@ -109,6 +121,8 @@ public class SimpleToStringStyleTest {
 
     @Test
     public void testLongArray() {
+    	Object base = base();
+    	
         long[] array = new long[] {1, 2, -3, 4};
         assertEquals("{1,2,-3,4}", new ToStringBuilder(base).append(array).toString());
         assertEquals("{1,2,-3,4}", new ToStringBuilder(base).append((Object) array).toString());
@@ -119,6 +133,8 @@ public class SimpleToStringStyleTest {
 
     @Test
     public void testLongArrayArray() {
+    	Object base = base();
+    	
         long[][] array = new long[][] {{1, 2}, null, {5}};
         assertEquals("{{1,2},<null>,{5}}", new ToStringBuilder(base).append(array).toString());
         assertEquals("{{1,2},<null>,{5}}", new ToStringBuilder(base).append((Object) array).toString());

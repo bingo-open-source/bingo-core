@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 
+import bingo.lang.Classes;
 import bingo.lang.Collections;
 import bingo.lang.Named;
 import bingo.lang.New;
@@ -53,6 +54,8 @@ public class ReflectClass<T> implements Named {
 	private final ReflectAccessor   accessor;
 	private final ReflectMetadata   metadata;
 	
+	private final boolean 		 isInner;
+	
 	private ReflectConstructor<T>[]	 constructors;
 	private ReflectField[]		 	 fields;
 	private ReflectMethod[]		 	 methods;
@@ -61,11 +64,15 @@ public class ReflectClass<T> implements Named {
 	private ReflectMethod[]		 	 declaredMethods;	
 	
 	private ReflectConstructor<T>	 defaultConstructor;	
+	private boolean				 defaultConstructorInner = false;
+	private ReflectInstantiator<T>  instantiator	         = null;
 	
 	protected ReflectClass(Class<T> javaClass){
 		this.javaClass = javaClass;
 		this.metadata  = new ReflectMetadata(javaClass);
 		this.accessor  = ReflectAccessor.createFor(this.javaClass);
+		this.isInner   = Classes.isInnerClass(javaClass);
+		
 		this.initialize();
 	}
 	
@@ -76,9 +83,29 @@ public class ReflectClass<T> implements Named {
 	@SuppressWarnings("unchecked")
 	public T newInstance(){
 		if(null == defaultConstructor){
-			throw new ReflectException("there is no default constructor available in class '{0}'",getName());
+			throw new ReflectException("there is no default constructor available in class '{0}'",getName());	
 		}
-		return (T)accessor.newInstance();
+		
+		if(defaultConstructorInner){
+			return defaultConstructor.newInstance(Reflects.newInstance(javaClass.getEnclosingClass()));
+		}else{
+			if(accessor.canNewInstance()){
+				return (T)accessor.newInstance();	
+			}else{
+				return defaultConstructor.newInstance((Object[])null);
+			}
+		}
+	}
+	
+	public boolean canNewInstanceWithoutCallingConstructor(){
+		return null != instantiator;
+	}
+	
+	public T newInstanceWithoutCallingConstructor() throws IllegalStateException {
+		if(null == instantiator){
+			throw new IllegalStateException("there is no instantiator can new instance without calling constructor");
+		}
+		return instantiator.newInstance();
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -108,6 +135,10 @@ public class ReflectClass<T> implements Named {
 	
 	public boolean isInterface() {
 		return javaClass.isInterface();
+	}
+	
+	public boolean isInner(){
+		return isInner;
 	}
 	
 	public Class<T> getJavaClass() {
@@ -229,14 +260,20 @@ public class ReflectClass<T> implements Named {
 			if(!c.isSynthetic()){
 				ReflectConstructor<T> rc = new ReflectConstructor<T>(this,c);
 				
-				constructorList.add(rc);	
+				constructorList.add(rc);
 				
-				if(c.getParameterTypes().length == 0){
+				if(isInner && !Modifier.isStatic(javaClass.getModifiers())){
+					if(c.getParameterTypes().length == 1 && c.getParameterTypes()[0].equals(javaClass.getEnclosingClass())){
+						defaultConstructor      = rc;
+						defaultConstructorInner = true;
+					}
+				}else if(c.getParameterTypes().length == 0){
 					defaultConstructor = rc;
-				}				
+				}
 			}
 		}
 		
+		this.instantiator = ReflectInstantiator.forType(javaClass);
 		this.constructors = constructorList.toArray(new ReflectConstructor[constructorList.size()]);
 	}
 	

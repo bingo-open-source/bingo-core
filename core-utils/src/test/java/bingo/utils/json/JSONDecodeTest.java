@@ -22,8 +22,10 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.junit.Test;
 
@@ -133,7 +135,30 @@ public class JSONDecodeTest {
     }
     
     @Test
+    public void testDecodeList() throws Exception {
+    	
+    	List<Bean> beans = new ArrayList<Bean>();
+    	
+    	beans.add(new Bean());
+    	beans.add(new Bean());
+    	
+    	String json = JSON.encode(beans);
+    	
+    	Bean[] decoded = JSON.decodeToArray(json, Bean.class);
+    	
+    	assertEquals(2, decoded.length);
+    	
+    	for(int i=0;i<decoded.length;i++){
+    		assertEquals(beans.get(i).name,decoded[i].name);
+    	}
+    }
+    
+    @Test
     public void testDecode1(){
     	JSON.decode("[{ id : \"\", fields:[{ id:\"\",attrs:{}}]}]");
+    }
+
+    private static class Bean {
+    	public String name = UUID.randomUUID().toString();
     }
 }

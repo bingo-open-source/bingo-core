@@ -37,6 +37,7 @@ import static bingo.lang.asm.Opcodes.PUTFIELD;
 import static bingo.lang.asm.Opcodes.RETURN;
 import static bingo.lang.asm.Opcodes.V1_5;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -54,8 +55,13 @@ public abstract class ReflectAccessor {
     
     private static final String CLASS_NAME = ReflectAccessor.class.getName().replaceAll("\\.", "/");
     
-	Field[]  fields;
-	Method[] methods;
+	Field[]  	   fields;
+	Method[] 	   methods;
+	Constructor<?> constructor;
+	
+	public boolean canNewInstance() {
+		return null != constructor;
+	}
 	
 	public abstract Object newInstance();
 	
@@ -114,6 +120,7 @@ public abstract class ReflectAccessor {
         
         Method[] methods = getDeclaredMethods(type);
         Field[]  fields  = getDelaredFields(type);
+        Constructor<?> c = getDefaultConstructor(type,accessorClassName.startsWith(typeClassName));
         
         if (accessorClass == null) {
             String accessorClassNameInternal = accessorClassName.replace('.', '/');
@@ -147,8 +154,9 @@ public abstract class ReflectAccessor {
         
         try {
             ReflectAccessor accessor = (ReflectAccessor)accessorClass.newInstance();
-            accessor.methods = methods;
-            accessor.fields  = fields;
+            accessor.methods     = methods;
+            accessor.fields      = fields;
+            accessor.constructor = c;
             return accessor;
         } catch (Exception ex) {
             throw new ReflectException(ex,"Error constructing reflect accessor class: {0}",accessorClassName);
@@ -753,6 +761,32 @@ public abstract class ReflectAccessor {
         mv.visitInsn(ATHROW);
         mv.visitMaxs(0, 0);
         mv.visitEnd();
+    }
+    
+    private static Constructor<?> getDefaultConstructor(Class<?> type,boolean isPackageAccessible){
+    	for(Constructor<?> c : type.getDeclaredConstructors()){
+    		
+    		int modifiers = c.getModifiers();
+    		
+    		if(c.getParameterTypes().length == 0){
+    			
+    			if(Modifier.isPrivate(modifiers)){
+    				return null;
+    			}
+    			
+    			if(Modifier.isPublic(modifiers) || Modifier.isProtected(modifiers)){
+    				return c;
+    			}
+    			
+    			if(isPackageAccessible){
+    				return c;
+    			}
+    			
+    			return null;
+    		}
+    	}
+    	
+    	return null;
     }
     
     private static Method[] getDeclaredMethods(Class<?> type){

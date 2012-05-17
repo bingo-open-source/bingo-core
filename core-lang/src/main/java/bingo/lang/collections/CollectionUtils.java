@@ -39,6 +39,20 @@ abstract class CollectionUtils {
 		return array;
 	}
 
+	static boolean containsAllImpl(Collection<?> self, Collection<?> c) {
+		if(null == self){
+			return false;
+		}
+		
+		for (Object o : c) {
+			if (!self.contains(o)) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
 	private static Object[] fillArray(Iterable<?> elements, Object[] array) {
 		int i = 0;
 		for (Object element : elements) {

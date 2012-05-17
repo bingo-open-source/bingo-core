@@ -50,6 +50,10 @@ public class Reflects {
 		return ReflectClass.get(type).newInstance();
 	}
 	
+	public static <T> T newInstanceWithoutCallingConstructor(Class<T> type) throws IllegalStateException {
+		return ReflectClass.get(type).newInstanceWithoutCallingConstructor();
+	}
+	
 	public static <T>	T[] newArray(Class<T> type,int length){
 		return ReflectClass.get(type).newArray(length);
 	}

@@ -116,7 +116,7 @@ public class ReflectField extends ReflectMember {
         try {
             if(setterIndex != -1){
                 reflectClass.getAccessor().invokeMethod(instance, setterIndex, safeValue(value));
-            }else if(fieldIndex != 0){
+            }else if(fieldIndex != -1){
             	reflectClass.getAccessor().setField(instance, fieldIndex, safeValue(value));
             }else{
                 javaField.set(instance, safeValue(value));

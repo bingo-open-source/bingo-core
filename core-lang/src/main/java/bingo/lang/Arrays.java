@@ -19,6 +19,9 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
+import bingo.lang.iterable.ArrayIterable;
+import bingo.lang.iterable.EmptyIterable;
+
 /**
  * <code>null</code> safe {@link Array} utility
  * 
@@ -1543,6 +1546,13 @@ public class Arrays {
 		T[] copy = (T[]) Array.newInstance(original.getClass().getComponentType(), newLength);
 		System.arraycopy(original, 0, copy, 0, Math.min(original.length, newLength));
 		return copy;
+	}
+	
+	/**
+	 * Converts a T[] array to a Iterable<T>.
+	 */
+	public static <T> Iterable<T> toIterable(T... elements){
+		return null == elements || elements.length == 0 ? new EmptyIterable<T>() : new ArrayIterable<T>(elements);
 	}
 
 	/**
