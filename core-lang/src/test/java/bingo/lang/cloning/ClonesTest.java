@@ -27,6 +27,8 @@ public class ClonesTest {
 	@Test
 	public void testCyclicRreferencesClone(){
 		
+		Cloner cloner = new Cloner();
+		
 		Category category = new Category();
 		
 		Product product1 = new Product(1, "sku1", "title1");
@@ -39,7 +41,7 @@ public class ClonesTest {
 		category.getProducts().add(product2);
 		category.getProducts().add(product2);
 
-		Category cloned = Clones.deepClone(category);
+		Category cloned = cloner.deepClone(category);
 		
 		assertNotNull(cloned);
 		assertNotSame(category, cloned);
