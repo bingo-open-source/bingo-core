@@ -15,15 +15,9 @@
  */
 package bingo.lang;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.Field;
-import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
-import java.lang.reflect.WildcardType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -33,7 +27,7 @@ import bingo.lang.exceptions.ReflectException;
 import bingo.lang.reflect.ReflectClass;
 
 public class Reflects {
-
+	
 	protected Reflects(){
 		
 	}
@@ -187,97 +181,10 @@ public class Reflects {
 		return null;
 	}	
 	
-	/**
-	 * Handle the given reflection exception. Should only be called if no checked exception is expected to be thrown by
-	 * the target method.
-	 * <p>
-	 * Throws the underlying RuntimeException or Error in case of an InvocationTargetException with such a root cause.
-	 * Throws an IllegalStateException with an appropriate message else.
-	 * 
-	 * @param ex the reflection exception to handle
-	 */
-	public static void handleException(Exception ex) {
-		if (ex instanceof InvocationTargetException) {
-			Throwable cause = ((InvocationTargetException) ex).getTargetException();
-			
-			if (cause instanceof RuntimeException) {
-				throw (RuntimeException) cause;
-			}
-			
-			if (cause instanceof Error) {
-				throw (Error) cause;
-			}
-			throw new ReflectException(ex);
-		}
-		
-		if (ex instanceof NoSuchMethodException) {
-			throw new IllegalStateException("Method not found: " + ex.getMessage());
-		}
-		
-		if (ex instanceof NoSuchFieldException) {
-			throw new IllegalStateException("Field not found: " + ex.getMessage());
-		}
-		
-		if (ex instanceof IllegalAccessException) {
-			throw new IllegalStateException("Illegal access method or field: " + ex.getMessage());
-		}
-		
-		if (ex instanceof RuntimeException) {
-			throw (RuntimeException) ex;
-		}
-		
-		throw new ReflectException(ex);
-	}
 	
-	public static Class<?> getTypeArgument(Type genericType){
-		Assert.notNull(genericType);
-		
-		if(genericType instanceof ParameterizedType){
-			Type[] types = ((ParameterizedType) genericType).getActualTypeArguments();
+	//generic types
+	//---------------------------------------------------------------------------------------------
 
-			if (types.length > 1) {
-				throw new IllegalArgumentException("type argument's length large than 1");
-			}
-			
-			if(types.length == 1){
-				Type type = types[0];
-				
-				if(type instanceof WildcardType){
-					
-					types = ((WildcardType)type).getUpperBounds();
-					
-					if(types.length != 1){
-						return null;
-					}
-					
-					type = types[0];
-				}
-
-				return getRawType(types[0]);
-				
-			}
-
-			return Object.class;
-		}
-		
-		if(genericType instanceof Class<?>) {
-			Class<?> clazz = ((Class<?>) genericType);
-			
-			TypeVariable<?>[] types = clazz.getTypeParameters();
-			
-			if (types.length > 1) {
-				throw new IllegalArgumentException("type argument's length large than 1");
-			}
-			
-			if(types.length == 1){
-				return getRawType(types[0]);
-			}
-			
-			return Object.class;
-		}
-		
-		return Object.class;
-	}
 	
 	/*
 	public static Class<?> getTypeArgument(Type genericType, Class<?> genericDelcarationType) {
@@ -342,35 +249,6 @@ public class Reflects {
 	}
 	*/
 	
-	public static Class<?> getRawType(Type type){
-        if (type instanceof Class<?>) {
-            // it is raw, no problem
-            return (Class<?>) type;
-        }
-        
-        if (type instanceof ParameterizedType) {
-            // simple enough to get the raw type of a ParameterizedType
-            return getRawType((ParameterizedType) type);
-        } 
-        
-        if(type instanceof TypeVariable<?>) {
-        	Type[] types = ((TypeVariable<?>) type).getBounds();
-        	
-        	if(types.length == 1){
-        		return getRawType(types[0]);
-        	}
-        }
-        
-		if (type instanceof GenericArrayType) {
-			// get raw component type
-			Class<?> rawComponentType = getRawType(((GenericArrayType) type).getGenericComponentType());
-
-			// create array type from raw component type and return its class
-			return Array.newInstance(rawComponentType, 0).getClass();
-		}
-		
-		return null;
-	}
 	
 	//Consturctors, Fields, Methods
 	//--------------------------------------------------------------------------------------------------------
@@ -404,29 +282,51 @@ public class Reflects {
         
         return fields;
     }
+    
+    //Protected Methods
+    //------------------------------------------------------------------
+	/**
+	 * Handle the given reflection exception. Should only be called if no checked exception is expected to be thrown by
+	 * the target method.
+	 * <p>
+	 * Throws the underlying RuntimeException or Error in case of an InvocationTargetException with such a root cause.
+	 * Throws an IllegalStateException with an appropriate message else.
+	 * 
+	 * @param ex the reflection exception to handle
+	 */
+	protected static void handleException(Exception ex) {
+		if (ex instanceof InvocationTargetException) {
+			Throwable cause = ((InvocationTargetException) ex).getTargetException();
+			
+			if (cause instanceof RuntimeException) {
+				throw (RuntimeException) cause;
+			}
+			
+			if (cause instanceof Error) {
+				throw (Error) cause;
+			}
+			throw new ReflectException(ex);
+		}
+		
+		if (ex instanceof NoSuchMethodException) {
+			throw new IllegalStateException("Method not found: " + ex.getMessage());
+		}
+		
+		if (ex instanceof NoSuchFieldException) {
+			throw new IllegalStateException("Field not found: " + ex.getMessage());
+		}
+		
+		if (ex instanceof IllegalAccessException) {
+			throw new IllegalStateException("Illegal access method or field: " + ex.getMessage());
+		}
+		
+		if (ex instanceof RuntimeException) {
+			throw (RuntimeException) ex;
+		}
+		
+		throw new ReflectException(ex);
+	}    
 	
 	//Internal Methods
 	//--------------------------------------------------------------------------------------------------------
-	
-    /**
-     * <p> Transforms the passed in type to a {@code Class} object. Type-checking method of convenience. </p>
-     *
-     * @param parameterizedType the type to be converted
-     * @return the corresponding {@code Class} object
-     * @throws IllegalStateException if the conversion fails
-     */
-    private static Class<?> getRawType(ParameterizedType parameterizedType) {
-        Type rawType = parameterizedType.getRawType();
-
-        // check if raw type is a Class object
-        // not currently necessary, but since the return type is Type instead of
-        // Class, there's enough reason to believe that future versions of Java
-        // may return other Type implementations. And type-safety checking is
-        // rarely a bad idea.
-        if (!(rawType instanceof Class<?>)) {
-            throw new IllegalStateException("parameterizedType.getRawType() returned not a Class object");
-        }
-
-        return (Class<?>) rawType;
-    }	
 }

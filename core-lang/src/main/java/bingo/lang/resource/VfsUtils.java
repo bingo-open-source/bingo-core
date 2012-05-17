@@ -44,7 +44,7 @@ import bingo.lang.logging.LogFactory;
  *
  * @author Costin Leau
  */
-abstract class VfsUtils {
+abstract class VfsUtils extends Reflects {
 
 	private static final Log logger = LogFactory.get(VfsUtils.class);
 

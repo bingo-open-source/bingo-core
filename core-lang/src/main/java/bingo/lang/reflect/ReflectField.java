@@ -36,6 +36,8 @@ public class ReflectField extends ReflectMember {
 	private final int    setterIndex;
 	private final int    getterIndex;
 	
+	private final ReflectAccessor accessor;
+	
 	protected ReflectField(ReflectClass<?> reflectClass, Field javaField){
 		super(reflectClass,javaField);
 		
@@ -43,10 +45,11 @@ public class ReflectField extends ReflectMember {
 		this.fieldType = javaField.getType();
 		this.setter    = findSetter();
 		this.getter    = findGetter();
+		this.accessor  = reflectClass.getAccessor();
 		
-		this.fieldIndex  = reflectClass.getAccessor().getFieldIndex(javaField);
-		this.setterIndex = null == setter ? -1 : reflectClass.getAccessor().getMethodIndex(setter.getJavaMethod());
-		this.getterIndex = null == getter ? -1 : reflectClass.getAccessor().getMethodIndex(getter.getJavaMethod());
+		this.fieldIndex  = accessor.getFieldIndex(javaField);
+		this.setterIndex = null == setter ? -1 : accessor.getMethodIndex(setter.getJavaMethod());
+		this.getterIndex = null == getter ? -1 : accessor.getMethodIndex(getter.getJavaMethod());
 		
 		this.initialize();
 	}
@@ -126,15 +129,45 @@ public class ReflectField extends ReflectMember {
         }	
 	}
 	
-	public Object getValue(Object instance) {
+	public void setValue(Object instance, Object value, boolean useSetterIfExists) {
         try {
-            if(getterIndex != -1){
-                return reflectClass.getAccessor().invokeMethod(instance, getterIndex, Arrays.EMPTY_OBJECT_ARRAY);
-            }else if(fieldIndex != -1){
-                return reflectClass.getAccessor().getField(instance, fieldIndex);
-            }else {
-                return javaField.get(instance);
-            }
+        	if(useSetterIfExists && null != setter){
+        		if(setterIndex != -1){
+        			accessor.invokeMethod(instance, setterIndex, safeValue(value));
+        		}else{
+        			setter.invoke(instance, safeValue(value));
+        		}
+        	}else{
+        		if(fieldIndex != -1){
+                	accessor.setField(instance, fieldIndex, safeValue(value));
+                }else{
+                    javaField.set(instance, safeValue(value));
+                }
+        	}
+        } catch (Exception e) {
+        	throw new ReflectException(e,"error setting value '{0}' to field '{1}'",value,getName());
+        }
+	}
+	
+	public Object getValue(Object instance) {
+		return getValue(instance,false);
+	}
+	
+	public Object getValue(Object instance,boolean useGetterIfExists) {
+        try {
+        	if(useGetterIfExists && null != getter){
+        		if(getterIndex != -1){
+        			return accessor.invokeMethod(instance, getterIndex, Arrays.EMPTY_OBJECT_ARRAY);
+        		}else{
+        			return getter.invoke(instance, Arrays.EMPTY_OBJECT_ARRAY);
+        		}
+        	}else{
+        		if(fieldIndex != -1){
+                    return accessor.getField(instance, fieldIndex);
+                }else {
+                    return javaField.get(instance);
+                }
+        	}
         } catch (Exception e) {
         	throw new ReflectException(e,"error getting value of field '{1}'",getName());
         }

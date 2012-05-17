@@ -15,12 +15,15 @@
  */
 package bingo.lang.reflect;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 import java.util.List;
 
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 import bingo.lang.Reflects;
+import bingo.lang.Types;
 
 public class ReflectMethodTest {
 
@@ -46,7 +49,7 @@ public class ReflectMethodTest {
 		
 		assertEquals(3, m2.getParameters()[2].getIndex());
 		assertEquals("list", m2.getParameters()[2].getName());
-		assertEquals(String.class, Reflects.getTypeArgument(m2.getParameters()[2].getGenericType()));
+		assertEquals(String.class, Types.getActualTypeArgument(m2.getParameters()[2].getGenericType()));
 		
 		ReflectMethod m3 = clazz.getMethod("test1");
 		assertEquals(0, m3.getParameters().length);

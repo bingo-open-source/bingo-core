@@ -32,7 +32,7 @@ import org.junit.Test;
 import bingo.lang.testbed.beans.TestBean;
 import bingo.lang.testing.Perf;
 
-@SuppressWarnings({"unchecked","unused"})
+@SuppressWarnings({"unused"})
 public class ReflectsTest {
 
 	@Test
@@ -62,100 +62,6 @@ public class ReflectsTest {
 		assertNotNull(Reflects.findMethod(B.class, "foo", Integer.class));
 		assertNotNull(Reflects.findMethod(B.class, "getClass"));
 	}
-
-	@Test
-	public void testGetTypeArgument() throws Exception{
-		 assertEquals(Object.class, Reflects.getTypeArgument(GenericContainer.class.getDeclaredField("list0").getGenericType()));
-		 assertEquals(String.class, Reflects.getTypeArgument(GenericContainer.class.getDeclaredField("list1").getGenericType()));
-		 assertEquals(List.class, 	 Reflects.getTypeArgument(GenericContainer.class.getDeclaredField("list2").getGenericType()));
-		 assertEquals(List.class, 	 Reflects.getTypeArgument(GenericContainer.class.getDeclaredField("list3").getGenericType()));
-		 assertEquals(Map.class, 	 Reflects.getTypeArgument(GenericContainer.class.getDeclaredField("list4").getGenericType()));
-		 assertEquals(Object.class, Reflects.getTypeArgument(GenericContainer.class.getDeclaredField("list5").getGenericType()));
-		 assertEquals(Object.class, Reflects.getTypeArgument(GenericContainer.class.getDeclaredField("list6").getGenericType()));
-		 assertEquals(StringChild.class, Reflects.getTypeArgument(GenericContainer1.class.getDeclaredField("list5").getGenericType()));
-		 assertEquals(StringChild.class, Reflects.getTypeArgument(GenericContainer1.class.getDeclaredField("list6").getGenericType()));
-		 assertEquals(Object.class, Reflects.getTypeArgument(GenericContainer.class.getDeclaredField("list7").getGenericType()));
-		 assertEquals(String[].class, Reflects.getTypeArgument(GenericContainer.class.getDeclaredField("list8").getGenericType()));
-		 assertEquals(Object.class,Reflects.getTypeArgument(GenericContainer.class.getDeclaredField("field0").getGenericType()));
-		 assertEquals(Object.class, Reflects.getTypeArgument(GenericContainer.class.getDeclaredField("child1").getGenericType()));
-		 assertEquals(String.class, Reflects.getTypeArgument(GenericContainer.class.getDeclaredField("child2").getGenericType()));
-		 assertEquals(StringChild.class, Reflects.getTypeArgument(GenericContainer.class.getDeclaredField("child3").getGenericType()));
-		 assertEquals(Object.class,Reflects.getTypeArgument(GenericContainer.class.getDeclaredField("child4").getGenericType()));
-	}
-	
-	@Test
-	public void testGetTypeArgumentPerformance() throws Exception {
-		 final Type genericType = GenericContainer.class.getDeclaredField("child4").getGenericType();
-		 
-		 Perf.run("Types.getTypeArgument", new Runnable() {
-			public void run() {
-				Reflects.getTypeArgument(genericType);
-			}
-		},1000000);
-	}
-	
-	private static class GenericContainer<T> {
-		
-		private List<?> list0;
-		
-		private List<String> list1;
-		
-		private List<List<?>> list2;
-		
-		private List<List<String>> list3;
-		
-		private List<Map<?, ?>> list4;
-		
-		private List<T> list5;
-		
-		private List<? extends T> list6;
-		
-		private List list7;
-		
-		private List<String[]> list8;
-		
-		private T field0;
-		
-		private String field1;
-		
-		private StringChild child0;
-		
-		private GenericParent<?> child1;
-		
-		private GenericParent<String> child2;
-		
-		private GenericContainer1 child3;
-		
-		private StringChildI child4;
-		
-	}
-	
-	private static class GenericContainer1<T extends StringChild> {
-		
-		private List<T> list5;
-		
-		private List<? extends T> list6;		
-		
-		private T field0;
-	}	
-	
-	private static interface IGenericParent<T> {
-		
-		
-	}
-
-	private static class GenericParent<T> {
-		
-		
-	}
-	
-	private static class StringChild extends GenericParent<String> {
-		
-	}
-	
-	private static class StringChildI implements IGenericParent<String> {
-		
-	}	
 
 	private static class TestBeanSubclass extends TestBean {
 

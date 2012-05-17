@@ -20,8 +20,8 @@ import java.util.Collection;
 
 import bingo.lang.Converts;
 import bingo.lang.Out;
-import bingo.lang.Reflects;
 import bingo.lang.Strings;
+import bingo.lang.Types;
 
 @SuppressWarnings("unchecked")
 public abstract class AbstractCollectionConverter<T extends Collection> extends AbstractConverter<T>{
@@ -29,7 +29,7 @@ public abstract class AbstractCollectionConverter<T extends Collection> extends 
 	@Override
     public boolean convertFrom(Object value, Class<?> targetType, Type genericType, Out<Object> out) throws Throwable {
 
-		Class<?> elementType = null == genericType ? Object.class : Reflects.getTypeArgument(genericType);
+		Class<?> elementType = null == genericType ? Object.class : Types.getActualTypeArgument(genericType);
 		
 		if(value instanceof Iterable<?>){
 			

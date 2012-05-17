@@ -826,6 +826,11 @@ public abstract class ReflectAccessor {
                 	continue;
                 }
                 
+                if(!Modifier.isPublic(field.getModifiers()) && 
+                		(type != nextClass && !type.getPackage().getName().equals(nextClass.getPackage().getName()))){
+                	continue;
+                }
+                
                 fields.add(field);
             }
             
