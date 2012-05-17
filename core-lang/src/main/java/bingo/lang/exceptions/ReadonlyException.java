@@ -15,12 +15,14 @@
  */
 package bingo.lang.exceptions;
 
-public class ReadonlyException extends RuntimeExceptionEx {
+import bingo.lang.Strings;
+
+public class ReadonlyException extends UnsupportedOperationException {
 
 	private static final long serialVersionUID = -1737056858372438598L;
 
 	public ReadonlyException() {
-		
+		super("unsupported operation, the object is immutable");
 	}
 
 	public ReadonlyException(String message) {
@@ -31,16 +33,15 @@ public class ReadonlyException extends RuntimeExceptionEx {
 		super(message, cause);
 	}
 
-	public ReadonlyException(String message, Object... args) {
-		super(message, args);
-	}
-
 	public ReadonlyException(Throwable cause) {
 		super(cause);
 	}
-
-	public ReadonlyException(Throwable cause, String message, Object... args) {
-		super(cause, message, args);
+	
+	public ReadonlyException(String message,Object... args) {
+		super(Strings.format(message, args));
 	}
-
+	
+	public ReadonlyException(Throwable cause,String message,Object... args) {
+		super(Strings.format(message, args),cause);
+	}
 }

@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.Set;
 
 import bingo.lang.exceptions.NotFoundException;
+import bingo.lang.exceptions.ReflectException;
 import bingo.lang.exceptions.WrappedIOException;
 import bingo.lang.logging.Log;
 import bingo.lang.logging.LogFactory;
@@ -108,6 +109,19 @@ public class Classes {
 
 	protected Classes() {
 
+	}
+	//new instance
+	//----------------------------------------------------------------------
+	public static Object newInstance(String className) throws NotFoundException,ReflectException {
+		return Reflects.newInstance(forName(className));
+	}
+	
+	public static Object newInstance(Class<?> loaderClass, String className) throws NotFoundException,ReflectException {
+		return Reflects.newInstance(forName(loaderClass,className));
+	}
+
+	public static Object newInstance(Class<?> clazz) throws ReflectException {
+		return Reflects.newInstance(clazz);
 	}
 	
 	//Class scan
@@ -350,6 +364,10 @@ public class Classes {
 	 */
 	public static Class<?> forName(ClassLoader classLoader, String className) throws NotFoundException {
 		return forName(classLoader, className, true);
+	}
+	
+	public static Class<?> forName(Class<?> loaderClass,String className) throws NotFoundException {
+		return forName(getClassLoader(loaderClass),className);
 	}
 	
 	public static Class<?> forNameOrNull(ClassLoader classLoader, String className) {

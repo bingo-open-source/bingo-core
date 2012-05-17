@@ -45,12 +45,12 @@ public class RuntimeExceptionEx extends RuntimeException {
 		super(message, cause);
 	}
 	
-	public RuntimeExceptionEx(String message,Object... args) {
-		super(Strings.format(message, args));
-	}
-	
 	public RuntimeExceptionEx(Throwable cause) {
 		super(cause);
+	}
+	
+	public RuntimeExceptionEx(String message,Object... args) {
+		super(Strings.format(message, args));
 	}
 	
 	public RuntimeExceptionEx(Throwable cause,String message,Object... args) {

@@ -16,42 +16,20 @@
 package bingo.lang.tuple;
 
 import bingo.lang.NamedValue;
+import bingo.lang.exceptions.ReadonlyException;
 
-public class MutableNamedValue<V> extends Pair<String, V> implements NamedValue<V> {
+public class ImmutableNamedValue<V> extends Pair<String, V>  implements NamedValue<V> {
 	
-	private static final long serialVersionUID = -8052820161777994131L;
+	private static final long serialVersionUID = -426792841413872323L;
 	
-	private final String name;
-	private V 	value;
+	protected final String name;
+	protected final V      value;
 	
-	public MutableNamedValue(String name) {
-	    this.name = name;
-    }	
-
-	public MutableNamedValue(String name, V value) {
+	public ImmutableNamedValue(String name,V value){
 		this.name  = name;
 		this.value = value;
-    }
+	}
 	
-	public String getName() {
-	    return name;
-    }
-
-	public V setValue(V value) {
-		this.value = value;
-	    return value;
-    }
-	
-	@Override
-    public String getKey() {
-	    return name;
-    }
-
-	@Override
-    public V getValue() {
-	    return value;
-    }
-
 	@Override
     protected String getLeft() {
 	    return name;
@@ -60,5 +38,22 @@ public class MutableNamedValue<V> extends Pair<String, V> implements NamedValue<
 	@Override
     protected V getRight() {
 	    return value;
+    }
+	
+	@Override
+    public String getKey() {
+	    return name;
+    }
+
+	public V getValue() {
+	    return value;
+    }
+
+	public String getName() {
+	    return name;
+    }
+	
+	public V setValue(V value) {
+	    throw new ReadonlyException();
     }
 }

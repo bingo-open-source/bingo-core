@@ -15,27 +15,41 @@
  */
 package bingo.lang.tuple;
 
-import bingo.lang.NamedValue;
+import bingo.lang.exceptions.ReadonlyException;
 
-public class SimpleNamedValue<T> implements NamedValue<T> {
+public final class ImmutableEntry<K,V> extends Pair<K, V> {
 	
-	protected String name;
-	protected T      value;
+	private static final long serialVersionUID = 6333097634226450971L;
 	
-	protected SimpleNamedValue(){
-		
-	}
+	private final K key;
+	private final V value;
 	
-	public SimpleNamedValue(String name,T value){
-		this.name  = name;
+	public ImmutableEntry(K key,V value){
+		this.key   = key;
 		this.value = value;
 	}
 
-	public T getValue() {
+	@Override
+    protected K getLeft() {
+	    return key;
+    }
+
+	@Override
+    protected V getRight() {
+	    return value;
+    }
+	
+	@Override
+    public K getKey() {
+	    return key;
+    }
+
+	@Override
+    public V getValue() {
 	    return value;
     }
 
-	public String getName() {
-	    return name;
+	public V setValue(V value) {
+	    throw new ReadonlyException();
     }
 }

@@ -13,24 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.lang.cloning;
+package bingo.lang.collections;
 
-import javax.sql.DataSource;
+import java.util.Map;
 
-public class Clones {
-	
-	private static final Cloner cloner = new Cloner(); 
-	
-	static {
-		cloner.dontCloneInstanceOf(DataSource.class);
+import bingo.lang.exceptions.ReadonlyException;
+
+public abstract class AbstractImmutableMap<K,V> implements Map<K, V> {
+
+	public void clear() {
+		throw readonlyException();
+    }
+
+	public V put(K key, V value) {
+		throw readonlyException();
+    }
+
+	public void putAll(Map<? extends K, ? extends V> t) {
+		throw readonlyException();	    
+    }
+
+	public V remove(Object key) {
+		throw readonlyException();
+    }
+
+	protected static ReadonlyException readonlyException() {
+		return new ReadonlyException("unsupported operation, the map is immutable");
 	}
 
-	protected Clones(){
-		
-	}
-	
-	public static <T> T deepClone(T object) {
-		return cloner.deepClone(object);
-	}
-	
 }

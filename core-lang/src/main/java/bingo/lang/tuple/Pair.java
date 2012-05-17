@@ -49,25 +49,6 @@ public abstract class Pair<L, R> implements Map.Entry<L, R>, Comparable<Pair<L, 
 	/** Serialization version */
 	private static final long	serialVersionUID	= 4954918890077093841L;
 
-	/**
-	 * <p>
-	 * Obtains an immutable pair of from two objects inferring the generic types.
-	 * </p>
-	 * 
-	 * <p>
-	 * This factory allows the pair to be created using inference to obtain the generic types.
-	 * </p>
-	 * 
-	 * @param <L> the left element type
-	 * @param <R> the right element type
-	 * @param left the left element, may be null
-	 * @param right the right element, may be null
-	 * @return a pair formed from the two parameters, not null
-	 */
-	public static <L, R> Pair<L, R> of(L left, R right) {
-		return new ImmutablePair<L, R>(left, right);
-	}
-
 	//-----------------------------------------------------------------------
 	/**
 	 * <p>
@@ -80,7 +61,7 @@ public abstract class Pair<L, R> implements Map.Entry<L, R>, Comparable<Pair<L, 
 	 * 
 	 * @return the left element, may be null
 	 */
-	public abstract L getLeft();
+	protected abstract L getLeft();
 
 	/**
 	 * <p>
@@ -93,7 +74,7 @@ public abstract class Pair<L, R> implements Map.Entry<L, R>, Comparable<Pair<L, 
 	 * 
 	 * @return the right element, may be null
 	 */
-	public abstract R getRight();
+	protected abstract R getRight();
 
 	/**
 	 * <p>
@@ -106,9 +87,7 @@ public abstract class Pair<L, R> implements Map.Entry<L, R>, Comparable<Pair<L, 
 	 * 
 	 * @return the left element as the key, may be null
 	 */
-	public final L getKey() {
-		return getLeft();
-	}
+	public abstract L getKey();
 
 	/**
 	 * <p>
@@ -121,9 +100,7 @@ public abstract class Pair<L, R> implements Map.Entry<L, R>, Comparable<Pair<L, 
 	 * 
 	 * @return the right element as the value, may be null
 	 */
-	public R getValue() {
-		return getRight();
-	}
+	public abstract R getValue();
 
 	//-----------------------------------------------------------------------
 	/**

@@ -114,6 +114,16 @@ public class MutablePair<L, R> extends Pair<L, R> {
 	public void setRight(R right) {
 		this.right = right;
 	}
+	
+	@Override
+    public L getKey() {
+	    return left;
+    }
+
+	@Override
+    public R getValue() {
+	    return right;
+    }
 
 	/**
 	 * Sets the {@code Map.Entry} value. This sets the right element of the pair.

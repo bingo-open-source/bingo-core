@@ -22,25 +22,47 @@ import java.util.Map.Entry;
 /**
  * Simple implement of {@link Map.Entry}
  */
-public final class SimpleEntry<K,V> implements Entry<K, V>{
+public class MutableEntry<K,V> extends Pair<K, V> implements Entry<K, V>{
     
-    private K key;
+    private static final long serialVersionUID = -356478565525099830L;
+    
+	private K key;
     private V value;
     
-    public SimpleEntry(K key, V value){
+    protected MutableEntry(){
+    	
+    }
+    
+    public MutableEntry(K key){
+    	this.key = key;
+    }
+    
+    public MutableEntry(K key, V value){
         this.key = key;
         this.value = value;
     }
+    
+    @Override
+    protected K getLeft() {
+	    return key;
+    }
 
+	@Override
+    protected V getRight() {
+	    return value;
+    }
+	
+    @Override
     public K getKey() {
-        return key;
+	    return key;
     }
 
+	@Override
     public V getValue() {
-        return value;
+	    return value;
     }
 
-    public V setValue(V value) {
+	public V setValue(V value) {
         this.value = value;
         return this.value;
     }

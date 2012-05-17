@@ -16,6 +16,8 @@
  */
 package bingo.lang.tuple;
 
+import bingo.lang.exceptions.ReadonlyException;
+
 /**
  * <p>
  * An immutable pair consisting of two {@code Object} elements.
@@ -41,6 +43,25 @@ public final class ImmutablePair<L, R> extends Pair<L, R> {
 
 	/** Serialization version */
 	private static final long	serialVersionUID	= 4954918890077093841L;
+	
+	/**
+	 * <p>
+	 * Obtains an immutable pair of from two objects inferring the generic types.
+	 * </p>
+	 * 
+	 * <p>
+	 * This factory allows the pair to be created using inference to obtain the generic types.
+	 * </p>
+	 * 
+	 * @param <L> the left element type
+	 * @param <R> the right element type
+	 * @param left the left element, may be null
+	 * @param right the right element, may be null
+	 * @return a pair formed from the two parameters, not null
+	 */
+	public static <L,R> ImmutablePair<L, R> pairOf(L left,R right) {
+		return new ImmutablePair<L, R>(left, right);
+	}	
 
 	/**
 	 * <p>
@@ -95,6 +116,16 @@ public final class ImmutablePair<L, R> extends Pair<L, R> {
 	public R getRight() {
 		return right;
 	}
+	
+	@Override
+    public L getKey() {
+	    return left;
+    }
+
+	@Override
+    public R getValue() {
+	    return right;
+    }
 
 	/**
 	 * <p>
@@ -110,6 +141,6 @@ public final class ImmutablePair<L, R> extends Pair<L, R> {
 	 * @throws UnsupportedOperationException as this operation is not supported
 	 */
 	public R setValue(R value) {
-		throw new UnsupportedOperationException();
+		throw new ReadonlyException();
 	}
 }

@@ -25,7 +25,7 @@ import java.util.Set;
 
 import bingo.lang.Arrays;
 import bingo.lang.Builder;
-import bingo.lang.tuple.Pair;
+import bingo.lang.tuple.ImmutablePair;
 
 /**
  * <p>
@@ -99,7 +99,7 @@ public class EqualsBuilder implements Builder<Boolean> {
 	 * 
 	 * @since 3.0
 	 */
-	private static final ThreadLocal<Set<Pair<IDKey, IDKey>>>	REGISTRY	= new ThreadLocal<Set<Pair<IDKey, IDKey>>>();
+	private static final ThreadLocal<Set<ImmutablePair<IDKey, IDKey>>>	REGISTRY	= new ThreadLocal<Set<ImmutablePair<IDKey, IDKey>>>();
 
 	/*
 	 * NOTE: we cannot store the actual objects in a HashSet, as that would use the very hashCode() we are in the
@@ -124,7 +124,7 @@ public class EqualsBuilder implements Builder<Boolean> {
 	 * @return Set the registry of objects being traversed
 	 * @since 3.0
 	 */
-	static Set<Pair<IDKey, IDKey>> getRegistry() {
+	static Set<ImmutablePair<IDKey, IDKey>> getRegistry() {
 		return REGISTRY.get();
 	}
 
@@ -138,10 +138,10 @@ public class EqualsBuilder implements Builder<Boolean> {
 	 * 
 	 * @return the pair
 	 */
-	static Pair<IDKey, IDKey> getRegisterPair(Object lhs, Object rhs) {
+	static ImmutablePair<IDKey, IDKey> getRegisterPair(Object lhs, Object rhs) {
 		IDKey left = new IDKey(lhs);
 		IDKey right = new IDKey(rhs);
-		return Pair.of(left, right);
+		return ImmutablePair.of(left, right);
 	}
 
 	/**
@@ -157,9 +157,9 @@ public class EqualsBuilder implements Builder<Boolean> {
 	 * @since 3.0
 	 */
 	static boolean isRegistered(Object lhs, Object rhs) {
-		Set<Pair<IDKey, IDKey>> registry = getRegistry();
-		Pair<IDKey, IDKey> pair = getRegisterPair(lhs, rhs);
-		Pair<IDKey, IDKey> swappedPair = Pair.of(pair.getLeft(), pair.getRight());
+		Set<ImmutablePair<IDKey, IDKey>> registry = getRegistry();
+		ImmutablePair<IDKey, IDKey> pair = getRegisterPair(lhs, rhs);
+		ImmutablePair<IDKey, IDKey> swappedPair = ImmutablePair.of(pair.getLeft(), pair.getRight());
 
 		return registry != null && (registry.contains(pair) || registry.contains(swappedPair));
 	}
@@ -175,12 +175,12 @@ public class EqualsBuilder implements Builder<Boolean> {
 	static void register(Object lhs, Object rhs) {
 		synchronized (EqualsBuilder.class) {
 			if (getRegistry() == null) {
-				REGISTRY.set(new HashSet<Pair<IDKey, IDKey>>());
+				REGISTRY.set(new HashSet<ImmutablePair<IDKey, IDKey>>());
 			}
 		}
 
-		Set<Pair<IDKey, IDKey>> registry = getRegistry();
-		Pair<IDKey, IDKey> pair = getRegisterPair(lhs, rhs);
+		Set<ImmutablePair<IDKey, IDKey>> registry = getRegistry();
+		ImmutablePair<IDKey, IDKey> pair = getRegisterPair(lhs, rhs);
 		registry.add(pair);
 	}
 
@@ -197,9 +197,9 @@ public class EqualsBuilder implements Builder<Boolean> {
 	 * @since 3.0
 	 */
 	static void unregister(Object lhs, Object rhs) {
-		Set<Pair<IDKey, IDKey>> registry = getRegistry();
+		Set<ImmutablePair<IDKey, IDKey>> registry = getRegistry();
 		if (registry != null) {
-			Pair<IDKey, IDKey> pair = getRegisterPair(lhs, rhs);
+			ImmutablePair<IDKey, IDKey> pair = getRegisterPair(lhs, rhs);
 			registry.remove(pair);
 			synchronized (EqualsBuilder.class) {
 				//read again

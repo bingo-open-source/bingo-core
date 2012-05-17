@@ -41,11 +41,11 @@ public class PairTest {
 
     @Test
     public void testPairOf() throws Exception {
-        Pair<Integer, String> pair = Pair.of(0, "foo");
+        Pair<Integer, String> pair = ImmutablePair.of(0, "foo");
         assertTrue(pair instanceof ImmutablePair<?, ?>);
         assertEquals(0, ((ImmutablePair<Integer, String>) pair).left.intValue());
         assertEquals("foo", ((ImmutablePair<Integer, String>) pair).right);
-        Pair<Object, String> pair2 = Pair.of(null, "bar");
+        Pair<Object, String> pair2 = ImmutablePair.of(null, "bar");
         assertTrue(pair2 instanceof ImmutablePair<?, ?>);
         assertNull(((ImmutablePair<Object, String>) pair2).left);
         assertEquals("bar", ((ImmutablePair<Object, String>) pair2).right);
@@ -78,8 +78,8 @@ public class PairTest {
 
     @Test
     public void testComparable1() throws Exception {
-        Pair<String, String> pair1 = Pair.of("A", "D");
-        Pair<String, String> pair2 = Pair.of("B", "C");
+        Pair<String, String> pair1 = ImmutablePair.of("A", "D");
+        Pair<String, String> pair2 = ImmutablePair.of("B", "C");
         assertTrue(pair1.compareTo(pair1) == 0);
         assertTrue(pair1.compareTo(pair2) < 0);
         assertTrue(pair2.compareTo(pair2) == 0);
@@ -88,8 +88,8 @@ public class PairTest {
 
     @Test
     public void testComparable2() throws Exception {
-        Pair<String, String> pair1 = Pair.of("A", "C");
-        Pair<String, String> pair2 = Pair.of("A", "D");
+        Pair<String, String> pair1 = ImmutablePair.of("A", "C");
+        Pair<String, String> pair2 = ImmutablePair.of("A", "D");
         assertTrue(pair1.compareTo(pair1) == 0);
         assertTrue(pair1.compareTo(pair2) < 0);
         assertTrue(pair2.compareTo(pair2) == 0);
@@ -98,7 +98,7 @@ public class PairTest {
 
     @Test
     public void testToString() throws Exception {
-        Pair<String, String> pair = Pair.of("Key", "Value");
+        Pair<String, String> pair = ImmutablePair.of("Key", "Value");
         assertEquals("(Key,Value)", pair.toString());
     }
 
@@ -106,19 +106,19 @@ public class PairTest {
     public void testToStringCustom() throws Exception {
         Calendar date = Calendar.getInstance();
         date.set(2011, Calendar.APRIL, 25);
-        Pair<String, Calendar> pair = Pair.of("DOB", date);
+        Pair<String, Calendar> pair = ImmutablePair.of("DOB", date);
         assertEquals("Test created on " + "04-25-2011", pair.toString("Test created on %2$tm-%2$td-%2$tY"));
     }
 
     @Test
     public void testFormattable_simple() throws Exception {
-        Pair<String, String> pair = Pair.of("Key", "Value");
+        Pair<String, String> pair = ImmutablePair.of("Key", "Value");
         assertEquals("(Key,Value)", String.format("%1$s", pair));
     }
 
     @Test
     public void testFormattable_padded() throws Exception {
-        Pair<String, String> pair = Pair.of("Key", "Value");
+        Pair<String, String> pair = ImmutablePair.of("Key", "Value");
         assertEquals("         (Key,Value)", String.format("%1$20s", pair));
     }
 
