@@ -36,4 +36,8 @@ import java.lang.annotation.Target;
     ElementType.TYPE})
 @Documented
 @Internal
-public @interface Internal {}
+public @interface Internal {
+	
+	public String value() default "";
+	
+}

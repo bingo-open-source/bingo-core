@@ -48,34 +48,34 @@ public class Df {
 		for(ReflectField field : reflectClass.getFields()){
 			if(!field.isFinal()){
 				Class<?> type = field.getType();
-				Object   value = field.getValue(bean);
+				Object   value = field.getValue(bean,false);
 				
 				if(null != value && !value.equals(Primitives.defaultValue(type))){
 					continue;
 				}
 				
 				if(Classes.isString(type)){
-					field.setValue(bean, Randoms.nextString(Randoms.nextInt(1,MAX_STRING_LENGTH)));
+					field.setValue(bean, Randoms.nextString(Randoms.nextInt(1,MAX_STRING_LENGTH)),true);
 				}else if(Classes.isBoolean(type)){
-					field.setValue(bean, Randoms.nextBoolean());
+					field.setValue(bean, Randoms.nextBoolean(),true);
 				}else if(Classes.isCharacter(type)){
-					field.setValue(bean, Randoms.nextCharacter());
+					field.setValue(bean, Randoms.nextCharacter(),true);
 				}else if(Classes.isInteger(type)){
-					field.setValue(bean, Randoms.nextInt());
+					field.setValue(bean, Randoms.nextInt(),true);
 				}else if(Classes.isShort(type)){
-					field.setValue(bean, Randoms.nextShort());
+					field.setValue(bean, Randoms.nextShort(),true);
 				}else if(Classes.isLong(type)){
-					field.setValue(bean, Randoms.nextLong());
+					field.setValue(bean, Randoms.nextLong(),true);
 				}else if(Classes.isFloat(type)){
-					field.setValue(bean, Randoms.nextFloat());
+					field.setValue(bean, Randoms.nextFloat(),true);
 				}else if(Classes.isDouble(type)){
-					field.setValue(bean, Randoms.nextDouble());
+					field.setValue(bean, Randoms.nextDouble(),true);
 				}else if(Classes.isBigDecimal(type)){
-					field.setValue(bean, BigDecimal.valueOf(Randoms.nextDouble()));
+					field.setValue(bean, BigDecimal.valueOf(Randoms.nextDouble()),true);
 				}else if(Classes.isBigInteger(type)){
-					field.setValue(bean, BigInteger.valueOf(Randoms.nextLong()));
+					field.setValue(bean, BigInteger.valueOf(Randoms.nextLong()),true);
 				}else if(Date.class.isAssignableFrom(type)){
-					field.setValue(bean, Converts.convert(Randoms.nextDateTime(),type));
+					field.setValue(bean, Converts.convert(Randoms.nextDateTime(),type),true);
 				}
 			}
 		}

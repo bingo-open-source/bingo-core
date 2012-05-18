@@ -150,7 +150,7 @@ public class ReflectField extends ReflectMember {
 	}
 	
 	public Object getValue(Object instance) {
-		return getValue(instance,false);
+		return getValue(instance,true);
 	}
 	
 	public Object getValue(Object instance,boolean useGetterIfExists) {

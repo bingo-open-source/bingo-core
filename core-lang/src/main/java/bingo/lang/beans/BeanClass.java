@@ -23,6 +23,7 @@ import java.util.Set;
 import java.util.WeakHashMap;
 
 import bingo.lang.Arrays;
+import bingo.lang.Assert;
 import bingo.lang.Collections;
 import bingo.lang.Predicates;
 import bingo.lang.reflect.ReflectClass;
@@ -33,6 +34,13 @@ public class BeanClass<T> {
 	
 	private static final Map<Class<?>, BeanClass<?>> cache = 
 		java.util.Collections.synchronizedMap(new WeakHashMap<Class<?>, BeanClass<?>>());
+	
+	@SuppressWarnings("unchecked")
+	public static <T> BeanClass<T> get(T bean){
+		Assert.notNull(bean);
+		
+		return (BeanClass<T>)get(bean.getClass());
+	}
 	
 	@SuppressWarnings("unchecked")
 	public static <T> BeanClass<T> get(Class<T> type) {
@@ -90,6 +98,10 @@ public class BeanClass<T> {
 	
 	public BeanProperty getProperty(String name){
 		return Collections.firstOrNull(properties,Predicates.nameEquals(BeanProperty.class,name));
+	}
+	
+	public BeanProperty getPropertyIgnorecase(String name){
+		return Collections.firstOrNull(properties,Predicates.nameEqualsIgnoreCase(BeanProperty.class,name));
 	}
 
 	private void initialize(){

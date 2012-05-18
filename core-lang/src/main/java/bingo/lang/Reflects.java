@@ -25,6 +25,7 @@ import java.util.List;
 import bingo.lang.exceptions.NotFoundException;
 import bingo.lang.exceptions.ReflectException;
 import bingo.lang.reflect.ReflectClass;
+import bingo.lang.reflect.ReflectField;
 
 public class Reflects {
 	
@@ -62,7 +63,7 @@ public class Reflects {
 	 * @param target the target object from which to get the field
 	 * @return the field's current value
 	 */
-	public static Object getFieldValue(Field field,Object target) {
+	public static Object getFieldValue(Object target,Field field) {
 		try {
 			return field.get(target);
 		}
@@ -71,6 +72,19 @@ public class Reflects {
 			throw new ReflectException(
 					"Unexpected reflection exception - " + ex.getClass().getName() + ": " + ex.getMessage());
 		}
+	}
+	
+	public static Object getFieldValue(Object target,String name) throws NotFoundException {
+		Assert.notNull(target);
+		Assert.notNull(name);
+		
+		ReflectField field = ReflectClass.get(target.getClass()).getField(name);
+		
+		if(null == field){
+			throw new NotFoundException("field name '{0}' not exists in type '{1}'",name,target.getClass().getName());
+		}
+		
+		return field.getValue(target,false);
 	}
 	
 	/**

@@ -270,7 +270,7 @@ abstract class VfsUtils extends Reflects {
 	}
 
 	protected static Object doGetVisitorAttribute() {
-		return Reflects.getFieldValue(VISITOR_ATTRIBUTES_FIELD_RECURSE,null);
+		return Reflects.getFieldValue((Object)null,VISITOR_ATTRIBUTES_FIELD_RECURSE);
 	}
 
 	protected static String doGetPath(Object resource) {

@@ -55,6 +55,8 @@ public class ReflectClass<T> implements Named {
 	private final ReflectMetadata   metadata;
 	
 	private final boolean 		 isInner;
+	private final boolean          isSimple;
+	private final boolean			 isEnumerable;
 	
 	private ReflectConstructor<T>[]	 constructors;
 	private ReflectField[]		 	 fields;
@@ -71,7 +73,9 @@ public class ReflectClass<T> implements Named {
 		this.javaClass = javaClass;
 		this.metadata  = new ReflectMetadata(javaClass);
 		this.accessor  = ReflectAccessor.createFor(this.javaClass);
-		this.isInner   = Classes.isInnerClass(javaClass);
+		this.isInner   = Classes.isInner(javaClass);
+		this.isSimple  = Classes.isSimple(javaClass);
+		this.isEnumerable = Classes.isEnumerable(javaClass);
 		
 		this.initialize();
 	}
@@ -125,16 +129,32 @@ public class ReflectClass<T> implements Named {
 		accessor.setArrayItem(array, index, value);
 	}
 	
-	public boolean isAbstract() {
-		return Modifier.isAbstract(javaClass.getModifiers());
+	public boolean isSimple(){
+		return isSimple;
+	}
+	
+	public boolean isEnumerable(){
+		return isEnumerable;
+	}
+	
+	public boolean isMap(){
+		return Map.class.isAssignableFrom(javaClass);
 	}
 	
 	public boolean isArray() {
 		return javaClass.isArray();
 	}
 	
+	public boolean isAbstract() {
+		return Modifier.isAbstract(javaClass.getModifiers());
+	}
+	
 	public boolean isInterface() {
 		return javaClass.isInterface();
+	}
+	
+	public boolean isConcrete(){
+		return !javaClass.isInterface() && !isAbstract();
 	}
 	
 	public boolean isInner(){
@@ -166,19 +186,11 @@ public class ReflectClass<T> implements Named {
 	}
 	
 	public ReflectField getField(final String name,final Class<?> fieldType){
-		return Collections.firstOrNull(fields, new Predicate<ReflectField>() {
-			public boolean evaluate(ReflectField object) {
-	            return object.getName().equals(name) && object.getJavaField().getType().equals(fieldType);
-            }
-		});
+		return Collections.firstOrNull(fields,Predicates.nameEquals(ReflectField.class, name));
 	}
 	
-	public ReflectField findField(final String name){
-		return Collections.firstOrNull(fields, new Predicate<ReflectField>() {
-			public boolean evaluate(ReflectField object) {
-	            return object.getName().equalsIgnoreCase(name);
-            }
-		});
+	public ReflectField getFieldIgnorecase(final String name){
+		return Collections.firstOrNull(fields,Predicates.nameEqualsIgnoreCase(ReflectField.class, name));
 	}
 	
 	public ReflectMethod[] getMethods(){

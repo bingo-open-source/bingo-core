@@ -19,8 +19,11 @@ import java.io.IOException;
 import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Date;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -387,7 +390,7 @@ public class Classes {
      * @return {@code true} if the class is an inner or static nested class,
      *  false if not or {@code null}
      */
-    public static boolean isInnerClass(Class<?> cls) {
+    public static boolean isInner(Class<?> cls) {
         return cls != null && cls.getEnclosingClass() != null;
     }
 	
@@ -439,6 +442,37 @@ public class Classes {
 		
 		return ! (Modifier.isInterface(clazz.getModifiers()) || Modifier.isAbstract(clazz.getModifiers())); 
 		
+	}
+	
+	/**
+	 * Checks if given class is a simple type.
+	 */
+	public static boolean isSimple(Class<?> clazz) {
+		return null != clazz &&
+				    (clazz.isPrimitive() || 
+					Primitives.isWrapperType(clazz) || 
+					clazz.isEnum() ||
+					Number.class.isAssignableFrom(clazz) ||
+					CharSequence.class.isAssignableFrom(clazz) ||
+					Date.class.isAssignableFrom(clazz) ||
+					Class.class.isAssignableFrom(clazz));
+	}
+	
+	public static boolean isEnumerable(Class<?> clazz) {
+		return null != clazz && 
+				(clazz.isArray() || 
+			     Iterable.class.isAssignableFrom(clazz) ||
+			     Iterator.class.isAssignableFrom(clazz) ||
+			     Enumeration.class.isAssignableFrom(clazz) 
+			     );
+	}
+	
+	public static boolean isJavaPackage(Class<?> clazz){
+		return null != clazz && clazz.getPackage().getName().startsWith("java.");
+	}
+	
+	public static boolean isJavaxPackage(Class<?> clazz){
+		return null != clazz && clazz.getPackage().getName().startsWith("javax.");
 	}
 	
 	public static boolean isString(Class<?> clazz){
