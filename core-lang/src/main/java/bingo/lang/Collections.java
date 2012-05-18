@@ -208,7 +208,7 @@ public class Collections {
 		}
 		
 		for (T object : iterable) {
-			if (predicate.evaluate(object)) {
+			if (predicate.apply(object)) {
 				return object;
 			}
 		}
@@ -222,7 +222,7 @@ public class Collections {
 		}
 		
 		for (T object : array) {
-			if (predicate.evaluate(object)) {
+			if (predicate.apply(object)) {
 				return object;
 			}
 		}
@@ -230,7 +230,7 @@ public class Collections {
 	}
 
 	//TODO to be documented after figure out the usage of predicate.
-	public static <T, O> O firstOrNull(Iterable<T> iterable, Predicate1<T, O> predicate) {
+	public static <T, O> O firstOrNull(Iterable<T> iterable, OutPredicate<T, O> predicate) {
 		if(null == iterable){
 			return null;
 		}
@@ -247,7 +247,7 @@ public class Collections {
 	}
 
 	//TODO to be documented after figure out the usage of predicate.
-	public static <T, O> O firstOrNull(T[] array, Predicate1<T, O> predicate) {
+	public static <T, O> O firstOrNull(T[] array, OutPredicate<T, O> predicate) {
 		if(null == array){
 			return null;
 		}
@@ -269,7 +269,7 @@ public class Collections {
 		
 		if(null != iterable){
 			for(T item : iterable){
-				if(where.evaluate(item)){
+				if(where.apply(item)){
 					list.add(item);
 				}
 			}
@@ -284,7 +284,7 @@ public class Collections {
 		
 		if(null != array){
 			for(T item : array){
-				if(where.evaluate(item)){
+				if(where.apply(item)){
 					list.add(item);
 				}
 			}
@@ -300,7 +300,7 @@ public class Collections {
 
 		if(null != iterable){
 			for (T object : iterable) {
-				list.add(func.evaluate(object));
+				list.add(func.apply(object));
 			}
 		}
 
@@ -313,7 +313,7 @@ public class Collections {
 
 		if(null != array){
 			for (T object : array) {
-				list.add(func.evaluate(object));
+				list.add(func.apply(object));
 			}
 		}
 
@@ -326,7 +326,7 @@ public class Collections {
 
 		if(null != iterable){
 			for (T object : iterable) {
-				list.addAll(func.evaluate(object));
+				list.addAll(func.apply(object));
 			}
 		}
 

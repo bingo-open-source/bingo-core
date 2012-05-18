@@ -63,7 +63,7 @@ public class EnumerableTest extends TestCase {
 
 	private static <T> Enumerable<T> infinite(final T value) {
 		return Enumerable.create(new Func<Iterator<T>>() {
-			public Iterator<T> evaluate() {
+			public Iterator<T> apply() {
 				return new InfiniteIterator<T>(value);
 			}
 		});
@@ -87,19 +87,19 @@ public class EnumerableTest extends TestCase {
 	private static final Func1<Integer, Integer> IDENTITY = identity(Integer.class);
 
 	private static final Func1<Integer, Integer> TIMES_TWO = new Func1<Integer, Integer>() {
-		public Integer evaluate(Integer input) {
+		public Integer apply(Integer input) {
 			return input * 2;
 		}
 	};
 
 	private static final Predicate<Integer> IS_ODD = new Predicate<Integer>() {
-		public boolean evaluate(Integer input) {
+		public boolean apply(Integer input) {
 			return input % 2 == 1;
 		}
 	};
 
 	private static final Func1<String, Enumerable<Character>> CHARS = new Func1<String, Enumerable<Character>>() {
-		public Enumerable<Character> evaluate(String input) {
+		public Enumerable<Character> apply(String input) {
 			return chars(input);
 		}
 	};
@@ -118,15 +118,15 @@ public class EnumerableTest extends TestCase {
 
 	private static <T> Predicate<T> not(final Predicate<T> predicate) {
 		return new Predicate<T>() {
-			public boolean evaluate(T input) {
-				return !predicate.evaluate(input);
+			public boolean apply(T input) {
+				return !predicate.apply(input);
 			}
 		};
 	}
 
 	private static <TResult> Func1<TResult, TResult> identity(Class<TResult> clazz) {
 		return new Func1<TResult, TResult>() {
-			public TResult evaluate(TResult input) {
+			public TResult apply(TResult input) {
 				return input;
 			}
 		};

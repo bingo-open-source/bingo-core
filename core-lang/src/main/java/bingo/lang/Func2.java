@@ -16,8 +16,8 @@
 package bingo.lang;
 
 
-public interface Func2<TInput1,TInput2,TResult> {
+public interface Func2<T1,T2,R> {
 
-	TResult evaluate(TInput1 input1,TInput2 input2);
+	R evaluate(T1 input1,T2 input2);
 	
 }

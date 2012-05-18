@@ -97,7 +97,7 @@ public class Enumerable<T> implements Iterable<T> {
 
 	public T first(Predicate<T> predicate) {
 		for (T value : values) {
-			if (predicate.evaluate(value)) {
+			if (predicate.apply(value)) {
 				return value;
 			}
 		}
@@ -113,7 +113,7 @@ public class Enumerable<T> implements Iterable<T> {
 
 	public T firstOrNull(Predicate<T> predicate) {
 		for (T value : values) {
-			if (predicate.evaluate(value)) {
+			if (predicate.apply(value)) {
 				return value;
 			}
 		}
@@ -131,7 +131,7 @@ public class Enumerable<T> implements Iterable<T> {
 	public static <K, E> Map<K, List<E>> group(Collection<E> c, final Func1<E, K> projection) {
 		Map<K, List<E>> map = new HashMap<K, List<E>>();
 		for (E e : c) {
-			K key = projection.evaluate(e);
+			K key = projection.apply(e);
 			if (key != null) {
 				List<E> list = map.get(key);
 				if (list == null) {
@@ -193,7 +193,7 @@ public class Enumerable<T> implements Iterable<T> {
 
 	public Enumerable<T> take(final int count) {
 		return create(new Func<Iterator<T>>() {
-			public Iterator<T> evaluate() {
+			public Iterator<T> apply() {
 				return new TakeIterator<T>(Enumerable.this, count);
 			}
 		});
@@ -201,7 +201,7 @@ public class Enumerable<T> implements Iterable<T> {
 
 	public boolean any(Predicate<T> predicate) {
 		for (T value : values) {
-			if (predicate.evaluate(value)) {
+			if (predicate.apply(value)) {
 				return true;
 			}
 		}
@@ -210,7 +210,7 @@ public class Enumerable<T> implements Iterable<T> {
 
 	public boolean all(Predicate<T> predicate) {
 		for (T value : values) {
-			if (!predicate.evaluate(value)) {
+			if (!predicate.apply(value)) {
 				return false;
 			}
 		}
@@ -308,8 +308,8 @@ public class Enumerable<T> implements Iterable<T> {
 	public <TKey extends Comparable<TKey>> Enumerable<T> orderBy(final Func1<T, TKey> projection) {
 		return orderBy(new Comparator<T>() {
 			public int compare(T o1, T o2) {
-				TKey lhs = projection.evaluate(o1);
-				TKey rhs = projection.evaluate(o2);
+				TKey lhs = projection.apply(o1);
+				TKey rhs = projection.apply(o2);
 				return lhs.compareTo(rhs);
 			}
 		});
@@ -352,7 +352,7 @@ public class Enumerable<T> implements Iterable<T> {
 
 	public static Enumerable<Integer> range(final int start, final int count) {
 		return create(new Func<Iterator<Integer>>() {
-			public Iterator<Integer> evaluate() {
+			public Iterator<Integer> apply() {
 				return new RangeIterator(start, count);
 			}
 		});
@@ -361,7 +361,7 @@ public class Enumerable<T> implements Iterable<T> {
 	public <TOutput> Enumerable<TOutput> cast(Class<TOutput> clazz) {
 		return this.select(new Func1<T, TOutput>() {
 			@SuppressWarnings("unchecked")
-			public TOutput evaluate(T input) {
+			public TOutput apply(T input) {
 				return (TOutput) input;
 			}
 		});
@@ -370,7 +370,7 @@ public class Enumerable<T> implements Iterable<T> {
 	public <TOutput> Enumerable<TOutput> ofType(Class<TOutput> clazz) {
 		final Class<TOutput> finalClazz = clazz;
 		return this.where(new Predicate<T>() {
-			public boolean evaluate(T input) {
+			public boolean apply(T input) {
 				return input != null && finalClazz.isAssignableFrom(input.getClass());
 			}
 		}).cast(clazz);
@@ -383,11 +383,11 @@ public class Enumerable<T> implements Iterable<T> {
 	public Enumerable<T> skipWhile(final Predicate<T> predicate) {
 		final Boolean[] skipping = new Boolean[] { true };
 		return this.where(new Predicate<T>() {
-			public boolean evaluate(T input) {
+			public boolean apply(T input) {
 				if (!skipping[0]) {
 					return true;
 				}
-				if (!predicate.evaluate(input)) {
+				if (!predicate.apply(input)) {
 					skipping[0] = false;
 					return true;
 				}
@@ -422,7 +422,7 @@ public class Enumerable<T> implements Iterable<T> {
 	public Enumerable<T> union(Enumerable<T>... others) {
 		final List<Iterable<T>> rt = thisThenOthers(others);
 		return Enumerable.create(makeIterable(new Func<Iterator<T>>() {
-			public Iterator<T> evaluate() {
+			public Iterator<T> apply() {
 				return new UnionIterator<T>(rt);
 			}
 		}));
@@ -430,7 +430,7 @@ public class Enumerable<T> implements Iterable<T> {
 
 	public <TResult> Enumerable<TResult> selectMany(final Func1<T, Enumerable<TResult>> selector) {
 		return Enumerable.create(new Func<Iterator<TResult>>() {
-			public Iterator<TResult> evaluate() {
+			public Iterator<TResult> apply() {
 				return new SelectManyIterator<T, TResult>(Enumerable.this, selector);
 			}
 		});
@@ -438,7 +438,7 @@ public class Enumerable<T> implements Iterable<T> {
 
 	public Enumerable<T> distinct() {
 		return Enumerable.create(new Func<Iterator<T>>() {
-			public Iterator<T> evaluate() {
+			public Iterator<T> apply() {
 				return new DistinctIterator<T>(Enumerable.this);
 			}
 		});
@@ -448,7 +448,7 @@ public class Enumerable<T> implements Iterable<T> {
 		List<TKey> ordering = new ArrayList<TKey>();
 		final Map<TKey, List<T>> map = new HashMap<TKey, List<T>>();
 		for (T value : this) {
-			TKey key = keySelector.evaluate(value);
+			TKey key = keySelector.apply(value);
 			if (!ordering.contains(key)) {
 				ordering.add(key);
 				map.put(key, new ArrayList<T>());
@@ -457,7 +457,7 @@ public class Enumerable<T> implements Iterable<T> {
 		}
 
 		return Enumerable.create(ordering).select(new Func1<TKey, Grouping<TKey, T>>() {
-			public Grouping<TKey, T> evaluate(TKey input) {
+			public Grouping<TKey, T> apply(TKey input) {
 				return new Grouping<TKey, T>(input, Enumerable.create(map.get(input)));
 			}
 		});
@@ -466,7 +466,7 @@ public class Enumerable<T> implements Iterable<T> {
 	public <TResult extends Comparable<TResult>> TResult max(Func1<T, TResult> fn) {
 		TResult rt = null;
 		for (T value : this) {
-			TResult newValue = fn.evaluate(value);
+			TResult newValue = fn.apply(value);
 			if (newValue == null) {
 				continue;
 			}
@@ -484,7 +484,7 @@ public class Enumerable<T> implements Iterable<T> {
 	public <TResult extends Comparable<TResult>> TResult min(Func1<T, TResult> fn) {
 		TResult rt = null;
 		for (T value : this) {
-			TResult newValue = fn.evaluate(value);
+			TResult newValue = fn.apply(value);
 			if (newValue == null) {
 				continue;
 			}
@@ -549,7 +549,7 @@ public class Enumerable<T> implements Iterable<T> {
 	public <K> Map<K, T> toMap(Func1<T, K> keyFn) {
 		Map<K, T> rt = new HashMap<K, T>();
 		for (T value : values) {
-			rt.put(keyFn.evaluate(value), value);
+			rt.put(keyFn.apply(value), value);
 		}
 		return rt;
 	}
@@ -560,7 +560,7 @@ public class Enumerable<T> implements Iterable<T> {
 	private static <T> Iterable<T> makeIterable(final Func<Iterator<T>> fn) {
 		return new Iterable<T>() {
 			public Iterator<T> iterator() {
-				return fn.evaluate();
+				return fn.apply();
 			}
 		};
 	}
@@ -726,7 +726,7 @@ public class Enumerable<T> implements Iterable<T> {
 						return false;
 					}
 					TSource source = sourceIterator.next();
-					resultIterator = selector.evaluate(source).iterator();
+					resultIterator = selector.apply(source).iterator();
 				}
 				if (!resultIterator.hasNext()) {
 					resultIterator = null;
@@ -749,7 +749,7 @@ public class Enumerable<T> implements Iterable<T> {
 
 		public Iterator<T> iterator() {
 			return new ConcatIterator<T>(Enumerable.create(iterables).select(new Func1<Iterable<T>, Iterator<T>>() {
-				public Iterator<T> evaluate(Iterable<T> x) {
+				public Iterator<T> apply(Iterable<T> x) {
 					return x.iterator();
 				}
 			}).toList());

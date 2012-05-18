@@ -34,7 +34,7 @@ public class FuncIterator<X, Y> implements Iterator<Y> {
 	}
 
 	public Y next() {
-		return projection.evaluate(iterator.next());
+		return projection.apply(iterator.next());
 	}
 
 	public void remove() {

@@ -15,8 +15,8 @@
  */
 package bingo.lang;
 
-public interface Func1<TInput,TResult> {
+public interface Func1<T,R> {
 
-	TResult evaluate(TInput input);
+	R apply(T input);
 	
 }

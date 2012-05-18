@@ -15,25 +15,8 @@
  */
 package bingo.lang;
 
+public interface Predicate1<T1,T2> {
 
-
-/**
- * Defines a functor interface implemented by classes that perform a predicate test on an object.
- */
-public interface Predicate1<T,O> {
-
-    /**
-     * Use the specified parameter to perform a test that returns true or false.
-     *
-     * @param object  the object to evaluate, should not be changed
-     * 
-     * @return true or false
-     * 
-     * @throws ClassCastException (runtime) if the input is the wrong class
-     * 
-     * @throws IllegalArgumentException (runtime) if the input is invalid
-     * 
-     * @throws RuntimeException (runtime) if the predicate encounters a problem
-     */
-	boolean evaluate(T object,Out<O> out);
+	boolean apply(T1 input1,T2 input2);
+	
 }

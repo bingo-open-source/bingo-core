@@ -179,7 +179,7 @@ public class ReflectClass<T> implements Named {
 	
 	public ReflectField getField(final String name){
 		return Collections.firstOrNull(fields, new Predicate<ReflectField>() {
-			public boolean evaluate(ReflectField object) {
+			public boolean apply(ReflectField object) {
 	            return object.getName().equals(name);
             }
 		});
@@ -207,7 +207,7 @@ public class ReflectClass<T> implements Named {
 	
 	public ReflectMethod getMethod(final String name,final Class<?>... argumentTypes){
 		return Collections.firstOrNull(methods, new Predicate<ReflectMethod>() {
-			public boolean evaluate(ReflectMethod object) {
+			public boolean apply(ReflectMethod object) {
 	            if(object.getName().equals(name)){
 	            	Method javaMethod = object.getJavaMethod();
 	            	
@@ -239,7 +239,7 @@ public class ReflectClass<T> implements Named {
 	
 	public ReflectMethod[] getMethods(final String name) {
 		return Collections.where(methods, new Predicate<ReflectMethod>() {
-			public boolean evaluate(ReflectMethod object) {
+			public boolean apply(ReflectMethod object) {
 	            return object.getName().equals(name);
             }
 		}).toArray(new ReflectMethod[]{});
@@ -324,7 +324,7 @@ public class ReflectClass<T> implements Named {
 	
 	private static <T extends ReflectMember,E> List<T> getDeclaredMembers(List<T> members){
 		return Collections.where(members, new Predicate<T>() {
-			public boolean evaluate(T object) {
+			public boolean apply(T object) {
 	            return object.isDeclared();
             }
 		});

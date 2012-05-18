@@ -32,7 +32,7 @@ public class CollectionsTest {
 		final List<Integer> list = Enumerable.create(1, 3, 2, 4, 100, 1, 2, 3, 5, 531).toList();
 
 		final Predicate<Integer> where = new Predicate<Integer>() {
-			public boolean evaluate(Integer object) {
+			public boolean apply(Integer object) {
 				return true;
 			}
 		};
@@ -53,7 +53,7 @@ public class CollectionsTest {
 			public void run() {
 				List<Integer> newList = new ArrayList<Integer>();
 				for (Integer i : list) {
-					if (where.evaluate(i)) {
+					if (where.apply(i)) {
 						newList.add(i);
 					}
 				}

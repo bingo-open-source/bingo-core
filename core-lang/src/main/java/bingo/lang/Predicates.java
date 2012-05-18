@@ -19,7 +19,7 @@ public final class Predicates {
 
 	public static <T extends Named> Predicate<T> nameEquals(Class<T> elementType, final String name){
 		return new Predicate<T>() {
-			public boolean evaluate(T object) {
+			public boolean apply(T object) {
 				return object.getName().equals(name);
 			}
 		};
@@ -27,7 +27,7 @@ public final class Predicates {
 	
 	public static <T extends Named> Predicate<T> nameEqualsIgnoreCase(Class<T> elementType, final String name){
 		return new Predicate<T>() {
-			public boolean evaluate(T object) {
+			public boolean apply(T object) {
 				return object.getName().equalsIgnoreCase(name);
 			}
 		};

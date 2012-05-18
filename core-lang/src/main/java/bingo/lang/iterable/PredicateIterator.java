@@ -38,7 +38,7 @@ public class PredicateIterator<T> extends ImmutableIteratorBase<T> {
 		if (useEx) {
 			try {
 				T rt = iterator.next();
-				while (!predicate.evaluate(rt)) {
+				while (!predicate.apply(rt)) {
 					rt = iterator.next();
 				}
 
@@ -51,7 +51,7 @@ public class PredicateIterator<T> extends ImmutableIteratorBase<T> {
 			// non-exception-backed method
 			if (iterator.hasNext()) {
 				T rt = iterator.next();
-				while (!predicate.evaluate(rt)) {
+				while (!predicate.apply(rt)) {
 					if (iterator.hasNext()) {
 						rt = iterator.next();
 					} else {
