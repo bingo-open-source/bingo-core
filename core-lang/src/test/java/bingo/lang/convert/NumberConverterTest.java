@@ -209,6 +209,7 @@ public class NumberConverterTest {
             "from Byte",
             "from Short",
             "from Integer",
+            "from Integer Zero",
             "from Long",
             "from Float",
             "from Double"
@@ -225,6 +226,7 @@ public class NumberConverterTest {
             new Byte((byte)7),
             new Short((short)8),
             new Integer(9),
+            new Integer(0),
             new Long(10),
             new Float(11.1),
             new Double(12.2),
@@ -241,6 +243,7 @@ public class NumberConverterTest {
             new Float(7),
             new Float(8),
             new Float(9),
+            new Float(0.0),
             new Float(10),
             new Float(11.1),
             new Float(12.2)
