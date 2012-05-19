@@ -16,6 +16,7 @@
 package bingo.lang;
 
 import bingo.lang.exceptions.InvalidValueException;
+import bingo.lang.reflect.ReflectEnum;
 
 
 /**
@@ -27,31 +28,33 @@ public class Enums {
 		
 	}
 	
-	@SuppressWarnings("unchecked")
 	public static Object getValue(Enum<?> enumObject) {
+		ReflectEnum reflectEnum = ReflectEnum.get(enumObject.getClass());
 		
-		if(enumObject instanceof Valued){
-			return ((Valued)enumObject).getValue();
+		if(reflectEnum.isValued()){
+			return reflectEnum.getValue(enumObject);
+		}else{
+			return enumObject.toString();
 		}
-		
-		return enumObject.name();
 	}
 	
-	@SuppressWarnings("unchecked")
 	public static <E extends Enum<?>> E valueOf(Class<E> enumType,Object value) throws InvalidValueException{
         if(null == value){
             return null;
         }
         
-        if(Valued.class.isAssignableFrom(enumType)){
+    	String stringValue = value.toString();
+        
+        ReflectEnum reflectEnum = ReflectEnum.get(enumType);
+        
+        if(reflectEnum.isValued()){
+        	
             for(E e : enumType.getEnumConstants()){
-            	if(((Valued)e).getValue().equals(value)){
-            		return e;
-            	}
+                if(reflectEnum.getValue(e).toString().equals(stringValue)){
+                    return e;
+                }
             }
         }else{
-            String stringValue = value.toString();
-            
             if(stringValue.equals("")){
                 return null;
             }

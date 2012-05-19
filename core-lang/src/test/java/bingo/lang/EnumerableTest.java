@@ -21,8 +21,8 @@ public class EnumerableTest extends TestCase {
 		Assert.assertEquals((Integer) 1, Enumerable.range(1, 5).first());
 		Assert.assertEquals((Integer) 5, Enumerable.range(1, 5).last());
 		Assert.assertEquals((Integer) 3, Enumerable.range(1, 5).elementAt(2));
-		Assert.assertEquals(null, Enumerable.empty(Integer.class).firstOrNull());
-		Assert.assertEquals("1", Enumerable.create(1).join(","));
+		Assert.assertEquals(null, Enumerable.emptyOf(Integer.class).firstOrNull());
+		Assert.assertEquals("1", Enumerable.of(1).join(","));
 
 		Assert.assertEquals("1,2,3,4,5", Enumerable.range(1, 5).join(","));
 		Assert.assertEquals("5,4,3,2,1", Enumerable.range(1, 5).reverse().join(","));
@@ -32,8 +32,8 @@ public class EnumerableTest extends TestCase {
 		Assert.assertEquals("2,3,4,5", Enumerable.range(1, 5).skipWhile(IS_ODD).join(","));
 		Assert.assertEquals((Integer) 10, Enumerable.range(1, 4).sum(Integer.class));
 
-		Enumerable<Integer> one = Enumerable.create(5, 3, 9, 7, 5, 9, 3, 7);
-		Enumerable<Integer> two = Enumerable.create(8, 3, 6, 4, 4, 9, 1, 0);
+		Enumerable<Integer> one = Enumerable.of(5, 3, 9, 7, 5, 9, 3, 7);
+		Enumerable<Integer> two = Enumerable.of(8, 3, 6, 4, 4, 9, 1, 0);
 
 		Assert.assertEquals((Integer) 0, two.min(IDENTITY));
 		Assert.assertEquals((Integer) 9, two.max(IDENTITY));
@@ -46,7 +46,7 @@ public class EnumerableTest extends TestCase {
 		Assert.assertEquals("8,6,4,4,0", two.where(not(IS_ODD)).join(","));
 		Assert.assertEquals("2,4,6,8,10", Enumerable.range(1, 5).select(TIMES_TWO).join(","));
 
-		Assert.assertEquals("onetwothree", Enumerable.create("one", "two", "three").selectMany(CHARS).join(""));
+		Assert.assertEquals("onetwothree", Enumerable.of("one", "two", "three").selectMany(CHARS).join(""));
 
 		// test using an infinite iterator - none of these methods should materialize the enumerable
 		Assert.assertEquals("1,1", infinite(1).skip(100).take(2).join(","));
@@ -62,7 +62,7 @@ public class EnumerableTest extends TestCase {
 	}
 
 	private static <T> Enumerable<T> infinite(final T value) {
-		return Enumerable.create(new Func<Iterator<T>>() {
+		return Enumerable.of(new Func<Iterator<T>>() {
 			public Iterator<T> apply() {
 				return new InfiniteIterator<T>(value);
 			}
@@ -113,7 +113,7 @@ public class EnumerableTest extends TestCase {
 		for (int i = 0; i < chars.length; i++) {
 			rt[i] = chars[i];
 		}
-		return Enumerable.create(rt);
+		return Enumerable.of(rt);
 	}
 
 	private static <T> Predicate<T> not(final Predicate<T> predicate) {
