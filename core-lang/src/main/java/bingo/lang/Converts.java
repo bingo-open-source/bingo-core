@@ -94,6 +94,13 @@ public class Converts {
 		converters.put(clazz,converter);
 	}
 	
+	/**
+	 * 将传入的value对象转换为指定的targetType类型并返回。
+	 * @param value 传入的欲进行转换的对象。
+	 * @param targetType 转换的目标类型。
+	 * @return 由value对象转换过来的targetType类型的对象。
+	 * @throws ConvertUnsupportedException 当传入的value对象不支持转换为指定的targetType类型时，抛出此异常。
+	 */
 	public static <T> T convert(Object value,Class<T> targetType) throws ConvertUnsupportedException {
 		return convert(value,targetType,null);
 	}
