@@ -32,7 +32,7 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import bingo.lang.exceptions.EmptyElementException;
+import bingo.lang.exceptions.EmptyDataException;
 import bingo.lang.iterable.ArrayIterable;
 import bingo.lang.iterable.FuncIterable;
 import bingo.lang.iterable.PredicateIterable;
@@ -101,7 +101,7 @@ public class Enumerable<T> implements Iterable<T> {
 		for (T value : values) {
 			return value;
 		}
-		throw new EmptyElementException("No elements");
+		throw new EmptyDataException("No elements");
 	}
 
 	public T first(Predicate<T> predicate) {
@@ -110,7 +110,7 @@ public class Enumerable<T> implements Iterable<T> {
 				return value;
 			}
 		}
-		throw new EmptyElementException("No elements match the predicate");
+		throw new EmptyDataException("No elements match the predicate");
 	}
 
 	public T firstOrNull() {
@@ -137,7 +137,7 @@ public class Enumerable<T> implements Iterable<T> {
 			rt = value;
 		}
 		if (empty) {
-			throw new EmptyElementException("No elements");
+			throw new EmptyDataException("No elements");
 		}
 		return rt;
 	}
@@ -222,7 +222,7 @@ public class Enumerable<T> implements Iterable<T> {
 				return value;
 			}
 		}
-		throw new EmptyElementException("No element at index " + index);
+		throw new EmptyDataException("No element at index " + index);
 	}
 
 	public T elementAtOrNull(int index) {

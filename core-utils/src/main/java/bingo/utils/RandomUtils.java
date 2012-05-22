@@ -13,13 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.utils.jdbc;
+package bingo.utils;
 
-import java.sql.Connection;
-import java.sql.SQLException;
+import bingo.lang.Randoms;
 
-public interface JdbcCallbackWithResult<T> {
+public final class RandomUtils extends Randoms {
 
-    T executeWithResult(Connection connection) throws SQLException;
-    
 }

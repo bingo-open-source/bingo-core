@@ -15,7 +15,7 @@
  */
 package bingo.lang.exceptions;
 
-public class ConvertException extends RuntimeExceptionEx {
+public class ConvertException extends ExRuntimeException {
 
 	private static final long serialVersionUID = -4672348555971040044L;
 

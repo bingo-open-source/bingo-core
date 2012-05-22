@@ -13,33 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.lang.exceptions;
+package bingo.utils;
 
-public class ReflectException extends ExRuntimeException {
+import bingo.lang.Objects;
 
-	private static final long	serialVersionUID	= -2185260498980158237L;
+public final class ObjectUtils extends Objects {
 
-	public ReflectException() {
-		
-	}
-
-	public ReflectException(String message) {
-		super(message);
-	}
-
-	public ReflectException(String message, Throwable cause) {
-		super(message, cause);
-	}
-
-	public ReflectException(String message, Object... args) {
-		super(message, args);
-	}
-
-	public ReflectException(Throwable cause) {
-		super(cause);
-	}
-
-	public ReflectException(Throwable cause, String message, Object... args) {
-		super(cause, message, args);
-	}
 }

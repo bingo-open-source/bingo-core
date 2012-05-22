@@ -15,7 +15,7 @@
  */
 package bingo.lang.exceptions;
 
-public class NotFoundException extends RuntimeExceptionEx {
+public class NotFoundException extends ExRuntimeException {
 
     private static final long serialVersionUID = -3863052698325938663L;
 

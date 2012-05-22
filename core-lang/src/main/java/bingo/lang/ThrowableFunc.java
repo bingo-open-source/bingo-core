@@ -13,33 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.lang.exceptions;
+package bingo.lang;
 
-public class ParseException extends ExRuntimeException {
+public interface ThrowableFunc<R> {
 
-	private static final long serialVersionUID = -8343914705663146151L;
-
-	public ParseException() {
-		
-	}
-
-	public ParseException(String message) {
-		super(message);
-	}
-
-	public ParseException(String message, Throwable cause) {
-		super(message, cause);
-	}
-
-	public ParseException(String message, Object... args) {
-		super(message, args);
-	}
-
-	public ParseException(Throwable cause) {
-		super(cause);
-	}
-
-	public ParseException(Throwable cause, String message, Object... args) {
-		super(cause, message, args);
-	}
+	R apply() throws Throwable;
+	
 }

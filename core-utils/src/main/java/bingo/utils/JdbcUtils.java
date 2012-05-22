@@ -13,24 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.lang.exceptions;
+package bingo.utils;
 
-import java.io.IOException;
+import bingo.lang.jdbc.Jdbc;
 
-public class IOExceptionEx extends IOException {
+public final class JdbcUtils extends Jdbc {
 
-	private static final long serialVersionUID = 3997494082839660257L;
-
-	public IOExceptionEx() {
-	    super();
-    }
-
-	public IOExceptionEx(String s) {
-	    super(s);
-    }
 	
-	public IOExceptionEx(String s,Throwable cause) {
-	    super(s);
-	    initCause(cause);
-    }
 }

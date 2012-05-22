@@ -15,31 +15,22 @@
  */
 package bingo.lang.exceptions;
 
-public class ReflectException extends ExRuntimeException {
+import java.sql.SQLException;
 
-	private static final long	serialVersionUID	= -2185260498980158237L;
+public class NestedSQLException extends SQLException {
 
-	public ReflectException() {
-		
+	private static final long serialVersionUID = 3205901113291522541L;
+
+	protected NestedSQLException() {
+		super();
 	}
 
-	public ReflectException(String message) {
+	public NestedSQLException(String message) {
 		super(message);
 	}
 
-	public ReflectException(String message, Throwable cause) {
-		super(message, cause);
-	}
-
-	public ReflectException(String message, Object... args) {
-		super(message, args);
-	}
-
-	public ReflectException(Throwable cause) {
-		super(cause);
-	}
-
-	public ReflectException(Throwable cause, String message, Object... args) {
-		super(cause, message, args);
+	public NestedSQLException(String message,Throwable cause) {
+		super(message);
+		initCause(cause);
 	}
 }

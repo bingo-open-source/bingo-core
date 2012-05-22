@@ -29,31 +29,31 @@ import bingo.lang.Strings;
  * throw new RuntimeExceptionEx(cause,"the argument '{0}' could not be empty","name");
  * </pre>
  */
-public class RuntimeExceptionEx extends RuntimeException {
+public class ExRuntimeException extends RuntimeException {
 
     private static final long serialVersionUID = -288751546316286455L;
     
-	public RuntimeExceptionEx() {
+	public ExRuntimeException() {
 		super();
 	}
 
-	public RuntimeExceptionEx(String message) {
+	public ExRuntimeException(String message) {
 		super(message);
 	}
 	
-	public RuntimeExceptionEx(String message, Throwable cause) {
+	public ExRuntimeException(String message, Throwable cause) {
 		super(message, cause);
 	}
 	
-	public RuntimeExceptionEx(Throwable cause) {
+	public ExRuntimeException(Throwable cause) {
 		super(cause);
 	}
 	
-	public RuntimeExceptionEx(String message,Object... args) {
+	public ExRuntimeException(String message,Object... args) {
 		super(Strings.format(message, args));
 	}
 	
-	public RuntimeExceptionEx(Throwable cause,String message,Object... args) {
+	public ExRuntimeException(Throwable cause,String message,Object... args) {
 		super(Strings.format(message, args),cause);
 	}
 }

@@ -24,7 +24,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-import bingo.lang.exceptions.IOExceptionEx;
+import bingo.lang.exceptions.NestedIOException;
 
 /**
  * Convenience base class for {@link Resource} implementations,
@@ -93,7 +93,7 @@ abstract class AbstractResource implements Resource {
 			return Resources.toURI(url);
 		}
 		catch (URISyntaxException ex) {
-			throw new IOExceptionEx("Invalid URI [" + url + "]", ex);
+			throw new NestedIOException("Invalid URI [" + url + "]", ex);
 		}
 	}
 

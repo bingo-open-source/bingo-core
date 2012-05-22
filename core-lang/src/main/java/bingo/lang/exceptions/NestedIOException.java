@@ -15,31 +15,22 @@
  */
 package bingo.lang.exceptions;
 
-public class EmptyElementException extends RuntimeExceptionEx {
+import java.io.IOException;
 
-	private static final long serialVersionUID = -1858390357310304667L;
+public class NestedIOException extends IOException {
 
-	public EmptyElementException() {
-		
-	}
+	private static final long serialVersionUID = 3997494082839660257L;
 
-	public EmptyElementException(String message) {
-		super(message);
-	}
+	protected NestedIOException() {
+	    super();
+    }
 
-	public EmptyElementException(String message, Throwable cause) {
-		super(message, cause);
-	}
-
-	public EmptyElementException(String message, Object... args) {
-		super(message, args);
-	}
-
-	public EmptyElementException(Throwable cause) {
-		super(cause);
-	}
-
-	public EmptyElementException(Throwable cause, String message, Object... args) {
-		super(cause, message, args);
-	}
+	public NestedIOException(String s) {
+	    super(s);
+    }
+	
+	public NestedIOException(String s,Throwable cause) {
+	    super(s);
+	    initCause(cause);
+    }
 }

@@ -15,35 +15,31 @@
  */
 package bingo.lang.exceptions;
 
-/**
- * Exception thrown when a clone cannot be created. In contrast to {@link CloneNotSupportedException} this is a
- * {@link RuntimeException}.
- */
-public class CloneException extends ExRuntimeException {
+public class UncheckedSQLException extends ExRuntimeException {
 
-	private static final long	serialVersionUID	= 102030044497665595L;
+	private static final long serialVersionUID = -6880256117616434335L;
 
-	public CloneException() {
-
+	public UncheckedSQLException() {
+		
 	}
 
-	public CloneException(String message) {
+	public UncheckedSQLException(String message) {
 		super(message);
 	}
 
-	public CloneException(Throwable cause) {
-		super(cause);
-	}
-
-	public CloneException(String message, Throwable cause) {
+	public UncheckedSQLException(String message, Throwable cause) {
 		super(message, cause);
 	}
 
-	public CloneException(String message, Object... args) {
-	    super(message, args);
-    }
+	public UncheckedSQLException(Throwable cause) {
+		super(cause);
+	}
 
-	public CloneException(Throwable cause, String message, Object... args) {
-	    super(cause, message, args);
-    }
+	public UncheckedSQLException(String message, Object... args) {
+		super(message, args);
+	}
+
+	public UncheckedSQLException(Throwable cause, String message, Object... args) {
+		super(cause, message, args);
+	}
 }

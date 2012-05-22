@@ -15,7 +15,7 @@
  */
 package bingo.lang.exceptions;
 
-public class InvalidValueException extends RuntimeExceptionEx {
+public class InvalidValueException extends ExRuntimeException {
 
 	private static final long serialVersionUID = -5095348732682041107L;
 

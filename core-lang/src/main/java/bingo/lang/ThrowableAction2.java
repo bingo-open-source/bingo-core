@@ -13,33 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.lang.exceptions;
+package bingo.lang;
 
-public class ReflectException extends ExRuntimeException {
+public interface ThrowableAction2<T1,T2> {
 
-	private static final long	serialVersionUID	= -2185260498980158237L;
-
-	public ReflectException() {
-		
-	}
-
-	public ReflectException(String message) {
-		super(message);
-	}
-
-	public ReflectException(String message, Throwable cause) {
-		super(message, cause);
-	}
-
-	public ReflectException(String message, Object... args) {
-		super(message, args);
-	}
-
-	public ReflectException(Throwable cause) {
-		super(cause);
-	}
-
-	public ReflectException(Throwable cause, String message, Object... args) {
-		super(cause, message, args);
-	}
+	void execute(T1 input1,T2 input2);
+	
 }

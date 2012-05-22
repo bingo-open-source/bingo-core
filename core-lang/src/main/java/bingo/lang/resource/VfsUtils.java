@@ -28,7 +28,7 @@ import java.net.URI;
 import java.net.URL;
 
 import bingo.lang.Reflects;
-import bingo.lang.exceptions.IOExceptionEx;
+import bingo.lang.exceptions.NestedIOException;
 import bingo.lang.exceptions.ReflectException;
 import bingo.lang.logging.Log;
 import bingo.lang.logging.LogFactory;
@@ -233,7 +233,7 @@ abstract class VfsUtils extends Reflects {
 				return new File((URI) invokeVfsMethod(VFS_UTILS_METHOD_GET_COMPATIBLE_URI, null, vfsResource));
 			}
 			catch (Exception ex) {
-				throw new IOExceptionEx("Failed to obtain File reference for " + vfsResource, ex);
+				throw new NestedIOException("Failed to obtain File reference for " + vfsResource, ex);
 			}
 		}
 		else {

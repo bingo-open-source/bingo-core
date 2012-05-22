@@ -15,9 +15,9 @@
  */
 package bingo.utils.json;
 
-import bingo.lang.exceptions.RuntimeExceptionEx;
+import bingo.lang.exceptions.ExRuntimeException;
 
-public class JSONException extends RuntimeExceptionEx {
+public class JSONException extends ExRuntimeException {
 
     private static final long serialVersionUID = 6604866089585580442L;
 

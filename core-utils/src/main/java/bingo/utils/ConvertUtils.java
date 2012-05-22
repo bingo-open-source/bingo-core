@@ -13,17 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.utils.jdbc;
+package bingo.utils;
 
-import java.sql.Connection;
-import java.sql.SQLException;
+import bingo.lang.Converts;
 
-public abstract class JdbcCallback implements JdbcCallbackWithResult<Object> {
+public final class ConvertUtils extends Converts {
 
-    public final Object executeWithResult(Connection connection) throws SQLException {
-        execute(connection);
-        return null;
-    }
-
-    protected abstract void execute(Connection connection) throws SQLException;
 }
