@@ -33,26 +33,62 @@ public class RuntimeExceptionEx extends RuntimeException {
 
     private static final long serialVersionUID = -288751546316286455L;
     
+    /**
+     * 默认构造方法，与原生 {@link RuntimeException}的构造方法效果一致。
+     */
 	public RuntimeExceptionEx() {
 		super();
 	}
 
+	/**
+	 * 指定消息message的构造方法，与原生的 {@link RuntimeException#RuntimeException(String)}构造方法一致。
+	 * @param message 指定消息
+	 */
 	public RuntimeExceptionEx(String message) {
 		super(message);
 	}
 	
+	/**
+	 * 指定消息message和原因cause的构造方法，
+	 * 与原生的 {@link RuntimeException#RuntimeException(String, Throwable)}构造方法一致。
+	 * @param message 指定消息。
+	 * @param cause 指定原因。
+	 */
 	public RuntimeExceptionEx(String message, Throwable cause) {
 		super(message, cause);
 	}
 	
+	/**
+	 * 指定原因cause的构造方法，与原生的 {@link RuntimeException#RuntimeException(Throwable)}构造方法一致。
+	 * @param cause 指定原因。
+	 */
 	public RuntimeExceptionEx(Throwable cause) {
 		super(cause);
 	}
 	
+	/**
+	 * 指定可格式化参数的消息的构造方法。
+	 * <pre>
+	 * 示例：
+	 * RuntimeException("message is {0}", "hello") = RuntimeException("message is hello.")
+	 * </pre>
+	 * @param message 可格式化参数的消息。
+	 * @param args 用于格式化的参数。
+	 */
 	public RuntimeExceptionEx(String message,Object... args) {
 		super(Strings.format(message, args));
 	}
 	
+	/**
+	 * 指定原因cause和可格式化参数的消息message以及参数args的构造方法。
+	 * <pre>
+	 * 示例：
+	 * RuntimeException(cause, "message is {0}", "hello") = RuntimeException("message is hello.", cause)
+	 * </pre>
+	 * @param cause 指定的原因。
+	 * @param message 可格式化参数的消息。
+	 * @param args 用于格式化的参数。
+	 */
 	public RuntimeExceptionEx(Throwable cause,String message,Object... args) {
 		super(Strings.format(message, args),cause);
 	}
