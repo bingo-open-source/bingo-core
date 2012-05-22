@@ -19,10 +19,22 @@ import java.lang.reflect.Constructor;
 
 import bingo.lang.exceptions.ReflectException;
 
+/**
+ * 反射类的构造器。
+ * @param <T> 
+ */
 public class ReflectConstructor<T> extends ReflectMember {
 
+	/**
+	 * JDK中的 {@link Constructor}。
+	 */
 	private final Constructor<T> javaConstructor;
 	
+	/**
+	 * 通过对应的反射类和JDK中的 {@link Constructor}实例初始化。
+	 * @param reflectClass 所对应的反射类。
+	 * @param javaConstructor JDK中的 {@link Constructor}实例。
+	 */
 	protected ReflectConstructor(ReflectClass<T> reflectClass, Constructor<T> javaConstructor){
 		super(reflectClass,javaConstructor);
 
@@ -31,14 +43,27 @@ public class ReflectConstructor<T> extends ReflectMember {
 		this.initialize();
 	}
 	
+	/**
+	 * 获得此反射类的构造器的名称。
+	 */
 	public String getName() {
 	    return javaConstructor.getName();
     }
 	
+	/**
+	 * 获取此 {@link ReflectConstructor}所包裹的Java原生的 {@link Constructor}。
+	 * @return 此 {@link ReflectConstructor}所包裹的Java原生的 {@link Constructor}。
+	 */
 	public Constructor<T> getJavaConstructor(){
 		return this.javaConstructor;
 	}
 	
+	/**
+	 * 根据传入参数实例化 {@link ReflectConstructor}，
+	 * 实际上调用了所包裹的原生的 {@link Constructor}的newInstance(Object...)方法。
+	 * @param args 传入的用于实例化的参数。
+	 * @return 实例化后的对象。
+	 */
 	public T newInstance(Object... args){
 		try {
 	        return javaConstructor.newInstance(args);
@@ -47,10 +72,16 @@ public class ReflectConstructor<T> extends ReflectMember {
         }
 	}
 	
+	/**
+	 * 反射类的构造器的初始化模块。
+	 */
 	private void initialize(){
 		this.setAccessiable();
 	}
 	
+	/**
+	 * 将构造器的可访问性设置为true。
+	 */
 	private void setAccessiable(){
 		try {
 	        this.javaConstructor.setAccessible(true);
@@ -59,6 +90,9 @@ public class ReflectConstructor<T> extends ReflectMember {
         }
 	}
 	
+	/**
+	 * 重写。将返回所包裹的 {@link Constructor}的toString()的内容。
+	 */
 	@Override
     public String toString() {
 		return javaConstructor.toString();

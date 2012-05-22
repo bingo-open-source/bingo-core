@@ -20,8 +20,15 @@ import java.lang.reflect.Constructor;
 import bingo.lang.Classes;
 import bingo.lang.exceptions.ReflectException;
 
+/**
+ * 反射类的实例化抽象类。
+ * @param <T>
+ */
 abstract class ReflectInstantiator<T> {
 	
+	/**
+	 * 是否找到sun.reflect.ReflectionFactory这个类。
+	 */
 	private static boolean foundSunReflectionFactory;
 	
 	static {
@@ -31,7 +38,12 @@ abstract class ReflectInstantiator<T> {
         	foundSunReflectionFactory = false;
         }
 	}
-
+	
+	/**
+	 * 
+	 * @param type
+	 * @return
+	 */
 	static <T> ReflectInstantiator<T> forType(Class<T> type) {
 		return foundSunReflectionFactory ? new SunReflectionFactoryInstantiator<T>(type) : null;
 	}
@@ -43,6 +55,10 @@ abstract class ReflectInstantiator<T> {
 
 		private final Constructor mungedConstructor;
 
+		/**
+		 * 根据传入的type类型实例化 {@link SunReflectionFactoryInstantiator}。
+		 * @param type 传入的type类型。
+		 */
 		SunReflectionFactoryInstantiator(Class<T> type) {
 			sun.reflect.ReflectionFactory reflectionFactory = sun.reflect.ReflectionFactory.getReflectionFactory();
 			Constructor javaLangObjectConstructor;
