@@ -6,9 +6,10 @@ import bingo.lang.Enumerable;
 import bingo.lang.Func1;
 import bingo.lang.Out;
 import bingo.lang.Predicate;
+import bingo.lang.Strings;
 import bingo.lang.iterable.ImmutableIteratorBase;
 
-final class XUtils {
+final class XmlUtils {
 
 	public static String escapeAttributeValue(String unescaped) {
 		return escapeElementValue(unescaped); // TODO for now
@@ -78,19 +79,18 @@ final class XUtils {
 			};
 		}
 
-		public static <T extends XNameable> Predicate<T> xnameEquals(final XName xname) {
+		public static <T extends XNameable> Predicate<T> xnameEquals(final XNameable xname) {
 			return new Predicate<T>() {
 				public boolean apply(T input) {
-					return input.getName().equals(xname);
+					return Strings.equals(xname.prefix(), xname.prefix()) && Strings.equals(xname.name(), xname.name());
 				}
 			};
 		}
 
 		public static <T extends XNameable> Predicate<T> xnameEquals(final String name) {
-			final XName xname = new XName(null, name);
 			return new Predicate<T>() {
 				public boolean apply(T input) {
-					return input.getName().equals(xname);
+					return Strings.isEmpty(input.prefix()) && Strings.equals(input.name(), name);
 				}
 			};
 		}

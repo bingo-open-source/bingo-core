@@ -1,20 +1,20 @@
 package bingo.lang.xml;
 
-public class XComment extends XNode {
+public class XmlComment extends XmlNode {
 
 	private String value;
 
-	public XComment(String value) {
+	public XmlComment(String value) {
 		this.value = value;
 	}
 
-	public String getValue() {
+	public String value() {
 		return value;
 	}
 
 	@Override
-	public XNodeType nodeType() {
-		return XNodeType.COMMENT;
+	public XmlNodeType nodeType() {
+		return XmlNodeType.COMMENT;
 	}
 
 	@Override
@@ -23,7 +23,7 @@ public class XComment extends XNode {
 	}
 
 	@Override
-	public String toString(XFormat format) {
+	public String toXml(XmlFormat format) {
 		String indent = getIndent(format);
 		return indent + "<!--" + value + "-->";
 	}

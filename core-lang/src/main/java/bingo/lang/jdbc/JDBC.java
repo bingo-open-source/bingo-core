@@ -28,11 +28,11 @@ import bingo.lang.exceptions.UncheckedSQLException;
 import bingo.lang.logging.Log;
 import bingo.lang.logging.LogFactory;
 
-public class Jdbc {
+public class JDBC {
     
-    private static final Log log = LogFactory.get(Jdbc.class);
+    private static final Log log = LogFactory.get(JDBC.class);
     
-    protected Jdbc(){
+    protected JDBC(){
     	
     }
     

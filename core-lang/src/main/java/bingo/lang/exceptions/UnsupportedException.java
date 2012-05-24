@@ -15,7 +15,7 @@
  */
 package bingo.lang.exceptions;
 
-public class UnsupportedException extends ExRuntimeException {
+public class UnsupportedException extends NestedRuntimeException {
 
     private static final long serialVersionUID = 6195386828802883127L;
 
@@ -37,9 +37,5 @@ public class UnsupportedException extends ExRuntimeException {
 
 	public UnsupportedException(Throwable cause) {
 		super(cause);
-	}
-
-	public UnsupportedException(Throwable cause, String message, Object... args) {
-		super(cause, message, args);
 	}
 }

@@ -1,6 +1,6 @@
 package bingo.lang.xml;
 
-public class XName {
+class XName {
 
 	private final XNamespace namespace;
 	private final String localName;

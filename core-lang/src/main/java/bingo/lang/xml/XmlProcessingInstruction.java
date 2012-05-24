@@ -1,11 +1,11 @@
 package bingo.lang.xml;
 
-public class XProcessingInstruction extends XNode {
+public class XmlProcessingInstruction extends XmlNode {
 
 	private final String target;
 	private final String data;
 
-	public XProcessingInstruction(String target, String data) {
+	public XmlProcessingInstruction(String target, String data) {
 		this.target = target;
 		this.data = data;
 	}
@@ -19,12 +19,12 @@ public class XProcessingInstruction extends XNode {
 	}
 
 	@Override
-	public XNodeType nodeType() {
-		return XNodeType.PROCESSING_INSTRUCTION;
+	public XmlNodeType nodeType() {
+		return XmlNodeType.PROCESSING_INSTRUCTION;
 	}
 
 	@Override
-	public String toString(XFormat format) {
+	public String toXml(XmlFormat format) {
 		String indent = getIndent(format);
 		return indent + "<?" + target + " " + data + ">";
 	}

@@ -15,7 +15,7 @@
  */
 package bingo.lang.exceptions;
 
-public class UncheckedIOException extends ExRuntimeException {
+public class UncheckedIOException extends NestedRuntimeException {
 
 	private static final long serialVersionUID = 8828062067628915762L;
 
@@ -37,9 +37,5 @@ public class UncheckedIOException extends ExRuntimeException {
 
 	public UncheckedIOException(String message, Object... args) {
 		super(message, args);
-	}
-
-	public UncheckedIOException(Throwable cause, String message, Object... args) {
-		super(cause, message, args);
 	}
 }

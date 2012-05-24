@@ -15,7 +15,7 @@
  */
 package bingo.lang.exceptions;
 
-public class NotImplementedException extends ExRuntimeException {
+public class NotImplementedException extends NestedRuntimeException {
 
     private static final long serialVersionUID = -8372122034377909033L;
 
@@ -37,9 +37,5 @@ public class NotImplementedException extends ExRuntimeException {
 
 	public NotImplementedException(Throwable cause) {
 		super(cause);
-	}
-
-	public NotImplementedException(Throwable cause, String message, Object... args) {
-		super(cause, message, args);
 	}
 }

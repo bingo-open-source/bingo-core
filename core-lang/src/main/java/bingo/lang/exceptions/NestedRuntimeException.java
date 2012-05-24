@@ -25,35 +25,35 @@ import bingo.lang.Strings;
  * <pre>
  * Examples:
  * 
- * throw new RuntimeExceptionEx("the argument '{0}' could not be empty","name");
- * throw new RuntimeExceptionEx(cause,"the argument '{0}' could not be empty","name");
+ * throw new NestedRuntimeException("the argument '{0}' could not be empty","name");
+ * throw new NestedRuntimeException(cause,"the argument '{0}' could not be empty","name");
  * </pre>
  */
-public class ExRuntimeException extends RuntimeException {
+public abstract class NestedRuntimeException extends RuntimeException {
 
     private static final long serialVersionUID = -288751546316286455L;
     
-	public ExRuntimeException() {
+	public NestedRuntimeException() {
 		super();
 	}
 
-	public ExRuntimeException(String message) {
+	public NestedRuntimeException(String message) {
 		super(message);
 	}
 	
-	public ExRuntimeException(String message, Throwable cause) {
+	public NestedRuntimeException(String message, Throwable cause) {
 		super(message, cause);
 	}
 	
-	public ExRuntimeException(Throwable cause) {
+	public NestedRuntimeException(Throwable cause) {
 		super(cause);
 	}
 	
-	public ExRuntimeException(String message,Object... args) {
+	public NestedRuntimeException(String message,Object... args) {
 		super(Strings.format(message, args));
-	}
-	
-	public ExRuntimeException(Throwable cause,String message,Object... args) {
-		super(Strings.format(message, args),cause);
+		
+		if(null != args && args.length > 0 && args[args.length -1] instanceof Throwable){
+			initCause((Throwable)args[args.length -1]);
+		}
 	}
 }

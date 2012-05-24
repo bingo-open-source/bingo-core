@@ -1,8 +1,9 @@
 package bingo.lang.xml;
 
-public interface XNameable {
+interface XNameable {
 
-	XName getName();
+	String name();
 	
-	String getLocalName();
+	String prefix();
+
 }

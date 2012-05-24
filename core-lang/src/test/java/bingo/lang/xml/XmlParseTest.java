@@ -9,26 +9,26 @@ import bingo.lang.resource.Resources;
 
 import static org.junit.Assert.*;
 
-public class XDocumentParseTest {
+public class XmlParseTest {
 
 	@Test
 	public void testSimpleParseFromString() {
-		XDocument doc = XDocument.parse("<a foo='bar' foo2='bax'><b><c/></b><d><b>boom</b></d></a>");
+		XmlDocument doc = XmlDocument.parse("<a foo='bar' foo2='bax'><b><c/></b><d><b>boom</b></d></a>");
 
 		System.out.println(doc);
 
 		System.out.println("\ndescendants()");
-		for (XElement e : doc.descendants()) {
+		for (XmlElement e : doc.descendantElements()) {
 			System.out.println(e);
 		}
 
 		System.out.println("\ndescendants(b)");
-		for (XElement e : doc.descendants("b")) {
+		for (XmlElement e : doc.descendantElements("b")) {
 			System.out.println(e);
 		}
 
 		System.out.println("\ndoc.element(a)");
-		System.out.println(doc.element("a"));
+		System.out.println(doc.childElement("a"));
 	}
 
 	@Test
@@ -41,9 +41,11 @@ public class XDocumentParseTest {
 			try {
 				System.out.println("#load xml : " + resource.getURL().toString());
 
-				XDocument doc = XDocument.loadUtf8(resource.getInputStream());
+				XmlDocument doc = XmlDocument.load(resource);
 				
 				assertNotNull(doc);
+				
+				System.out.println(doc.toXml());
 				
 			} catch (IOException e) {
 				e.printStackTrace();

@@ -38,8 +38,4 @@ public class ConvertUnsupportedException extends ConvertException {
 	public ConvertUnsupportedException(Throwable cause) {
 		super(cause);
 	}
-
-	public ConvertUnsupportedException(Throwable cause, String message, Object... args) {
-		super(cause, message, args);
-	}
 }

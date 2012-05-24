@@ -15,7 +15,7 @@
  */
 package bingo.lang.exceptions;
 
-public class UncheckedSQLException extends ExRuntimeException {
+public class UncheckedSQLException extends NestedRuntimeException {
 
 	private static final long serialVersionUID = -6880256117616434335L;
 
@@ -37,9 +37,5 @@ public class UncheckedSQLException extends ExRuntimeException {
 
 	public UncheckedSQLException(String message, Object... args) {
 		super(message, args);
-	}
-
-	public UncheckedSQLException(Throwable cause, String message, Object... args) {
-		super(cause, message, args);
 	}
 }

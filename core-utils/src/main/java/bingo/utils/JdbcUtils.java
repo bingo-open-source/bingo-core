@@ -15,9 +15,9 @@
  */
 package bingo.utils;
 
-import bingo.lang.jdbc.Jdbc;
+import bingo.lang.jdbc.JDBC;
 
-public final class JdbcUtils extends Jdbc {
+public final class JdbcUtils extends JDBC {
 
 	
 }

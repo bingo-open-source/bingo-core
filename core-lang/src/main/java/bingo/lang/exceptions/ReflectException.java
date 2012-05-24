@@ -15,7 +15,7 @@
  */
 package bingo.lang.exceptions;
 
-public class ReflectException extends ExRuntimeException {
+public class ReflectException extends NestedRuntimeException {
 
 	private static final long	serialVersionUID	= -2185260498980158237L;
 
@@ -37,9 +37,5 @@ public class ReflectException extends ExRuntimeException {
 
 	public ReflectException(Throwable cause) {
 		super(cause);
-	}
-
-	public ReflectException(Throwable cause, String message, Object... args) {
-		super(cause, message, args);
 	}
 }

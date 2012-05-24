@@ -97,14 +97,14 @@ public class Enumerable<T> implements Iterable<T> {
 		return size() <= 0;
 	}
 
-	public T first() {
+	public T first() throws EmptyDataException {
 		for (T value : values) {
 			return value;
 		}
 		throw new EmptyDataException("No elements");
 	}
 
-	public T first(Predicate<T> predicate) {
+	public T first(Predicate<T> predicate) throws EmptyDataException  {
 		for (T value : values) {
 			if (predicate.apply(value)) {
 				return value;
@@ -171,7 +171,7 @@ public class Enumerable<T> implements Iterable<T> {
 		return concat(new Enumerable[] { Enumerable.of(others) });
 	}
 
-	public Enumerable<T> take(final int count) {
+	protected Enumerable<T> take(final int count) {
 		return of(new Func<Iterator<T>>() {
 			public Iterator<T> apply() {
 				return new TakeIterator<T>(Enumerable.this, count);
@@ -215,7 +215,7 @@ public class Enumerable<T> implements Iterable<T> {
 
 	}
 
-	public T elementAt(int index) {
+	public T elementAt(int index) throws EmptyDataException {
 		int i = 0;
 		for (T value : values) {
 			if (index == i++) {
@@ -235,11 +235,11 @@ public class Enumerable<T> implements Iterable<T> {
 		return null;
 	}
 
-	public <R> R aggregate(Class<R> clazz, Func2<T, R, R> aggregation) {
+	protected <R> R aggregate(Class<R> clazz, Func2<T, R, R> aggregation) {
 		return aggregate(clazz, null, aggregation);
 	}
 
-	public <R> R aggregate(Class<R> clazz, R initialValue, Func2<T, R, R> aggregation) {
+	protected <R> R aggregate(Class<R> clazz, R initialValue, Func2<T, R, R> aggregation) {
 		R rt = initialValue;
 		for (T value : values) {
 			rt = aggregation.evaluate(value, rt);
@@ -247,7 +247,7 @@ public class Enumerable<T> implements Iterable<T> {
 		return rt;
 	}
 
-	public <R> R sum(final Class<R> clazz) {
+	protected <R> R sum(final Class<R> clazz) {
 		if (clazz.equals(Double.class) || clazz.equals(Integer.class) || clazz.equals(BigDecimal.class)) {
 			Func2<T, R, R> aggregation = new Func2<T, R, R>() {
 				@SuppressWarnings("unchecked")
@@ -288,12 +288,12 @@ public class Enumerable<T> implements Iterable<T> {
 		throw new UnsupportedOperationException("No default aggregation for class " + clazz.getSimpleName());
 	}
 
-	public <R> R sum(Class<R> clazz, Func1<T, R> projection) {
+	protected <R> R sum(Class<R> clazz, Func1<T, R> projection) {
 		Enumerable<R> rt = this.select(projection);
 		return rt.sum(clazz);
 	}
 
-	public <K extends Comparable<K>> Enumerable<T> orderBy(final Func1<T, K> projection) {
+	protected <K extends Comparable<K>> Enumerable<T> orderBy(final Func1<T, K> projection) {
 		return orderBy(new Comparator<T>() {
 			public int compare(T o1, T o2) {
 				K lhs = projection.apply(o1);

@@ -951,6 +951,136 @@ public class StringsTest extends TestCase {
     	assertEquals("123", Strings.trimToNull("   123   "));
     }
     
+    //-----------------------------------------------------------------------
+    @Test
+    public void testAbbreviate_StringInt() {
+        assertEquals(null, Strings.abbreviate(null, 10));
+        assertEquals("", Strings.abbreviate("", 10));
+        assertEquals("short", Strings.abbreviate("short", 10));
+        assertEquals("Now is ...", Strings.abbreviate("Now is the time for all good men to come to the aid of their party.", 10));
+
+        String raspberry = "raspberry peach";
+        assertEquals("raspberry p...", Strings.abbreviate(raspberry, 14));
+        assertEquals("raspberry peach", Strings.abbreviate("raspberry peach", 15));
+        assertEquals("raspberry peach", Strings.abbreviate("raspberry peach", 16));
+        assertEquals("abc...", Strings.abbreviate("abcdefg", 6));
+        assertEquals("abcdefg", Strings.abbreviate("abcdefg", 7));
+        assertEquals("abcdefg", Strings.abbreviate("abcdefg", 8));
+        assertEquals("a...", Strings.abbreviate("abcdefg", 4));
+        assertEquals("", Strings.abbreviate("", 4));
+        
+        try {
+            @SuppressWarnings("unused")
+            String res = Strings.abbreviate("abc", 3);
+            fail("Strings.abbreviate expecting IllegalArgumentException");
+        } catch (IllegalArgumentException ex) {
+                // empty
+        }              
+    }
+    
+    @Test
+    public void testAbbreviate_StringIntInt() {
+        assertEquals(null, Strings.abbreviate(null, 10, 12));
+        assertEquals("", Strings.abbreviate("", 0, 10));
+        assertEquals("", Strings.abbreviate("", 2, 10));
+        
+        try {
+            @SuppressWarnings("unused")
+            String res = Strings.abbreviate("abcdefghij", 0, 3);
+            fail("Strings.abbreviate expecting IllegalArgumentException");
+        } catch (IllegalArgumentException ex) {
+                // empty
+        }      
+        try {
+            @SuppressWarnings("unused")
+            String res = Strings.abbreviate("abcdefghij", 5, 6);
+            fail("Strings.abbreviate expecting IllegalArgumentException");
+        } catch (IllegalArgumentException ex) {
+                // empty
+        }      
+        
+
+        String raspberry = "raspberry peach";
+        assertEquals("raspberry peach", Strings.abbreviate(raspberry, 11, 15));
+
+        assertEquals(null, Strings.abbreviate(null, 7, 14));
+        assertAbbreviateWithOffset("abcdefg...", -1, 10);
+        assertAbbreviateWithOffset("abcdefg...", 0, 10);
+        assertAbbreviateWithOffset("abcdefg...", 1, 10);
+        assertAbbreviateWithOffset("abcdefg...", 2, 10);
+        assertAbbreviateWithOffset("abcdefg...", 3, 10);
+        assertAbbreviateWithOffset("abcdefg...", 4, 10);
+        assertAbbreviateWithOffset("...fghi...", 5, 10);
+        assertAbbreviateWithOffset("...ghij...", 6, 10);
+        assertAbbreviateWithOffset("...hijk...", 7, 10);
+        assertAbbreviateWithOffset("...ijklmno", 8, 10);
+        assertAbbreviateWithOffset("...ijklmno", 9, 10);
+        assertAbbreviateWithOffset("...ijklmno", 10, 10);
+        assertAbbreviateWithOffset("...ijklmno", 10, 10);
+        assertAbbreviateWithOffset("...ijklmno", 11, 10);
+        assertAbbreviateWithOffset("...ijklmno", 12, 10);
+        assertAbbreviateWithOffset("...ijklmno", 13, 10);
+        assertAbbreviateWithOffset("...ijklmno", 14, 10);
+        assertAbbreviateWithOffset("...ijklmno", 15, 10);
+        assertAbbreviateWithOffset("...ijklmno", 16, 10);
+        assertAbbreviateWithOffset("...ijklmno", Integer.MAX_VALUE, 10);
+    }
+
+    private void assertAbbreviateWithOffset(String expected, int offset, int maxWidth) {
+        String abcdefghijklmno = "abcdefghijklmno";
+        String message = "abbreviate(String,int,int) failed";
+        String actual = Strings.abbreviate(abcdefghijklmno, offset, maxWidth);
+        if (offset >= 0 && offset < abcdefghijklmno.length()) {
+            assertTrue(message + " -- should contain offset character",
+                    actual.indexOf((char)('a'+offset)) != -1);
+        }
+        assertTrue(message + " -- should not be greater than maxWidth",
+                actual.length() <= maxWidth);
+        assertEquals(message, expected, actual);
+    }
+
+    @Test
+    public void testAbbreviateMiddle() {
+        // javadoc examples
+        assertNull( Strings.abbreviateMiddle(null, null, 0) );
+        assertEquals( "abc", Strings.abbreviateMiddle("abc", null, 0) );
+        assertEquals( "abc", Strings.abbreviateMiddle("abc", ".", 0) );
+        assertEquals( "abc", Strings.abbreviateMiddle("abc", ".", 3) );
+        assertEquals( "ab.f", Strings.abbreviateMiddle("abcdef", ".", 4) );
+        assertEquals("ab...j",Strings.abbreviateMiddle("abcdefghij", "...", 6));
+
+        // JIRA issue (LANG-405) example (slightly different than actual expected result)
+        assertEquals( 
+            "A very long text with un...f the text is complete.",
+            Strings.abbreviateMiddle(
+                "A very long text with unimportant stuff in the middle but interesting start and " +
+                "end to see if the text is complete.", "...", 50) );
+
+        // Test a much longer text :)
+        String longText = "Start text" + Strings.repeat("x", 10000) + "Close text";
+        assertEquals( 
+            "Start text->Close text",
+            Strings.abbreviateMiddle( longText, "->", 22 ) );
+
+        // Test negative length
+        assertEquals("abc", Strings.abbreviateMiddle("abc", ".", -1));
+
+        // Test boundaries
+        // Fails to change anything as method ensures first and last char are kept
+        assertEquals("abc", Strings.abbreviateMiddle("abc", ".", 1));
+        assertEquals("abc", Strings.abbreviateMiddle("abc", ".", 2));
+
+        // Test length of n=1
+        assertEquals("a", Strings.abbreviateMiddle("a", ".", 1));
+
+        // Test smallest length that can lead to success
+        assertEquals("a.d", Strings.abbreviateMiddle("abcd", ".", 3));
+
+        // More from LANG-405
+        assertEquals("a..f", Strings.abbreviateMiddle("abcdef", "..", 4));
+        assertEquals("ab.ef", Strings.abbreviateMiddle("abcdef", ".", 5));
+    }    
+    
 	private static class SubStrings extends Strings {
 		public SubStrings() {
 			super();

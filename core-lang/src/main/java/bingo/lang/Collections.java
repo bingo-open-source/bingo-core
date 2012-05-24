@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -199,6 +200,20 @@ public class Collections {
 		}
 		
 		throw new EmptyDataException("iterable is empty");
+	}
+	
+	public static <T> T firstOrNull(Iterable<T> iterable) {
+		if(null == iterable){
+			return null;
+		}
+		
+		Iterator<T> iterator = iterable.iterator();
+		
+		if(iterator.hasNext()){
+			return iterator.next();
+		}
+		
+		return null;
 	}
 	
 	//TODO to be documented after figure out the usage of predicate.

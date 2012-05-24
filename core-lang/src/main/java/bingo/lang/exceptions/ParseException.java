@@ -15,7 +15,7 @@
  */
 package bingo.lang.exceptions;
 
-public class ParseException extends ExRuntimeException {
+public class ParseException extends NestedRuntimeException {
 
 	private static final long serialVersionUID = -8343914705663146151L;
 
@@ -37,9 +37,5 @@ public class ParseException extends ExRuntimeException {
 
 	public ParseException(Throwable cause) {
 		super(cause);
-	}
-
-	public ParseException(Throwable cause, String message, Object... args) {
-		super(cause, message, args);
 	}
 }

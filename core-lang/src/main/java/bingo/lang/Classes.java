@@ -29,7 +29,7 @@ import java.util.Set;
 
 import bingo.lang.exceptions.NotFoundException;
 import bingo.lang.exceptions.ReflectException;
-import bingo.lang.exceptions.WrappedIOException;
+import bingo.lang.exceptions.UncheckedIOException;
 import bingo.lang.logging.Log;
 import bingo.lang.logging.LogFactory;
 import bingo.lang.resource.Resource;
@@ -129,7 +129,7 @@ public class Classes {
 	
 	//Class scan
 	//-----------------------------------------------------------------------
-	public static Set<Class<?>> scan(String basePackage,String classpathPattern) throws WrappedIOException {
+	public static Set<Class<?>> scan(String basePackage,String classpathPattern) throws UncheckedIOException {
 		Assert.notEmpty(basePackage,	 "basePackage must not be empty");
 		Assert.notEmpty(classpathPattern,"classLocationPattern must not be empty");
 		
@@ -149,12 +149,12 @@ public class Classes {
 	        	}
 	        }
         } catch (IOException e) {
-	        throw new WrappedIOException("Error scanning package '" + basePackage + "'",e);
+        	Exceptions.uncheck(e,"Error scanning package '{0}'",basePackage);
         }
         
         sw.stop();
         
-        log.debug("scan {} classes in package '{}' used {}ms",classes.size(),basePackage,sw.getElapsedMilliseconds());
+        log.debug("scan {0} classes in package '{1}' used {2}ms",classes.size(),basePackage,sw.getElapsedMilliseconds());
 		
 		return classes;
 	}
@@ -428,7 +428,7 @@ public class Classes {
 				}
 			}
 
-			throw new NotFoundException(ex,"class '{0}' not found",className);
+			throw new NotFoundException("class '{0}' not found",className,ex);
 		}
 	}
 	

@@ -1,14 +1,14 @@
 package bingo.lang.xml;
 
-public class XFormat {
+public class XmlFormat {
 
-	public static final XFormat NOT_INDENTED = new XFormat(false, " ", 0);
-	public static final XFormat INDENTED = new XFormat(true, "  ", 0);
+	public static final XmlFormat NOT_INDENTED = new XmlFormat(false, " ", 0);
+	public static final XmlFormat INDENTED = new XmlFormat(true, "  ", 0);
 	private final boolean indentEnabled;
 	private final String indentString;
 	private final int currentIndent;
 
-	private XFormat(boolean indentEnabled, String indentString, int currentIndent) {
+	private XmlFormat(boolean indentEnabled, String indentString, int currentIndent) {
 		this.indentEnabled = indentEnabled;
 		this.indentString = indentString;
 		this.currentIndent = currentIndent;
@@ -26,7 +26,7 @@ public class XFormat {
 		return indentEnabled;
 	}
 
-	public XFormat incrementLevel() {
-		return new XFormat(indentEnabled, indentString, currentIndent + 1);
+	public XmlFormat incrementLevel() {
+		return new XmlFormat(indentEnabled, indentString, currentIndent + 1);
 	}
 }

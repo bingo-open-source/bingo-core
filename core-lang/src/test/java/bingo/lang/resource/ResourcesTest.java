@@ -28,6 +28,23 @@ import static org.junit.Assert.*;
 public class ResourcesTest {
 	
 	@Test
+	public void testIsURL() throws Exception {
+		assertFalse(Resources.isUrl("bingo/lang/resource/Resource.class"));
+		assertTrue(Resources.isUrl("classpath:bingo/lang/resource/Resource.class"));
+	}
+	
+	@Test
+	public void testGetResource() throws Exception {
+		Resource res = Resources.getResource(Resource.class,"Resource.class");
+		assertNotNull(res);
+		assertTrue(res.exists());
+		
+		res = Resources.getResource("bingo/lang/resource/Resource.class");
+		assertNotNull(res);
+		assertTrue(res.exists());
+	}
+	
+	@Test
 	public void testIsJarURL() throws Exception {
 		assertTrue(Resources.isJarURL(new URL("jar:file:myjar.jar!/mypath")));
 		assertTrue(Resources.isJarURL(new URL(null, "zip:file:myjar.jar!/mypath", new DummyURLStreamHandler())));

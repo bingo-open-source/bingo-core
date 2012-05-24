@@ -159,7 +159,7 @@ public abstract class ReflectAccessor {
             accessor.constructor = c;
             return accessor;
         } catch (Exception ex) {
-            throw new ReflectException(ex,"Error constructing reflect accessor class: {0}",accessorClassName);
+            throw new ReflectException("Error constructing reflect accessor class: {0}",accessorClassName,ex);
         }
     }
     

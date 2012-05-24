@@ -17,6 +17,8 @@ package bingo.lang.logging;
 
 import java.util.logging.Level;
 
+import bingo.lang.Strings;
+
 public class JdkLog implements Log {
 	
 	private final java.util.logging.Logger logger;
@@ -50,7 +52,7 @@ public class JdkLog implements Log {
     }
 	
 	public void trace(String msg, Object... args) {
-		logger.finest(Formatter.format(msg, args));
+		logger.finest(Strings.format(msg, args));
     }
 
 	public void debug(String msg) {
@@ -58,7 +60,7 @@ public class JdkLog implements Log {
     }
 	
 	public void debug(String msg, Object... args) {
-		logger.fine(Formatter.format(msg, args));
+		logger.fine(Strings.format(msg, args));
     }
 	
 	public void info(String msg) {
@@ -66,7 +68,7 @@ public class JdkLog implements Log {
     }
 	
 	public void info(String msg, Object... args) {
-		logger.info(Formatter.format(msg, args));
+		logger.info(Strings.format(msg, args));
     }
 	
 	public void warn(String msg) {
@@ -74,7 +76,7 @@ public class JdkLog implements Log {
     }
 	
 	public void warn(String msg, Object... args) {
-	    logger.warning(Formatter.format(msg, args));
+	    logger.warning(Strings.format(msg, args));
     }
 
 	public void error(String msg) {
@@ -82,6 +84,6 @@ public class JdkLog implements Log {
     }
 
 	public void error(String msg, Object... args) {
-		logger.severe(Formatter.format(msg,args));
+		logger.severe(Strings.format(msg,args));
     }
 }
