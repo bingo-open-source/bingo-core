@@ -23,7 +23,7 @@ import java.net.URI;
 import java.net.URL;
 
 import bingo.lang.Assert;
-import bingo.lang.exceptions.IOExceptionEx;
+import bingo.lang.exceptions.NestedIOException;
 
 /**
  * VFS based {@link Resource} implementation.
@@ -66,7 +66,7 @@ class VfsResource extends AbstractResource {
 			return VfsUtils.getURL(this.resource);
 		}
 		catch (Exception ex) {
-			throw new IOExceptionEx("Failed to obtain URL for file " + this.resource, ex);
+			throw new NestedIOException("Failed to obtain URL for file " + this.resource, ex);
 		}
 	}
 
@@ -76,7 +76,7 @@ class VfsResource extends AbstractResource {
 			return VfsUtils.getURI(this.resource);
 		}
 		catch (Exception ex) {
-			throw new IOExceptionEx("Failed to obtain URI for " + this.resource, ex);
+			throw new NestedIOException("Failed to obtain URI for " + this.resource, ex);
 		}
 	}
 

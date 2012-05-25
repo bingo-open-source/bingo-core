@@ -17,6 +17,7 @@
 package bingo.lang;
 
 import java.nio.charset.Charset;
+import java.nio.charset.IllegalCharsetNameException;
 import java.nio.charset.UnsupportedCharsetException;
 
 /**
@@ -124,6 +125,14 @@ public class Charsets {
      * @see <a href="http://docs.oracle.com/javase/6/docs/api/java/nio/charset/Charset.html">Standard charsets</a>
      */
     public static final Charset UTF_8 = Charset.forName("UTF-8");
+    
+    /**
+     * see {@link Charset#forName(String)}
+     */
+    public static Charset forName(String charset) throws IllegalCharsetNameException,UnsupportedCharsetException {
+    	Assert.notNull(charset);
+    	return Charset.forName(charset);
+    }
     
     /**
      * Returns the given Charset or the default Charset if the given Charset is null.

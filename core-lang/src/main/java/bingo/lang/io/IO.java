@@ -29,6 +29,9 @@ import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
 
 import bingo.lang.Charsets;
+import bingo.lang.ThrowableAction1;
+import bingo.lang.ThrowableFunc1;
+import bingo.lang.exceptions.UncheckedIOException;
 
 //from apache commons io
 
@@ -45,6 +48,29 @@ public class IO {
 	protected IO() {
 
 	}
+	
+	//Execute
+	//-----------------------------------------------------------------------
+	
+	public static <T extends Closeable> void execute(T closable,ThrowableAction1<T> action) throws UncheckedIOException {
+		try{
+			action.execute(closable);
+		} catch(Throwable e){
+			throw new UncheckedIOException(e.getMessage(),e);
+		} finally{
+			close(closable);
+		}
+	}
+	
+	public static <T extends Closeable,R> R execute(T closable,ThrowableFunc1<T,R> func) throws UncheckedIOException {
+		try{
+			return func.apply(closable);
+		} catch(Throwable e){
+			throw new UncheckedIOException(e.getMessage(),e);
+		} finally{
+			close(closable);
+		}
+	}	
 
 	// Close
 	//-----------------------------------------------------------------------

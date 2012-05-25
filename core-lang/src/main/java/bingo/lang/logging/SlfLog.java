@@ -15,6 +15,8 @@
  */
 package bingo.lang.logging;
 
+import bingo.lang.Strings;
+
 public class SlfLog implements Log {
 	
 	private final org.slf4j.Logger logger;
@@ -48,7 +50,7 @@ public class SlfLog implements Log {
     }
 	
 	public void trace(String msg, Object... args) {
-		logger.trace(msg,args);
+		logger.trace(Strings.format(msg, args));
     }
 
 	public void debug(String msg) {
@@ -56,7 +58,7 @@ public class SlfLog implements Log {
     }
 	
 	public void debug(String msg, Object... args) {
-		logger.debug(msg,args);
+		logger.debug(Strings.format(msg, args));
     }
 	
 	public void info(String msg) {
@@ -64,7 +66,7 @@ public class SlfLog implements Log {
     }
 	
 	public void info(String msg, Object... args) {
-		logger.info(msg,args);
+		logger.info(Strings.format(msg, args));
     }
 	
 	public void warn(String msg) {
@@ -72,7 +74,7 @@ public class SlfLog implements Log {
     }
 	
 	public void warn(String msg, Object... args) {
-	    logger.warn(msg,args);
+	    logger.warn(Strings.format(msg, args));
     }
 
 	public void error(String msg) {
@@ -80,6 +82,6 @@ public class SlfLog implements Log {
     }
 	
 	public void error(String msg, Object... args) {
-	    logger.error(msg,args);
+	    logger.error(Strings.format(msg, args));
     }
 }

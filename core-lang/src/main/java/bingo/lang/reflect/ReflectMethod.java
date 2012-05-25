@@ -81,7 +81,7 @@ public class ReflectMethod extends ReflectMember{
 	        	return reflectClass.getAccessor().invokeMethod(instance, index, args);
 	        }
         } catch (Exception e) {
-        	throw new ReflectException(e,"error invoking method '{0}'",getName());
+        	throw new ReflectException("error invoking method '{0}'",getName(),e);
         }
 	}
 	
@@ -93,7 +93,7 @@ public class ReflectMethod extends ReflectMember{
 	        	return reflectClass.getAccessor().invokeMethod(null, index, args);
 	        }
         } catch (Exception e) {
-        	throw new ReflectException(e,"error invoking method '{0}'",getName());
+        	throw new ReflectException("error invoking method '{0}'",getName(),e);
         }
 	}
 	

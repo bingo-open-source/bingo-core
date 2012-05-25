@@ -133,7 +133,7 @@ public class ReflectField extends ReflectMember {
                 javaField.set(instance, safeValue(value));
             }
         } catch (Exception e) {
-        	throw new ReflectException(e,"error setting value '{0}' to field '{1}'",value,getName());
+        	throw new ReflectException("error setting value '{0}' to field '{1}'",value,getName(),e);
         }	
 	}
 	
@@ -153,7 +153,7 @@ public class ReflectField extends ReflectMember {
                 }
         	}
         } catch (Exception e) {
-        	throw new ReflectException(e,"error setting value '{0}' to field '{1}'",value,getName());
+        	throw new ReflectException("error setting value '{0}' to field '{1}'",value,getName(),e);
         }
 	}
 	
@@ -177,7 +177,7 @@ public class ReflectField extends ReflectMember {
                 }
         	}
         } catch (Exception e) {
-        	throw new ReflectException(e,"error getting value of field '{1}'",getName());
+        	throw new ReflectException("error getting value of field '{1}'",getName(),e);
         }
 	}
 	

@@ -15,7 +15,7 @@
  */
 package bingo.lang.exceptions;
 
-public class InvalidFormatException extends RuntimeExceptionEx {
+public class InvalidFormatException extends NestedRuntimeException {
 
 	private static final long serialVersionUID = -15305099775642352L;
 
@@ -33,10 +33,6 @@ public class InvalidFormatException extends RuntimeExceptionEx {
 
 	public InvalidFormatException(String message) {
 	    super(message);
-    }
-
-	public InvalidFormatException(Throwable cause, String message, Object... args) {
-	    super(cause, message, args);
     }
 
 	public InvalidFormatException(Throwable cause) {

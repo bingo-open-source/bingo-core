@@ -189,7 +189,7 @@ public class Converts {
         } catch (ConvertException e){
         	throw e;
         } catch (Throwable e) {
-        	throw new ConvertException(e,"Error converting '{0}' to '{1}', value : {2}",sourceType.getName(),targetType.getName(),value);
+        	throw new ConvertException("Error converting '{0}' to '{1}', value : {2}",sourceType.getName(),targetType.getName(),value,e);
         }
         
 		throw new ConvertUnsupportedException("Cannot convert '{0}' to '{1}', value : {2}",sourceType.getName(),targetType.getName(),value.toString());
@@ -239,7 +239,7 @@ public class Converts {
         } catch (ConvertException e){
         	throw e;
         } catch (Throwable e) {
-        	throw new ConvertException(e,"error converting '{0}' to String",sourceType.getName());
+        	throw new ConvertException("error converting '{0}' to String",sourceType.getName(),e);
         }
 	}
 	

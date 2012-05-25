@@ -15,7 +15,7 @@
  */
 package bingo.lang.exceptions;
 
-public class InvalidOperationException extends RuntimeExceptionEx {
+public class InvalidOperationException extends NestedRuntimeException {
 
 	private static final long serialVersionUID = -133819354586484655L;
 
@@ -37,9 +37,5 @@ public class InvalidOperationException extends RuntimeExceptionEx {
 
 	public InvalidOperationException(Throwable cause) {
 		super(cause);
-	}
-
-	public InvalidOperationException(Throwable cause, String message, Object... args) {
-		super(cause, message, args);
 	}
 }

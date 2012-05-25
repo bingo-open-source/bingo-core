@@ -15,20 +15,22 @@
  */
 package bingo.lang.exceptions;
 
-import java.sql.SQLException;
+import java.io.IOException;
 
-/**
- * Warp a {@link SQLException} to {@link RuntimeException}
- */
-public class WrappedSQLException extends RuntimeException {
+public class NestedIOException extends IOException {
 
-	private static final long serialVersionUID = -1637514337920224680L;
+	private static final long serialVersionUID = 3997494082839660257L;
 
-	public WrappedSQLException(SQLException cause) {
-		super(cause.getMessage(), cause);
-	}
+	protected NestedIOException() {
+	    super();
+    }
 
-	public SQLException getSQLException() {
-		return (SQLException) getCause();
-	}
+	public NestedIOException(String s) {
+	    super(s);
+    }
+	
+	public NestedIOException(String s,Throwable cause) {
+	    super(s);
+	    initCause(cause);
+    }
 }

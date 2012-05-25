@@ -71,6 +71,12 @@ public abstract class Assert {
 			throw new IllegalArgumentException(message);
 		}
 	}
+	
+	public static void isTrue(boolean expression, String template,Object... args) {
+		if (!expression) {
+			throw new IllegalArgumentException(Strings.format(template, args));
+		}
+	}
 
 	/**
 	 * Assert a boolean expression, throwing <code>IllegalArgumentException</code> if the test result is
@@ -119,6 +125,12 @@ public abstract class Assert {
 			throw new IllegalArgumentException(message);
 		}
 	}
+	
+	public static void isFalse(boolean expression, String template,Object... args) {
+		if (expression) {
+			throw new IllegalArgumentException(Strings.format(template, args));
+		}
+	}
 
 	/**
 	 * Assert that an object is <code>null</code> .
@@ -136,6 +148,12 @@ public abstract class Assert {
 			throw new IllegalArgumentException(message);
 		}
 	}
+	
+	public static void isNull(Object object, String template,Object... args) {
+		if (object != null) {
+			throw new IllegalArgumentException(Strings.format(template, args));
+		}
+	}	
 
 	/**
 	 * Assert that an object is <code>null</code> .
@@ -165,6 +183,13 @@ public abstract class Assert {
 	public static <T> T notNull(T object, String message) {
 		if (object == null) {
 			throw new IllegalArgumentException(message);
+		}
+		return object;
+	}
+	
+	public static <T> T notNull(T object, String template,Object... args){
+		if (object == null) {
+			throw new IllegalArgumentException(Strings.format(template, args));
 		}
 		return object;
 	}
@@ -200,6 +225,13 @@ public abstract class Assert {
 		}
 		return text;
 	}
+	
+	public static String notEmpty(String text, String template,Object... args) {
+		if (Strings.isEmpty(text)) {
+			throw new IllegalArgumentException(Strings.format(template, args));
+		}
+		return text;
+	}
 
 	/**
 	 * Assert that the given String is not empty; that is, it must not be <code>null</code> and not the empty String.
@@ -230,6 +262,13 @@ public abstract class Assert {
 	public static String notBlank(String text, String message) {
 		if (Strings.isBlank(text)) {
 			throw new IllegalArgumentException(message);
+		}
+		return text;
+	}
+	
+	public static String notBlank(String text, String template,Object... args) {
+		if (Strings.isBlank(text)) {
+			throw new IllegalArgumentException(Strings.format(template, args));
 		}
 		return text;
 	}
@@ -294,6 +333,13 @@ public abstract class Assert {
 	public static <T> T[] notEmpty(T[] array, String message) {
 		if (Arrays.isEmpty(array)) {
 			throw new IllegalArgumentException(message);
+		}
+		return array;
+	}
+	
+	public static <T> T[] notEmpty(T[] array, String template,Object... args) {
+		if (Arrays.isEmpty(array)) {
+			throw new IllegalArgumentException(Strings.format(template, args));
 		}
 		return array;
 	}
@@ -366,6 +412,13 @@ public abstract class Assert {
 		}
 		return collection;
 	}
+	
+	public static <C extends Collection<E>,E> C notEmpty(C collection, String template,Object... args) {
+		if (Collections.isEmpty(collection)) {
+			throw new IllegalArgumentException(Strings.format(template, args));
+		}
+		return collection;
+	}
 
 	/**
 	 * Assert that a collection has elements; that is, it must not be <code>null</code> and must have at least one
@@ -396,6 +449,13 @@ public abstract class Assert {
 	public static <M extends Map<K,V>,K,V> M notEmpty(M map, String message) {
 		if (Maps.isEmpty(map)) {
 			throw new IllegalArgumentException(message);
+		}
+		return map;
+	}
+	
+	public static <M extends Map<K,V>,K,V> M notEmpty(M map, String template,Object... args) {
+		if (Maps.isEmpty(map)) {
+			throw new IllegalArgumentException(Strings.format(template, args));
 		}
 		return map;
 	}
@@ -448,7 +508,7 @@ public abstract class Assert {
 	public static <T> T isInstanceOf(Class<?> type, T obj, String message) {
 		notNull(type, "Type to check against must not be null");
 		if (!type.isInstance(obj)) {
-			throw new IllegalArgumentException(message + "Object of class [" + (obj != null ? obj.getClass().getName() : "null")
+			throw new IllegalArgumentException(message + " ; Object of class [" + (obj != null ? obj.getClass().getName() : "null")
 			        + "] must be an instance of " + type);
 		}
 		return obj;

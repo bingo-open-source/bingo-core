@@ -35,5 +35,5 @@ public interface OutPredicate<T,O> {
      * 
      * @throws RuntimeException (runtime) if the predicate encounters a problem
      */
-	boolean evaluate(T object,Out<O> out);
+	boolean apply(T object,Out<O> out);
 }

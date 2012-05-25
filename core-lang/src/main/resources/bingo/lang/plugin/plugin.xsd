@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://schemas.bingosoft.net/java/core/plugin" xmlns:tns="http://schemas.bingosoft.net/java/core/plugin"
+	elementFormDefault="qualified">
+
+	<element name="plugins" type="tns:Plugins"></element>
+
+	<complexType name="Plugin">
+		<sequence>
+			<element name="document" type="tns:Document" maxOccurs="1" minOccurs="0"></element>
+			<element name="properties" type="tns:Properties" maxOccurs="1" minOccurs="0"></element>
+		</sequence>
+		<attribute name="name" type="string" use="required"></attribute>
+		<attribute name="class" type="string"></attribute>
+	</complexType>
+
+	<complexType name="Plugins">
+		<sequence>
+			<element name="add" type="tns:Plugin" maxOccurs="unbounded" minOccurs="0"></element>
+			<element name="set" type="tns:Plugin" maxOccurs="unbounded" minOccurs="0"></element>
+		</sequence>
+	</complexType>
+
+	<complexType name="Document">
+
+		<sequence>
+			<element name="summary" type="string" maxOccurs="1" minOccurs="0"></element>
+			<element name="description" type="string" maxOccurs="1" minOccurs="0"></element>
+		</sequence>
+	</complexType>
+
+	<complexType name="Properties">
+		<sequence maxOccurs="unbounded" minOccurs="0">
+			<element name="property" type="tns:Property"></element>
+		</sequence>
+	</complexType>
+
+	<complexType name="Property">
+		<simpleContent>
+			<extension base="string">
+				<attribute name="name" type="string" use="required"/>
+				<attribute name="value" type="string" use="optional"/>
+			</extension>
+		</simpleContent>
+	</complexType>
+</schema>

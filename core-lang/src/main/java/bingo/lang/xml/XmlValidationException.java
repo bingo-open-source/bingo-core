@@ -13,23 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.lang.exceptions;
+package bingo.lang.xml;
 
-import java.io.IOException;
+import bingo.lang.exceptions.NestedRuntimeException;
 
-public class WrappedIOException extends RuntimeException {
+public class XmlValidationException extends NestedRuntimeException {
 
-	private static final long serialVersionUID = 2777668702971980169L;
+	private static final long serialVersionUID = 5141320954015097550L;
 
-	public WrappedIOException(IOException ex){
-		super(ex.getMessage(),ex);
+	public XmlValidationException() {
+
 	}
-	
-	public WrappedIOException(String message,IOException ex){
-		super(message,ex);
+
+	public XmlValidationException(String message) {
+		super(message);
 	}
-	
-	public IOException getIOException(){
-		return (IOException)getCause();
+
+	public XmlValidationException(String message, Throwable cause) {
+		super(message, cause);
+	}
+
+	public XmlValidationException(Throwable cause) {
+		super(cause);
+	}
+
+	public XmlValidationException(String message, Object... args) {
+		super(message, args);
 	}
 }

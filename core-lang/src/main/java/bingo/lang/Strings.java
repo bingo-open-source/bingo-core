@@ -3497,6 +3497,168 @@ public class Strings {
         }
         return count;
     }    
+    
+    // Abbreviating
+    //-----------------------------------------------------------------------
+    /**
+     * <p>Abbreviates a String using ellipses. This will turn
+     * "Now is the time for all good men" into "Now is the time for..."</p>
+     *
+     * <p>Specifically:
+     * <ul>
+     *   <li>If {@code str} is less than {@code maxWidth} characters
+     *       long, return it.</li>
+     *   <li>Else abbreviate it to {@code (substring(str, 0, max-3) + "...")}.</li>
+     *   <li>If {@code maxWidth} is less than {@code 4}, throw an
+     *       {@code IllegalArgumentException}.</li>
+     *   <li>In no case will it return a String of length greater than
+     *       {@code maxWidth}.</li>
+     * </ul>
+     * </p>
+     *
+     * <pre>
+     * Strings.abbreviate(null, *)      = null
+     * Strings.abbreviate("", 4)        = ""
+     * Strings.abbreviate("abcdefg", 6) = "abc..."
+     * Strings.abbreviate("abcdefg", 7) = "abcdefg"
+     * Strings.abbreviate("abcdefg", 8) = "abcdefg"
+     * Strings.abbreviate("abcdefg", 4) = "a..."
+     * Strings.abbreviate("abcdefg", 3) = IllegalArgumentException
+     * </pre>
+     *
+     * @param str  the String to check, may be null
+     * @param maxWidth  maximum length of result String, must be at least 4
+     * @return abbreviated String, {@code null} if null String input
+     * @throws IllegalArgumentException if the width is too small
+     */
+    public static String abbreviate(String str, int maxWidth) {
+        return abbreviate(str, 0, maxWidth);
+    }
+    
+    /**
+     * <pre>
+     * Strings.abbreviateMiddle(null,  0)      = ""
+     * Strings.abbreviateMiddle("abc", 0)      = "abc"
+     * Strings.abbreviateMiddle("abc", 0)      = "abc"
+     * Strings.abbreviateMiddle("abc", ".", 3) = "abc"
+     * Strings.abbreviateMiddle("abcdefghij", "...", 6)  = "ab...g"
+     * </pre>
+     */
+    public static String abbreviateMiddle(String str, int maxWidth) {
+        return abbreviateMiddle(str, "...", maxWidth);
+    }
+
+    /**
+     * <p>Abbreviates a String using ellipses. This will turn
+     * "Now is the time for all good men" into "...is the time for..."</p>
+     *
+     * <p>Works like {@code abbreviate(String, int)}, but allows you to specify
+     * a "left edge" offset.  Note that this left edge is not necessarily going to
+     * be the leftmost character in the result, or the first character following the
+     * ellipses, but it will appear somewhere in the result.
+     *
+     * <p>In no case will it return a String of length greater than
+     * {@code maxWidth}.</p>
+     *
+     * <pre>
+     * Strings.abbreviate(null, *, *)                = null
+     * Strings.abbreviate("", 0, 4)                  = ""
+     * Strings.abbreviate("abcdefghijklmno", -1, 10) = "abcdefg..."
+     * Strings.abbreviate("abcdefghijklmno", 0, 10)  = "abcdefg..."
+     * Strings.abbreviate("abcdefghijklmno", 1, 10)  = "abcdefg..."
+     * Strings.abbreviate("abcdefghijklmno", 4, 10)  = "abcdefg..."
+     * Strings.abbreviate("abcdefghijklmno", 5, 10)  = "...fghi..."
+     * Strings.abbreviate("abcdefghijklmno", 6, 10)  = "...ghij..."
+     * Strings.abbreviate("abcdefghijklmno", 8, 10)  = "...ijklmno"
+     * Strings.abbreviate("abcdefghijklmno", 10, 10) = "...ijklmno"
+     * Strings.abbreviate("abcdefghijklmno", 12, 10) = "...ijklmno"
+     * Strings.abbreviate("abcdefghij", 0, 3)        = IllegalArgumentException
+     * Strings.abbreviate("abcdefghij", 5, 6)        = IllegalArgumentException
+     * </pre>
+     *
+     * @param str  the String to check, may be null
+     * @param offset  left edge of source String
+     * @param maxWidth  maximum length of result String, must be at least 4
+     * @return abbreviated String, {@code null} if null String input
+     * @throws IllegalArgumentException if the width is too small
+     */
+    static String abbreviate(String str, int offset, int maxWidth) {
+        if (str == null) {
+            return null;
+        }
+        if (maxWidth < 4) {
+            throw new IllegalArgumentException("Minimum abbreviation width is 4");
+        }
+        if (str.length() <= maxWidth) {
+            return str;
+        }
+        if (offset > str.length()) {
+            offset = str.length();
+        }
+        if (str.length() - offset < maxWidth - 3) {
+            offset = str.length() - (maxWidth - 3);
+        }
+        final String abrevMarker = "...";
+        if (offset <= 4) {
+            return str.substring(0, maxWidth - 3) + abrevMarker;
+        }
+        if (maxWidth < 7) {
+            throw new IllegalArgumentException("Minimum abbreviation width with offset is 7");
+        }
+        if (offset + maxWidth - 3 < str.length()) {
+            return abrevMarker + abbreviate(str.substring(offset), maxWidth - 3);
+        }
+        return abrevMarker + str.substring(str.length() - (maxWidth - 3));
+    }
+
+    /**
+     * <p>Abbreviates a String to the length passed, replacing the middle characters with the supplied
+     * replacement String.</p>
+     *
+     * <p>This abbreviation only occurs if the following criteria is met:
+     * <ul>
+     * <li>Neither the String for abbreviation nor the replacement String are null or empty </li>
+     * <li>The length to truncate to is less than the length of the supplied String</li>
+     * <li>The length to truncate to is greater than 0</li>
+     * <li>The abbreviated String will have enough room for the length supplied replacement String
+     * and the first and last characters of the supplied String for abbreviation</li>
+     * </ul>
+     * Otherwise, the returned String will be the same as the supplied String for abbreviation.
+     * </p>
+     *
+     * <pre>
+     * Strings.abbreviateMiddle(null, null, 0)      = null
+     * Strings.abbreviateMiddle("abc", null, 0)      = "abc"
+     * Strings.abbreviateMiddle("abc", ".", 0)      = "abc"
+     * Strings.abbreviateMiddle("abc", ".", 3)      = "abc"
+     * Strings.abbreviateMiddle("abcdef", ".", 4)     = "ab.f"
+     * </pre>
+     *
+     * @param str  the String to abbreviate, may be null
+     * @param middle the String to replace the middle characters with, may be null
+     * @param length the length to abbreviate {@code str} to.
+     * @return the abbreviated String if the above criteria is met, or the original String supplied for abbreviation.
+     */
+    static String abbreviateMiddle(String str, String middle, int length) {
+        if (isEmpty(str) || isEmpty(middle)) {
+            return str;
+        }
+
+        if (length >= str.length() || length < middle.length()+2) {
+            return str;
+        }
+
+        int targetSting = length-middle.length();
+        int startOffset = targetSting/2+targetSting%2;
+        int endOffset = str.length()-targetSting/2;
+
+        StringBuilder builder = new StringBuilder(length);
+        builder.append(str.substring(0,startOffset));
+        builder.append(middle);
+        builder.append(str.substring(endOffset));
+
+        return builder.toString();
+    }    
 
 	//private methods
 	//----------------------------------------------------------------------------------------------------------------------

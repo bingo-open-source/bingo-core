@@ -19,10 +19,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import bingo.lang.exceptions.EmptyElementException;
+import bingo.lang.exceptions.EmptyDataException;
 
 /**
  * <code>null</code> safe {@link Collection} utility.
@@ -187,18 +188,32 @@ public class Collections {
 	 * 
 	 * @return the first element.
 	 * 
-	 * @throws EmptyElementException if the supplied iterable is null or empty.
+	 * @throws EmptyDataException if the supplied iterable is null or empty.
 	 */
 	public static <T> T first(Iterable<T> iterable){
 		if(null == iterable){
-			throw new EmptyElementException("iterable is null");
+			throw new EmptyDataException("iterable is null");
 		}
 		
 		for(T e : iterable){
 			return e;
 		}
 		
-		throw new EmptyElementException("iterable is empty");
+		throw new EmptyDataException("iterable is empty");
+	}
+	
+	public static <T> T firstOrNull(Iterable<T> iterable) {
+		if(null == iterable){
+			return null;
+		}
+		
+		Iterator<T> iterator = iterable.iterator();
+		
+		if(iterator.hasNext()){
+			return iterator.next();
+		}
+		
+		return null;
 	}
 	
 	//TODO to be documented after figure out the usage of predicate.
@@ -238,7 +253,7 @@ public class Collections {
 		Out<O> out = new OutObject<O>();
 		
 		for (T object : iterable) {
-			if ((predicate.evaluate(object, out))) {
+			if ((predicate.apply(object, out))) {
 				return out.getValue();
 			}
 		}
@@ -255,7 +270,7 @@ public class Collections {
 		Out<O> out = new OutObject<O>();
 
 		for (T object : array) {
-			if ((predicate.evaluate(object, out))) {
+			if ((predicate.apply(object, out))) {
 				return out.getValue();
 			}
 		}

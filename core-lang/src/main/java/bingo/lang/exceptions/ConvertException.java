@@ -15,7 +15,7 @@
  */
 package bingo.lang.exceptions;
 
-public class ConvertException extends RuntimeExceptionEx {
+public class ConvertException extends NestedRuntimeException {
 
 	private static final long serialVersionUID = -4672348555971040044L;
 
@@ -37,9 +37,5 @@ public class ConvertException extends RuntimeExceptionEx {
 
 	public ConvertException(Throwable cause) {
 		super(cause);
-	}
-
-	public ConvertException(Throwable cause, String message, Object... args) {
-		super(cause, message, args);
 	}
 }

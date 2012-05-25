@@ -29,7 +29,7 @@ import bingo.lang.Assert;
 import bingo.lang.Classes;
 import bingo.lang.Strings;
 import bingo.lang.exceptions.NotFoundException;
-import bingo.lang.exceptions.WrappedIOException;
+import bingo.lang.exceptions.UncheckedIOException;
 
 //from spring framework
 
@@ -180,23 +180,49 @@ public abstract class Resources {
 	
 	//scan resources
 	//-----------------------------------------------------------------------------
-	public static Resource[] scan(String resourceLocationPattern) throws WrappedIOException {
+	public static Resource[] scan(String resourceLocationPattern) throws UncheckedIOException {
 		try {
 	        return resolver.getResources(resourceLocationPattern);
         } catch (IOException e) {
-        	throw new WrappedIOException("Error scanning location : " + resourceLocationPattern, e);
+        	throw new UncheckedIOException("Error scanning location : " + resourceLocationPattern, e);
         }
+	}
+	
+	public static Resource getResource(String resourceLocation) throws UncheckedIOException {
+		Assert.notNull(resourceLocation,"Resource location must not be null");
+		
+		if(!isUrl(resourceLocation)){
+			resourceLocation = CLASSPATH_URL_PREFIX + resourceLocation;
+		}
+		
+        return loader.getResource(resourceLocation);
+	}
+	
+	public static Resource getResource(Class<?> clazz,String resourceNameInPackage) throws UncheckedIOException {
+		Assert.notNull(clazz,"clazz must not be null");
+		Assert.notNull(resourceNameInPackage,"resource name must not be null");
+		
+		String resourceLocation = CLASSPATH_URL_PREFIX + clazz.getPackage().getName().replace('.', '/') + "/" + resourceNameInPackage;
+		
+        return loader.getResource(resourceLocation);
 	}
 	
 	//InputStream
 	//-----------------------------------------------------------------------------
 	
-	public static InputStream getInputStream(String resourceLocation) throws WrappedIOException {
-		Assert.notNull(resourceLocation,"Resource location must not be null");
+	public static InputStream getInputStream(String resourceLocation) throws UncheckedIOException {
 		try {
-	        return loader.getResource(resourceLocation).getInputStream();
+			return getResource(resourceLocation).getInputStream();
         } catch (IOException e) {
-        	throw new WrappedIOException("Error getInputStream from :" + resourceLocation,e);
+        	throw new UncheckedIOException("Error getInputStream from :" + resourceLocation,e);
+        }
+	}
+	
+	public static InputStream getInputStream(Class<?> clazz,String resourceNameInPackage) throws UncheckedIOException {
+		try {
+			return getResource(clazz,resourceNameInPackage).getInputStream();
+        } catch (IOException e) {
+        	throw new UncheckedIOException("Error getInputStream from :" + resourceNameInPackage,e);
         }
 	}
 	

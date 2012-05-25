@@ -13,17 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.utils.jdbc;
+package bingo.lang;
 
-import java.sql.Connection;
-import java.sql.SQLException;
+public interface ThrowableFunc1<T,R> {
 
-public abstract class JdbcCallback implements JdbcCallbackWithResult<Object> {
-
-    public final Object executeWithResult(Connection connection) throws SQLException {
-        execute(connection);
-        return null;
-    }
-
-    protected abstract void execute(Connection connection) throws SQLException;
+	R apply(T input) throws Throwable;
+	
 }

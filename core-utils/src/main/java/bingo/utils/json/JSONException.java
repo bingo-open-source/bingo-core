@@ -15,9 +15,9 @@
  */
 package bingo.utils.json;
 
-import bingo.lang.exceptions.RuntimeExceptionEx;
+import bingo.lang.exceptions.NestedRuntimeException;
 
-public class JSONException extends RuntimeExceptionEx {
+public class JSONException extends NestedRuntimeException {
 
     private static final long serialVersionUID = 6604866089585580442L;
 
@@ -35,10 +35,6 @@ public class JSONException extends RuntimeExceptionEx {
 
 	public JSONException(String message) {
 	    super(message);
-    }
-
-	public JSONException(Throwable cause, String message, Object... args) {
-	    super(cause, message, args);
     }
 
 	public JSONException(Throwable cause) {

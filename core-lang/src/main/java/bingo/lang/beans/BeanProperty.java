@@ -20,6 +20,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 
+import bingo.lang.Converts;
 import bingo.lang.Named;
 import bingo.lang.reflect.ReflectField;
 import bingo.lang.reflect.ReflectMethod;
@@ -123,6 +124,10 @@ public class BeanProperty implements Named {
 	public void setValue(Object bean,Object value){
 		if(!writable){
 			throw new IllegalStateException("Property '" + name + "' of '" + beanClass.getJavaClass().getName() + "' not writable");
+		}
+		
+		if(null != value && !type.isAssignableFrom(value.getClass())){
+			value = Converts.convert(value, type,genericType);
 		}
 		
 		if(null != setter){

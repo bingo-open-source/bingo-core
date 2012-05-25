@@ -29,7 +29,7 @@ public class CollectionsTest {
 
 	@Test
 	public void testPerformanceComparesToEnumerable() {
-		final List<Integer> list = Enumerable.create(1, 3, 2, 4, 100, 1, 2, 3, 5, 531).toList();
+		final List<Integer> list = Enumerable.of(1, 3, 2, 4, 100, 1, 2, 3, 5, 531).toList();
 
 		final Predicate<Integer> where = new Predicate<Integer>() {
 			public boolean apply(Integer object) {
@@ -45,7 +45,7 @@ public class CollectionsTest {
 
 		Perf.run("Enumerable.where", new Runnable() {
 			public void run() {
-				Enumerable.create(list).where(where).toArray(new Integer[] {});
+				Enumerable.of(list).where(where).toArray(new Integer[] {});
 			}
 		}, 100000);
 
