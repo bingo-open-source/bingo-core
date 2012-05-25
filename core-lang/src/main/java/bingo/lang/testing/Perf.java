@@ -23,31 +23,37 @@ import bingo.lang.Strings;
  */
 public final class Perf {
 	
-    public static void run(String test,Runnable action){
-    	//warmup
-    	action.run();
-        
-    	StopWatch sw = StopWatch.startNew();
-    	
-    	action.run();
-    	
-    	sw.stop();
-    	
-    	System.out.println(Strings.format("[{0}] -> duration : {1}ms, {2}ns",test,sw.getElapsedMilliseconds(),sw.getElapsedNanoseconds()));
+    public static void run(String test, Runnable action){
+    	run(test, action, 1);
     }	
 
     public static void run(String test,Runnable action,int times){
-    	//warmup
-    	action.run();
-     
-    	StopWatch sw = StopWatch.startNew();
+    	/* wrapped with runnable group */
+    	String name = RunnableGroup.tryToGetName(action);
+    	times = RunnableGroup.tryToGetRunTimes(action);
     	
-    	for(int i=0;i<times;i++){
-    		action.run();
+    	RunnableGroup runnableGroup = new RunnableGroup(name, action, times);
+    	
+    	/* warm up */
+    	runnableGroup.run();
+    	
+    	runnableGroup.run();
+    	
+    	Perf.toConsole(test, runnableGroup.getPerfResult());
+    }
+    
+    public static void toConsole(String name, PerfResult perfResult){
+    	System.out.println("PROJECT: " + name);
+    	toConsole(perfResult.getChildren().get(0), "");
+    }
+    
+    private static void toConsole(PerfResult perfResult, String prefix){
+    	System.out.println(prefix + perfResult.toString());
+    	prefix += "  ";
+    	if(perfResult.isEnd() == false){
+        	for (PerfResult perfResultChild : perfResult.getChildren()) {
+    			toConsole(perfResultChild, prefix);
+    		}
     	}
-    	
-    	sw.stop();
-    	
-    	System.out.println(Strings.format("[{0}] -> run {1} times, duration : {2}ms, {3}ns", test,times,sw.getElapsedMilliseconds(),sw.getElapsedNanoseconds()));
     }
 }

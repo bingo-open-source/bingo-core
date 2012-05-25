@@ -27,16 +27,29 @@ import bingo.lang.exceptions.ReflectException;
 import bingo.lang.reflect.ReflectClass;
 import bingo.lang.reflect.ReflectField;
 
+/**
+ * 反射的工具类。
+ */
 public class Reflects {
 	
 	protected Reflects(){
 		
 	}
 	
+	/**
+	 * 获取classType类型对应的反射类 {@link ReflectClass}。
+	 * @param classType 指定的classType
+	 * @return 对应的反射类 {@link ReflectClass}。
+	 */
 	public static <T> ReflectClass<T> forType(Class<T> classType){
 		return ReflectClass.get(classType);
 	}
 	
+	/**
+	 * 根据类名称className获取对应的反射类 {@link ReflectClass}。
+	 * @param className 指定的类名称className。
+	 * @return 对应的反射类 {@link ReflectClass}。
+	 */
 	public static ReflectClass<?> forName(String className) throws NotFoundException {
 		return ReflectClass.get(Classes.forName(className));
 	}
@@ -74,6 +87,13 @@ public class Reflects {
 		}
 	}
 	
+	/**
+	 * 获取target对象的名为name的域的值。
+	 * @param target 要获取域值的target对象。
+	 * @param name 要获取域值的域名称。
+	 * @return target对象的名为name的域的值。
+	 * @throws NotFoundException 当找不到该域的时候抛出此异常。
+	 */
 	public static Object getFieldValue(Object target,String name) throws NotFoundException {
 		Assert.notNull(target);
 		Assert.notNull(name);
@@ -267,6 +287,11 @@ public class Reflects {
 	//Consturctors, Fields, Methods
 	//--------------------------------------------------------------------------------------------------------
 	
+	/**
+	 * 获得所传入的clazz类的所有非编译器合成方法，包括父类的。
+	 * @param clazz 欲获得所有方法的clazz类。
+	 * @return 所有非编译器合成方法。
+	 */
     public static List<Method> getMethods(Class<?> clazz){
         List<Method> methods = new ArrayList<Method>();
         
@@ -282,6 +307,11 @@ public class Reflects {
         return methods;
     }
 	
+    /**
+     * 获得所传入的clazz类的所有非编译器合成的域，包括父类的。
+     * @param clazz 欲获得其所有域的clazz类。
+     * @return 所有非编译器合成域。
+     */
     public static List<Field> getFields(Class<?> clazz){
         List<Field> fields = new ArrayList<Field>();
         

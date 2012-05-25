@@ -21,11 +21,14 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.lang.reflect.Array;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 import org.junit.Test;
 
 import bingo.lang.Converts;
+import bingo.lang.Out;
+import bingo.lang.OutObject;
 
 public class ArrayConverterTest {
 
@@ -41,19 +44,22 @@ public class ArrayConverterTest {
         long[]    longArray    = new long[] {intArray[0], intArray[1], intArray[2], intArray[3]};
         Long[]    LONGArray    = new Long[]    {new Long(intArray[0]),    new Long(intArray[1]),    new Long(intArray[2]),    new Long(intArray[3])};
         Integer[] IntegerArray = new Integer[] {new Integer(intArray[0]), new Integer(intArray[1]), new Integer(intArray[2]), new Integer(intArray[3])};
-        ArrayList strList = new ArrayList();
-        ArrayList longList = new ArrayList();
+        ArrayList<String> strList = new ArrayList<String>();
+        ArrayList<Long> longList = new ArrayList<Long>();
         for (int i = 0; i < strArray.length; i++) {
             strList.add(strArray[i]);
             longList.add(LONGArray[i]);
         }
 
         String msg = null;
+        Object convertResult = null;
 
         // String --> int[]
         try {
             msg = "String --> int[]";
-            checkArray(msg, intArray, Converts.convert(stringA,int[].class));
+            convertResult = Converts.convert(stringA,int[].class);
+            checkArray(msg, intArray, convertResult);
+            checkConvertFrom(msg, convertResult, int[].class, null);
         } catch (Exception e) {
             fail(msg + " failed " + e);
         }
@@ -61,7 +67,9 @@ public class ArrayConverterTest {
         // String[] --> int[]
         try {
             msg = "String[] --> int[]";
-            checkArray(msg, intArray, Converts.convert(strArray,int[].class));
+            convertResult = Converts.convert(strArray,int[].class);
+            checkArray(msg, intArray, convertResult);
+            checkConvertFrom(msg, convertResult, int[].class, null);
         } catch (Exception e) {
             fail(msg + " failed " + e);
         }
@@ -129,6 +137,8 @@ public class ArrayConverterTest {
         } catch (Exception e) {
             fail(msg + " failed " + e);
         }
+        
+        assertEquals(null, Converts.convert(null, int[].class));
     }
     
     private void checkArray(String msg, Object expected, Object result) {
@@ -145,4 +155,13 @@ public class ArrayConverterTest {
             assertEquals(msg + " Element " + i, expectElement, resultElement);
         }
     }    
+    
+    private void checkConvertFrom(String msg, Object convertResult, Class<?> targetType, Type genericType) {
+    	Out<Object> out = new OutObject<Object>();
+    	try {
+			assertTrue(msg + " ConvertFrom Check Error", new ArrayConverter().convertFrom(convertResult, targetType, genericType, out));
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+    }
 }
