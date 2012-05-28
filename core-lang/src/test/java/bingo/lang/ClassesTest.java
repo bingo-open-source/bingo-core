@@ -26,7 +26,11 @@ import java.util.Set;
 
 import org.junit.Test;
 
-public class ClassesTest {
+import bingo.lang.testing.junit.Concurrent;
+import bingo.lang.testing.junit.ConcurrentTestCase;
+
+@Concurrent(threads=5)
+public class ClassesTest extends ConcurrentTestCase{
 
 	@Test
 	public void testScan(){

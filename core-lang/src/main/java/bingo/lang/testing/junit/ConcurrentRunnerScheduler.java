@@ -26,7 +26,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * @author Mathieu Carbou (mathieu.carbou@gmail.com)
  */
-final class ConcurrentJunitRunnerScheduler implements RunnerScheduler {
+final class ConcurrentRunnerScheduler implements RunnerScheduler {
 
     private static final int CPUS = Runtime.getRuntime().availableProcessors();
 
@@ -34,11 +34,11 @@ final class ConcurrentJunitRunnerScheduler implements RunnerScheduler {
     private final Queue<Future<Void>> tasks = new LinkedList<Future<Void>>();
     private final CompletionService<Void> completionService;
 
-    public ConcurrentJunitRunnerScheduler(String name, int threads) {
+    public ConcurrentRunnerScheduler(String name, int threads) {
         this(name, Math.min(CPUS, threads), Math.max(CPUS, threads));
     }
 
-    public ConcurrentJunitRunnerScheduler(String name, int nThreadsMin, int nThreadsMax) {
+    public ConcurrentRunnerScheduler(String name, int nThreadsMin, int nThreadsMax) {
         executorService = new ThreadPoolExecutor(
             nThreadsMin, nThreadsMax,
             10L, TimeUnit.SECONDS,
@@ -52,7 +52,7 @@ final class ConcurrentJunitRunnerScheduler implements RunnerScheduler {
         tasks.offer(completionService.submit(childStatement, null));
     }
 
-    public void finished() throws ConcurrentJunitException {
+    public void finished() throws ConcurrentRunnerException {
         try {
             while (!tasks.isEmpty()) {
                 Future<Void> f = completionService.take();
@@ -62,7 +62,7 @@ final class ConcurrentJunitRunnerScheduler implements RunnerScheduler {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         } catch (ExecutionException e) {
-            throw ConcurrentJunitException.wrap(e.getCause());
+            throw ConcurrentRunnerException.wrap(e.getCause());
         } finally {
             while (!tasks.isEmpty())
                 tasks.poll().cancel(true);

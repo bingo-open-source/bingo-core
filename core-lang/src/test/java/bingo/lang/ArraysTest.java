@@ -28,10 +28,12 @@ import junit.framework.TestCase;
 import org.junit.Assert;
 import org.junit.Test;
 
+import bingo.lang.testing.junit.ConcurrentTestCase;
+
 /**
  * {@link TestCase} of {@link Arrays}
  */
-public class ArraysTest extends ConcurrentTestBase {
+public class ArraysTest extends ConcurrentTestCase {
 	
 	@Test
 	public void testConstructor(){

@@ -13,18 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.lang;
-
-import org.junit.Rule;
-
-import bingo.lang.testing.junit.Repeater;
+package bingo.lang.testing.junit;
 
 import static org.junit.Assert.*;
 
-@SuppressWarnings("unused")
-public abstract class ConcurrentTestBase {
+import org.junit.After;
+import org.junit.Before;
 
-	@Rule
-	public Repeater repeater = new Repeater(10);
-	
+@SuppressWarnings("unused")
+public abstract class TestCase {
+
 }

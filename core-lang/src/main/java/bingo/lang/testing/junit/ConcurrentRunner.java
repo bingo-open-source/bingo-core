@@ -24,16 +24,16 @@ import org.junit.runners.model.TestClass;
 /**
  * @author Mathieu Carbou (mathieu.carbou@gmail.com)
  */
-final class ConcurrentJunitRunner extends BlockJUnit4ClassRunner {
-    public ConcurrentJunitRunner(final Class<?> klass) throws InitializationError {
+final class ConcurrentRunner extends BlockJUnit4ClassRunner {
+    public ConcurrentRunner(final Class<?> klass) throws InitializationError {
         super(klass);
         int nThreads = 0;
-        if (klass.isAnnotationPresent(Concurrency.class))
-            nThreads = Math.max(0, klass.getAnnotation(Concurrency.class).value());
+        if (klass.isAnnotationPresent(Concurrent.class))
+            nThreads = Math.max(0, klass.getAnnotation(Concurrent.class).threads());
         if (nThreads == 0)
             nThreads = new TestClass(klass).getAnnotatedMethods(Test.class).size();
         if (nThreads == 0)
             nThreads = Runtime.getRuntime().availableProcessors();
-        setScheduler(new ConcurrentJunitRunnerScheduler(klass.getSimpleName(), nThreads));
+        setScheduler(new ConcurrentRunnerScheduler(klass.getSimpleName(), nThreads));
     }
 }

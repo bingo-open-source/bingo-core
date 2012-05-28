@@ -32,10 +32,8 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE, ElementType.METHOD})
-public @interface Repeat {
-    int times() default -1;
-
-    boolean concurrent() default true;
+public @interface Concurrent {
+    int threads() default -1;
     
     boolean ignore() default false;
 }

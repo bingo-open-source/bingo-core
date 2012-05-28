@@ -19,24 +19,24 @@ package bingo.lang.testing.junit;
 /**
  * @author Mathieu Carbou (mathieu.carbou@gmail.com)
  */
-final class ConcurrentJunitException extends RuntimeException {
+final class ConcurrentRunnerException extends RuntimeException {
     private static final long serialVersionUID = 4401596464149916841L;
 
-	private ConcurrentJunitException(Throwable cause) {
+	private ConcurrentRunnerException(Throwable cause) {
         super(cause.getMessage(), cause);
     }
 
     public Throwable unwrap() {
         Throwable t = getCause();
-        while (t instanceof ConcurrentJunitException)
+        while (t instanceof ConcurrentRunnerException)
             t = t.getCause();
         return t;
     }
 
-    public static ConcurrentJunitException wrap(Throwable t) {
-        if (t instanceof ConcurrentJunitException)
-            t = ((ConcurrentJunitException) t).unwrap();
-        ConcurrentJunitException concurrentException = new ConcurrentJunitException(t);
+    public static ConcurrentRunnerException wrap(Throwable t) {
+        if (t instanceof ConcurrentRunnerException)
+            t = ((ConcurrentRunnerException) t).unwrap();
+        ConcurrentRunnerException concurrentException = new ConcurrentRunnerException(t);
         concurrentException.setStackTrace(t.getStackTrace());
         return concurrentException;
     }

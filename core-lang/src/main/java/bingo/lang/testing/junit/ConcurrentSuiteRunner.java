@@ -28,8 +28,8 @@ import java.util.List;
 /**
  * @author Mathieu Carbou (mathieu.carbou@gmail.com)
  */
-final class ConcurrentJunitSuiteRunner extends Suite {
-    public ConcurrentJunitSuiteRunner(Class<?> klass) throws InitializationError {
+final class ConcurrentSuiteRunner extends Suite {
+    public ConcurrentSuiteRunner(Class<?> klass) throws InitializationError {
         super(klass, new AllDefaultPossibilitiesBuilder(true) {
             @Override
             public Runner runnerForClass(Class<?> testClass) throws Throwable {
@@ -37,8 +37,8 @@ final class ConcurrentJunitSuiteRunner extends Suite {
                     new RunnerBuilder() {
                         @Override
                         public Runner runnerForClass(Class<?> testClass) throws Throwable {
-                            Concurrency annotation = testClass.getAnnotation(Concurrency.class);
-                            return annotation != null ? new ConcurrentJunitRunner(testClass) : null;
+                        	Concurrent annotation = testClass.getAnnotation(Concurrent.class);
+                            return annotation != null ? new ConcurrentRunner(testClass) : null;
                         }
                     },
                     ignoredBuilder(),
@@ -55,12 +55,12 @@ final class ConcurrentJunitSuiteRunner extends Suite {
             }
         });
         int nThreads = 0;
-        if (klass.isAnnotationPresent(Concurrency.class))
-            nThreads = Math.max(0, klass.getAnnotation(Concurrency.class).value());
+        if (klass.isAnnotationPresent(Concurrent.class))
+            nThreads = Math.max(0, klass.getAnnotation(Concurrent.class).threads());
         if (nThreads == 0) {
             SuiteClasses suiteClasses = klass.getAnnotation(SuiteClasses.class);
             nThreads = suiteClasses != null && suiteClasses.value().length > 0 ? suiteClasses.value().length : Runtime.getRuntime().availableProcessors();
         }
-        setScheduler(new ConcurrentJunitRunnerScheduler(klass.getSimpleName(), nThreads));
+        setScheduler(new ConcurrentRunnerScheduler(klass.getSimpleName(), nThreads));
     }
 }
