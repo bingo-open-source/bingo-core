@@ -31,7 +31,7 @@ import org.junit.Test;
  * Unit tests for the {@link Assert} class.
  */
 @SuppressWarnings("unchecked")
-public class AssertTest {
+public class AssertTest extends ConcurrentTestBase {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void instanceOf() {

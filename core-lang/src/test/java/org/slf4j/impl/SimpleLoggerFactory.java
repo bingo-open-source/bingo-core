@@ -36,6 +36,7 @@ import org.slf4j.ILoggerFactory;
  * 
  * @author Ceki G&uuml;lc&uuml;
  */
+@SuppressWarnings("unchecked")
 public class SimpleLoggerFactory implements ILoggerFactory {
 
   final static SimpleLoggerFactory INSTANCE = new SimpleLoggerFactory();

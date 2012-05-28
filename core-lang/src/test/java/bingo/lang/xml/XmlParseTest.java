@@ -1,13 +1,13 @@
 package bingo.lang.xml;
 
+import static org.junit.Assert.assertNotNull;
+
 import java.io.IOException;
 
 import org.junit.Test;
 
 import bingo.lang.resource.Resource;
 import bingo.lang.resource.Resources;
-
-import static org.junit.Assert.*;
 
 public class XmlParseTest {
 
@@ -45,8 +45,11 @@ public class XmlParseTest {
 				
 				assertNotNull(doc);
 				
-				System.out.println(doc.toXml());
+				String xml = doc.toXml();
 				
+				System.out.println(xml);
+				
+				assertNotNull(XmlDocument.parse(xml));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

@@ -24,9 +24,13 @@
  */
 package org.slf4j.impl;
 
+import java.util.Date;
+
 import org.slf4j.helpers.FormattingTuple;
 import org.slf4j.helpers.MarkerIgnoringBase;
 import org.slf4j.helpers.MessageFormatter;
+
+import bingo.lang.Dates;
 
 /**
  * A simple (and direct) implementation that logs messages of level INFO or
@@ -60,7 +64,6 @@ public class SimpleLogger extends MarkerIgnoringBase {
   /**
    * Mark the time when this class gets loaded into memory.
    */
-  private static long startTime = System.currentTimeMillis();
   public static final String LINE_SEPARATOR = System
       .getProperty("line.separator");
   
@@ -197,10 +200,11 @@ public class SimpleLogger extends MarkerIgnoringBase {
   private void log(String level, String message, Throwable t) {
     StringBuffer buf = new StringBuffer();
 
-    long millis = System.currentTimeMillis();
-    buf.append(millis - startTime);
-
-    buf.append(" [");
+    buf.append("[");
+    buf.append(Dates.format(new Date(System.currentTimeMillis()),"HH:mm:ss.SSS"));
+    buf.append("] ");
+    
+    buf.append("[");
     buf.append(Thread.currentThread().getName());
     buf.append("] ");
 
