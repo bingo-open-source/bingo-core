@@ -26,6 +26,6 @@ public class XmlProcessingInstruction extends XmlNode {
 	@Override
 	public String toXml(XmlFormat format) {
 		String indent = getIndent(format);
-		return indent + "<?" + target + " " + data + ">";
+		return indent + "<?" + target + " " + data + "?>";
 	}
 }
