@@ -199,6 +199,31 @@ public class ReflectClass<T> implements Named {
 		return constructors;
 	}
 	
+	public ReflectConstructor<T> getConstructor(){
+		return getConstructor((Class<?>[])null);
+	}
+	
+	public ReflectConstructor<T> getConstructor(Class<?>... parameterTypes) {
+		if(null == parameterTypes || parameterTypes.length == 0){
+			return defaultConstructor;
+		}
+		
+		for(ReflectConstructor<T> c : constructors) {
+			Constructor<T> jc = c.getJavaConstructor();
+
+			if(jc.getParameterTypes().length == parameterTypes.length){
+				for(int i=0;i<parameterTypes.length;i++){
+					
+					if(!jc.getParameterTypes()[i].equals(parameterTypes[i])){
+						continue;
+					}
+				}
+				return c;
+			}
+		}
+		return null;
+	}
+	
 	public ReflectField[] getFields() {
 		return fields;
 	}

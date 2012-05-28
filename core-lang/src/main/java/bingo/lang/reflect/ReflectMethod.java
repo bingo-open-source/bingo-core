@@ -15,12 +15,9 @@
  */
 package bingo.lang.reflect;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.lang.reflect.Type;
 
-import bingo.lang.Named;
 import bingo.lang.exceptions.ReflectException;
 
 /**
@@ -41,7 +38,7 @@ public class ReflectMethod extends ReflectMember{
 	/**
 	 * 该方法的参数列表。
 	 */
-	private Parameter[]   parameters;
+	private ReflectParameter[]   parameters;
 	
 	/**
 	 * 指定反射类reflectClass和原生javaMethod的构造方法。
@@ -65,7 +62,7 @@ public class ReflectMethod extends ReflectMember{
 		return this.javaMethod;
 	}
 	
-	public Parameter[] getParameters(){
+	public ReflectParameter[] getParameters(){
 		return parameters;
 	}
 	
@@ -101,7 +98,7 @@ public class ReflectMethod extends ReflectMember{
 	 * 反射类的方法的初始化模块，由构造方法调用。
 	 */
 	private void initialize() {
-		this.parameters = new Parameter[javaMethod.getParameterTypes().length];
+		this.parameters = new ReflectParameter[javaMethod.getParameterTypes().length];
 		
 		if(this.parameters.length > 0){
 			String[] names = reflectClass.getMetadata().getParameterNames(javaMethod);
@@ -111,7 +108,7 @@ public class ReflectMethod extends ReflectMember{
 			}
 
 			for(int i=0;i<parameters.length;i++){
-				Parameter p = new Parameter();
+				ReflectParameter p = new ReflectParameter();
 				
 				p.index       = i+1;
 				p.name        = names[i];
@@ -137,34 +134,5 @@ public class ReflectMethod extends ReflectMember{
 	@Override
     public String toString() {
 		return javaMethod.toString();
-    }	
-	
-	public static class Parameter implements Named {
-
-		private int 		  index;
-		private String 		  name;
-		private Class<?> 	  type;
-		private Type 		  genericType;
-		private Annotation[] annotations;
-
-		public final int getIndex() {
-			return index;
-		}
-
-		public final String getName() {
-			return name;
-		}
-
-		public final Class<?> getType() {
-			return type;
-		}
-		
-		public final Type getGenericType() {
-        	return genericType;
-        }
-
-		public final Annotation[] getAnnotations() {
-			return annotations;
-		}
-	}
+    }
 }

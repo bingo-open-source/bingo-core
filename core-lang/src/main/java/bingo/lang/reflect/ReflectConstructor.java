@@ -31,6 +31,11 @@ public class ReflectConstructor<T> extends ReflectMember {
 	private final Constructor<T> javaConstructor;
 	
 	/**
+	 * 该构造器的参数列表。
+	 */
+	private ReflectParameter[]   parameters;
+	
+	/**
 	 * 通过对应的反射类和JDK中的 {@link Constructor}实例初始化。
 	 * @param reflectClass 所对应的反射类。
 	 * @param javaConstructor JDK中的 {@link Constructor}实例。
@@ -49,6 +54,10 @@ public class ReflectConstructor<T> extends ReflectMember {
 	public String getName() {
 	    return javaConstructor.getName();
     }
+	
+	public ReflectParameter[] getParameters(){
+		return parameters;
+	}
 	
 	/**
 	 * 获取此 {@link ReflectConstructor}所包裹的Java原生的 {@link Constructor}。
@@ -77,6 +86,28 @@ public class ReflectConstructor<T> extends ReflectMember {
 	 */
 	private void initialize(){
 		this.setAccessiable();
+
+		this.parameters = new ReflectParameter[javaConstructor.getParameterTypes().length];
+		
+		if(this.parameters.length > 0){
+			String[] names = reflectClass.getMetadata().getParameterNames(javaConstructor);
+
+			if(null == names){
+				names = createUnknowParameterNames(parameters.length);
+			}
+
+			for(int i=0;i<parameters.length;i++){
+				ReflectParameter p = new ReflectParameter();
+				
+				p.index       = i+1;
+				p.name        = names[i];
+				p.type        = javaConstructor.getParameterTypes()[i];
+				p.genericType = javaConstructor.getGenericParameterTypes()[i];
+				p.annotations = javaConstructor.getParameterAnnotations()[i];
+				
+				parameters[i] = p;
+			}
+		}
 	}
 	
 	/**
@@ -97,4 +128,14 @@ public class ReflectConstructor<T> extends ReflectMember {
     public String toString() {
 		return javaConstructor.toString();
     }
+	
+	private static String[] createUnknowParameterNames(int length){
+		String[] names = new String[length];
+		
+		for(int i=0;i<length;i++){
+			names[i] = "arg" + (i+1);
+		}
+		
+		return names;
+	}
 }
