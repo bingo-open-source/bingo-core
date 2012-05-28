@@ -26,35 +26,43 @@ import bingo.lang.Strings;
 
 public class ArrayConverter extends AbstractConverter<Object>{
 
-	@Override
+	/**
+	 * 
+	 * @param value 
+	 * @param targetType
+	 * @param genericType
+	 * @param out
+	 * @return
+	 * @throws
+	 */
 	@SuppressWarnings("unused")
 	public boolean convertFrom(Object value, Class<?> targetType, Type genericType, Out<Object> out) throws Throwable {
 		Class<?> sourceType = value.getClass();
-		Class<?> componentType = targetType.getComponentType();
+		Class<?> targetComponentType = targetType.getComponentType();
 
 		if (sourceType.isArray()) {
 			
 			Class<?> sourceCompoenentType = sourceType.getComponentType();
 
-			if (componentType.isAssignableFrom(sourceCompoenentType)) {
+			if (targetComponentType.isAssignableFrom(sourceCompoenentType)) {
 				return out.returns(value);
 			} else {
 				int length = Array.getLength(value);
-				Object array = Array.newInstance(componentType, length);
+				Object array = Array.newInstance(targetComponentType, length);
 				for (int i = 0; i < length; i++) {
-					Array.set(array, i, Converts.convert(Array.get(value, i),componentType));
+					Array.set(array, i, Converts.convert(Array.get(value, i),targetComponentType));
 				}
 				return out.returns(array);
 			}
 			
 		} else if (value instanceof CharSequence) {
 			
-			return out.returns(stringToArray(value.toString(),componentType));
+			return out.returns(stringToArray(value.toString(),targetComponentType));
 			
 		} else if (value instanceof Collection<?>) {
 			Collection<?> collection = (Collection<?>)value;
 
-			return out.returns(iterableToArray(collection, componentType, collection.size()));
+			return out.returns(iterableToArray(collection, targetComponentType, collection.size()));
 			
 		} else if (value instanceof Iterable<?>) {
 			Iterable<?> iterable = (Iterable<?>) value;
@@ -65,12 +73,18 @@ public class ArrayConverter extends AbstractConverter<Object>{
 				length++;
 			}
 			
-			return out.returns(iterableToArray(iterable, componentType, length));
+			return out.returns(iterableToArray(iterable, targetComponentType, length));
 		}
 
 		return false;
 	}
 
+	/**
+	 * 将传入的Object对象（一般为array数组）转换为字符串，数组元素之间用逗号“,”连接。
+	 * @param array 传入的Object对象，一般为array数组。
+	 * @return 转换后的字符串。
+	 * @throws Throwable 
+	 */
 	@Override
     public String convertToString(Object array) throws Throwable {
 		
@@ -87,6 +101,13 @@ public class ArrayConverter extends AbstractConverter<Object>{
         return string.toString();
     }
 	
+	/**
+	 * 将类型为 {@link Iterable}的iterable对象转换为长度为length、类型为componentType数组。
+	 * @param iterable 传入的待转换的 {@link Iterable}对象。
+	 * @param componentType 指定的转换后数组类型。
+	 * @param length 数组的长度。
+	 * @return 转换后的对象。
+	 */
 	private static Object iterableToArray(Iterable<?> iterable,Class<?> componentType,int length){
 		Object array = Array.newInstance(componentType, length);
 
@@ -101,6 +122,12 @@ public class ArrayConverter extends AbstractConverter<Object>{
 		return array;
 	}
 	
+	/**
+	 * 将传入的string字符串以逗号“,”为分隔符，转换为类型为指定的componentType的数组。
+	 * @param string 传入的待转换的字符串。
+	 * @param componentType 指定的数组类型。
+	 * @return 由string转换过来的类型为componentType数组。
+	 */
     private static Object stringToArray(String string,Class<?> componentType){
         String[] strings = Strings.split(string,',');
         

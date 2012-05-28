@@ -24,6 +24,9 @@ import bingo.lang.Arrays;
 import bingo.lang.Primitives;
 import bingo.lang.exceptions.ReflectException;
 
+/**
+ * 反射类中的域。
+ */
 public class ReflectField extends ReflectMember {
 	
 	private final Field    javaField;
@@ -38,6 +41,11 @@ public class ReflectField extends ReflectMember {
 	
 	private final ReflectAccessor accessor;
 	
+	/**
+	 * 通过对应的反射类和域初始化。
+	 * @param reflectClass 所对应的反射类。
+	 * @param javaField 所对应的JDK中的 {@link Field}。
+	 */
 	protected ReflectField(ReflectClass<?> reflectClass, Field javaField){
 		super(reflectClass,javaField);
 		
@@ -177,6 +185,10 @@ public class ReflectField extends ReflectMember {
 		this.setAccessiable();
 	}
 	
+	/**
+	 * 获得此域的修改器方法。
+	 * @return 此域的修改器方法。
+	 */
 	private ReflectMethod findSetter(){
 		String   fieldName  = javaField.getName();
 		String   nameToFind = "set" + Character.toUpperCase(fieldName.charAt(0)) + (fieldName.length() > 1 ? fieldName.substring(1) : "");
@@ -197,7 +209,14 @@ public class ReflectField extends ReflectMember {
 		return m;
 	}
 	
+	/**
+	 * 通过返回值的类型和方法名称找到setter方法。
+	 * @param fieldType 返回值的类型。
+	 * @param nameToFind 该方法的名称。
+	 * @return 符合返回值类型以及方法名称的方法。
+	 */
 	private ReflectMethod findSetter(Class<?> fieldType,String nameToFind){
+		//iterate all public methods.
 		for(ReflectMethod rm : reflectClass.getMethods()){
 			Method m = rm.getJavaMethod();
 			if(m.getParameterTypes().length == 1 && 
