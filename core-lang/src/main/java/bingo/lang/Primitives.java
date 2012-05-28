@@ -55,7 +55,7 @@ public class Primitives {
 		add(primToWrap, wrapToPrim, int.class, Integer.class);
 		add(primToWrap, wrapToPrim, long.class, Long.class);
 		add(primToWrap, wrapToPrim, short.class, Short.class);
-		add(primToWrap, wrapToPrim, void.class, Void.class);
+//		add(primToWrap, wrapToPrim, void.class, Void.class);
 
 		PRIMITIVE_TO_WRAPPER_TYPE = Collections.unmodifiableMap(primToWrap);
 		WRAPPER_TO_PRIMITIVE_TYPE = Collections.unmodifiableMap(wrapToPrim);
@@ -143,7 +143,11 @@ public class Primitives {
 	 * @see Class#isPrimitive
 	 */
 	public static boolean isWrapperType(Class<?> type) {
-		return WRAPPER_TO_PRIMITIVE_TYPE.containsKey(Assert.notNull(type));
+		return null == type ? false : WRAPPER_TO_PRIMITIVE_TYPE.containsKey(Assert.notNull(type));
+	}
+	
+	public static boolean isPrimitiveOrWrapper(Class<?> type){
+		return null == type ? false : PRIMITIVE_TO_WRAPPER_TYPE.containsKey(type) || WRAPPER_TO_PRIMITIVE_TYPE.containsKey(type);
 	}
 
 	/**
@@ -229,7 +233,9 @@ public class Primitives {
 	 * </pre>
 	 */
 	public static <T> Class<T> wrap(Class<T> type) {
-		Assert.notNull(type);
+		if(null == type){
+			return null;
+		}
 
 		// cast is safe: long.class and Long.class are both of type Class<Long>
 		@SuppressWarnings("unchecked")
@@ -248,7 +254,9 @@ public class Primitives {
 	 * </pre>
 	 */
 	public static <T> Class<T> unwrap(Class<T> type) {
-		Assert.notNull(type);
+		if(null == type){
+			return null;
+		}
 
 		// cast is safe: long.class and Long.class are both of type Class<Long>
 		@SuppressWarnings("unchecked")

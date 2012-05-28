@@ -29,21 +29,41 @@ public interface Log {
 	
 	public void trace(String msg);
 	
+	public void trace(Throwable throwable);
+	
+	public void trace(String msg,Throwable throwable);
+	
 	public void trace(String msg,Object... args);
 	
 	public void debug(String msg);
+	
+	public void debug(Throwable throwable);
+	
+	public void debug(String msg,Throwable throwable);
 	
 	public void debug(String msg,Object... args);
 	
 	public void info(String msg);
 	
+	public void info(Throwable throwable);
+	
+	public void info(String msg,Throwable throwable);
+	
 	public void info(String msg,Object... args);
 	
 	public void warn(String msg);
 	
+	public void warn(Throwable throwable);
+	
+	public void warn(String msg,Throwable throwable);
+	
 	public void warn(String msg,Object... args);
 	
 	public void error(String msg);
+	
+	public void error(Throwable throwable);
+	
+	public void error(String msg,Throwable throwable);
 	
 	public void error(String msg,Object... args);	
 }

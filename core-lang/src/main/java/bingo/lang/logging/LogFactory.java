@@ -19,17 +19,18 @@ package bingo.lang.logging;
 public final class LogFactory {
 	
 	private static final boolean slf4j;
+	private static final NopLog   nopLog = new NopLog();;
 	
 	static {
 		slf4j = forName("org.slf4j.Logger");
 	}
 
 	public static Log get(String name) {
-		return slf4j ? getSlf4jLogger(name) : new JdkLog(java.util.logging.Logger.getLogger(name));
+		return slf4j ? getSlf4jLogger(name) : nopLog;
 	}
 	
 	public static Log get(Class<?> clazz) {
-		return slf4j ? getSlf4jLogger(clazz) : new JdkLog(java.util.logging.Logger.getLogger(clazz.getName()));
+		return slf4j ? getSlf4jLogger(clazz) : nopLog;
 	}
 	
 	private static Log getSlf4jLogger(String name){

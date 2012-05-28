@@ -15,9 +15,8 @@
  */
 package bingo.lang.logging;
 
-import bingo.lang.Strings;
 
-public class SlfLog implements Log {
+final class SlfLog implements Log {
 	
 	private final org.slf4j.Logger logger;
 	
@@ -49,39 +48,104 @@ public class SlfLog implements Log {
 	    logger.trace(msg);
     }
 	
+	public void trace(Throwable throwable) {
+		if(null == throwable){
+			logNullThrowable();
+		}else{
+			logger.trace(throwable.getMessage(),throwable);
+		}
+    }
+	
+	public void trace(String msg, Throwable throwable) {
+		logger.trace(msg,throwable);
+    }
+	
 	public void trace(String msg, Object... args) {
-		logger.trace(Strings.format(msg, args));
+		logger.trace(msg,args);
     }
 
 	public void debug(String msg) {
 		logger.debug(msg);
     }
 	
+	public void debug(Throwable throwable) {
+		if(null == throwable){
+			logNullThrowable();
+		}else{
+			logger.debug(throwable.getMessage(),throwable);
+		}
+	}
+	
+	public void debug(String msg, Throwable throwable) {
+	    logger.debug(msg,throwable);
+    }
+	
 	public void debug(String msg, Object... args) {
-		logger.debug(Strings.format(msg, args));
+		logger.debug(msg,args);
     }
 	
 	public void info(String msg) {
 		logger.info(msg);
     }
+
+	public void info(Throwable throwable) {
+		if(null == throwable){
+			logNullThrowable();
+		}else{
+			logger.info(throwable.getMessage(),throwable);	
+		}
+    }
+	
+	public void info(String msg, Throwable throwable) {
+		logger.info(msg,throwable);
+    }
 	
 	public void info(String msg, Object... args) {
-		logger.info(Strings.format(msg, args));
+		logger.info(msg,args);
     }
+	
 	
 	public void warn(String msg) {
 		logger.warn(msg);
     }
 	
-	public void warn(String msg, Object... args) {
-	    logger.warn(Strings.format(msg, args));
+	public void warn(Throwable throwable) {
+		if(null == throwable){
+			logNullThrowable();
+		}else{
+			logger.warn(throwable.getMessage(),throwable);	
+		}
+    }
+	
+	public void warn(String msg, Throwable throwable) {
+		logger.warn(msg,throwable);
     }
 
+	public void warn(String msg, Object... args) {
+		logger.warn(msg,args);
+    }
+	
 	public void error(String msg) {
 		logger.error(msg);
     }
 	
-	public void error(String msg, Object... args) {
-	    logger.error(Strings.format(msg, args));
+	public void error(Throwable throwable) {
+		if(null == throwable){
+			logNullThrowable();
+		}else{
+			logger.error(throwable.getMessage(),throwable);
+		}
     }
+	
+	public void error(String msg, Throwable throwable) {
+		logger.error(msg,throwable);
+    }
+	
+	public void error(String msg, Object... args) {
+		logger.error(msg,args);
+    }
+	
+	private void logNullThrowable(){
+		logger.info("null throwable input in logging");
+	}
 }
