@@ -26,7 +26,7 @@ import java.net.URI;
 import java.net.URL;
 
 import bingo.lang.Assert;
-import bingo.lang.io.Files;
+import bingo.lang.io.Paths;
 
 /**
  * {@link Resource} implementation for <code>java.io.File</code> handles.
@@ -57,7 +57,7 @@ class FileSystemResource extends AbstractResource implements WritableResource {
 	public FileSystemResource(File file) {
 		Assert.notNull(file, "File must not be null");
 		this.file = file;
-		this.path = Files.cleanPath(file.getPath());
+		this.path = Paths.normalize(file.getPath());
 	}
 
 	/**
@@ -73,7 +73,7 @@ class FileSystemResource extends AbstractResource implements WritableResource {
 	public FileSystemResource(String path) {
 		Assert.notNull(path, "Path must not be null");
 		this.file = new File(path);
-		this.path = Files.cleanPath(path);
+		this.path = Paths.normalize(path);
 	}
 
 	/**
@@ -153,7 +153,7 @@ class FileSystemResource extends AbstractResource implements WritableResource {
 	 */
 	@Override
 	public Resource createRelative(String relativePath) {
-		String pathToUse = Files.applyRelativePath(this.path, relativePath);
+		String pathToUse = Resources.applyRelativePath(this.path, relativePath);
 		return new FileSystemResource(pathToUse);
 	}
 

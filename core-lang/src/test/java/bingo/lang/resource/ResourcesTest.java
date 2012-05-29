@@ -15,14 +15,17 @@
  */
 package bingo.lang.resource;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLStreamHandler;
 
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 
 public class ResourcesTest {
@@ -71,6 +74,16 @@ public class ResourcesTest {
 				Resources.extractJarFileURL(new URL(null, "wsjar:file:myjar.jar!/", new DummyURLStreamHandler())));
 		assertEquals(new URL("file:myjar.jar"),
 				Resources.extractJarFileURL(new URL("file:myjar.jar")));
+	}
+	
+	@Test
+	public void testApplyRelativePath(){
+		assertEquals("/mypath/myfile", Resources.applyRelativePath("/mypath/", "myfile"));
+		assertEquals("/mypath/myfile", Resources.applyRelativePath("/mypath/", "/myfile"));
+		assertEquals("/myfile", 	   Resources.applyRelativePath("/myfile1", "/myfile"));
+		assertEquals("mypath/myfile",  Resources.applyRelativePath("mypath/", "myfile"));
+		assertEquals("mypath/myfile",  Resources.applyRelativePath("mypath/", "/myfile"));
+		assertEquals("mypath/myfile",  Resources.applyRelativePath("mypath/myfile1", "/myfile"));
 	}
 
 	/**

@@ -26,7 +26,7 @@ import java.net.URL;
 import java.net.URLConnection;
 
 import bingo.lang.Assert;
-import bingo.lang.io.Files;
+import bingo.lang.io.Paths;
 
 /**
  * {@link Resource} implementation for <code>java.net.URL</code> locators.
@@ -98,7 +98,7 @@ class UrlResource extends AbstractFileResolvingResource {
 	 */
 	private URL getCleanedUrl(URL originalUrl, String originalPath) {
 		try {
-			return new URL(Files.cleanPath(originalPath));
+			return new URL(Paths.normalize(originalPath));
 		}
 		catch (MalformedURLException ex) {
 			// Cleaned URL path cannot be converted to URL
