@@ -22,11 +22,10 @@ import static org.junit.Assert.fail;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.Random;
-
 import org.junit.Test;
 
 import bingo.lang.Strings;
+import bingo.lang.testing.junit.ConcurrentTestCase;
 import bingo.utils.codec.digest.Digests;
 
 /**
@@ -35,19 +34,12 @@ import bingo.utils.codec.digest.Digests;
  * @author Apache Software Foundation
  * @version $Id: DigestUtilsTest.java 1157192 2011-08-12 17:27:38Z ggregory $
  */
-public class DigestsTest {
+public class DigestsTest extends ConcurrentTestCase {
 
     private final byte[] testData = new byte[1024*1024];
     
     private byte[] getBytesUtf8(String hashMe) {
         return Strings.getBytesUtf8(hashMe);
-    }
-
-    /* (non-Javadoc)
-     * @see junit.framework.TestCase#setUp()
-     */
-    protected void setUp() throws Exception {
-        new Random().nextBytes(testData);
     }
 
     @Test

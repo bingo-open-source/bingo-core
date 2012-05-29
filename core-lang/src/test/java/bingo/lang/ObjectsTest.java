@@ -30,11 +30,12 @@ import org.junit.Test;
 
 import bingo.lang.exceptions.CloneException;
 import bingo.lang.mutable.MutableObject;
+import bingo.lang.testing.junit.ConcurrentTestCase;
 
 /**
  * {@link TestCase} of {@link Objects}
  */
-public class ObjectsTest {
+public class ObjectsTest extends ConcurrentTestCase {
 
 	@Test
 	public void testHashCode() {

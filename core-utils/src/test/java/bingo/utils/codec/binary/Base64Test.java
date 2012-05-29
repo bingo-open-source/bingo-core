@@ -30,6 +30,7 @@ import java.util.Random;
 import org.junit.Test;
 
 import bingo.lang.Strings;
+import bingo.lang.testing.junit.ConcurrentTestCase;
 
 /**
  * Test cases for Base64 class.
@@ -38,7 +39,7 @@ import bingo.lang.Strings;
  * @author Apache Software Foundation
  * @version $Id: Base64Test.java 1161342 2011-08-25 00:34:24Z ggregory $
  */
-public class Base64Test {
+public class Base64Test extends ConcurrentTestCase{
 	
 	static final byte[] CHUNK_SEPARATOR = {'\r', '\n'};
 

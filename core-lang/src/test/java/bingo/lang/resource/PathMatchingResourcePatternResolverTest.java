@@ -47,8 +47,8 @@ public class PathMatchingResourcePatternResolverTest {
 
 	private static final String[] CLASSES_IN_JUNIT =
 			new String[] {"After.class","AfterClass.class","Assert.class","Assume.class","Before.class","BeforeClass.class",
-						   "ComparisonFailure.class","ComparisonFailure$ComparisonCompactor.class",
-						   "Ignore.class","Rule.class","Test.class","Test$None.class"};
+						   "ClassRule.class","ComparisonFailure.class","ComparisonFailure$ComparisonCompactor.class",
+						   "Ignore.class","Rule.class","Test.class","Test$None.class","package-info.class"};
 
 	private PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
 

@@ -30,6 +30,7 @@ import bingo.lang.Classes;
 import bingo.lang.Strings;
 import bingo.lang.exceptions.NotFoundException;
 import bingo.lang.exceptions.UncheckedIOException;
+import bingo.lang.io.Paths;
 
 //from spring framework
 
@@ -385,5 +386,19 @@ public abstract class Resources {
 	 */
 	static void useCachesIfNecessary(URLConnection con) {
 		con.setUseCaches(con.getClass().getName().startsWith("JNLP"));
+	}
+	
+	static String applyRelativePath(String parentPath, String relativePath) {
+		int separatorIndex = parentPath.lastIndexOf(Paths.UNIX_SEPARATOR_STR);
+		if (separatorIndex != -1) {
+			String newPath = parentPath.substring(0, separatorIndex);
+			if (!relativePath.startsWith(Paths.UNIX_SEPARATOR_STR)) {
+				newPath += Paths.UNIX_SEPARATOR_STR;
+			}
+			return newPath + relativePath;
+		}
+		else {
+			return relativePath;
+		}
 	}
 }

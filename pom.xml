@@ -32,7 +32,7 @@
 		<common.encoding>UTF-8</common.encoding>
 
 		<!-- libraries versions  -->
-		<libs.junit.version>4.8.2</libs.junit.version>
+		<libs.junit.version>4.10</libs.junit.version>
 
 		<!-- maven properties -->
 		<maven.compile.source>1.5</maven.compile.source>

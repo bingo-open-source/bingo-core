@@ -21,10 +21,11 @@ import java.math.BigInteger;
 import org.junit.Test;
 
 import bingo.lang.Converts;
+import bingo.lang.testing.junit.ConcurrentTestCase;
 
 import static org.junit.Assert.*;
 
-public class NumberConverterTest {
+public class NumberConverterTest extends ConcurrentTestCase {
 
 	@Test
     public void testSimpleIntegerConversion() throws Exception {

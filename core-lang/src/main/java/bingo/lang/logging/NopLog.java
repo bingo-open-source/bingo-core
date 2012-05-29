@@ -15,75 +15,106 @@
  */
 package bingo.lang.logging;
 
-import java.util.logging.Level;
-
-import bingo.lang.Strings;
-
-public class JdkLog implements Log {
-	
-	private final java.util.logging.Logger logger;
-	
-	JdkLog(java.util.logging.Logger log) {
-		this.logger = log;
-    }
-	
-	public boolean isTraceEnabled() {
-		return logger.isLoggable(Level.FINEST);
-    }
+final class NopLog implements Log {
 	
 	public boolean isDebugEnabled() {
-		return logger.isLoggable(Level.FINE);
-    }
-	
-	public boolean isInfoEnabled() {
-		return logger.isLoggable(Level.INFO);
-    }
-	
-	public boolean isWarnEnabled() {
-		return logger.isLoggable(Level.WARNING);
-    }
+		return false;
+	}
 
 	public boolean isErrorEnabled() {
-		return logger.isLoggable(Level.SEVERE);
-    }
+		return false;
+	}
+
+	public boolean isInfoEnabled() {
+		return false;
+	}
+
+	public boolean isTraceEnabled() {
+		return false;
+	}
+
+	public boolean isWarnEnabled() {
+		return false;
+	}
 	
 	public void trace(String msg) {
-		logger.finest(msg);
+
+	}
+
+	public void trace(Throwable throwable) {
+	    
+    }
+	
+	public void trace(String msg, Throwable throwable) {
+	    
     }
 	
 	public void trace(String msg, Object... args) {
-		logger.finest(Strings.format(msg, args));
-    }
+
+	}
 
 	public void debug(String msg) {
-		logger.fine(msg);		
+
+	}
+	
+	public void debug(Throwable throwable) {
+	    
+    }
+
+	public void debug(String msg, Throwable throwable) {
+	    
     }
 	
 	public void debug(String msg, Object... args) {
-		logger.fine(Strings.format(msg, args));
-    }
+
+	}
 	
 	public void info(String msg) {
-		logger.info(msg);
-    }
-	
+
+	}
+
 	public void info(String msg, Object... args) {
-		logger.info(Strings.format(msg, args));
+
+	}
+	
+	public void info(String msg, Throwable throwable) {
+	    
+    }
+
+	public void info(Throwable throwable) {
+	    
+    }
+
+
+	public void warn(String msg) {
+
+	}
+
+	public void warn(Throwable throwable) {
+	    
     }
 	
-	public void warn(String msg) {
-		logger.warning(msg);
+	public void warn(String msg, Throwable throwable) {
+	    
     }
 	
 	public void warn(String msg, Object... args) {
-	    logger.warning(Strings.format(msg, args));
-    }
 
+	}
+	
 	public void error(String msg) {
-		logger.severe(msg);
-    }
 
-	public void error(String msg, Object... args) {
-		logger.severe(Strings.format(msg,args));
+	}
+
+	public void error(Throwable throwable) {
+	    
     }
+	
+	public void error(String msg, Throwable throwable) {
+	    
+    }
+	
+	public void error(String msg, Object... args) {
+
+	}
 }

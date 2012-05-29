@@ -17,7 +17,6 @@
 package bingo.lang.resource;
 
 import bingo.lang.Assert;
-import bingo.lang.io.Files;
 
 /**
  * {@link ResourceLoader} implementation that interprets plain resource paths
@@ -66,7 +65,7 @@ class ClassRelativeResourceLoader extends DefaultResourceLoader {
 
 		@Override
 		public Resource createRelative(String relativePath) {
-			String pathToUse = Files.applyRelativePath(getPath(), relativePath);
+			String pathToUse = Resources.applyRelativePath(getPath(), relativePath);
 			return new ClassRelativeContextResource(pathToUse, this.clazz);
 		}
 	}

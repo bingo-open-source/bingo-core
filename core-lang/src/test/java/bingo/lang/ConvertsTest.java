@@ -25,8 +25,9 @@ import static org.junit.Assert.*;
 
 import bingo.lang.testing.Df;
 import bingo.lang.testing.Perf;
+import bingo.lang.testing.junit.ConcurrentTestCase;
 
-public class ConvertsTest {
+public class ConvertsTest extends ConcurrentTestCase {
 
 	@Test
 	public void testSimplePerformanceComparsion(){

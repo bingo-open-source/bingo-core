@@ -113,6 +113,7 @@ public class Classes {
 	protected Classes() {
 
 	}
+	
 	//new instance
 	//----------------------------------------------------------------------
 	public static Object newInstance(String className) throws NotFoundException,ReflectException {
@@ -126,6 +127,64 @@ public class Classes {
 	public static Object newInstance(Class<?> clazz) throws ReflectException {
 		return Reflects.newInstance(clazz);
 	}
+	
+	//primitives
+    /**
+     * <p>Converts the specified primitive Class object to its corresponding
+     * wrapper Class object.</p>
+     *
+     * @param cls  the class to convert, may be null
+     * @return the wrapper class for {@code cls} or {@code cls} if
+     * {@code cls} is not a primitive. {@code null} if null input.
+     */
+    public static Class<?> primitiveToWrapper(Class<?> cls) {
+        Class<?> convertedClass = cls;
+        if (cls != null && cls.isPrimitive()) {
+            convertedClass = Primitives.wrap(cls);
+        }
+        return convertedClass;
+    }	
+    
+    /**
+     * <p>Converts the specified wrapper class to its corresponding primitive
+     * class.</p>
+     *
+     * @param cls the class to convert, may be <b>null</b>
+     * @return the corresponding primitive type if {@code cls} is a
+     * wrapper class, <b>itself</b> otherwise
+     */
+    public static Class<?> wrapperToPrimitive(Class<?> cls) {
+        return Primitives.unwrap(cls);
+    }
+    
+    /**
+     * Returns whether the given {@code type} is a primitive or primitive wrapper ({@link Boolean}, {@link Byte}, {@link Character},
+     * {@link Short}, {@link Integer}, {@link Long}, {@link Double}, {@link Float}).
+     * 
+     * @param type
+     *            The class to query or null.
+     * @return true if the given {@code type} is a primitive or primitive wrapper ({@link Boolean}, {@link Byte}, {@link Character},
+     *         {@link Short}, {@link Integer}, {@link Long}, {@link Double}, {@link Float}).
+     */
+    public static boolean isPrimitiveOrWrapper(Class<?> type) {
+        if (type == null) {
+            return false;
+        }
+        return type.isPrimitive() || isPrimitiveWrapper(type);
+    }
+
+    /**
+     * Returns whether the given {@code type} is a primitive wrapper ({@link Boolean}, {@link Byte}, {@link Character}, {@link Short},
+     * {@link Integer}, {@link Long}, {@link Double}, {@link Float}).
+     * 
+     * @param type
+     *            The class to query or null.
+     * @return true if the given {@code type} is a primitive wrapper ({@link Boolean}, {@link Byte}, {@link Character}, {@link Short},
+     *         {@link Integer}, {@link Long}, {@link Double}, {@link Float}).
+     */
+    public static boolean isPrimitiveWrapper(Class<?> type) {
+        return Primitives.isWrapperType(type);
+    }    
 	
 	//Class scan
 	//-----------------------------------------------------------------------
@@ -154,7 +213,7 @@ public class Classes {
         
         sw.stop();
         
-        log.debug("scan {0} classes in package '{1}' used {2}ms",classes.size(),basePackage,sw.getElapsedMilliseconds());
+        log.debug("scan {} classes in package '{}' used {}ms",classes.size(),basePackage,sw.getElapsedMilliseconds());
 		
 		return classes;
 	}
@@ -467,13 +526,102 @@ public class Classes {
 			     );
 	}
 	
-	public static boolean isJavaPackage(Class<?> clazz){
-		return null != clazz && clazz.getPackage().getName().startsWith("java.");
-	}
-	
-	public static boolean isJavaxPackage(Class<?> clazz){
-		return null != clazz && clazz.getPackage().getName().startsWith("javax.");
-	}
+    /**
+     * <p>Checks if one {@code Class} can be assigned to a variable of
+     * another {@code Class}.</p>
+     *
+     * <p>Unlike the {@link Class#isAssignableFrom(java.lang.Class)} method,
+     * this method takes into account widenings of primitive classes and
+     * {@code null}s.</p>
+     *
+     * <p>Primitive widenings allow an int to be assigned to a long, float or
+     * double. This method returns the correct result for these cases.</p>
+     *
+     * <p>{@code Null} may be assigned to any reference type. This method
+     * will return {@code true} if {@code null} is passed in and the
+     * toClass is non-primitive.</p>
+     *
+     * <p>Specifically, this method tests whether the type represented by the
+     * specified {@code Class} parameter can be converted to the type
+     * represented by this {@code Class} object via an identity conversion
+     * widening primitive or widening reference conversion. See
+     * <em><a href="http://java.sun.com/docs/books/jls/">The Java Language Specification</a></em>,
+     * sections 5.1.1, 5.1.2 and 5.1.4 for details.</p>
+     *
+     * @param cls  the Class to check, may be null
+     * @param toClass  the Class to try to assign into, returns false if null
+     * @return {@code true} if assignment possible
+     */
+    public static boolean isAssignable(Class<?> cls, Class<?> toClass) {
+        if (toClass == null) {
+            return false;
+        }
+        // have to check for null, as isAssignableFrom doesn't
+        if (cls == null) {
+            return !toClass.isPrimitive();
+        }
+        //autoboxing:
+        if (cls.isPrimitive() && !toClass.isPrimitive()) {
+            cls = Primitives.wrap(cls);
+            if (cls == null) {
+                return false;
+            }
+        }
+        if (toClass.isPrimitive() && !cls.isPrimitive()) {
+            cls = Primitives.unwrap(cls);
+            if (cls == null) {
+                return false;
+            }
+        }
+        if (cls.equals(toClass)) {
+            return true;
+        }
+        if (cls.isPrimitive()) {
+            if (toClass.isPrimitive() == false) {
+                return false;
+            }
+            if (Integer.TYPE.equals(cls)) {
+                return Long.TYPE.equals(toClass)
+                    || Float.TYPE.equals(toClass)
+                    || Double.TYPE.equals(toClass);
+            }
+            if (Long.TYPE.equals(cls)) {
+                return Float.TYPE.equals(toClass)
+                    || Double.TYPE.equals(toClass);
+            }
+            if (Boolean.TYPE.equals(cls)) {
+                return false;
+            }
+            if (Double.TYPE.equals(cls)) {
+                return false;
+            }
+            if (Float.TYPE.equals(cls)) {
+                return Double.TYPE.equals(toClass);
+            }
+            if (Character.TYPE.equals(cls)) {
+                return Integer.TYPE.equals(toClass)
+                    || Long.TYPE.equals(toClass)
+                    || Float.TYPE.equals(toClass)
+                    || Double.TYPE.equals(toClass);
+            }
+            if (Short.TYPE.equals(cls)) {
+                return Integer.TYPE.equals(toClass)
+                    || Long.TYPE.equals(toClass)
+                    || Float.TYPE.equals(toClass)
+                    || Double.TYPE.equals(toClass);
+            }
+            if (Byte.TYPE.equals(cls)) {
+                return Short.TYPE.equals(toClass)
+                    || Integer.TYPE.equals(toClass)
+                    || Long.TYPE.equals(toClass)
+                    || Float.TYPE.equals(toClass)
+                    || Double.TYPE.equals(toClass);
+            }
+            // should never get here
+            return false;
+        }
+        return toClass.isAssignableFrom(cls);
+    }	
 	
 	public static boolean isString(Class<?> clazz){
 		return null == clazz ? false : clazz.equals(String.class);

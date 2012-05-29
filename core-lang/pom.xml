@@ -14,17 +14,19 @@
 	
 	<dependencies>
 		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${libs.junit.version}</version>
+			<scope>compile</scope>
+			<optional>true</optional>
+		</dependency>
+			
+		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 			<version>1.6.1</version>
 			<scope>compile</scope>
 			<optional>true</optional>			
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-simple</artifactId>
-			<version>1.6.1</version>
-			<scope>test</scope>
 		</dependency>
 		
 		<dependency>

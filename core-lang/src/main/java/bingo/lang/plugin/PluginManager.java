@@ -34,7 +34,6 @@ import bingo.lang.resource.Resource;
 import bingo.lang.resource.Resources;
 import bingo.lang.xml.XmlDocument;
 import bingo.lang.xml.XmlElement;
-import bingo.lang.xml.XmlValidationException;
 import bingo.lang.xml.XmlValidator;
 
 @SuppressWarnings("unchecked")
@@ -44,7 +43,7 @@ public class PluginManager<T,P extends Plugin<T>> {
 	
 	private static final XmlValidator validator = XmlValidator.of(Resources.getInputStream(PluginManager.class,"plugin.xsd"));
 	
-	public static final String DEFAULT_PLUGIN_SEARCH_PATH = "/META-INF/plugins";
+	public static final String[] DEFAULT_PLUGIN_SEARCH_PATHS = new String[]{"/META-INF/plugins","/plugins"};
 	
 	private String          configName;
 	private Class<P> 		 pluginType;
@@ -77,28 +76,36 @@ public class PluginManager<T,P extends Plugin<T>> {
 		this.reflectPlugin = ReflectClass.get(pluginType);
 	}
 	
-	public P[] plugins(){
+	public P[] getPlugins(){
 		return Collections.toArray(plugins.values(),pluginType);
+	}
+	
+	public P getPlugin(String name){
+		return plugins.get(name.toLowerCase());
 	}
 	
 	public synchronized P[] load(){
 		if(null == locations){
-			locations = new String[]{DEFAULT_PLUGIN_SEARCH_PATH};
+			locations = DEFAULT_PLUGIN_SEARCH_PATHS;
 		}
 		
 		for(String location : locations){
 			load(location);
 		}
 		
-		for(XmlElement e : context.adds){
-			loadNewPlugin(e);
-		}
+		try {
+	        for(XmlElement e : context.adds){
+	        	loadNewPlugin(e);
+	        }
+	        
+	        for(XmlElement e : context.sets){
+	        	loadExistPlugin(e);
+	        }
+        } catch (Throwable e) {
+        	throw new PluginException("Loading plugin failed : {0}",e.getMessage(),e);
+        }
 		
-		for(XmlElement e : context.sets){
-			loadExistPlugin(e);
-		}
-		
-		return plugins();
+		return getPlugins();
 	}
 	
 	public synchronized void unload(){
@@ -140,7 +147,7 @@ public class PluginManager<T,P extends Plugin<T>> {
 		}
 	}
 	
-	protected void loadNewPlugin(XmlElement e){
+	protected void loadNewPlugin(XmlElement e) throws Throwable{
 		String   name        = e.requiredAttributeValue("name");
 		String   clazzName   = e.requiredAttributeValue("class");
 		Class<?> clazzObject = Classes.forName(clazzName);
@@ -158,22 +165,25 @@ public class PluginManager<T,P extends Plugin<T>> {
 		loadPlugin(e, plugin);
 	}
 	
-	protected void loadExistPlugin(XmlElement e){
+	protected void loadExistPlugin(XmlElement e) throws Throwable{
 		String name  = e.requiredAttributeValue("name");
 		String clazz = e.attributeValue("class");
-
-		if(Strings.isEmpty(clazz)){
-			throw new XmlValidationException("cannot use 'class' attribute in <set ...> element in xml : {0}",e.documentUrl());
-		}
-
+		
 		P plugin = plugins.get(name.toLowerCase());
 
-		Assert.notNull(plugin,"plugin '{0}' not exists,please check the xml : {1}",e.documentUrl());
+		if(null == plugin){
+			loadNewPlugin(e);
+			return ;
+		}else if(!Strings.isEmpty(clazz)){
+			plugins.remove(name.toLowerCase());
+			loadNewPlugin(e);
+			return;
+		}
 		
 		loadPlugin(e, plugin);
 	}
 	
-	protected void loadPlugin(XmlElement e,P plugin){
+	protected void loadPlugin(XmlElement e,P plugin) throws Throwable{
 		XmlElement document = e.childElement("document");
 
 		if(null != document){
@@ -208,6 +218,8 @@ public class PluginManager<T,P extends Plugin<T>> {
 				}
 			}
 		}
+		
+		plugin.load(this);
 	}
 	
 	private static final class LoadContext {

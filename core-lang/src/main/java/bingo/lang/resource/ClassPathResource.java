@@ -24,7 +24,7 @@ import java.net.URL;
 import bingo.lang.Assert;
 import bingo.lang.Classes;
 import bingo.lang.Objects;
-import bingo.lang.io.Files;
+import bingo.lang.io.Paths;
 
 /**
  * {@link Resource} implementation for class path resources.
@@ -72,7 +72,7 @@ class ClassPathResource extends AbstractFileResolvingResource {
 	 */
 	public ClassPathResource(String path, ClassLoader classLoader) {
 		Assert.notNull(path, "Path must not be null");
-		String pathToUse = Files.cleanPath(path);
+		String pathToUse = Paths.normalize(path);
 		if (pathToUse.startsWith("/")) {
 			pathToUse = pathToUse.substring(1);
 		}
@@ -90,7 +90,7 @@ class ClassPathResource extends AbstractFileResolvingResource {
 	 */
 	public ClassPathResource(String path, Class<?> clazz) {
 		Assert.notNull(path, "Path must not be null");
-		this.path = Files.cleanPath(path);
+		this.path = Paths.normalize(path);
 		this.clazz = clazz;
 	}
 
@@ -102,7 +102,7 @@ class ClassPathResource extends AbstractFileResolvingResource {
 	 * @param clazz the class to load resources with, if any
 	 */
 	protected ClassPathResource(String path, ClassLoader classLoader, Class<?> clazz) {
-		this.path = Files.cleanPath(path);
+		this.path = Paths.normalize(path);
 		this.classLoader = classLoader;
 		this.clazz = clazz;
 	}
@@ -187,7 +187,7 @@ class ClassPathResource extends AbstractFileResolvingResource {
 	 */
 	@Override
 	public Resource createRelative(String relativePath) {
-		String pathToUse = Files.applyRelativePath(this.path, relativePath);
+		String pathToUse = Resources.applyRelativePath(this.path, relativePath);
 		return new ClassPathResource(pathToUse, this.classLoader, this.clazz);
 	}
 
@@ -198,7 +198,7 @@ class ClassPathResource extends AbstractFileResolvingResource {
 	 */
 	@Override
 	public String getFilename() {
-		return Files.getFileName(this.path);
+		return Paths.getFileName(this.path);
 	}
 
 	/**

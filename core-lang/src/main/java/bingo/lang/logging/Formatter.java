@@ -17,6 +17,7 @@ package bingo.lang.logging;
 
 import bingo.lang.Strings;
 
+@Deprecated
 final class Formatter {
 	
 	static String format(String template, Object... args) {

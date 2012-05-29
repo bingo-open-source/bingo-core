@@ -20,8 +20,9 @@ import java.lang.reflect.UndeclaredThrowableException;
 import bingo.lang.Out;
 import bingo.lang.OutObject;
 import bingo.lang.exceptions.ConvertUnsupportedException;
+import bingo.lang.testing.junit.ConcurrentTestCase;
 
-abstract class ConverterTestBase {
+abstract class ConverterTestBase extends ConcurrentTestCase {
 	
 	protected Object convertFrom(Converter<?> converter, Object value,Class<?> targetType) {
 		Out<Object> out = new OutObject<Object>();

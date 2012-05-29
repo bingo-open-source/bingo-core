@@ -32,9 +32,10 @@ import org.junit.Test;
 import bingo.lang.io.IO;
 import bingo.lang.resource.Resource;
 import bingo.lang.resource.Resources;
+import bingo.lang.testing.junit.ConcurrentTestCase;
 
 @SuppressWarnings("unchecked")
-public class JSONDecodeTest {
+public class JSONDecodeTest extends ConcurrentTestCase {
     
     @Test
     public void testDecodeLarge() throws Exception {

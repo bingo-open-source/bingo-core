@@ -20,10 +20,12 @@ import junit.framework.TestCase;
 
 import org.junit.Test;
 
+import bingo.lang.testing.junit.ConcurrentTestCase;
+
 /**
  * {@link TestCase} of {@link Encoding}
  */
-public class EncodingTest {
+public class EncodingTest extends ConcurrentTestCase {
 	
 	private static final String STR0 = "01xxbbcc_&$#@!*))~中 测";
 	private static final String STR1 = "01xxbbcc_&$#@!*))~xxxkk";

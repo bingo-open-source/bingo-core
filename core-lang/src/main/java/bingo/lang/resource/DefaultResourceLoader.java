@@ -21,7 +21,6 @@ import java.net.URL;
 
 import bingo.lang.Assert;
 import bingo.lang.Classes;
-import bingo.lang.io.Files;
 
 /**
  * Default implementation of the {@link ResourceLoader} interface.
@@ -132,7 +131,7 @@ class DefaultResourceLoader implements ResourceLoader {
 
 		@Override
 		public Resource createRelative(String relativePath) {
-			String pathToUse = Files.applyRelativePath(getPath(), relativePath);
+			String pathToUse = Resources.applyRelativePath(getPath(), relativePath);
 			return new ClassPathContextResource(pathToUse, getClassLoader());
 		}
 	}

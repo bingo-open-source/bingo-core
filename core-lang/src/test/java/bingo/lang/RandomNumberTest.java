@@ -22,8 +22,9 @@ import java.util.Random;
 import org.junit.Test;
 
 import bingo.lang.testing.Perf;
+import bingo.lang.testing.junit.ConcurrentTestCase;
 
-public class RandomNumberTest {
+public class RandomNumberTest extends ConcurrentTestCase {
 
 	private static final Random RANDOM = new Random();
 	

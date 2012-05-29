@@ -17,9 +17,11 @@ package bingo.lang.plugin;
 
 import org.junit.Test;
 
+import bingo.lang.testing.junit.ConcurrentTestCase;
+
 import static org.junit.Assert.*;
 
-public class PluginManagerTest {
+public class PluginManagerTest extends ConcurrentTestCase {
 
 	@Test
 	public void testSimplePlugin(){
@@ -29,14 +31,32 @@ public class PluginManagerTest {
 		
 		Plugin<SimpleProvider>[] plugins = manager.load();
 		
-		assertEquals(1,plugins.length);
+		assertEquals(3,plugins.length);
 		
-		Plugin<SimpleProvider> simpleProviderPlugin1 = plugins[0];
-		
-		SimpleProvider1 bean = (SimpleProvider1)simpleProviderPlugin1.getBean();
+		Plugin<SimpleProvider> plugin = manager.getPlugin("Simple1");
+		SimpleProvider1 	   bean   = (SimpleProvider1)plugin.getBean();
 		
 		assertNotNull(bean);
+		assertEquals(100, bean.getInt1());
+		assertEquals(new Integer(200), bean.getInt2());
+		assertTrue(bean.isBool1());
+		assertNotNull(bean.getBool2());
+		assertNull(bean.getBool3());
 		
+		plugin = manager.getPlugin("Simple2");
+		bean   = (SimpleProvider1)plugin.getBean();
+		
+		assertNotNull(bean);
+		assertEquals(200, bean.getInt1());
+		assertEquals(new Integer(200), bean.getInt2());
+		assertTrue(bean.isBool1());
+		assertNotNull(bean.getBool2());
+		assertNull(bean.getBool3());		
+		
+		plugin = manager.getPlugin("Simple3");
+		bean   = (SimpleProvider1)plugin.getBean();
+		
+		assertNotNull(bean);
 		assertEquals(100, bean.getInt1());
 		assertEquals(new Integer(200), bean.getInt2());
 		assertTrue(bean.isBool1());

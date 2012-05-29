@@ -26,12 +26,14 @@ import java.util.Set;
 
 import org.junit.Test;
 
+import bingo.lang.testing.junit.ConcurrentTestCase;
+
 
 /**
  * Unit tests for the {@link Assert} class.
  */
 @SuppressWarnings("unchecked")
-public class AssertTest {
+public class AssertTest extends ConcurrentTestCase {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void instanceOf() {

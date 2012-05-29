@@ -15,6 +15,10 @@
  */
 package bingo.lang;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 import java.util.List;
@@ -22,12 +26,16 @@ import java.util.List;
 import junit.framework.TestCase;
 
 import org.junit.Assert;
+import org.junit.Test;
+
+import bingo.lang.testing.junit.ConcurrentTestCase;
 
 /**
  * {@link TestCase} of {@link Arrays}
  */
-public class ArraysTest extends TestCase {
-
+public class ArraysTest extends ConcurrentTestCase {
+	
+	@Test
 	public void testConstructor(){
 		new Arrays();
 		new SubArrays();
@@ -39,6 +47,7 @@ public class ArraysTest extends TestCase {
         assertEquals(false, Modifier.isFinal(Arrays.class.getModifiers()));		
 	}
 	
+	@Test
 	public void testToList(){
 		List<?> list;
 		
@@ -55,6 +64,7 @@ public class ArraysTest extends TestCase {
 		Assert.assertArrayEquals(array, list.toArray());
 	}
 	
+	@Test
 	public void testToStringArray(){
 		String[] strings;
 		
@@ -73,6 +83,7 @@ public class ArraysTest extends TestCase {
 		assertEquals(array[2].toString(), strings[2]);
 	}
 	
+	@Test
 	public void testConcat(){
 		Integer[] a = new Integer[]{};
 		Integer[] b = new Integer[]{};

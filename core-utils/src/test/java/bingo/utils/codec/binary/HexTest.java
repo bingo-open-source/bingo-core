@@ -28,6 +28,7 @@ import java.util.Random;
 import org.junit.Test;
 
 import bingo.lang.Strings;
+import bingo.lang.testing.junit.ConcurrentTestCase;
 import bingo.utils.codec.DecoderException;
 import bingo.utils.codec.EncoderException;
 
@@ -37,7 +38,7 @@ import bingo.utils.codec.EncoderException;
  * @author Apache Software Foundation
  * @version $Id: HexTest.java 1157192 2011-08-12 17:27:38Z ggregory $
  */
-public class HexTest {
+public class HexTest extends ConcurrentTestCase {
 
     private void checkDecodeHexOddCharacters(char[] data) {
         try {

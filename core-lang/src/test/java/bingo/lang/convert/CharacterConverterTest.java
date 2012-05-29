@@ -20,8 +20,9 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import bingo.lang.Converts;
+import bingo.lang.testing.junit.ConcurrentTestCase;
 
-public class CharacterConverterTest {
+public class CharacterConverterTest extends ConcurrentTestCase {
 
 	@Test
 	public void testConvertToString() {

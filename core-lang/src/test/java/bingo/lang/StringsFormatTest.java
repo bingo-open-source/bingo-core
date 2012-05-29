@@ -24,11 +24,12 @@ import junit.framework.TestCase;
 import org.junit.Test;
 
 import bingo.lang.testing.Perf;
+import bingo.lang.testing.junit.ConcurrentTestCase;
 
 /**
  * {@link TestCase} of {@link Strings#format(String, Object...)}
  */
-public class StringsFormatTest {
+public class StringsFormatTest extends ConcurrentTestCase {
 
 	@Test
 	public void testFormatsSimple(){

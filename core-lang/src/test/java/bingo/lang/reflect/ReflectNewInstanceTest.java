@@ -21,8 +21,9 @@ import org.junit.Test;
 
 import bingo.lang.Reflects;
 import bingo.lang.exceptions.ReflectException;
+import bingo.lang.testing.junit.ConcurrentTestCase;
 
-public class ReflectNewInstanceTest {
+public class ReflectNewInstanceTest extends ConcurrentTestCase {
 
 	@Test
 	@SuppressWarnings("unused")

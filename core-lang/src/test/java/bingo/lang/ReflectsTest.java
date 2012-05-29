@@ -31,9 +31,10 @@ import org.junit.Test;
 
 import bingo.lang.testbed.beans.TestBean;
 import bingo.lang.testing.Perf;
+import bingo.lang.testing.junit.ConcurrentTestCase;
 
 @SuppressWarnings({"unused"})
-public class ReflectsTest {
+public class ReflectsTest extends ConcurrentTestCase {
 
 	@Test
 	public void testFindField() {
