@@ -15,11 +15,8 @@
  */
 package bingo.lang.testing.junit;
 
-import static org.junit.Assert.*;
-
 import org.junit.Rule;
 
-@SuppressWarnings("unused")
 public abstract class ConcurrentTestCase {
 
 	@Rule

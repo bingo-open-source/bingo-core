@@ -22,9 +22,10 @@ import org.junit.Test;
 import bingo.lang.Strings;
 import bingo.lang.testing.Perf;
 
+@SuppressWarnings("deprecation")
 public class FormatterTest {
 
-	@Test
+    @Test
 	public void testFormatsSimple(){
 		
 		assertEquals("", Formatter.format(null));

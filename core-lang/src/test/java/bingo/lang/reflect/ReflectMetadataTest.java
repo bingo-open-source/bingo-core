@@ -6,8 +6,10 @@ import java.util.List;
 
 import org.junit.Test;
 
+import bingo.lang.testing.junit.ConcurrentTestCase;
+
 @SuppressWarnings("unused")
-public class ReflectMetadataTest {
+public class ReflectMetadataTest extends ConcurrentTestCase {
 	
 	@Test
 	public void testGetParameterNamesConstructor() {

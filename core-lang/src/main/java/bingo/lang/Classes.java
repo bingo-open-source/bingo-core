@@ -213,7 +213,7 @@ public class Classes {
         
         sw.stop();
         
-        log.debug("scan {0} classes in package '{1}' used {2}ms",classes.size(),basePackage,sw.getElapsedMilliseconds());
+        log.debug("scan {} classes in package '{}' used {}ms",classes.size(),basePackage,sw.getElapsedMilliseconds());
 		
 		return classes;
 	}

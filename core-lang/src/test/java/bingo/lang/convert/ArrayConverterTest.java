@@ -29,11 +29,11 @@ import org.junit.Test;
 import bingo.lang.Converts;
 import bingo.lang.Out;
 import bingo.lang.OutObject;
+import bingo.lang.testing.junit.ConcurrentTestCase;
 
-public class ArrayConverterTest {
+public class ArrayConverterTest extends ConcurrentTestCase {
 
 	@Test
-	@SuppressWarnings("unchecked")
     public void testIntegerConvert() {
 
         // Expected results

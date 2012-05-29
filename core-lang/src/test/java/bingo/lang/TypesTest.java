@@ -34,9 +34,10 @@ import bingo.lang.reflect.testbed.GenericParent;
 import bingo.lang.reflect.testbed.GenericTypeHolder;
 import bingo.lang.reflect.testbed.StringParameterizedChild;
 import bingo.lang.testing.Perf;
+import bingo.lang.testing.junit.ConcurrentTestCase;
 
 @SuppressWarnings( { "unchecked", "unused" })
-public class TypesTest {
+public class TypesTest extends ConcurrentTestCase {
 	
 	public static class TypesTestGeneric<B> {
 		public interface This<K, V> {

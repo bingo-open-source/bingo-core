@@ -16,13 +16,20 @@
 package bingo.lang;
 
 import static bingo.lang.StringsTest.FOO;
+
+import org.junit.Test;
+
+import bingo.lang.testing.junit.ConcurrentTestCase;
 import junit.framework.TestCase;
+
+import static org.junit.Assert.*;
 
 /**
  * {@link TestCase} of {@link Strings}
  */
-public class StringsEmptyBlankTrimTest extends TestCase {
+public class StringsEmptyBlankTrimTest extends ConcurrentTestCase {
 	
+	@Test
 	public void testIsEmpty() {
 		assertEquals(true, Strings.isEmpty(null));
 		assertEquals(true, Strings.isEmpty(""));
@@ -30,7 +37,8 @@ public class StringsEmptyBlankTrimTest extends TestCase {
 		assertEquals(false, Strings.isEmpty("foo"));
 		assertEquals(false, Strings.isEmpty("  foo  "));
 	}
-
+	
+	@Test
 	public void testIsNotEmpty() {
 		assertEquals(false, Strings.isNotEmpty(null));
 		assertEquals(false, Strings.isNotEmpty(""));
@@ -39,6 +47,7 @@ public class StringsEmptyBlankTrimTest extends TestCase {
 		assertEquals(true, Strings.isNotEmpty("  foo  "));
 	}
 
+	@Test
 	public void testIsBlank() {
 		assertEquals(true, Strings.isBlank(null));
 		assertEquals(true, Strings.isBlank(""));
@@ -47,6 +56,7 @@ public class StringsEmptyBlankTrimTest extends TestCase {
 		assertEquals(false, Strings.isBlank("  foo  "));
 	}
 
+	@Test
 	public void testIsNotBlank() {
 		assertEquals(false, Strings.isNotBlank(null));
 		assertEquals(false, Strings.isNotBlank(""));
@@ -55,6 +65,7 @@ public class StringsEmptyBlankTrimTest extends TestCase {
 		assertEquals(true, Strings.isNotBlank("  foo  "));
 	}
 	
+	@Test
     public void testTrim() {
         assertEquals(FOO, Strings.trimOrNull(FOO + "  "));
         assertEquals(FOO, Strings.trimOrNull(" " + FOO + "  "));
@@ -67,6 +78,7 @@ public class StringsEmptyBlankTrimTest extends TestCase {
         assertEquals(null, Strings.trimOrNull(null));
     }
 
+	@Test
     public void testTrimEmptyToNull() {
         assertEquals(FOO, Strings.trimToNull(FOO + "  "));
         assertEquals(FOO, Strings.trimToNull(" " + FOO + "  "));
@@ -79,6 +91,7 @@ public class StringsEmptyBlankTrimTest extends TestCase {
         assertEquals(null, Strings.trimToNull(null));
     }
 
+	@Test
     public void testTrimNullToEmpty() {
         assertEquals(FOO, Strings.trim(FOO + "  "));
         assertEquals(FOO, Strings.trim(" " + FOO + "  "));
@@ -91,6 +104,7 @@ public class StringsEmptyBlankTrimTest extends TestCase {
         assertEquals("", Strings.trim(null));
     }
     
+	@Test
     public void testTrim_StringChars() {
         // null trim
         assertEquals("", Strings.trim(null, null));
@@ -121,6 +135,7 @@ public class StringsEmptyBlankTrimTest extends TestCase {
         assertEquals(StringsTest.WHITESPACE, Strings.trim(StringsTest.WHITESPACE, Arrays.EMPTY_CHAR_ARRAY));
     }
     
+	@Test
     public void testtrimStart_StringString() {
         // null trimStart
         assertEquals("", Strings.trimStart(null, null));
@@ -152,6 +167,7 @@ public class StringsEmptyBlankTrimTest extends TestCase {
         assertEquals(StringsTest.WHITESPACE, Strings.trimStart(StringsTest.WHITESPACE, Arrays.EMPTY_CHAR_ARRAY));
     }
     
+	@Test
     public void testtrimEnd_StringString() {
         // null trimEnd
         assertEquals("", Strings.trimEnd(null, null));

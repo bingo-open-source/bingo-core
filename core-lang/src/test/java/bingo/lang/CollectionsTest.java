@@ -22,10 +22,11 @@ import java.util.List;
 import org.junit.Test;
 
 import bingo.lang.testing.Perf;
+import bingo.lang.testing.junit.ConcurrentTestCase;
 
 import static org.junit.Assert.*;
 
-public class CollectionsTest {
+public class CollectionsTest extends ConcurrentTestCase {
 
 	@Test
 	public void testPerformanceComparesToEnumerable() {

@@ -44,7 +44,7 @@ public final class Perf {
     
     public static void toConsole(String name, PerfResult perfResult){
     	System.out.println("PROJECT: " + name);
-    	toConsole(perfResult.getChildren().get(0), "");
+    	//toConsole(perfResult.getChildren().get(0), "");
     }
     
     private static void toConsole(PerfResult perfResult, String prefix){

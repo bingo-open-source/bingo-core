@@ -21,8 +21,9 @@ import static org.junit.Assert.fail;
 import org.junit.Test;
 
 import bingo.lang.Strings;
+import bingo.lang.testing.junit.ConcurrentTestCase;
 
-public class JSONEncodeOverflowTest {
+public class JSONEncodeOverflowTest extends ConcurrentTestCase {
 	
 	@Test
 	public void testSimpleOverflowEncode(){

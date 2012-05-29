@@ -32,9 +32,11 @@ public final class ConcurrentRule implements TestRule {
 	
 	private static final Log log = LogFactory.get(ConcurrentRule.class);
 	
-	private static final int CPUS = Runtime.getRuntime().availableProcessors();
+	private static final int DEFAULT_THREADS = Runtime.getRuntime().availableProcessors() * 2;
 	
-	private int threads = CPUS;
+	private int threads = DEFAULT_THREADS;
+	
+	private boolean runAnnotatedMethodOnly = false;
 	
 	public ConcurrentRule(){
 		
@@ -44,15 +46,30 @@ public final class ConcurrentRule implements TestRule {
 		this.threads = threads;
 	}
 	
+	public ConcurrentRule(boolean runAnnotatedMethodOnly) {
+		this.runAnnotatedMethodOnly = runAnnotatedMethodOnly;
+	}
+	
+	public ConcurrentRule(int threads,boolean runAnnotatedMethodOnly) {
+		this.threads                = threads;
+		this.runAnnotatedMethodOnly = runAnnotatedMethodOnly;
+	}
+	
     public Statement apply(final Statement base, final Description description) {
         return new Statement() {
             @Override
             public void evaluate() throws Throwable {
                 Concurrent annotation = description.getAnnotation(Concurrent.class);
                 
+                if(runAnnotatedMethodOnly && null == annotation){
+                	base.evaluate();
+                }
+                
                 if(null == annotation){
                 	annotation = description.getTestClass().getAnnotation(Concurrent.class);
                 }
+                
+                int threads = ConcurrentRule.this.threads;
                 
                 if(null != annotation ){
                 	
@@ -62,6 +79,10 @@ public final class ConcurrentRule implements TestRule {
                 	}
                 	
                 	threads = Math.max(0, annotation.threads());
+                	
+                	if(threads == -1){
+                		threads = DEFAULT_THREADS;
+                	}
                 }
                 
                 if (threads == 1) {
@@ -101,7 +122,7 @@ public final class ConcurrentRule implements TestRule {
                             throw e.unwrap();
                         }
                         
-                        log.debug("run test case '{}' concurrently with {} threads",testName,threads);
+                        log.debug("run '{}' concurrently with {} threads",testName,threads);
                     }
                 }
             }

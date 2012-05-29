@@ -36,19 +36,25 @@ import junit.framework.TestCase;
 import org.junit.Assert;
 import org.junit.Test;
 
+import bingo.lang.testing.junit.ConcurrentTestCase;
+
+import static org.junit.Assert.*;
 
 /**
  * {@link TestCase} of {@link Strings}
  */
-public class StringsJoinSplitTest extends TestCase {
+public class StringsJoinSplitTest extends ConcurrentTestCase {
 	
     //-----------------------------------------------------------------------
+	
+	@Test
     public void testJoin_Objects() {
         assertEquals("a,b,c", Strings.join("a", "b", "c"));
         assertEquals(",,a",   Strings.join(null, "", "a"));
         assertEquals(Strings.EMPTY,  Strings.join((Object[])null));
     }
 
+	@Test
     public void testJoin_Objectarray() {
 //        assertEquals(null, Strings.join(null)); // generates warning
         assertEquals("", Strings.join((Object[]) null)); // equivalent explicit cast
@@ -65,6 +71,7 @@ public class StringsJoinSplitTest extends TestCase {
         assertEquals("foo,2", Strings.join(MIXED_TYPE_LIST));
     }
         
+	@Test
     public void testJoin_ArrayChar() {
         assertEquals("", Strings.join((Object[]) null, ','));
         assertEquals(TEXT_LIST_CHAR, Strings.join(ARRAY_LIST, SEPARATOR_CHAR));
@@ -142,6 +149,7 @@ public class StringsJoinSplitTest extends TestCase {
         assertEquals(TEXT_LIST, Strings.join(Arrays.toList(ARRAY_LIST), SEPARATOR));
     }
     
+    @Test
     public void testSplit_String() {
     	Assert.assertArrayEquals(Arrays.EMPTY_STRING_ARRAY, Strings.split(null));
         assertEquals(0, Strings.split("").length);

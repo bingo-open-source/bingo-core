@@ -8,11 +8,12 @@ import junit.framework.TestCase;
 import org.junit.Test;
 
 import bingo.lang.iterable.ImmutableIteratorBase;
+import bingo.lang.testing.junit.ConcurrentTestCase;
 
 /**
  * {@link TestCase} of {@link Enumerable}
  */
-public class EnumerableTest extends TestCase {
+public class EnumerableTest extends ConcurrentTestCase {
 
 	@Test
 	public void testEnumerable() {

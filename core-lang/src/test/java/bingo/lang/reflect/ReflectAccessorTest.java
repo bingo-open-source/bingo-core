@@ -25,10 +25,13 @@ import org.junit.Test;
 
 import bingo.lang.Reflects;
 import bingo.lang.testing.Perf;
+import bingo.lang.testing.junit.Concurrent;
+import bingo.lang.testing.junit.ConcurrentTestCase;
 
-public class ReflectAccessorTest {
+public class ReflectAccessorTest extends ConcurrentTestCase {
 	
 	@Test
+	@Concurrent(ignore=true)
 	public void testStaticField(){
 		ReflectAccessor accessor = ReflectAccessor.createFor(Bean.class);
 		
@@ -42,6 +45,23 @@ public class ReflectAccessorTest {
 		
 		accessor.setField(new Bean(), index, 100);
 		assertEquals(new Integer(100),accessor.getField(null, index));
+	}
+	
+	@Test
+	public void testInstanceField(){
+		ReflectAccessor accessor = ReflectAccessor.createFor(Bean.class);
+		
+		int index = accessor.getFieldIndex("instanceField");
+		
+		Bean bean = new Bean();
+		
+		assertEquals(new Integer(0),accessor.getField(bean, index));
+		
+		accessor.setField(bean, index, 10);
+		assertEquals(new Integer(10),accessor.getField(bean, index));
+		
+		accessor.setField(bean, index, 100);
+		assertEquals(new Integer(100),accessor.getField(bean, index));
 	}
 	
 	@Test
@@ -240,6 +260,8 @@ public class ReflectAccessorTest {
 	
 	static class Bean {
 		public static int STATIC_FIELD = 0;
+		
+		public int instanceField = 0;
 	}
 	
 	static interface IBean {

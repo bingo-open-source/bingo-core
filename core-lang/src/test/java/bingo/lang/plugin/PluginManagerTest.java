@@ -17,9 +17,11 @@ package bingo.lang.plugin;
 
 import org.junit.Test;
 
+import bingo.lang.testing.junit.ConcurrentTestCase;
+
 import static org.junit.Assert.*;
 
-public class PluginManagerTest {
+public class PluginManagerTest extends ConcurrentTestCase {
 
 	@Test
 	public void testSimplePlugin(){

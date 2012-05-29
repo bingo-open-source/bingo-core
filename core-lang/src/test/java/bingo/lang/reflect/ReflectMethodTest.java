@@ -24,8 +24,9 @@ import org.junit.Test;
 
 import bingo.lang.Reflects;
 import bingo.lang.Types;
+import bingo.lang.testing.junit.ConcurrentTestCase;
 
-public class ReflectMethodTest {
+public class ReflectMethodTest extends ConcurrentTestCase {
 
 	@Test
 	public void testGetParameters(){

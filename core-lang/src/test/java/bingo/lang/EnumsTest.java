@@ -20,9 +20,10 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import bingo.lang.exceptions.InvalidValueException;
+import bingo.lang.testing.junit.ConcurrentTestCase;
 
 @SuppressWarnings("unused")
-public class EnumsTest {
+public class EnumsTest extends ConcurrentTestCase {
 
 	@Test
 	public void testNotValued() {

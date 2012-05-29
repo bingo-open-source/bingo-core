@@ -112,59 +112,61 @@ public abstract class ReflectAccessor {
      * @return 根据指定类型创建的 {@link ReflectAccessor}。
      */
     static ReflectAccessor createFor(Class<?> type){
-        ReflectLoader loader = new ReflectLoader(type.getClassLoader());
-        
-        String typeClassName      = type.getName();
-        String accessorClassName  = getAccessorClassNameFor(type);
-        Class<?> accessorClass    = null;
-        
-        try {
-            accessorClass = loader.loadClass(accessorClassName);
-        } catch (ClassNotFoundException ignored) {
-        }
-        
-        Method[] methods = getDeclaredMethods(type);
-        Field[]  fields  = getDelaredFields(type);
-        Constructor<?> c = getDefaultConstructor(type,accessorClassName.startsWith(typeClassName));
-        
-        if (accessorClass == null) {
-            String accessorClassNameInternal = accessorClassName.replace('.', '/');
-            String typeClassNameInternal     = typeClassName.replace('.', '/');
+    	synchronized (type) {
+            ReflectLoader loader = new ReflectLoader(type.getClassLoader());
+            
+            String typeClassName      = type.getName();
+            String accessorClassName  = getAccessorClassNameFor(type);
+            Class<?> accessorClass    = null;
+            
+            try {
+                accessorClass = loader.loadClass(accessorClassName);
+            } catch (ClassNotFoundException ignored) {
+            }
+            
+            Method[] methods = getDeclaredMethods(type);
+            Field[]  fields  = getDelaredFields(type);
+            Constructor<?> c = getDefaultConstructor(type,accessorClassName.startsWith(typeClassName));
+            
+            if (accessorClass == null) {
+                String accessorClassNameInternal = accessorClassName.replace('.', '/');
+                String typeClassNameInternal     = typeClassName.replace('.', '/');
 
-            ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
-            
-            defineAccessorConstructor(accessorClassNameInternal,cw);
-            
-            defineNewInstance(typeClassNameInternal,cw);
-            
-            defineNewArray(type,typeClassNameInternal,cw);
-            
-            defineGetArrayLength(type, cw);
-            
-            defineGetArrayItem(type, cw);
-            
-            defineSetArrayItem(type, cw);
-            
-            defineInvokeMethod(typeClassNameInternal,methods, cw);
-            
-            defineSetField(typeClassNameInternal,fields, cw);
-            
-            defineGetField(typeClassNameInternal,fields, cw);
+                ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+                
+                defineAccessorConstructor(accessorClassNameInternal,cw);
+                
+                defineNewInstance(typeClassNameInternal,cw);
+                
+                defineNewArray(type,typeClassNameInternal,cw);
+                
+                defineGetArrayLength(type, cw);
+                
+                defineGetArrayItem(type, cw);
+                
+                defineSetArrayItem(type, cw);
+                
+                defineInvokeMethod(typeClassNameInternal,methods, cw);
+                
+                defineSetField(typeClassNameInternal,fields, cw);
+                
+                defineGetField(typeClassNameInternal,fields, cw);
 
-            cw.visitEnd();
+                cw.visitEnd();
+                
+                byte[] data   = cw.toByteArray();
+                accessorClass = loader.defineClass(accessorClassName, data);
+            }
             
-            byte[] data   = cw.toByteArray();
-            accessorClass = loader.defineClass(accessorClassName, data);
-        }
-        
-        try {
-            ReflectAccessor accessor = (ReflectAccessor)accessorClass.newInstance();
-            accessor.methods     = methods;
-            accessor.fields      = fields;
-            accessor.constructor = c;
-            return accessor;
-        } catch (Exception ex) {
-            throw new ReflectException("Error constructing reflect accessor class: {0}",accessorClassName,ex);
+            try {
+                ReflectAccessor accessor = (ReflectAccessor)accessorClass.newInstance();
+                accessor.methods     = methods;
+                accessor.fields      = fields;
+                accessor.constructor = c;
+                return accessor;
+            } catch (Exception ex) {
+                throw new ReflectException("Error constructing reflect accessor class: {0}",accessorClassName,ex);
+            }
         }
     }
     
@@ -887,7 +889,7 @@ public abstract class ReflectAccessor {
     		className = "bingo." + className;
     	}
     	
-    	return className + "$BingoReflectAccessor";
+    	return className + "_BingoReflectAccessor";
     }
     
     static final class ReflectLoader extends ClassLoader {

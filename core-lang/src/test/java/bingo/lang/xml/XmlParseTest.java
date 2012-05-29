@@ -8,8 +8,9 @@ import org.junit.Test;
 
 import bingo.lang.resource.Resource;
 import bingo.lang.resource.Resources;
+import bingo.lang.testing.junit.ConcurrentTestCase;
 
-public class XmlParseTest {
+public class XmlParseTest extends ConcurrentTestCase {
 
 	@Test
 	public void testSimpleParseFromString() {

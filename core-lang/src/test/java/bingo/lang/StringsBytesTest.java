@@ -24,10 +24,12 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
+import bingo.lang.testing.junit.ConcurrentTestCase;
+
 /**
  * Tests {@link Strings}
  */
-public class StringsBytesTest {
+public class StringsBytesTest extends ConcurrentTestCase {
 
     private static final byte[] BYTES_FIXTURE = {'a','b','c'};
 

@@ -18,13 +18,20 @@ package bingo.lang;
 import static bingo.lang.StringsTest.BAR;
 import static bingo.lang.StringsTest.FOO;
 import static bingo.lang.StringsTest.foo;
+
+import org.junit.Test;
+
+import bingo.lang.testing.junit.ConcurrentTestCase;
 import junit.framework.TestCase;
+
+import static org.junit.Assert.*;
 
 /**
  * {@link TestCase} of {@link Strings}
  */
-public class StringsEqualsTest extends TestCase {
+public class StringsEqualsTest extends ConcurrentTestCase {
 
+	@Test
 	public void testEquals() {
 		assertEquals(true, Strings.equals(null, null));
 		assertEquals(true, Strings.equals(FOO, FOO));
@@ -35,6 +42,7 @@ public class StringsEqualsTest extends TestCase {
 		assertEquals(false, Strings.equals(null, FOO));
 	}
 
+	@Test
 	public void testEqualsIgnoreCase() {
 		assertEquals(true, Strings.equalsIgnoreCase(null, null));
 		assertEquals(true, Strings.equalsIgnoreCase(FOO, FOO));

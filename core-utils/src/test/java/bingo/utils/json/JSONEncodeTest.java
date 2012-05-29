@@ -29,7 +29,9 @@ import java.util.Map;
 
 import org.junit.Test;
 
-public class JSONEncodeTest {
+import bingo.lang.testing.junit.ConcurrentTestCase;
+
+public class JSONEncodeTest extends ConcurrentTestCase {
 	
 	@Test
 	public void testSimpleValue() throws Exception{
