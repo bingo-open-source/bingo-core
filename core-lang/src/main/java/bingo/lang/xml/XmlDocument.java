@@ -22,6 +22,7 @@ import bingo.lang.exceptions.ParseException;
 import bingo.lang.exceptions.UncheckedIOException;
 import bingo.lang.io.IO;
 import bingo.lang.resource.Resource;
+import bingo.lang.resource.Resources;
 
 public class XmlDocument extends XmlContainer {
 	
@@ -55,6 +56,10 @@ public class XmlDocument extends XmlContainer {
 		} catch (Exception e) {
 			throw new UncheckedIOException(e.getMessage(),e);
 		}
+	}
+	
+	public static XmlDocument load(String resourceFile) throws UncheckedIOException {
+		return load(Resources.getResource(resourceFile));
 	}
 
 	public static XmlDocument load(Resource resource) throws UncheckedIOException {
