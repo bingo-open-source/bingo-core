@@ -18,15 +18,8 @@ package bingo.lang.testing;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Date;
 
-import org.dom4j.Document;
-import org.dom4j.DocumentHelper;
-import org.dom4j.Element;
-import org.dom4j.io.XMLWriter;
-import org.xml.sax.SAXException;
-
-import bingo.lang.Strings;
+import bingo.lang.xml.XmlElement;
 
 /**
  * Performance measurements utility for unit test.
@@ -79,6 +72,12 @@ public final class Perf {
 		if(runnableType == IS_RUNNABLE_MATRIX){
 			runMatrix();
 		}
+	}
+	
+	public static void run(String name, Runnable action, int runTimes){
+		Perf perf = new Perf(action);
+		perf.setFileName(name);
+		perf.run();
 	}
 	
     /**
@@ -134,7 +133,7 @@ public final class Perf {
     }
     
     private void matrixToHtml(PerfResult[][] resultMatrix) {
-	    Document doc = PerfHtmlBuilder.buildUpMatrixHtml(projectName, resultMatrix);
+	    XmlElement doc = PerfHtmlBuilder.buildUpMatrixHtml(projectName, resultMatrix);
 	    writeToHtml(doc);
     }
 
@@ -171,7 +170,7 @@ public final class Perf {
     }
     
     public void groupToHtml(){
-    	Document doc = buildUpGroupHtml();
+    	XmlElement doc = PerfHtmlBuilder.buildUpGroupHtml(projectName, perfResult);
 	    writeToHtml(doc);
     }
     
@@ -197,51 +196,8 @@ public final class Perf {
     	}
     }
     
-    private Document buildUpGroupHtml(){
-    	Document doc = DocumentHelper.createDocument();
-    	Element html = doc.addElement("html");
-    	html.addAttribute("lang", "en");
-    	Element head = html.addElement("head");
-    	Element link = head.addElement("link");
-    	link.addAttribute("href", "http://twitter.github.com/bootstrap/assets/css/bootstrap.css");
-    	link.addAttribute("rel", "stylesheet");
-    	Element body = html.addElement("body");
-    	body.addElement("H2").addText(projectName);
-    	Element table = body.addElement("table");
-    	table.addAttribute("class", "table table-bordered table-striped");
-    	Element thead = table.addElement("thead");
-    	Element tr = thead.addElement("tr");
-    	tr.addElement("th").addText("Hierarchy");
-    	tr.addElement("th").addText("Name");
-    	tr.addElement("th").addText("Run Times");
-    	tr.addElement("th").addText("ms");
-    	tr.addElement("th").addText("ns");
-    	Element tbody = table.addElement("tbody");
-    	buildUpGroupRow("|", 0, perfResult, tbody);
-    	return doc;
-    }
-    
-    private void buildUpGroupRow(String prefix, int number, PerfResult perfResult, Element tbody){
-    	if(number != 0){
-        	Element tr = tbody.addElement("tr");
-        	tr.addElement("td").addText(prefix);
-    		prefix += "--" + number + "--|";
-        	tr.addElement("td").addText(perfResult.getName());
-        	tr.addElement("td").addText(perfResult.getRunTimes() + "");
-        	tr.addElement("td").addText(perfResult.getElapsedMilliseconds() + "");
-        	tr.addElement("td").addText(perfResult.getElapsedNanoseconds() + "");
-    	}
-    	number++;
-    	
-    	if(perfResult.isEnd() == false){
-    		for (PerfResult perf : perfResult.getChildren()) {
-	            buildUpGroupRow(prefix, number, perf, tbody);
-            }
-    	}
-    }
-    
-    private void writeToHtml(Document document){
-    	XMLWriter writer = null;
+    private void writeToHtml(XmlElement ele){
+    	FileWriter writer = null;
     	try{
         	File dir = new File(DEFAULT_DIR_NAME);
         	File file = null;
@@ -252,11 +208,11 @@ public final class Perf {
         		file = new File(dir, projectName + ".html");
         	}
         	file.createNewFile();
-        	writer = new XMLWriter(new FileWriter(file));
-        	writer.write(document);
-    	} catch (Exception e) {
-    		throw new RuntimeException("error when generating HTML file.");
-		} finally {
+        	writer = new FileWriter(file);
+        	writer.write(ele.toString());
+		} catch (IOException e) {
+	        throw new RuntimeException("error when generating HTML file");
+        } finally {
 			if(null != writer){
 				try {
 	                writer.close();

@@ -67,6 +67,7 @@ public class PerfTest {
 
 		Perf perf = new Perf(rg);
 		perf.setProjectName("Array.get(native)");
+		perf.setShowResultTo(Perf.TO_CONSOLE_AND_HTML);
 		perf.run();
 	}
 	
