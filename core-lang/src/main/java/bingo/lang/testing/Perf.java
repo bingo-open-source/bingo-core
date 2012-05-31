@@ -19,12 +19,16 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import bingo.lang.logging.Log;
+import bingo.lang.logging.LogFactory;
 import bingo.lang.xml.XmlElement;
 
 /**
  * Performance measurements utility for unit test.
  */
 public final class Perf {
+	
+	private static final Log log = LogFactory.get(Perf.class);
 	
 	public static final int TO_CONSOLE = 0;
 	public static final int TO_HTML = 1;
@@ -38,6 +42,7 @@ public final class Perf {
 	private Runnable runnableThing;
 	private int showResultTo = TO_CONSOLE;
 	private String fileName;
+	private int runTimes;
 	
 	private PerfResult perfResult; 
 	
@@ -76,7 +81,8 @@ public final class Perf {
 	
 	public static void run(String name, Runnable action, int runTimes){
 		Perf perf = new Perf(action);
-		perf.setFileName(name);
+		perf.setProjectName(name);
+		perf.setRunTimes(runTimes);
 		perf.run();
 	}
 	
@@ -85,10 +91,14 @@ public final class Perf {
      */    
     private void runGroup(){
     	/* wrapped with runnable group */
-    	String name = RunnableGroup.tryToGetName(runnableThing);
-    	int times = RunnableGroup.tryToGetRunTimes(runnableThing);
-    	
-    	RunnableGroup runnableGroup = new RunnableGroup(name, times, runnableThing);
+    	RunnableGroup runnableGroup = null;
+    	if(runnableThing instanceof RunnableGroup){
+        	String name = RunnableGroup.tryToGetName(runnableThing);
+        	int times = RunnableGroup.tryToGetRunTimes(runnableThing);
+        	runnableGroup = new RunnableGroup(name, times, runnableThing);
+    	} else {
+    		runnableGroup = new RunnableGroup(projectName, runTimes, runnableThing);
+    	}
     	
     	/* warm up */
     	runnableGroup.run();
@@ -113,6 +123,8 @@ public final class Perf {
     
     private void runMatrix(){
     	RunnableMatrix matrix = (RunnableMatrix) runnableThing;
+
+    	matrix.run();
     	
     	matrix.run();
     	
@@ -166,7 +178,11 @@ public final class Perf {
      */
     public void groupToConsole(){
     	System.out.println("PROJECT: " + projectName);
-    	toConsole(perfResult.getChildren().get(0), "");
+    	if(runnableThing instanceof RunnableGroup){
+        	groupToConsole(perfResult.getChildren().get(0), "");
+    	} else {
+        	groupToConsole(perfResult, "");
+    	}
     }
     
     public void groupToHtml(){
@@ -186,12 +202,12 @@ public final class Perf {
     	this.runnableType = IS_SIMPLE_RUNNABLE;
     }
     
-    private void toConsole(PerfResult perfResult, String prefix){
+    private void groupToConsole(PerfResult perfResult, String prefix){
     	System.out.println(prefix + perfResult.toString());
     	prefix += "  ";
     	if(perfResult.isEnd() == false){
         	for (PerfResult perfResultChild : perfResult.getChildren()) {
-    			toConsole(perfResultChild, prefix);
+    			groupToConsole(perfResultChild, prefix);
     		}
     	}
     }
@@ -211,6 +227,7 @@ public final class Perf {
         	writer = new FileWriter(file);
         	writer.write(ele.toString());
 		} catch (IOException e) {
+			log.error("error when generating HTML file for project {}", projectName);
 	        throw new RuntimeException("error when generating HTML file");
         } finally {
 			if(null != writer){
@@ -263,6 +280,14 @@ public final class Perf {
 
 	public void setRunnableType(int runnableType) {
     	this.runnableType = runnableType;
+    }
+
+	public int getRunTimes() {
+    	return runTimes;
+    }
+
+	public void setRunTimes(int runTimes) {
+    	this.runTimes = runTimes;
     }
     
 }

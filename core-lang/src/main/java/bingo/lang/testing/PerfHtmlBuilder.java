@@ -11,7 +11,7 @@ public class PerfHtmlBuilder {
 	public static XmlElement buildUpMatrixHtml(String projectName, PerfResult[][] resultMatrix) {
 		XmlElement html = new XmlElement("html", new XmlAttribute("lang", "en"));
     	buildUpHead(projectName, html);
-    	buildUpBody(projectName, html, resultMatrix);
+    	buildUpMatrixBody(projectName, html, resultMatrix);
 	    return html;
     }
 	
@@ -22,7 +22,6 @@ public class PerfHtmlBuilder {
 	    return html;
 	}
 	
-    
     private static XmlElement buildUpGroupBody(String projectName, XmlElement html, PerfResult perfResult){
     	XmlElement tbody = null;
     	XmlElement body = new XmlElement("body", 
@@ -78,7 +77,7 @@ public class PerfHtmlBuilder {
     	return head;
 	}
 	
-	private static XmlElement buildUpBody(String projectName, XmlElement html, PerfResult[][] resultMatrix){
+	private static XmlElement buildUpMatrixBody(String projectName, XmlElement html, PerfResult[][] resultMatrix){
 		XmlElement divContainer = null;
 		XmlElement body = 
 			new XmlElement("body", 
