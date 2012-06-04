@@ -1,6 +1,7 @@
 package bingo.lang.testing;
 
 import java.util.Date;
+import java.util.List;
 
 import bingo.lang.xml.XmlAttribute;
 import bingo.lang.xml.XmlElement;
@@ -15,14 +16,14 @@ public class PerfHtmlBuilder {
 	    return html;
     }
 	
-	public static XmlElement buildUpGroupHtml(String projectName, PerfResult perfResult) {
+	public static XmlElement buildUpGroupHtml(String projectName, List<PerfResult> resultList) {
 		XmlElement html = new XmlElement("html", new XmlAttribute("lang", "en"));
     	buildUpHead(projectName, html);
-    	buildUpGroupBody(projectName, html, perfResult);
+    	buildUpGroupBody(projectName, html, resultList);
 	    return html;
 	}
 	
-    private static XmlElement buildUpGroupBody(String projectName, XmlElement html, PerfResult perfResult){
+    private static XmlElement buildUpGroupBody(String projectName, XmlElement html, List<PerfResult> resultList){
     	XmlElement tbody = null;
     	XmlElement body = new XmlElement("body", 
     		new XmlElement("h2", new XmlText(projectName)),
@@ -30,7 +31,6 @@ public class PerfHtmlBuilder {
     			new XmlAttribute("class", "table table-bordered table-striped"),
     			new XmlElement("thead", 
     				new XmlElement("tr", 
-    					new XmlElement("th", new XmlText("Hierarchy")),
     					new XmlElement("th", new XmlText("Name")),
     					new XmlElement("th", new XmlText("Run Times")),
     					new XmlElement("th", new XmlText("ms")),
@@ -38,30 +38,21 @@ public class PerfHtmlBuilder {
     					)),
     			tbody = new XmlElement("tbody")));
 
-    	buildUpGroupTbody("|", 0, perfResult, tbody);
+    	buildUpGroupTbody(resultList, tbody);
     	html.add(body);
     	return body;
     }
     
-    private static void buildUpGroupTbody(String prefix, int number, PerfResult perfResult, XmlElement tbody){
-    	if(number != 0){
+    private static void buildUpGroupTbody(List<PerfResult> resultList, XmlElement tbody){
+    	for (PerfResult per : resultList) {
         	XmlElement tr = new XmlElement("tr", 
-            		new XmlElement("td", new XmlText(prefix)),
-            		new XmlElement("td", new XmlText(perfResult.getName())),
-            		new XmlElement("td", new XmlText(perfResult.getRunTimes() + "")),
-            		new XmlElement("td", new XmlText(perfResult.getElapsedMilliseconds() + "")),
-            		new XmlElement("td", new XmlText(perfResult.getElapsedNanoseconds() + ""))
+            		new XmlElement("td", new XmlText(per.getName())),
+            		new XmlElement("td", new XmlText(per.getRunTimes() + "")),
+            		new XmlElement("td", new XmlText(per.getElapsedMilliseconds() + "")),
+            		new XmlElement("td", new XmlText(per.getElapsedNanoseconds() + ""))
         		);
-    		prefix += "--" + number + "--|";
         	tbody.add(tr);
-    	}
-    	number++;
-    	
-    	if(perfResult.isEnd() == false){
-    		for (PerfResult perf : perfResult.getChildren()) {
-    			buildUpGroupTbody(prefix, number, perf, tbody);
-            }
-    	}
+        }
     }
 	
 	private static XmlElement buildUpHead(String projectName, XmlElement html){
