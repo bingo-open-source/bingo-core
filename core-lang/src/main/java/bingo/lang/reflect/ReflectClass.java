@@ -241,11 +241,11 @@ public class ReflectClass<T> implements Named {
 	}
 	
 	public ReflectField getField(final String name,final Class<?> fieldType){
-		return Collections.firstOrNull(fields,Predicates.nameEquals(ReflectField.class, name));
+		return Collections.firstOrNull(fields,Predicates.<ReflectField>nameEquals(name));
 	}
 	
 	public ReflectField getFieldIgnorecase(final String name){
-		return Collections.firstOrNull(fields,Predicates.nameEqualsIgnoreCase(ReflectField.class, name));
+		return Collections.firstOrNull(fields,Predicates.<ReflectField>nameEqualsIgnoreCase(name));
 	}
 	
 	public ReflectMethod[] getMethods(){
@@ -257,7 +257,7 @@ public class ReflectClass<T> implements Named {
 	}
 	
 	public ReflectMethod getMethod(final String name){
-		return Collections.firstOrNull(methods, Predicates.nameEquals(ReflectMethod.class, name));
+		return Collections.firstOrNull(methods, Predicates.<ReflectMethod>nameEquals(name));
 	}
 	
 	public ReflectMethod getMethod(final String name,final Class<?>... argumentTypes){

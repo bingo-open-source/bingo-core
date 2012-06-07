@@ -15,21 +15,23 @@
  */
 package bingo.lang;
 
-public final class Predicates {
-	
-	public static <T extends Named> Predicate<T> nameEquals(final String name){
-		return new Predicate<T>() {
-			public boolean apply(T object) {
-				return Strings.equals(object.getName(), name);
-			}
-		};
-	}
+import java.util.List;
+import java.util.Set;
 
-	public static <T extends Named> Predicate<T> nameEqualsIgnoreCase(final String name){
-		return new Predicate<T>() {
-			public boolean apply(T object) {
-				return Strings.equalsIgnoreCase(object.getName(),name);
-			}
-		};
+import bingo.lang.collections.WrappedImmutableList;
+import bingo.lang.collections.WrappedImmutableSet;
+
+public class Immutables {
+
+	protected Immutables(){
+		
+	}
+	
+	public static <E> List<E> listOf(List<E> list) {
+		return new WrappedImmutableList<E>(list);
+	}
+	
+	public static <E> Set<E> setOf(Set<E> set) {
+		return new WrappedImmutableSet<E>(set);
 	}
 }

@@ -26,15 +26,14 @@ public class PluginManagerTest extends ConcurrentTestCase {
 	@Test
 	public void testSimplePlugin(){
 		
-		PluginManager<SimpleProvider, Plugin<SimpleProvider>> manager = 
-			new PluginManager<SimpleProvider, Plugin<SimpleProvider>>(SimpleProvider.class);
+		PluginManager manager = new PluginManager(SimpleProvider.class);
 		
-		Plugin<SimpleProvider>[] plugins = manager.load();
+		Plugin[] plugins = manager.load();
 		
 		assertEquals(3,plugins.length);
 		
-		Plugin<SimpleProvider> plugin = manager.getPlugin("Simple1");
-		SimpleProvider1 	   bean   = (SimpleProvider1)plugin.getBean();
+		Plugin			 plugin = manager.getPlugin("Simple1");
+		SimpleProvider1  bean   = plugin.getBean();
 		
 		assertNotNull(bean);
 		assertEquals(100, bean.getInt1());

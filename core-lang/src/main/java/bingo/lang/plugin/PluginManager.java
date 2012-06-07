@@ -17,12 +17,12 @@ package bingo.lang.plugin;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import bingo.lang.Assert;
 import bingo.lang.Classes;
 import bingo.lang.Collections;
+import bingo.lang.Predicates;
 import bingo.lang.Reflects;
 import bingo.lang.Strings;
 import bingo.lang.beans.BeanClass;
@@ -36,8 +36,7 @@ import bingo.lang.xml.XmlDocument;
 import bingo.lang.xml.XmlElement;
 import bingo.lang.xml.XmlValidator;
 
-@SuppressWarnings("unchecked")
-public class PluginManager<T,P extends Plugin<T>> {
+public class PluginManager {
 	
 	private static final Log log = LogFactory.get(PluginManager.class);
 	
@@ -45,52 +44,47 @@ public class PluginManager<T,P extends Plugin<T>> {
 	
 	public static final String[] DEFAULT_PLUGIN_SEARCH_PATHS = new String[]{"/META-INF/plugins","/plugins"};
 	
-	private String          configName;
-	private Class<P> 		 pluginType;
-	private Class<T> 		 beanType;
-	private ReflectClass<P> reflectPlugin;
-	private String[] 		 locations;
-	private LoadContext		 context = new LoadContext();
-	private Map<String, P>  plugins = new ConcurrentHashMap<String, P>();
+	private Class<?> 		 				 beanType;
+	private ReflectClass<? extends Plugin> reflectPlugin;
+	
+	private String		   systemConfigLocation;
+	private String[] 	   locations;
+	private LoadContext	   context = new LoadContext();
+	private List<Plugin>  plugins = new CopyOnWriteArrayList<Plugin>();
 	
 	protected PluginManager(){
 
 	}
 	
-	public PluginManager(Class<T> beanType){
-		this(beanType,(Class<P>)Plugin.class);
+	public PluginManager(Class<?> beanType){
+		this(beanType,Plugin.class);
 	}
 	
-	public PluginManager(Class<T> beanType,String configName){
-		this(beanType,(Class<P>)Plugin.class,configName);
+	public PluginManager(Class<?> beanType,Class<? extends Plugin> pluginType){
+		this.beanType      		   = beanType;
+		this.reflectPlugin 		   = ReflectClass.get(pluginType);
+		this.systemConfigLocation = Resources.CLASSPATH_URL_PREFIX + "/" + beanType.getName().replace('.', '/') + ".xml";
 	}
 	
-	public PluginManager(Class<T> beanType,Class<P> pluginType){
-		this(beanType,pluginType,beanType.getName());
+	public Plugin[] getPlugins(){
+		return Collections.toArray(plugins, Plugin.class);
 	}
 	
-	public PluginManager(Class<T> beanType,Class<P> pluginType,String configName){
-		this.beanType      = beanType;
-		this.pluginType    = pluginType;
-		this.configName    = configName;  
-		this.reflectPlugin = ReflectClass.get(pluginType);
+	public Plugin getPlugin(String name){
+		return Collections.firstOrNull(plugins,Predicates.<Plugin>nameEqualsIgnoreCase(name));
 	}
 	
-	public P[] getPlugins(){
-		return Collections.toArray(plugins.values(),pluginType);
-	}
-	
-	public P getPlugin(String name){
-		return plugins.get(name.toLowerCase());
-	}
-	
-	public synchronized P[] load(){
+	public synchronized Plugin[] load(){
 		if(null == locations){
 			locations = DEFAULT_PLUGIN_SEARCH_PATHS;
 		}
+
+		if(null != systemConfigLocation){
+			load(systemConfigLocation);
+		}
 		
 		for(String location : locations){
-			load(location);
+			load(Resources.CLASSPATH_ALL_URL_PREFIX + location + "/" + beanType.getName() + ".xml");
 		}
 		
 		try {
@@ -110,23 +104,20 @@ public class PluginManager<T,P extends Plugin<T>> {
 	
 	public synchronized void unload(){
 		try{
-			for(P p : plugins.values()){
+			for(Plugin p : plugins){
 				try {
-		            p.unload(this);
+		            p.unload();
 	            } catch (Throwable e) {
 	            	log.warn("Unload plugin '{}' of bean '{}' error",p.getBean().getClass().getName(),e);
 	            }
 			}
 		}finally{
-			plugins = null;
-			plugins = new ConcurrentHashMap<String, P>();
+			plugins.clear();
 		}
 	}
 	
 	protected void load(String location) {
-		String path = Resources.CLASSPATH_ALL_URL_PREFIX + location + "/" + configName + ".xml";
-		
-		Resource[] resources = Resources.scan(path);
+		Resource[] resources = Resources.scan(location);
 		
 		for(Resource resource : resources){
 			load(XmlDocument.load(resource));
@@ -152,15 +143,16 @@ public class PluginManager<T,P extends Plugin<T>> {
 		String   clazzName   = e.requiredAttributeValue("class");
 		Class<?> clazzObject = Classes.forName(clazzName);
 		
-		Assert.isFalse(plugins.containsKey(name.toLowerCase()),"plugin name '{0}' aleady exists, please check the xml : {1}",name,e.documentUrl());
+		Assert.isFalse(getPlugin(name) != null,"plugin name '{0}' aleady exists, please check the xml : {1}",name,e.documentUrl());
 		
 		Assert.isTrue(beanType.isAssignableFrom(clazzObject),"'class' value of plugin '" + name + "' is invalid in xml : " + e.documentUrl());
 		
-		P plugin = reflectPlugin.newInstance();
+		Plugin plugin = reflectPlugin.newInstance();
 		
-		plugin.setBean((T)Reflects.newInstance(clazzObject));
-
-		plugins.put(name.toLowerCase(), plugin);
+		plugin.setName(name);
+		plugin.setBean(Reflects.newInstance(clazzObject));
+		
+		plugins.add(plugin);
 		
 		loadPlugin(e, plugin);
 	}
@@ -169,7 +161,7 @@ public class PluginManager<T,P extends Plugin<T>> {
 		String name  = e.requiredAttributeValue("name");
 		String clazz = e.attributeValue("class");
 		
-		P plugin = plugins.get(name.toLowerCase());
+		Plugin plugin = getPlugin(name);
 
 		if(null == plugin){
 			loadNewPlugin(e);
@@ -183,7 +175,7 @@ public class PluginManager<T,P extends Plugin<T>> {
 		loadPlugin(e, plugin);
 	}
 	
-	protected void loadPlugin(XmlElement e,P plugin) throws Throwable{
+	protected void loadPlugin(XmlElement e,Plugin plugin) throws Throwable{
 		XmlElement document = e.childElement("document");
 
 		if(null != document){
@@ -202,7 +194,7 @@ public class PluginManager<T,P extends Plugin<T>> {
 		XmlElement properties = e.childElement("properties");
 		
 		if(null != properties){
-			T 			 bean 	   = plugin.getBean();
+			Object		 bean 	   = plugin.getBean();
 			BeanClass<?> beanClass = BeanClass.get(bean.getClass());
 			
 			for(XmlElement prop : properties.childElements()){
@@ -219,7 +211,7 @@ public class PluginManager<T,P extends Plugin<T>> {
 			}
 		}
 		
-		plugin.load(this);
+		plugin.load();
 	}
 	
 	private static final class LoadContext {

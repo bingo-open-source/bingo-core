@@ -97,11 +97,11 @@ public class BeanClass<T> {
 	}
 	
 	public BeanProperty getProperty(String name){
-		return Collections.firstOrNull(properties,Predicates.nameEquals(BeanProperty.class,name));
+		return Collections.firstOrNull(properties,Predicates.<BeanProperty>nameEquals(name));
 	}
 	
 	public BeanProperty getPropertyIgnorecase(String name){
-		return Collections.firstOrNull(properties,Predicates.nameEqualsIgnoreCase(BeanProperty.class,name));
+		return Collections.firstOrNull(properties,Predicates.<BeanProperty>nameEqualsIgnoreCase(name));
 	}
 
 	private void initialize(){

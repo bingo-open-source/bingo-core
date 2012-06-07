@@ -13,23 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.lang;
+package bingo.lang.collections;
 
-public final class Predicates {
-	
-	public static <T extends Named> Predicate<T> nameEquals(final String name){
-		return new Predicate<T>() {
-			public boolean apply(T object) {
-				return Strings.equals(object.getName(), name);
-			}
-		};
+import java.util.Collection;
+import java.util.List;
+
+public abstract class AbstractImmutableList<E> extends AbstractImmutableCollection<E> implements List<E> {
+
+	public void add(int index, E element) {
+		throw readonlyException();
 	}
 
-	public static <T extends Named> Predicate<T> nameEqualsIgnoreCase(final String name){
-		return new Predicate<T>() {
-			public boolean apply(T object) {
-				return Strings.equalsIgnoreCase(object.getName(),name);
-			}
-		};
+	public boolean addAll(int index, Collection<? extends E> c) {
+		throw readonlyException();
+	}
+
+	public E remove(int index) {
+		throw readonlyException();
+	}
+
+	public E set(int index, E element) {
+		throw readonlyException();
 	}
 }

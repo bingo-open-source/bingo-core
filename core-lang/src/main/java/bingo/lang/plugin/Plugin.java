@@ -15,13 +15,16 @@
  */
 package bingo.lang.plugin;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class Plugin<T> {
+import bingo.lang.Named;
+
+public class Plugin implements Named{
 
 	private String   			 name;
-	private T   			 	 bean;
+	private Object 			 	 bean;
 	private String   			 summary;
 	private String   			 description;
 	private Map<String, String> properties = new LinkedHashMap<String, String>();
@@ -34,8 +37,9 @@ public class Plugin<T> {
 		return name;
 	}
 
-	public T getBean() {
-		return bean;
+	@SuppressWarnings("unchecked")
+	public <T> T getBean() {
+		return (T)bean;
 	}
 	
 	public String getSummary() {
@@ -46,11 +50,19 @@ public class Plugin<T> {
     	return description;
     }
 	
+	public String getProperty(String name){
+		return properties.get(name);
+	}
+	
+	public Map<String, String> getProperties(){
+		return new HashMap<String, String>(properties);
+	}
+	
 	protected void setName(String name) {
     	this.name = name;
     }
 	
-	protected void setBean(T instance) {
+	protected void setBean(Object instance) {
 		this.bean = instance;
 	}
 	
@@ -66,11 +78,11 @@ public class Plugin<T> {
 		properties.put(name, value);
 	}
 
-	protected void load(PluginManager<T,? extends Plugin<T>> manager) throws Throwable {
+	protected void load() throws Throwable {
 
 	}
 
-	protected void unload(PluginManager<T,? extends Plugin<T>> manager) throws Throwable {
+	protected void unload() throws Throwable {
 
 	}
 }

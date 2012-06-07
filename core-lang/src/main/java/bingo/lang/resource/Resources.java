@@ -24,9 +24,12 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.List;
 
 import bingo.lang.Assert;
 import bingo.lang.Classes;
+import bingo.lang.Collections;
 import bingo.lang.Strings;
 import bingo.lang.exceptions.NotFoundException;
 import bingo.lang.exceptions.UncheckedIOException;
@@ -183,7 +186,17 @@ public abstract class Resources {
 	//-----------------------------------------------------------------------------
 	public static Resource[] scan(String resourceLocationPattern) throws UncheckedIOException {
 		try {
-	        return resolver.getResources(resourceLocationPattern);
+	        Resource[] resources = resolver.getResources(resourceLocationPattern);
+	        
+	        List<Resource> list = new ArrayList<Resource>();
+	        
+	        for(Resource r : resources){
+	        	if(r.exists()){
+	        		list.add(r);
+	        	}
+	        }
+	        
+	        return Collections.toArray(list,Resource.class);
         } catch (IOException e) {
         	throw new UncheckedIOException("Error scanning location : " + resourceLocationPattern, e);
         }
