@@ -1115,6 +1115,28 @@ public class StringsTest extends ConcurrentTestCase {
         assertEquals("ab.ef", Strings.abbreviateMiddle("abcdef", ".", 5));
     }    
     
+    @Test
+    public void testLowerCamel(){
+    	assertEquals("", Strings.lowerCamel(null, '_'));
+    	assertEquals("", Strings.lowerCamel("", '_'));
+    	assertEquals("helloWorld", Strings.lowerCamel("hello_world", '_'));
+    	assertEquals("helloWorld", Strings.lowerCamel("hello_World", '_'));
+    	assertEquals("helloWorld", Strings.lowerCamel("Hello_World", '_'));
+    	assertEquals("helloWorld", Strings.lowerCamel("HeLlo_WOrld", '_'));
+    	assertEquals("aaBbCc", Strings.lowerCamel("aa_bb_cc", '_'));
+    }
+    
+    @Test
+    public void testUpperCamel(){
+    	assertEquals("", Strings.upperCamel(null, '_'));
+    	assertEquals("", Strings.upperCamel("", '_'));
+    	assertEquals("HelloWorld", Strings.upperCamel("hello_world", '_'));
+    	assertEquals("HelloWorld", Strings.upperCamel("hello_World", '_'));
+    	assertEquals("HelloWorld", Strings.upperCamel("Hello_World", '_'));
+    	assertEquals("HelloWorld", Strings.upperCamel("HeLlo_WOrld", '_'));
+    	assertEquals("AaBbCc", Strings.upperCamel("aa_bb_cc", '_'));
+    }
+    
 	private static class SubStrings extends Strings {
 		public SubStrings() {
 			super();

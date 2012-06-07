@@ -1408,7 +1408,7 @@ public class Strings {
 	 * </p>
 	 * 
 	 * <pre>
-	 * Strings.lowerCase(null)  = null
+	 * Strings.lowerCase(null)  = ""
 	 * Strings.lowerCase("")    = ""
 	 * Strings.lowerCase("aBc") = "abc"
 	 * </pre>
@@ -1427,6 +1427,50 @@ public class Strings {
 			return EMPTY;
 		}
 		return string.toLowerCase();
+	}
+	
+	/**
+	 * <pre>
+	 * Strings.lowerCamel(null) 	      = ""
+	 * Strings.lowerCamel("")   	      = ""
+	 * Strings.lowerCamel("hello_world",'_') = helloWorld
+	 * </pre>
+	 */
+	public static String lowerCamel(String string, char seperator) {
+		if(null == string){
+			return EMPTY;
+		}
+		
+		String[]	  parts = split(string,seperator);
+		StringBuilder out   = new StringBuilder(string.length());
+		for (String part : parts) {
+			if (out.length() == 0) {
+				out.append(part.toLowerCase());
+			}else{
+				out.append(part.substring(0, 1).toUpperCase() + part.substring(1).toLowerCase());
+			}
+		}
+		return out.toString();
+	}
+	
+	/**
+	 * <pre>
+	 * Strings.upperCamel(null) 	      = ""
+	 * Strings.upperCamel("")   	      = ""
+	 * Strings.upperCamel("hello_world",'_') = HelloWorld
+	 * </pre>
+	 */
+	public static String upperCamel(String string, char seperator) {
+		if(null == string){
+			return EMPTY;
+		}
+		
+		String[] parts 	  = split(string,seperator);
+		StringBuilder out = new StringBuilder();
+		for (String part : parts) {
+			out.append(part.substring(0, 1).toUpperCase() + part.substring(1).toLowerCase());
+		}
+		return out.toString();
 	}
 
 	// IndexOf
