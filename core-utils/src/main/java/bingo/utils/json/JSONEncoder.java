@@ -250,6 +250,12 @@ class JSONEncoder {
                 if(prop.isReadable() && prop.isField() && !prop.isAnnotationPresent(JSONIgnore.class) && !prop.isTransient()){
                     String propName = prop.getName();
                     
+                    JSONNamed named = prop.getAnnotation(JSONNamed.class);
+                    
+                    if(null != named){
+                    	propName = named.value();
+                    }
+                    
                     Object propValue = prop.getValue(bean);
                     
                     if(null == propValue && ignoreNull){

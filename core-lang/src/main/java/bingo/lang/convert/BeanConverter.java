@@ -15,6 +15,7 @@
  */
 package bingo.lang.convert;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -23,8 +24,10 @@ import java.util.Map.Entry;
 import bingo.lang.Classes;
 import bingo.lang.Converts;
 import bingo.lang.Out;
+import bingo.lang.annotations.NamedAnnotation;
 import bingo.lang.beans.BeanClass;
 import bingo.lang.beans.BeanProperty;
+import bingo.lang.reflect.ReflectClass;
 
 
 @SuppressWarnings("unchecked")
@@ -56,20 +59,30 @@ public class BeanConverter extends AbstractConverter<Object>{
 		
 		Object bean = beanClass.newInstance();
 		
-        for(Object entryObject : map.entrySet()){
-            Entry entry = (Entry)entryObject;
-            
-            Object key   = entry.getKey();
-            Object param = entry.getValue();
-            
-            String name  = key.getClass().equals(String.class) ? (String)key : key.toString();
-            
-            BeanProperty prop = beanClass.getProperty(name);
-            
-            if(null != prop && prop.isWritable()){
-                prop.setValue(bean, Converts.convert(param,prop.getType(),prop.getGenericType()));
-            }
-        }
+		for(BeanProperty prop : beanClass.getProperties()){
+			String name = prop.getName();
+			
+			for(Annotation a : prop.getAnnotations()){
+				NamedAnnotation namedAnnotation = a.annotationType().getAnnotation(NamedAnnotation.class);
+				
+				if(null != namedAnnotation){
+					name = (String)ReflectClass.get(a.getClass()).getMethod(namedAnnotation.value()).invoke(a);
+				}
+			}
+			
+	        for(Object entryObject : map.entrySet()){
+	            Entry entry = (Entry)entryObject;
+	            
+	            if(entry.getKey().equals(name)){
+		            Object param = entry.getValue();
+		            
+		            if(null != prop && prop.isWritable()){
+		                prop.setValue(bean, Converts.convert(param,prop.getType(),prop.getGenericType()));
+		                break;
+		            }
+	            }
+	        }
+		}
 		
 		return bean;
 	}

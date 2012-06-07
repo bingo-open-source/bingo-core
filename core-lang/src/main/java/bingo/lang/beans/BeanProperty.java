@@ -92,10 +92,11 @@ public class BeanProperty implements Named {
 		return null != setter;
 	}
 	
-	public Annotation getAnnotation(Class<? extends Annotation> annotationType) {
+	@SuppressWarnings("unchecked")
+	public <T extends Annotation> T getAnnotation(Class<T> annotationType) {
 		for(Annotation a : annotations){
 			if(a.annotationType().equals(annotationType)){
-				return a;
+				return (T)a;
 			}
 		}
 		return null;

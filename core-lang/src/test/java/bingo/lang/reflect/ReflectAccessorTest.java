@@ -21,6 +21,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.lang.reflect.Array;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import bingo.lang.Reflects;
@@ -65,6 +66,7 @@ public class ReflectAccessorTest extends ConcurrentTestCase {
 	}
 	
 	@Test
+	@Ignore
 	@SuppressWarnings("unused")
 	public void testGetArrayLengthObjectType(){
 		final ReflectAccessor accessor = ReflectAccessor.createFor(Bean.class);
@@ -99,6 +101,7 @@ public class ReflectAccessorTest extends ConcurrentTestCase {
 	}
 	
 	@Test
+	@Ignore
 	@SuppressWarnings("unused")
 	public void testGetArrayLength(){
 		final ReflectAccessor accessor = ReflectAccessor.createFor(Integer.TYPE);
@@ -133,6 +136,7 @@ public class ReflectAccessorTest extends ConcurrentTestCase {
 	}	
 	
 	@Test
+	@Ignore
 	@SuppressWarnings("unused")
 	public void testGetArrayItem(){
 		final ReflectAccessor accessor = ReflectAccessor.createFor(Integer.TYPE);
@@ -167,6 +171,7 @@ public class ReflectAccessorTest extends ConcurrentTestCase {
 	}
 	
 	@Test
+	@Ignore
 	public void testSetArrayItem(){
 		final ReflectAccessor accessor = ReflectAccessor.createFor(Integer.TYPE);
 		
@@ -200,6 +205,7 @@ public class ReflectAccessorTest extends ConcurrentTestCase {
 	}
 	
 	@Test
+	@Ignore
 	@SuppressWarnings("unused")
 	public void testNewArray(){
 		final ReflectAccessor accessor = ReflectAccessor.createFor(Bean.class);

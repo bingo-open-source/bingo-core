@@ -99,6 +99,17 @@ public class JSONEncodeTest extends ConcurrentTestCase {
 	}
 	
 	@Test
+	public void testJSONNamed() throws Exception {
+		String json = "{id:\"1\",name1:\"xx\"}";
+		assertEquals(json, encode(new NamedBean("1","xx")));
+		
+		NamedBean bean = JSON.decode(json,NamedBean.class);
+		
+		assertEquals("1", bean.id);
+		assertEquals("xx", bean.name);
+	}
+	
+	@Test
 	public void testCyclicBean() throws Exception {
 		Category parent = new Category("1");
 		Category child1 = new Category("2",parent);
@@ -244,6 +255,23 @@ public class JSONEncodeTest extends ConcurrentTestCase {
 
 		public void setParent(Category parent) {
 			this.parent = parent;
+		}
+	}
+	
+	static final class NamedBean {
+		
+		public String id;
+		
+		@JSONNamed("name1")
+		public String name;
+		
+		public NamedBean() {
+			
+		}
+		
+		public NamedBean(String id,String name){
+			this.id   = id;
+			this.name = name;
 		}
 	}
 }

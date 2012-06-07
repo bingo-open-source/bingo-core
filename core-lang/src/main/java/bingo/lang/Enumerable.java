@@ -171,7 +171,7 @@ public class Enumerable<T> implements Iterable<T> {
 		return concat(new Enumerable[] { Enumerable.of(others) });
 	}
 
-	protected Enumerable<T> take(final int count) {
+	public Enumerable<T> take(final int count) {
 		return of(new Func<Iterator<T>>() {
 			public Iterator<T> apply() {
 				return new TakeIterator<T>(Enumerable.this, count);
@@ -359,11 +359,11 @@ public class Enumerable<T> implements Iterable<T> {
 		}).cast(clazz);
 	}
 
-	protected Enumerable<T> skip(int count) {
+	public Enumerable<T> skip(int count) {
 		return Enumerable.of(new SkipEnumerable<T>(this, count));
 	}
 
-	protected Enumerable<T> skipWhile(final Predicate<T> predicate) {
+	public Enumerable<T> skipWhile(final Predicate<T> predicate) {
 		final Boolean[] skipping = new Boolean[] { true };
 		return this.where(new Predicate<T>() {
 			public boolean apply(T input) {
