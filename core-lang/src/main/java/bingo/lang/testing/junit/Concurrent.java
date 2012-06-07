@@ -33,7 +33,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE, ElementType.METHOD})
 public @interface Concurrent {
-    int threads() default -1;
-    
-    boolean ignore() default false;
+    int value() default -1;
 }

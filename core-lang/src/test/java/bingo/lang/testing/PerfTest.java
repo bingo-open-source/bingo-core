@@ -20,64 +20,53 @@ import java.util.List;
 
 import org.junit.Test;
 
-import bingo.lang.testing.Perf.OutputType;
 
-
+@SuppressWarnings("unused")
 public class PerfTest {
+	
 	@Test
-	public void testPerfGroup(){
+	public void testRunnableSingle(){
+		Perf.run(10000,new Runnable() {
+			public void run() {
+				int i = 1 + 100;
+			}
+		});
+		
+		Perf.run("PerfTestSingle", 10000,new Runnable() {
+			public void run() {
+				int i = 1 + 100;
+			}
+		});
+	}
+	
+	@Test
+	public void testRunnableGroup(){
 		final List<String> list = new ArrayList<String>();
 		list.add("111");
 		list.add("22");
 		list.add("3");
 		
-		RunnableList rg = new RunnableList()
-		.add("item1", 123,new Runnable() {
-			public void run() {
-				list.size();
-			}
-		})
-		.add("item2", 123,new Runnable() {
-			public void run() {
-				list.size();
-			}
-		})		
-		.add("item3", 1, new Runnable() {
-			public void run() {
-				this.getClass();
-			}
-		})
-		.add("item4", 321, new Runnable() {
-			public void run() {
-				list.get(1);
-			}
-		});
-
-		new Perf(rg).setProjectName("Array.get(native)").setOutputType(OutputType.ALL).run();
+		Perf.create("PerfTestGroup", 10000)
+			.add("item1", new Runnable() {
+				public void run() {
+					list.size();
+				}
+			})
+			.add("item2", new Runnable() {
+				public void run() {
+					list.size();
+				}
+			})		
+			.add("item3", new Runnable() {
+				public void run() {
+					this.getClass();
+				}
+			})
+			.add("item4", new Runnable() {
+				public void run() {
+					list.get(1);
+				}
+			})
+			.run();
 	}
-	
-	@Test
-	public void testPerfMatrix(){
-		RunnableMatrix matrix = new RunnableMatrix()
-		.addRunnableColumn("this.getClass();", new Runnable(){
-			public void run() {
-				this.getClass();
-            }
-		}).addRunnableColumn("thisequal", new Runnable() {
-			public void run() {
-				this.equals(null);
-			}
-		}).addRunnableColumn("this", new Runnable() {
-			public void run() {
-				this.equals(this);
-			}
-		}).addRunnableColumn("this.hashCode();", new Runnable() {
-			public void run() {
-				this.hashCode();
-			}
-		}).setDefaultRunTimeFrom1to1000000();
-		
-		new Perf(matrix).setProjectName("this methods").setOutputType(OutputType.ALL).run();
-	}
-	
 }

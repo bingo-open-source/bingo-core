@@ -7,7 +7,7 @@ import bingo.lang.xml.XmlAttribute;
 import bingo.lang.xml.XmlElement;
 import bingo.lang.xml.XmlText;
 
-public class PerfHtmlBuilder {
+class PerfHtmlBuilder {
 	
 	public static XmlElement buildUpMatrixHtml(String projectName, PerfResult[][] resultMatrix) {
 		XmlElement html = new XmlElement("html", new XmlAttribute("lang", "en"));

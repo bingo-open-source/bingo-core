@@ -72,22 +72,26 @@ public class StringsFormatTest extends ConcurrentTestCase {
 		
 		int times = 100000;
 		
-		Perf.run("String +",new Runnable() {
-			public void run() {
-				String s ="argument '" + arg1 + "' must be large then " + arg2;
-			}
-		},times);
+		Perf.create("StringFormat", times)
 		
-		Perf.run("MessageFormat.format",new Runnable() {
-			public void run() {
-				String s = MessageFormat.format("argument '{0}' must be large then {1}",arg1,arg2);
-			}
-		},times);	
-		
-		Perf.run("Strings.format",new Runnable() {
-			public void run() {
-				String s = Strings.format("argument '{0}' must be large then {1}",arg1,arg2);
-			}
-		},times);	
+		    .add("String +",new Runnable() {
+				public void run() {
+					String s ="argument '" + arg1 + "' must be large then " + arg2;
+				}
+			})
+			
+			.add("MessageFormat.format",new Runnable() {
+				public void run() {
+					String s = MessageFormat.format("argument '{0}' must be large then {1}",arg1,arg2);
+				}
+			})
+			
+			.add("Strings.format",new Runnable() {
+				public void run() {
+					String s = Strings.format("argument '{0}' must be large then {1}",arg1,arg2);
+				}
+			})
+			
+			.run();	
 	}
 }

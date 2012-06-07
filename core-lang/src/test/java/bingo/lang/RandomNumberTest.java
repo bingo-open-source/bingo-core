@@ -30,16 +30,20 @@ public class RandomNumberTest extends ConcurrentTestCase {
 	
 	@Test
     public void testNextInt() {
-		Perf.run("Randonms.nextInt", new Runnable() {
-			public void run() {
-				assertTrue(Randoms.nextInt() >= 0);
-			}
-		},100000);
+		Perf.create("RandomNextInt", 100000)
 		
-		Perf.run("Random.nextInt", new Runnable() {
-			public void run() {
-				assertTrue(RANDOM.nextInt(Integer.MAX_VALUE) >= 0);
-			}
-		},100000);
+		    .add("Randonms.nextInt", new Runnable() {
+				public void run() {
+					assertTrue(Randoms.nextInt() >= 0);
+				}
+			})
+			
+			.add("Random.nextInt", new Runnable() {
+				public void run() {
+					assertTrue(RANDOM.nextInt(Integer.MAX_VALUE) >= 0);
+				}
+			})
+			
+			.run();
     }
 }

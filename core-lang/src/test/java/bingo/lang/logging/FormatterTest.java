@@ -63,16 +63,17 @@ public class FormatterTest {
 		
 		int times = 100000;
 		
-		Perf.run("Formatter.format",new Runnable() {
-			public void run() {
-				String s = Formatter.format("argument '{}' must be large then {}",arg1,arg2);
-			}
-		},times);	
-		
-		Perf.run("Strings.format",new Runnable() {
-			public void run() {
-				String s = Strings.format("argument '{0}' must be large then {1}",arg1,arg2);
-			}
-		},times);	
+		Perf.create("StringFormat", times)
+		    .add("Formatter.format",new Runnable() {
+				public void run() {
+					String s = Formatter.format("argument '{}' must be large then {}",arg1,arg2);
+				}
+		    })	
+		    .add("Strings.format",new Runnable() {
+				public void run() {
+					String s = Strings.format("argument '{0}' must be large then {1}",arg1,arg2);
+				}
+			})
+			.run();	
 	}
 }

@@ -29,7 +29,7 @@ import org.junit.Test;
 import bingo.lang.testing.junit.Concurrent;
 import bingo.lang.testing.junit.ConcurrentTestCase;
 
-@Concurrent(threads=5)
+@Concurrent(5)
 public class ClassesTest extends ConcurrentTestCase{
 
 	@Test

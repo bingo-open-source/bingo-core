@@ -17,7 +17,7 @@ package bingo.lang.testing;
 
 import bingo.lang.Strings;
 
-public class PerfResult {
+class PerfResult {
 
 	private String name;
 	private int runTimes;

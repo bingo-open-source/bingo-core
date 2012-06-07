@@ -22,6 +22,7 @@ import java.util.List;
 import org.junit.Test;
 
 import bingo.lang.testing.Perf;
+import bingo.lang.testing.junit.Concurrent;
 import bingo.lang.testing.junit.ConcurrentTestCase;
 
 import static org.junit.Assert.*;
@@ -29,38 +30,45 @@ import static org.junit.Assert.*;
 public class CollectionsTest extends ConcurrentTestCase {
 
 	@Test
+	@Concurrent(2)
 	public void testPerformanceComparesToEnumerable() {
 		final List<Integer> list = Enumerable.of(1, 3, 2, 4, 100, 1, 2, 3, 5, 531).toList();
 
+		final Enumerable<Integer> enumerable = Enumerable.of(list);
+		
 		final Predicate<Integer> where = new Predicate<Integer>() {
 			public boolean apply(Integer object) {
 				return true;
 			}
 		};
 
-		Perf.run("Collections.where", new Runnable() {
-			public void run() {
-				Collections.where(list, where).toArray(new Integer[] {});
-			}
-		}, 100000);
-
-		Perf.run("Enumerable.where", new Runnable() {
-			public void run() {
-				Enumerable.of(list).where(where).toArray(new Integer[] {});
-			}
-		}, 100000);
-
-		Perf.run("Handcode.foreach", new Runnable() {
-			public void run() {
-				List<Integer> newList = new ArrayList<Integer>();
-				for (Integer i : list) {
-					if (where.apply(i)) {
-						newList.add(i);
-					}
+		Perf.create("CollectionPredicate(Where)", 100000)
+		
+		    .add("Collections.where", new Runnable() {
+				public void run() {
+					Collections.where(list, where).toArray(new Integer[] {});
 				}
-				newList.toArray(new Integer[] {});
-			}
-		}, 100000);
+			})
+			
+			.add("Enumerable.where", new Runnable() {
+				public void run() {
+					enumerable.where(where).toArray(new Integer[] {});
+				}
+			})
+			
+			.add("Handcode.foreach", new Runnable() {
+				public void run() {
+					List<Integer> newList = new ArrayList<Integer>();
+					for (Integer i : list) {
+						if (where.apply(i)) {
+							newList.add(i);
+						}
+					}
+					newList.toArray(new Integer[] {});
+				}
+			})
+			
+			.run();
 	}
 
 	@Test

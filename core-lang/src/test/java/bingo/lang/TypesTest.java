@@ -159,16 +159,15 @@ public class TypesTest extends ConcurrentTestCase {
 		Assert.assertEquals(GenericParent[].class, Types.getRawType(GenericTypeHolder.class.getDeclaredField("barParents").getGenericType(), null));
     }	
 
-    @Ignore
 	@Test
 	public void testGetTypeArgumentPerformance() throws Exception {
 		final Type genericType = GenericContainer.class.getDeclaredField("child4").getGenericType();
 
-		Perf.run("Types.getTypeArgument", new Runnable() {
+		Perf.run("Types.getTypeArgument",100000, new Runnable() {
 			public void run() {
 				Types.getActualTypeArgument(genericType);
 			}
-		}, 1000000);
+		});
 	}
 	
 

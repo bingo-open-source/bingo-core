@@ -25,31 +25,38 @@ import static org.junit.Assert.*;
 
 import bingo.lang.testing.Df;
 import bingo.lang.testing.Perf;
+import bingo.lang.testing.junit.Concurrent;
 import bingo.lang.testing.junit.ConcurrentTestCase;
 
 public class ConvertsTest extends ConcurrentTestCase {
 
 	@Test
+	@Concurrent(2)
 	public void testSimplePerformanceComparsion(){
-		Perf.run("Handcode.parse", new Runnable() {
-			public void run() {
-				Integer.parseInt("100");
-			}
-		},1000000);		
+		Perf.create("SimpleConvert", 1000000)
 		
-		Perf.run("Convert.toType", new Runnable() {
-			public void run() {
-				Converts.convert("100",Integer.class);
-			}
-		},1000000);
+		    .add("Handcode.parse", new Runnable() {
+				public void run() {
+					Integer.parseInt("100");
+				}
+			})
+			
+			.add("Convert.toType", new Runnable() {
+				public void run() {
+					Converts.convert("100",Integer.class);
+				}
+			})
+			
+			.run();
 		
 		final TesterBean bean = Df.fillBean(new TesterBean());
 		
-		Perf.run("Converts.bean", new Runnable() {
-			public void run() {
-				Converts.convert(bean,Map.class);
-			}
-		},100000);
+		Perf.run("Converts.bean",100000, 
+				new Runnable() {
+					public void run() {
+						Converts.convert(bean,Map.class);
+					}
+				});
 	}
 	
 	@Test

@@ -29,7 +29,7 @@ final class ConcurrentRunner extends BlockJUnit4ClassRunner {
         super(klass);
         int nThreads = 0;
         if (klass.isAnnotationPresent(Concurrent.class))
-            nThreads = Math.max(0, klass.getAnnotation(Concurrent.class).threads());
+            nThreads = Math.max(0, klass.getAnnotation(Concurrent.class).value());
         if (nThreads == 0)
             nThreads = new TestClass(klass).getAnnotatedMethods(Test.class).size();
         if (nThreads == 0)

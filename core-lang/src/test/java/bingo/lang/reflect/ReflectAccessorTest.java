@@ -26,13 +26,14 @@ import org.junit.Test;
 
 import bingo.lang.Reflects;
 import bingo.lang.testing.Perf;
-import bingo.lang.testing.junit.Concurrent;
+import bingo.lang.testing.junit.ConcurrentIgnore;
 import bingo.lang.testing.junit.ConcurrentTestCase;
 
+@SuppressWarnings("unused")
 public class ReflectAccessorTest extends ConcurrentTestCase {
 	
 	@Test
-	@Concurrent(ignore=true)
+	@ConcurrentIgnore
 	public void testStaticField(){
 		ReflectAccessor accessor = ReflectAccessor.createFor(Bean.class);
 		
@@ -66,147 +67,131 @@ public class ReflectAccessorTest extends ConcurrentTestCase {
 	}
 	
 	@Test
-	@Ignore
-	@SuppressWarnings("unused")
+	@ConcurrentIgnore
 	public void testGetArrayLengthObjectType(){
 		final ReflectAccessor accessor = ReflectAccessor.createFor(Bean.class);
 		
 		final Bean[] array = new Bean[]{new Bean(),new Bean(),new Bean()};
 		
-		Perf.run("Accessor.getArrayLength", new Runnable() {
-			public void run() {
-				int i = accessor.getArrayLength(array);
-			}
-		},1000000);		
-		
-		Perf.run("Handcode.getArrayLength", new Runnable() {
-			public void run() {
-				int i = array.length;
-			}
-		},1000000);
-		
-		Perf.run("Reflects.getLength", new Runnable() {
-			public void run() {
-				int i = ReflectClass.get(array.getClass().getComponentType()).getArrayLength(array);
-			}
-		},1000000);			
-		
-		Perf.run("Array.getLength(native)", new Runnable() {
-			public void run() {
-				int i = Array.getLength(array);
-			}
-		},1000000);		
-		
-		System.out.println();
+		Perf.create("GetArrayLength(Object[])", 1000000)
+		    .add("Accessor.getArrayLength", new Runnable() {
+				public void run() {
+					int i = accessor.getArrayLength(array);
+				}
+			})
+		    .add("Handcode.getArrayLength", new Runnable() {
+				public void run() {
+					int i = array.length;
+				}
+			})
+		    .add("Reflects.getLength", new Runnable() {
+				public void run() {
+					int i = ReflectClass.get(array.getClass().getComponentType()).getArrayLength(array);
+				}
+			})
+		    .add("Array.getLength(native)", new Runnable() {
+				public void run() {
+					int i = Array.getLength(array);
+				}
+			})		
+			.run();
 	}
 	
 	@Test
-	@Ignore
-	@SuppressWarnings("unused")
+	@ConcurrentIgnore
 	public void testGetArrayLength(){
 		final ReflectAccessor accessor = ReflectAccessor.createFor(Integer.TYPE);
 		
 		final int[] array = new int[]{1,2,3};
 		
-		Perf.run("Accessor.getArrayLength", new Runnable() {
-			public void run() {
-				int i = accessor.getArrayLength(array);
-			}
-		},1000000);		
-		
-		Perf.run("Handcode.getArrayLength", new Runnable() {
-			public void run() {
-				int i = array.length;
-			}
-		},1000000);
-		
-		Perf.run("Reflects.getLength", new Runnable() {
-			public void run() {
-				int i = ReflectClass.get(array.getClass().getComponentType()).getArrayLength(array);
-			}
-		},1000000);			
-		
-		Perf.run("Array.getLength(native)", new Runnable() {
-			public void run() {
-				int i = Array.getLength(array);
-			}
-		},1000000);		
-		
-		System.out.println();
+		Perf.create("GetArrayLength(int[])", 1000000)
+		    .add("Accessor.getArrayLength", new Runnable() {
+				public void run() {
+					int i = accessor.getArrayLength(array);
+				}
+			})
+		    .add("Handcode.getArrayLength", new Runnable() {
+				public void run() {
+					int i = array.length;
+				}
+			})
+		    .add("Reflects.getLength", new Runnable() {
+				public void run() {
+					int i = ReflectClass.get(array.getClass().getComponentType()).getArrayLength(array);
+				}
+			})
+		    .add("Array.getLength(native)", new Runnable() {
+				public void run() {
+					int i = Array.getLength(array);
+				}
+			})		
+			.run();		
 	}	
 	
 	@Test
-	@Ignore
-	@SuppressWarnings("unused")
+	@ConcurrentIgnore
 	public void testGetArrayItem(){
 		final ReflectAccessor accessor = ReflectAccessor.createFor(Integer.TYPE);
 		
 		final int[] array = new int[]{1,2,3};
 		
-		Perf.run("Accessor.getArrayItem", new Runnable() {
-			public void run() {
-				int i = (Integer)accessor.getArrayItem(array, 1);
-			}
-		},1000000);		
-		
-		Perf.run("Handcode.getArrayItem", new Runnable() {
-			public void run() {
-				int i = array[1];
-			}
-		},1000000);
-		
-		Perf.run("Reflects.getArrayItem", new Runnable() {
-			public void run() {
-				int i = (Integer)ReflectClass.get(array.getClass().getComponentType()).getArrayItem(array,1);
-			}
-		},1000000);			
-		
-		Perf.run("Array.get(native)", new Runnable() {
-			public void run() {
-				int i = (Integer)Array.get(array, 1);
-			}
-		},1000000);		
-		
-		System.out.println();
+		Perf.create("GetArrayItem(int[])", 1000000)
+		    .add("Accessor.getArrayItem", new Runnable() {
+				public void run() {
+					int i = (Integer)accessor.getArrayItem(array, 1);
+				}
+			})
+		    .add("Handcode.getArrayItem", new Runnable() {
+				public void run() {
+					int i = array[1];
+				}
+			})
+		    .add("Reflects.getArrayItem", new Runnable() {
+				public void run() {
+					int i = (Integer)ReflectClass.get(array.getClass().getComponentType()).getArrayItem(array,1);
+				}
+			})
+		    .add("Array.get(native)", new Runnable() {
+				public void run() {
+					int i = (Integer)Array.get(array, 1);
+				}
+			})		
+			.run();
 	}
 	
 	@Test
-	@Ignore
+	@ConcurrentIgnore
 	public void testSetArrayItem(){
 		final ReflectAccessor accessor = ReflectAccessor.createFor(Integer.TYPE);
 		
 		final int[] array = new int[]{1,2,3};
 		
-		Perf.run("Accessor.setArrayItem", new Runnable() {
-			public void run() {
-				accessor.setArrayItem(array, 1, 1);
-			}
-		},1000000);
-		
-		Perf.run("Handcode.setArrayItem", new Runnable() {
-			public void run() {
-				array[1] = 1;
-			}
-		},1000000);
-		
-		Perf.run("Reflects.setArrayItem", new Runnable() {
-			public void run() {
-				ReflectClass.get(array.getClass().getComponentType()).setArrayItem(array, 1, 1);
-			}
-		},1000000);
-		
-		Perf.run("Array.set(native)", new Runnable() {
-			public void run() {
-				Array.set(array, 1, 1);
-			}
-		},1000000);
-		
-		System.out.println();
+		Perf.create("SetArrayItem(int[])", 1000000)
+		    .add("Accessor.setArrayItem", new Runnable() {
+				public void run() {
+					accessor.setArrayItem(array, 1, 1);
+				}
+			})
+		    .add("Handcode.setArrayItem", new Runnable() {
+				public void run() {
+					array[1] = 1;
+				}
+			})
+		    .add("Reflects.setArrayItem", new Runnable() {
+				public void run() {
+					ReflectClass.get(array.getClass().getComponentType()).setArrayItem(array, 1, 1);
+				}
+			})
+		    .add("Array.set(native)", new Runnable() {
+				public void run() {
+					Array.set(array, 1, 1);
+				}
+			})		
+			.run();
 	}
 	
 	@Test
-	@Ignore
-	@SuppressWarnings("unused")
+	@ConcurrentIgnore
 	public void testNewArray(){
 		final ReflectAccessor accessor = ReflectAccessor.createFor(Bean.class);
 		
@@ -216,31 +201,28 @@ public class ReflectAccessorTest extends ConcurrentTestCase {
 		assertEquals(0,Array.getLength(accessor.newArray(0)));
 		assertEquals(10,Array.getLength(accessor.newArray(10)));
 		
-		Perf.run("Accessor.newArray", new Runnable() {
-			public void run() {
-				Bean[] array = (Bean[])accessor.newArray(10);
-			}
-		},1000000);
-		
-		Perf.run("Handcode.newArray", new Runnable() {
-			public void run() {
-				Bean[] array = new Bean[10];
-			}
-		},1000000);
-		
-		Perf.run("Reflects.newArray", new Runnable() {
-			public void run() {
-				Bean[] array = Reflects.newArray(Bean.class, 10);
-			}
-		},1000000);		
-		
-		Perf.run("Array.newInstance(native)", new Runnable() {
-			public void run() {
-				Bean[] array = (Bean[])Array.newInstance(Bean.class, 10);
-			}
-		},1000000);	
-		
-		System.out.println();
+		Perf.create("NewArray", 1000000)
+		    .add("Accessor.newArray", new Runnable() {
+				public void run() {
+					Bean[] array = (Bean[])accessor.newArray(10);
+				}
+			})
+		    .add("Handcode.newArray", new Runnable() {
+				public void run() {
+					Bean[] array = new Bean[10];
+				}
+			})
+		    .add("Reflects.newArray", new Runnable() {
+				public void run() {
+					Bean[] array = Reflects.newArray(Bean.class, 10);
+				}
+			})
+		    .add("Array.newInstance(native)", new Runnable() {
+				public void run() {
+					Bean[] array = (Bean[])Array.newInstance(Bean.class, 10);
+				}
+			})		
+			.run();
 	}
 	
 	@Test

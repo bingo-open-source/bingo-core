@@ -56,7 +56,7 @@ final class ConcurrentSuiteRunner extends Suite {
         });
         int nThreads = 0;
         if (klass.isAnnotationPresent(Concurrent.class))
-            nThreads = Math.max(0, klass.getAnnotation(Concurrent.class).threads());
+            nThreads = Math.max(0, klass.getAnnotation(Concurrent.class).value());
         if (nThreads == 0) {
             SuiteClasses suiteClasses = klass.getAnnotation(SuiteClasses.class);
             nThreads = suiteClasses != null && suiteClasses.value().length > 0 ? suiteClasses.value().length : Runtime.getRuntime().availableProcessors();

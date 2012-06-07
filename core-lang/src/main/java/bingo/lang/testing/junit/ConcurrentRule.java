@@ -59,10 +59,22 @@ public final class ConcurrentRule implements TestRule {
         return new Statement() {
             @Override
             public void evaluate() throws Throwable {
+            	String testName = description.getTestClass().getSimpleName() + (description.isTest() ? "#" + description.getMethodName() : "");
+            	
+            	log.info("run '{}' in single thread",testName);
+            	
+            	//warm up
+            	base.evaluate();
+            	
+            	if(description.getAnnotation(ConcurrentIgnore.class) != null){
+            		return;
+            	}
+            	
+            	//run concurrently
                 Concurrent annotation = description.getAnnotation(Concurrent.class);
                 
                 if(runAnnotatedMethodOnly && null == annotation){
-                	base.evaluate();
+                	return;
                 }
                 
                 if(null == annotation){
@@ -72,23 +84,15 @@ public final class ConcurrentRule implements TestRule {
                 int threads = ConcurrentRule.this.threads;
                 
                 if(null != annotation ){
-                	
-                	if(annotation.ignore()){
-                		base.evaluate();
-                		return;
-                	}
-                	
-                	threads = Math.max(0, annotation.threads());
+                	threads = Math.max(0, annotation.value());
                 	
                 	if(threads == -1){
                 		threads = DEFAULT_THREADS;
                 	}
                 }
                 
-                if (threads == 1) {
-                    base.evaluate();
-                } else {
-                	String testName = description.getTestClass().getSimpleName() + (description.isTest() ? "#" + description.getMethodName() : "");
+                if (threads> 1) {
+                	log.info("run '{}' concurrently with {} threads",testName,threads);
                 	
                     if (threads > 1) {
                     	int counter = threads;
@@ -121,8 +125,6 @@ public final class ConcurrentRule implements TestRule {
                         } catch (ConcurrentRunnerException e) {
                             throw e.unwrap();
                         }
-                        
-                        log.debug("run '{}' concurrently with {} threads",testName,threads);
                     }
                 }
             }
