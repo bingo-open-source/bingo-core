@@ -3,114 +3,100 @@ package bingo.lang.testing;
 import java.util.LinkedList;
 import java.util.List;
 
+import bingo.lang.logging.Log;
+import bingo.lang.logging.LogFactory;
+
 public class RunnableMatrix implements Runnable{
-	private List<Integer> runTimes;
-	private List<Runnable> actions;
+	
+	private static final Log log = LogFactory.get(RunnableMatrix.class);
+	
+	private List<Integer> runTimeRows;
+	private RunnableList runnableColumns;
 	private PerfResult[][] resultMatrix;
 	
 	public RunnableMatrix(){
-		initMatrix();
+		this(new LinkedList<Integer>(), new RunnableList());
 	}
 	
-	public RunnableMatrix(List<Integer> runTimes, List<Runnable> actions){
-		if(runTimes == null || actions == null){
+	public RunnableMatrix(List<Integer> runTimeRows, RunnableList runnableColumns){
+		if(runTimeRows == null || runnableColumns == null){
+			log.error("run time rows or runnable columns is null when constucting RunnableMatrix.");
 			throw new RuntimeException(
 					"use this constructor to init a PerfMatrix " +
 					"must use not-null runTimes and actions");
 		}
-		this.runTimes = runTimes;
-		setActions(actions);
+		this.runTimeRows = runTimeRows;
+		this.runnableColumns = runnableColumns;
 	}
 	
-	public RunnableMatrix addRunTime(int runTime){
-		runTimes.add(runTime);
+	public RunnableMatrix addRunTimeRow(int runTime){
+		runTimeRows.add(runTime);
+		log.debug("add run time row as [{}]", runTime);
 		return this;
 	}
 	
-	public RunnableMatrix addRunTimes(int... runTimes){
+	public RunnableMatrix addRunTimeRows(int... runTimes){
 		for (int i = 0; i < runTimes.length; i++) {
-	        this.runTimes.add(runTimes[i]);
+			addRunTimeRow(runTimes[i]);
         }
 		return this;
 	}
+	
+    public RunnableMatrix setDefaultRunTimeFrom1to1000000(){
+		runTimeRows = new LinkedList<Integer>();
+		addRunTimeRows(1, 10, 100, 1000, 10000, 100000, 1000000);
+		return this;
+	}
 
-	public RunnableMatrix addAction(Runnable action){
-		actions.add(wrapGroupIfNot(action));
+	public RunnableMatrix addRunnableColumn(NamedRunnable item){
+		runnableColumns.add(item);
+		log.debug("add runnable column named [{}]", item.getName());
 		return this;
 	}
 	
-	public RunnableMatrix addAction(String name, Runnable action){
-		actions.add(wrapGroupIfNot(name, action));
+	public RunnableMatrix addRunnableColumn(String name, Runnable runnable){
+		addRunnableColumn(new NamedRunnable(name, runnable));
 		return this;
 	}
 	
-	public RunnableMatrix addActions(Runnable... actions){
-		for (int i = 0; i < actions.length; i++) {
-	        this.actions.add(wrapGroupIfNot(actions[i]));
+	public RunnableMatrix addRunnbaleColumns(NamedRunnable... items){
+		for (int i = 0; i < items.length; i++) {
+			addRunnableColumn(items[i]);
         }
 		return this;
 	}
 
 	public void run() {
-		initResultMatrix();
-	    for (int i = 0; i < runTimes.size(); i++) {
-            int currentRunTimes = runTimes.get(i);
-	        for (int j = 0; j < actions.size(); j++) {
-	        	RunnableGroup currentAction = (RunnableGroup) actions.get(j);
-	        	currentAction.setRunTimes(currentRunTimes);
-	        	currentAction.run();
-	        	resultMatrix[i][j] = currentAction.getPerfResult();
+		resultMatrix = new PerfResult[runTimeRows.size()][runnableColumns.getList().size()];
+		log.debug("set up a [{}][{}] result matrix", runTimeRows.size(), runnableColumns.getList().size());
+		
+	    for (int i = 0; i < runTimeRows.size(); i++) {
+            int runTime = runTimeRows.get(i);
+            runnableColumns.setAllRunTimes(runTime);
+            runnableColumns.run();
+	        for (int j = 0; j < runnableColumns.getResultList().size(); j++) {
+	        	resultMatrix[i][j] = runnableColumns.getResultList().get(j);
             }
         }
     }
 	
-	/* private methods */
-	
-	private void initMatrix(){
-		runTimes = new LinkedList<Integer>();
-		actions = new LinkedList<Runnable>();
-	}
-	
-	private void initResultMatrix(){
-		resultMatrix = new PerfResult[runTimes.size()][actions.size()];
-	}
-	
 	/* getter and setter */
 
 	public List<Integer> getRunTimes() {
-    	return runTimes;
+    	return runTimeRows;
     }
 
 	public void setRunTimes(List<Integer> runTimes) {
-    	this.runTimes = runTimes;
+    	this.runTimeRows = runTimes;
     }
 
-	public List<Runnable> getActions() {
-    	return actions;
+	public RunnableList getRunnableColumns() {
+    	return runnableColumns;
     }
 
-	public void setActions(List<Runnable> actions) {
-		for (int i = 0; i < actions.size(); i++) {
-	        actions.set(i, wrapGroupIfNot(actions.get(i)));
-        }
-    	this.actions = actions;
+	public void setRunnableColumns(RunnableList runnableColumns) {
+    	this.runnableColumns = runnableColumns;
     }
-	
-	private Runnable wrapGroupIfNot(Runnable action){
-		RunnableGroup group = null;
-		if((action instanceof RunnableGroup) == false){
-			group = new RunnableGroup();
-			group.setSingleAction(action);
-			action = group;
-		}
-		return action;
-	}
-	
-	private Runnable wrapGroupIfNot(String name, Runnable action){
-		RunnableGroup group = (RunnableGroup) wrapGroupIfNot(action);
-		group.setName(name);
-		return group;
-	}
 
 	public PerfResult[][] getResultMatrix() {
     	return resultMatrix;

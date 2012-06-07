@@ -18,7 +18,9 @@ package bingo.lang.testing;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.List;
 
+import bingo.lang.Strings;
 import bingo.lang.logging.Log;
 import bingo.lang.logging.LogFactory;
 import bingo.lang.xml.XmlElement;
@@ -27,267 +29,268 @@ import bingo.lang.xml.XmlElement;
  * Performance measurements utility for unit test.
  */
 public final class Perf {
-	
-	private static final Log log = LogFactory.get(Perf.class);
-	
-	public static final int TO_CONSOLE = 0;
-	public static final int TO_HTML = 1;
-	public static final int TO_CONSOLE_AND_HTML = 2;
-	
-	public static final String DEFAULT_PROJECT_NAME = "anonymous";
-	public static final String DEFAULT_FILE_NAME = "testing.html";
-	public static final String DEFAULT_DIR_NAME = "perf";
-	
-	private String projectName = DEFAULT_PROJECT_NAME;
-	private Runnable runnableThing;
-	private int showResultTo = TO_CONSOLE;
-	private String fileName;
-	private int runTimes;
-	
-	private PerfResult perfResult; 
-	
-	private int runnableType = IS_SIMPLE_RUNNABLE;
-	public static final int IS_SIMPLE_RUNNABLE = 0;
-	public static final int IS_RUNNABLE_GROUP = 1;
-	public static final int IS_RUNNABLE_MATRIX = 2;
 
-	public Perf(){
-		this(DEFAULT_PROJECT_NAME, null, TO_CONSOLE, null);
+	private static final Log	log	= LogFactory.get(Perf.class);
+
+	public enum OutputType {
+		CONSOLE, HTML, ALL
 	}
-	
-	public Perf(Runnable runnable){
-		this(DEFAULT_PROJECT_NAME, runnable, TO_CONSOLE, null);
+
+	public enum RunnableType {
+		ITEM, LIST, MATRIX
 	}
-	
-	public Perf(String projectName, Runnable runnable, int showResultTo, String fileName){
+
+	public static final String	DEFAULT_PROJECT_NAME	= "anonymous";
+	public static final String	DEFAULT_DIR_NAME	 = "perf";
+
+	private String	           projectName	         = DEFAULT_PROJECT_NAME;
+	private RunnableType	   runnableType	         = RunnableType.ITEM;
+	private Runnable	       runnableThing;
+	private OutputType	       outputType	         = OutputType.CONSOLE;
+	private int 			   runTimeForSingle;
+
+	private List<PerfResult>   resultList;
+
+	public Perf() {
+		this(DEFAULT_PROJECT_NAME, null, OutputType.CONSOLE);
+	}
+
+	public Perf(Runnable runnable) {
+		this(DEFAULT_PROJECT_NAME, runnable, OutputType.CONSOLE);
+	}
+
+	public Perf(String projectName, Runnable runnable, OutputType outputType) {
+		log.debug("execute construtor method with projectName [{}], runnable [{}], outputType [{}].",
+				projectName, runnable, outputType);
 		this.projectName = projectName;
 		checkAndSetRunnableType(runnable);
 		this.runnableThing = runnable;
-		this.showResultTo = showResultTo;
-		this.fileName = fileName;
+		this.outputType = outputType;
 	}
-	
-	public void run(){
-		if(null == runnableThing){
+
+	public Perf run() {
+		log.debug("Perf Project [{}] starts running...", projectName);
+		if (null == runnableThing) {
+			log.error("runnable thing is null when run() method is invoked.");
 			throw new RuntimeException("the runnable thing could not be null.");
 		}
-		if(runnableType == IS_RUNNABLE_GROUP || runnableType == IS_SIMPLE_RUNNABLE){
-			runGroup();
+
+		if (runnableType == RunnableType.LIST || runnableType == RunnableType.ITEM) {
+			log.debug("Runnable Type is ITEM or LIST.");
+			runList();
 		}
-		if(runnableType == IS_RUNNABLE_MATRIX){
+
+		if (runnableType == RunnableType.MATRIX) {
+			log.debug("Runnable Type is MATRIX.");
 			runMatrix();
 		}
+		log.debug("Perf Project [{}] end running.\n\n", projectName);
+		return this;
 	}
-	
-	public static void run(String name, Runnable action, int runTimes){
-		Perf perf = new Perf(action);
-		perf.setProjectName(name);
-		perf.setRunTimes(runTimes);
+
+	public static void run(String projectName, Runnable runnableThing, int runTimeForSingle) {
+		log.debug("static run method is called.");
+		Perf perf = new Perf(runnableThing);
+		perf.setProjectName(projectName);
+		perf.setRunTimeForSingle(runTimeForSingle);
 		perf.run();
 	}
-	
-    /**
-     * run a runnable group.
-     */    
-    private void runGroup(){
-    	/* wrapped with runnable group */
-    	RunnableGroup runnableGroup = null;
-    	if(runnableThing instanceof RunnableGroup){
-        	String name = RunnableGroup.tryToGetName(runnableThing);
-        	int times = RunnableGroup.tryToGetRunTimes(runnableThing);
-        	runnableGroup = new RunnableGroup(name, times, runnableThing);
-    	} else {
-    		runnableGroup = new RunnableGroup(projectName, runTimes, runnableThing);
-    	}
-    	
-    	/* warm up */
-    	runnableGroup.run();
-    	
-    	runnableGroup.run();
-    	
-    	perfResult = runnableGroup.getPerfResult();
-    	
-    	if(showResultTo == TO_CONSOLE){
-        	groupToConsole();	
-    	}
-    	
-    	if(showResultTo == TO_HTML){
-    		groupToHtml();
-    	}
-    	
-    	if(showResultTo == TO_CONSOLE_AND_HTML){
-        	groupToConsole();	
-    		groupToHtml();
-    	}
-    }
-    
-    private void runMatrix(){
-    	RunnableMatrix matrix = (RunnableMatrix) runnableThing;
 
-    	matrix.run();
-    	
-    	matrix.run();
-    	
-    	PerfResult[][] resultMatrix = matrix.getResultMatrix();
-    	
-    	if(showResultTo == TO_CONSOLE){
-        	matrixToConsole(resultMatrix);	
-    	}
-    	
-    	if(showResultTo == TO_HTML){
-    		matrixToHtml(resultMatrix);
-    	}
-    	
-    	if(showResultTo == TO_CONSOLE_AND_HTML){
-        	matrixToConsole(resultMatrix);	
-        	matrixToHtml(resultMatrix);
-    	}
-    }
-    
-    private void matrixToHtml(PerfResult[][] resultMatrix) {
-	    XmlElement doc = PerfHtmlBuilder.buildUpMatrixHtml(projectName, resultMatrix);
-	    writeToHtml(doc);
-    }
+	private void runList() {
+		/* wrapped with runnable list */
+		RunnableList runnableList = null;
+		if (runnableThing instanceof RunnableList == false) {
+			log.debug("Runnable Type is a simple runnable.");
+			NamedRunnable item = new NamedRunnable(runnableThing);
+			runnableList = new RunnableList().setGlobalRunTimes(runTimeForSingle).add(item);
+		} else {
+			runnableList = (RunnableList) runnableThing;
+		}
 
+		log.debug("Warming up...");
+		runnableList.run();
+		log.debug("End warming up and execute run() method inside the Runnable Thing.");
+		runnableList.run();
 
+		resultList = runnableList.getResultList();
+		log.debug("get the performance result and output.");
+		switch (outputType) {
+			case CONSOLE:
+				listToConsole();
+				break;
+			case HTML:
+				listToHtml();
+				break;
+			case ALL:
+				listToConsole();
+				listToHtml();
+				break;
+			default:
+				log.error("invalid enum value of OutputType: [{}].", outputType);
+		}
+	}
+
+	private void runMatrix() {
+		RunnableMatrix matrix = (RunnableMatrix) runnableThing;
+
+		log.debug("Warming up...");
+		matrix.run();
+		log.debug("End warming up and execute run() method inside the Runnable Thing.");
+		matrix.run();
+
+		PerfResult[][] resultMatrix = matrix.getResultMatrix();
+		log.debug("get the performance result and output.");
+		switch (outputType) {
+			case CONSOLE:
+				matrixToConsole(resultMatrix);
+				break;
+			case HTML:
+				matrixToHtml(resultMatrix);
+				break;
+			case ALL:
+				matrixToConsole(resultMatrix);
+				matrixToHtml(resultMatrix);
+				break;
+			default:
+				log.error("invalid enum value of OutputType: [{}].", outputType);
+		}
+	}
+
+	private void matrixToHtml(PerfResult[][] resultMatrix) {
+		XmlElement doc = PerfHtmlBuilder.buildUpMatrixHtml(projectName, resultMatrix);
+		writeToHtml(doc);
+	}
 
 	private void matrixToConsole(PerfResult[][] resultMatrix) {
 		System.out.println("------------------------------------------------");
-	   for (int i = -1; i < resultMatrix.length; i++) {
-		   if(-1 == i){
-			   System.out.print("\t");
-			   for (int k = 0; k < resultMatrix[0].length; k++) {
-				   System.out.print(resultMatrix[0][k].getName() + "\t");
-			   }
-			   System.out.println();
-			   continue;
-		   } else {
-			   System.out.print(resultMatrix[i][0].getRunTimes() + "\t");
-		   }
-		   for (int j = 0; j < resultMatrix[i].length; j++) {
-			   System.out.print(resultMatrix[i][j].getElapsedNanoseconds() + "\t\t");
-		   }
-		   System.out.println();
-	   }
-    }
+		String temp = null;
+		for (int i = -1; i < resultMatrix.length; i++) {
+			if (-1 == i) {
+				temp = "RunTimes\\Code";
+				System.out.print(temp + getTabByLength(temp.length()));
+				for (int k = 0; k < resultMatrix[0].length; k++) {
+					temp = "[" + resultMatrix[0][k].getName() + "]";
+					System.out.print(temp + getTabByLength(temp.length()));
+				}
+				System.out.println();
+				continue;
+			} else {
+				temp = "[" + resultMatrix[i][0].getRunTimes() + "]";
+				System.out.print(temp + getTabByLength(temp.length()));
+			}
+			
+			for (int j = 0; j < resultMatrix[i].length; j++) {
+				temp = resultMatrix[i][j].getElapsedNanoseconds() + "";
+				System.out.print(temp + getTabByLength(temp.length()));
+			}
+			System.out.println();
+		}
+		System.out.println("------------------------------------------------");
+	}
+	
+	private String getTabByLength(int length){
+		if(length < 8) return "\t\t\t";
+		if(length < 16) return "\t\t";
+		if(length < 24) return "\t";
+		log.warn("the length of runnable name is too long to display well: [{}].", length);
+		return "";
+	}
 
-	/**
-     * show the specified named {@link PerfResult} to console.
-     * @param projectName name of this {@link PerfResult}.
-     * @param perfResult the specified {@link PerfResult}.
-     */
-    public void groupToConsole(){
-    	System.out.println("PROJECT: " + projectName);
-    	if(runnableThing instanceof RunnableGroup){
-        	groupToConsole(perfResult.getChildren().get(0), "");
-    	} else {
-        	groupToConsole(perfResult, "");
-    	}
-    }
-    
-    public void groupToHtml(){
-    	XmlElement doc = PerfHtmlBuilder.buildUpGroupHtml(projectName, perfResult);
-	    writeToHtml(doc);
-    }
-    
-    private void checkAndSetRunnableType(Runnable runnable){
-    	if(runnable instanceof RunnableMatrix){
-    		this.runnableType = IS_RUNNABLE_MATRIX;
-    		return;
-    	}
-    	if(runnable instanceof RunnableGroup){
-    		this.runnableType = IS_RUNNABLE_GROUP;
-    		return;
-    	}
-    	this.runnableType = IS_SIMPLE_RUNNABLE;
-    }
-    
-    private void groupToConsole(PerfResult perfResult, String prefix){
-    	System.out.println(prefix + perfResult.toString());
-    	prefix += "  ";
-    	if(perfResult.isEnd() == false){
-        	for (PerfResult perfResultChild : perfResult.getChildren()) {
-    			groupToConsole(perfResultChild, prefix);
-    		}
-    	}
-    }
-    
-    private void writeToHtml(XmlElement ele){
-    	FileWriter writer = null;
-    	try{
-        	File dir = new File(DEFAULT_DIR_NAME);
-        	File file = null;
-        	dir.mkdir();
-        	if(DEFAULT_PROJECT_NAME.equals(projectName)){
-        		file = new File(dir, DEFAULT_FILE_NAME);
-        	} else {
-        		file = new File(dir, projectName + ".html");
-        	}
-        	file.createNewFile();
-        	writer = new FileWriter(file);
-        	writer.write(ele.toString());
+	private void listToConsole() {
+		log.debug("starting to output result to console...");
+		System.out.println("------------------------------------------------");
+		System.out.println(Strings.format("Performance Project [{0}]",
+								projectName));
+		for (PerfResult result : resultList) {
+	        System.out.println("    " + result.toString());
+        }
+		System.out.println("------------------------------------------------");
+		log.debug("finished to output result to console.");
+	}
+	
+	private void listToHtml() {
+		XmlElement doc = PerfHtmlBuilder.buildUpGroupHtml(projectName, resultList);
+		writeToHtml(doc);
+	}
+
+	private void checkAndSetRunnableType(Runnable runnable) {
+		if (runnable instanceof RunnableMatrix) {
+			this.runnableType = RunnableType.MATRIX;
+			log.debug("set runnable type is MATRIX");
+			return;
+		}
+		if (runnable instanceof RunnableList) {
+			this.runnableType = RunnableType.LIST;
+			log.debug("set runnable type is LIST");
+			return;
+		}
+		this.runnableType = RunnableType.ITEM;
+		log.debug("set runnable type is ITEM");
+	}
+
+	private void writeToHtml(XmlElement ele) {
+		FileWriter writer = null;
+		try {
+			File dir = new File(DEFAULT_DIR_NAME);
+			dir.mkdir();
+			File file = new File(dir, projectName + ".html");
+			file.createNewFile();
+			writer = new FileWriter(file);
+			writer.write(ele.toString());
+			log.info("successfully generated HTML file for project [{}].", projectName);
+			log.info("file location is [{}].", file.getAbsolutePath());
 		} catch (IOException e) {
-			log.error("error when generating HTML file for project {}", projectName);
-	        throw new RuntimeException("error when generating HTML file");
-        } finally {
-			if(null != writer){
+			log.error("error when generating HTML file for project [{}].", projectName);
+			throw new RuntimeException("error when generating HTML file");
+		} finally {
+			if (null != writer) {
 				try {
-	                writer.close();
-                } catch (IOException e) {
-	                throw new RuntimeException("error when closing HTML file.");
-                }
+					writer.close();
+				} catch (IOException e) {
+					throw new RuntimeException("error when closing HTML file.");
+				}
 			}
 		}
-    }
-    
-    /* getter and setter */
+	}
+
+	/* getter and setter */
 
 	public String getProjectName() {
-    	return projectName;
-    }
+		return projectName;
+	}
 
-	public void setProjectName(String projectName) {
-    	this.projectName = projectName;
-    }
+	public Perf setProjectName(String projectName) {
+		this.projectName = projectName;
+		log.debug("set project name as [{}]", projectName);
+		return this;
+	}
 
 	public Runnable getRunnableThing() {
-    	return runnableThing;
+		return runnableThing;
+	}
+
+	public Perf setRunnableThing(Runnable runnableThing) {
+		this.runnableThing = runnableThing;
+		log.debug("set runnable thing as [{}]", runnableThing);
+		return this;
+	}
+
+	public OutputType getOutputType() {
+		return outputType;
+	}
+
+	public Perf setOutputType(OutputType outputType) {
+		this.outputType = outputType;
+		log.debug("set output type as [{}]", outputType);
+		return this;
+	}
+
+	public int getRunTimeForSingle() {
+    	return runTimeForSingle;
     }
 
-	public void setRunnableThing(Runnable runnableThing) {
-    	this.runnableThing = runnableThing;
+	public void setRunTimeForSingle(int runTimeForSingle) {
+    	this.runTimeForSingle = runTimeForSingle;
     }
 
-	public int getShowResultTo() {
-    	return showResultTo;
-    }
-
-	public void setShowResultTo(int showResultTo) {
-    	this.showResultTo = showResultTo;
-    }
-
-	public String getFileName() {
-    	return fileName;
-    }
-
-	public void setFileName(String fileName) {
-    	this.fileName = fileName;
-    }
-
-	public int getRunnableType() {
-    	return runnableType;
-    }
-
-	public void setRunnableType(int runnableType) {
-    	this.runnableType = runnableType;
-    }
-
-	public int getRunTimes() {
-    	return runTimes;
-    }
-
-	public void setRunTimes(int runTimes) {
-    	this.runTimes = runTimes;
-    }
-    
 }
