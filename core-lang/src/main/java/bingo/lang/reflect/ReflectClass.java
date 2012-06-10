@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 import bingo.lang.Classes;
-import bingo.lang.Collections;
+import bingo.lang.Enumerables;
 import bingo.lang.Named;
 import bingo.lang.New;
 import bingo.lang.Predicate;
@@ -233,7 +233,7 @@ public class ReflectClass<T> implements Named {
 	}
 	
 	public ReflectField getField(final String name){
-		return Collections.firstOrNull(fields, new Predicate<ReflectField>() {
+		return Enumerables.firstOrNull(fields, new Predicate<ReflectField>() {
 			public boolean apply(ReflectField object) {
 	            return object.getName().equals(name);
             }
@@ -241,11 +241,11 @@ public class ReflectClass<T> implements Named {
 	}
 	
 	public ReflectField getField(final String name,final Class<?> fieldType){
-		return Collections.firstOrNull(fields,Predicates.<ReflectField>nameEquals(name));
+		return Enumerables.firstOrNull(fields,Predicates.<ReflectField>nameEquals(name));
 	}
 	
 	public ReflectField getFieldIgnorecase(final String name){
-		return Collections.firstOrNull(fields,Predicates.<ReflectField>nameEqualsIgnoreCase(name));
+		return Enumerables.firstOrNull(fields,Predicates.<ReflectField>nameEqualsIgnoreCase(name));
 	}
 	
 	public ReflectMethod[] getMethods(){
@@ -257,11 +257,11 @@ public class ReflectClass<T> implements Named {
 	}
 	
 	public ReflectMethod getMethod(final String name){
-		return Collections.firstOrNull(methods, Predicates.<ReflectMethod>nameEquals(name));
+		return Enumerables.firstOrNull(methods, Predicates.<ReflectMethod>nameEquals(name));
 	}
 	
 	public ReflectMethod getMethod(final String name,final Class<?>... argumentTypes){
-		return Collections.firstOrNull(methods, new Predicate<ReflectMethod>() {
+		return Enumerables.firstOrNull(methods, new Predicate<ReflectMethod>() {
 			public boolean apply(ReflectMethod object) {
 	            if(object.getName().equals(name)){
 	            	Method javaMethod = object.getJavaMethod();
@@ -293,7 +293,7 @@ public class ReflectClass<T> implements Named {
 	}	
 	
 	public ReflectMethod[] getMethods(final String name) {
-		return Collections.where(methods, new Predicate<ReflectMethod>() {
+		return Enumerables.where(methods, new Predicate<ReflectMethod>() {
 			public boolean apply(ReflectMethod object) {
 	            return object.getName().equals(name);
             }
@@ -393,7 +393,7 @@ public class ReflectClass<T> implements Named {
     }
 	
 	private static <T extends ReflectMember,E> List<T> getDeclaredMembers(List<T> members){
-		return Collections.where(members, new Predicate<T>() {
+		return Enumerables.where(members, new Predicate<T>() {
 			public boolean apply(T object) {
 	            return object.isDeclared();
             }

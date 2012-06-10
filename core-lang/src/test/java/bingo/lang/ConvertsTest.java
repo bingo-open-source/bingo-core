@@ -15,7 +15,13 @@
  */
 package bingo.lang;
 
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Reader;
+import java.io.Writer;
 import java.math.BigDecimal;
+import java.sql.Clob;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
@@ -63,6 +69,67 @@ public class ConvertsTest extends ConcurrentTestCase {
 	public void testToPrimitiveClassObject(){
 		assertTrue(0 == Converts.toPrimitive(null,Integer.TYPE));
 		assertTrue(36.5d == Converts.toPrimitive(36.5,Double.TYPE));
+	}
+	
+	
+	@Test
+	public void testClobToString(){
+		String string = "abcdefghijk\r\nabcdefg";
+
+		assertEquals(string, Converts.toString(new ClobImpl(string)));
+	}
+	
+	static final class ClobImpl implements Clob {
+		
+		private final String string;
+		
+		public ClobImpl(String string) {
+			this.string = string;
+        }
+		
+		public long length() throws SQLException {
+	        return string.length();
+        }
+		
+		public String getSubString(long pos, int length) throws SQLException {
+	        return string.substring((int)(pos - 1), (int)length);
+        }
+
+		public InputStream getAsciiStream() throws SQLException {
+	        return null;
+        }
+
+		public Reader getCharacterStream() throws SQLException {
+	        return null;
+        }
+
+		public long position(Clob searchstr, long start) throws SQLException {
+	        return 0;
+        }
+
+		public long position(String searchstr, long start) throws SQLException {
+	        return 0;
+        }
+
+		public OutputStream setAsciiStream(long pos) throws SQLException {
+	        return null;
+        }
+
+		public Writer setCharacterStream(long pos) throws SQLException {
+	        return null;
+        }
+
+		public int setString(long pos, String str, int offset, int len) throws SQLException {
+	        return 0;
+        }
+
+		public int setString(long pos, String str) throws SQLException {
+	        return 0;
+        }
+
+		public void truncate(long len) throws SQLException {
+	        
+        }
 	}
 	
 	static final class TesterBean  {

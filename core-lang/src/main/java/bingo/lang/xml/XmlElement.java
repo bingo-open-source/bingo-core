@@ -3,8 +3,8 @@ package bingo.lang.xml;
 import java.util.ArrayList;
 import java.util.List;
 
-import bingo.lang.Enumerable;
 import bingo.lang.Strings;
+import bingo.lang.enumerable.IteratedEnumerable;
 import bingo.lang.xml.XmlUtils.Predicates;
 
 public class XmlElement extends XmlContainer implements XNameable {
@@ -43,8 +43,8 @@ public class XmlElement extends XmlContainer implements XNameable {
 		return !attributes.isEmpty();
 	}
 	
-	public Enumerable<XmlAttribute> attributes() {
-		return Enumerable.of(attributes);
+	public IteratedEnumerable<XmlAttribute> attributes() {
+		return IteratedEnumerable.of(attributes);
 	}
 
 	public XmlAttribute attribute(String name) {

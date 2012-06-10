@@ -31,7 +31,24 @@ public class Immutables {
 		return new WrappedImmutableList<E>(list);
 	}
 	
+	public static <E> List<E> listOf(Iterable<E> iterable) {
+		return new WrappedImmutableList<E>(Enumerables.toList(iterable));
+	}
+	
+	public static <E> List<E> listOf(E... array) {
+		return new WrappedImmutableList<E>(Arrays.toList(array));
+	}
+	
 	public static <E> Set<E> setOf(Set<E> set) {
 		return new WrappedImmutableSet<E>(set);
 	}
+	
+	public static <E> Set<E> setOf(Iterable<E> iterable) {
+		return new WrappedImmutableSet<E>(Enumerables.toSet(iterable));
+	}
+	
+	public static <E> Set<E> setOf(E... array) {
+		return new WrappedImmutableSet<E>(Arrays.toSet(array));
+	}
+
 }

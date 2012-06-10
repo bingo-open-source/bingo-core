@@ -22,19 +22,19 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.ProcessingInstruction;
 import org.w3c.dom.Text;
 
-import bingo.lang.Collections;
-import bingo.lang.Enumerable;
+import bingo.lang.Enumerables;
 import bingo.lang.Func;
 import bingo.lang.Func1;
 import bingo.lang.Out;
+import bingo.lang.enumerable.IteratedEnumerable;
 import bingo.lang.iterable.ImmutableIteratorBase;
 import bingo.lang.xml.XmlUtils.DepthFirstIterator;
 import bingo.lang.xml.XmlUtils.Predicates;
 
 abstract class XmlContainer extends XmlNode {
 
-	private static final Func1<XmlElement, Enumerable<XmlElement>> CHILD_ELEMENTS = new Func1<XmlElement, Enumerable<XmlElement>>() {
-		public Enumerable<XmlElement> apply(XmlElement input) {
+	private static final Func1<XmlElement, IteratedEnumerable<XmlElement>> CHILD_ELEMENTS = new Func1<XmlElement, IteratedEnumerable<XmlElement>>() {
+		public IteratedEnumerable<XmlElement> apply(XmlElement input) {
 			return input.childElements();
 		}
 	};
@@ -49,11 +49,11 @@ abstract class XmlContainer extends XmlNode {
 		return !childNodes.isEmpty();
 	}
 
-	public Enumerable<XmlElement> childElements() {
+	public IteratedEnumerable<XmlElement> childElements() {
 		return childNodes().ofType(XmlElement.class);
 	}
 
-	public Enumerable<XmlElement> childElements(String name) {
+	public IteratedEnumerable<XmlElement> childElements(String name) {
 		return childNodes().ofType(XmlElement.class).where(Predicates.<XmlElement> xnameEquals(name));
 	}
 
@@ -65,23 +65,23 @@ abstract class XmlContainer extends XmlNode {
 		return childElements().firstOrNull();
 	}
 
-	public Enumerable<XmlNode> childNodes() {
-		return Enumerable.of(childNodes);
+	public IteratedEnumerable<XmlNode> childNodes() {
+		return IteratedEnumerable.of(childNodes);
 	}
 	
 	public XmlNode firstChildNode(){
-		return Collections.firstOrNull(childNodes);
+		return Enumerables.firstOrNull(childNodes);
 	}
 
-	public Enumerable<XmlElement> descendantElements() {
-		return Enumerable.of(new Func<Iterator<XmlElement>>() {
+	public IteratedEnumerable<XmlElement> descendantElements() {
+		return IteratedEnumerable.of(new Func<Iterator<XmlElement>>() {
 			public Iterator<XmlElement> apply() {
 				return new DepthFirstIterator<XmlElement>(element(), CHILD_ELEMENTS);
 			}
 		});
 	}
 
-	public Enumerable<XmlElement> descendantElements(final String name) {
+	public IteratedEnumerable<XmlElement> descendantElements(final String name) {
 		return descendantElements().where(Predicates.<XmlElement> xnameEquals(name));
 	}
 
@@ -105,7 +105,7 @@ abstract class XmlContainer extends XmlNode {
 	}
 
 	public void addFirst(Object... content) {
-		for (Object obj : Enumerable.of(content).reverse()) {
+		for (Object obj : IteratedEnumerable.of(content).reverse()) {
 			addFirst(obj);
 		}
 	}
@@ -185,8 +185,8 @@ abstract class XmlContainer extends XmlNode {
 		throw new UnsupportedOperationException("implement " + domNode);
 	}
 
-	protected static Enumerable<Node> domNodes(final NodeList nodes) {
-		return Enumerable.of(new Func<Iterator<Node>>() {
+	protected static IteratedEnumerable<Node> domNodes(final NodeList nodes) {
+		return IteratedEnumerable.of(new Func<Iterator<Node>>() {
 			public Iterator<Node> apply() {
 				return new NodeListIterator(nodes);
 			}
@@ -217,7 +217,7 @@ abstract class XmlContainer extends XmlNode {
 	}
 	
 	@SuppressWarnings("unused")
-	private static Enumerable<Element> domElements(Element parent) {
+	private static IteratedEnumerable<Element> domElements(Element parent) {
 		return domNodes(parent.getChildNodes()).ofType(Element.class);
 	}
 	

@@ -22,6 +22,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import bingo.lang.Assert;
 import bingo.lang.Classes;
 import bingo.lang.Collections;
+import bingo.lang.Enumerables;
 import bingo.lang.Predicates;
 import bingo.lang.Reflects;
 import bingo.lang.Strings;
@@ -71,7 +72,7 @@ public class PluginManager {
 	}
 	
 	public Plugin getPlugin(String name){
-		return Collections.firstOrNull(plugins,Predicates.<Plugin>nameEqualsIgnoreCase(name));
+		return Enumerables.firstOrNull(plugins,Predicates.<Plugin>nameEqualsIgnoreCase(name));
 	}
 	
 	public synchronized Plugin[] load(){

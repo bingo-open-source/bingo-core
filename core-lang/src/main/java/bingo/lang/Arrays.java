@@ -17,17 +17,16 @@ package bingo.lang;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import bingo.lang.iterable.ArrayIterable;
 import bingo.lang.iterable.EmptyIterable;
+import bingo.lang.reflect.ReflectClass;
 
 /**
  * <code>null</code> safe {@link Array} utility
- * 
- * @author fenghm (fenghm@bingosoft.net)
- * 
- * @since 0.1
  */
 //From apache commons-lang3, under Apache License 2.0
 public class Arrays {
@@ -1570,6 +1569,21 @@ public class Arrays {
 		}
 		return java.util.Arrays.asList(elements);
 	}
+	
+	/**
+	 * Converts a T[] array to a {@link Set}<T>.
+	 */
+	public static <T> Set<T> toSet(T... elements){
+		if(null == elements || elements.length == 0) {
+			return new LinkedHashSet<T>();
+		}else{
+			LinkedHashSet<T> set = new LinkedHashSet<T>();
+			for(T e : elements){
+				set.add(e);
+			}
+			return set;
+		}
+	}
 
 	/**
 	 * Converts a T[] array to a String[] array.
@@ -1657,6 +1671,11 @@ public class Arrays {
 		}
 		
 		return true;
+	}
+	
+	//newInstance
+	public static <T> T[] newInstance(Class<T> elementType,int length) {
+		return ReflectClass.get(elementType).newArray(length);
 	}
 
 	//Private Methods

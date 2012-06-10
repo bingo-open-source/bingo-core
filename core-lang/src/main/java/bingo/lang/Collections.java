@@ -17,13 +17,9 @@ package bingo.lang;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Enumeration;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-
-import bingo.lang.exceptions.EmptyDataException;
 
 /**
  * <code>null</code> safe {@link Collection} utility.
@@ -32,6 +28,30 @@ public class Collections {
 
 	protected Collections() {
 
+	}
+	
+	public static <E> List<E> listOf(Collection<E> collection) {
+		return new ArrayList<E>(collection);
+	}
+	
+	public static <E> List<E> listOf(Iterable<E> iterable) {
+		return Enumerables.toList(iterable);
+	}
+	
+	public static <E> List<E> listOf(E... array) {
+		return Arrays.toList(array);
+	}
+	
+	public static <E> Set<E> setOf(Collection<E> collection) {
+		return new HashSet<E>(collection);
+	}
+	
+	public static <E> Set<E> setOf(Iterable<E> iterable) {
+		return Enumerables.toSet(iterable);
+	}
+	
+	public static <E> Set<E> setOf(E... array) {
+		return Arrays.toSet(array);
 	}
 
 	/**
@@ -63,8 +83,6 @@ public class Collections {
 	}
 	
 	public static <T> T[] toArray(Collection<T> collection,Class<T> elementType){
-		Assert.notNull(elementType,"elementType cannot be null");
-		
 		if(null == collection || collection.isEmpty()){
 			return Reflects.newArray(elementType, 0);
 		}else{
@@ -78,87 +96,6 @@ public class Collections {
 		}
 	}
 	
-	/**
-	 * return an empty object array if the supplied {@link Iterable} is null. 
-	 * Otherwise, return an object array of all iterable.
-	 * 
-	 *  @param iterable the iterable to Array.
-	 *  
-	 *  @return empty object array if iterable is null or an object array of all iterable.
-	 */
-	public static Object[] toArray(Iterable<?> iterable) {
-		if (null == iterable) {
-			return Arrays.EMPTY_OBJECT_ARRAY;
-		}
-
-		ArrayList<Object> list = new ArrayList<Object>();
-
-		for (Object item : iterable) {
-			list.add(item);
-		}
-
-		return list.toArray();
-	}
-	
-	/**
-	 * return an object array of all enumeration elements.
-	 * 
-	 * @param enumeration the enumeration to return array.
-	 * 
-	 * @return the object array of all enumeration elements.
-	 */
-	public static Object[] toArray(Enumeration<?> enumeration) {
-		ArrayList<Object> list = new ArrayList<Object>();
-
-		while (enumeration.hasMoreElements()) {
-			list.add(enumeration.nextElement());
-		}
-
-		return list.toArray();
-	}	
-	
-	/**
-	 * return a list containing all elements in the supplied iterable.
-	 * 
-	 * @param iterable the supplied iterable.
-	 * 
-	 * @return a list containing all elements in the supplied iterable.
-	 */
-	public static <T> List<T> toList(Iterable<T> iterable) {
-		if (null == iterable) {
-			return new ArrayList<T>();
-		}
-
-		ArrayList<T> list = new ArrayList<T>();
-
-		for (T item : iterable) {
-			list.add(item);
-		}
-
-		return list;
-	}
-	
-	/**
-	 * return a set containing all elements in the supplied iterable.
-	 * 
-	 * @param iterable the supplied iterable.
-	 * 
-	 * @return a set containing all elements in the supplied iterable.
-	 */
-	public static <T> Set<T> toSet(Iterable<T> iterable) {
-		if (null == iterable) {
-			return new HashSet<T>();
-		}
-
-		HashSet<T> set = new HashSet<T>();
-
-		for (T item : iterable) {
-			set.add(item);
-		}
-
-		return set;
-	}	
-
 	/**
 	 * concatenate lists into one list.
 	 * 
@@ -180,171 +117,4 @@ public class Collections {
 
 		return list;
 	}
-	
-	/**
-	 * return the first element in the supplied {@link Iterable}.
-	 * 
-	 * @param iterable get the first element from this iterable.
-	 * 
-	 * @return the first element.
-	 * 
-	 * @throws EmptyDataException if the supplied iterable is null or empty.
-	 */
-	public static <T> T first(Iterable<T> iterable){
-		if(null == iterable){
-			throw new EmptyDataException("iterable is null");
-		}
-		
-		for(T e : iterable){
-			return e;
-		}
-		
-		throw new EmptyDataException("iterable is empty");
-	}
-	
-	public static <T> T firstOrNull(Iterable<T> iterable) {
-		if(null == iterable){
-			return null;
-		}
-		
-		Iterator<T> iterator = iterable.iterator();
-		
-		if(iterator.hasNext()){
-			return iterator.next();
-		}
-		
-		return null;
-	}
-	
-	//TODO to be documented after figure out the usage of predicate.
-	public static <T> T firstOrNull(Iterable<T> iterable, Predicate<T> predicate) {
-		if(null == iterable){
-			return null;
-		}
-		
-		for (T object : iterable) {
-			if (predicate.apply(object)) {
-				return object;
-			}
-		}
-		return null;
-	}
-
-	//TODO to be documented after figure out the usage of predicate.
-	public static <T> T firstOrNull(T[] array, Predicate<T> predicate) {
-		if(null == array){
-			return null;
-		}
-		
-		for (T object : array) {
-			if (predicate.apply(object)) {
-				return object;
-			}
-		}
-		return null;
-	}
-
-	//TODO to be documented after figure out the usage of predicate.
-	public static <T, O> O firstOrNull(Iterable<T> iterable, OutPredicate<T, O> predicate) {
-		if(null == iterable){
-			return null;
-		}
-		
-		Out<O> out = new OutObject<O>();
-		
-		for (T object : iterable) {
-			if ((predicate.apply(object, out))) {
-				return out.getValue();
-			}
-		}
-
-		return null;
-	}
-
-	//TODO to be documented after figure out the usage of predicate.
-	public static <T, O> O firstOrNull(T[] array, OutPredicate<T, O> predicate) {
-		if(null == array){
-			return null;
-		}
-		
-		Out<O> out = new OutObject<O>();
-
-		for (T object : array) {
-			if ((predicate.apply(object, out))) {
-				return out.getValue();
-			}
-		}
-
-		return null;
-	}
-
-	//TODO to be documented after figure out the usage of predicate.
-	public static <T> List<T> where(Iterable<T> iterable,Predicate<T> where){
-		List<T> list = new ArrayList<T>();
-		
-		if(null != iterable){
-			for(T item : iterable){
-				if(where.apply(item)){
-					list.add(item);
-				}
-			}
-		}
-		
-		return list;
-	}
-
-	//TODO to be documented after figure out the usage of predicate.
-	public static <T> List<T> where(T[] array,Predicate<T> where){
-		List<T> list = new ArrayList<T>();
-		
-		if(null != array){
-			for(T item : array){
-				if(where.apply(item)){
-					list.add(item);
-				}
-			}
-		}
-		
-		return list;
-	}
-
-
-	//TODO to be documented after figure out the usage of Func1.
-	public static <T, O> List<O> select(Iterable<T> iterable, Func1<T, O> func) {
-		List<O> list = new ArrayList<O>();
-
-		if(null != iterable){
-			for (T object : iterable) {
-				list.add(func.apply(object));
-			}
-		}
-
-		return list;
-	}
-
-	//TODO to be documented after figure out the usage of Func1.
-	public static <T, O> List<O> select(T[] array, Func1<T, O> func) {
-		List<O> list = new ArrayList<O>();
-
-		if(null != array){
-			for (T object : array) {
-				list.add(func.apply(object));
-			}
-		}
-
-		return list;
-	}
-
-	//TODO to be documented after figure out the usage of Func1.
-	public static <T, R> Collection<R> selectMany(Iterable<T> iterable, Func1<T,Collection<R>> func) {
-		List<R> list = new ArrayList<R>();
-
-		if(null != iterable){
-			for (T object : iterable) {
-				list.addAll(func.apply(object));
-			}
-		}
-
-		return list;
-	}	
 }

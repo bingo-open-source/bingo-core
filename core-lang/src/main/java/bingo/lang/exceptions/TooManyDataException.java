@@ -13,16 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.lang;
+package bingo.lang.exceptions;
 
-public interface NamedIterable<T extends Named> extends Iterable<T> {
-	
-	T find(String name);
-	
-	T find(Named name);
+public class TooManyDataException extends NestedRuntimeException {
 
-	T get(String name);
-	
-	T get(Named name);
+	private static final long serialVersionUID = 4588839934867608545L;
 
+	public TooManyDataException() {
+		
+	}
+
+	public TooManyDataException(String message) {
+		super(message);
+	}
+
+	public TooManyDataException(String message, Throwable cause) {
+		super(message, cause);
+	}
+
+	public TooManyDataException(Throwable cause) {
+		super(cause);
+	}
+
+	public TooManyDataException(String message, Object... args) {
+		super(message, args);
+	}
 }
