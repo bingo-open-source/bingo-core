@@ -38,42 +38,42 @@ public interface FileChangeListener {
      * 
      * @param directory The directory created
      */
-    void onDirectoryCreate(final File directory);
+    void onDirectoryCreate(final FileChangeObserver observer, final File directory);
 
     /**
      * Directory changed Event.
      * 
      * @param directory The directory changed
      */
-    void onDirectoryChange(final File directory);
+    void onDirectoryChange(final FileChangeObserver observer,final File directory);
 
     /**
      * Directory deleted Event.
      * 
      * @param directory The directory deleted
      */
-    void onDirectoryDelete(final File directory);
+    void onDirectoryDelete(final FileChangeObserver observer,final File directory);
 
     /**
      * File created Event.
      * 
      * @param file The file created
      */
-    void onFileCreate(final File file);
+    void onFileCreate(final FileChangeObserver observer,final File file);
 
     /**
      * File changed Event.
      * 
      * @param file The file changed
      */
-    void onFileChange(final File file);
+    void onFileChange(final FileChangeObserver observer,final File file);
 
     /**
      * File deleted Event.
      * 
      * @param file The file deleted
      */
-    void onFileDelete(final File file);
+    void onFileDelete(final FileChangeObserver observer,final File file);
 
     /**
      * File system observer finished checking event.
@@ -81,4 +81,9 @@ public interface FileChangeListener {
      * @param observer The file system observer
      */
     void onStop(final FileChangeObserver observer);
+    
+    /**
+     * File system observer error checking.
+     */
+    boolean onError(final FileChangeObserver observer,Throwable e);
 }

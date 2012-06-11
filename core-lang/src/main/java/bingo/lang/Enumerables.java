@@ -302,6 +302,19 @@ public class Enumerables {
 		
 		return list;
 	}
+	
+	public static <T> boolean any(Iterable<T> iterable,Predicate<T> predicate) {
+		if(null == iterable){
+			return false;
+		}
+		
+		for(T item : iterable){
+			if(predicate.apply(item)){
+				return true;
+			}
+		}
+		return false;
+	}
 
 	public static <T, O> List<O> select(Iterable<T> iterable, Func1<T, O> func) {
 		List<O> list = new ArrayList<O>();
@@ -327,7 +340,7 @@ public class Enumerables {
 		return list;
 	}
 
-	public static <T, R> Collection<R> selectMany(Iterable<T> iterable, Func1<T,Collection<R>> func) {
+	public static <T, R> List<R> selectMany(Iterable<T> iterable, Func1<T,Collection<R>> func) {
 		List<R> list = new ArrayList<R>();
 
 		if(null != iterable){

@@ -62,4 +62,76 @@ public class PathsTest extends ConcurrentTestCase {
 		assertEquals("../mypath1/myfile", Paths.normalize("mypath/../../mypath1/myfile"));
 		assertEquals("/../mypath/myfile", Paths.normalize("/../mypath/myfile"));
 	}
+	
+	@Test
+    public void testGetPath() {
+        assertEquals(null, Paths.getPath(null));
+        assertEquals("", Paths.getPath("noseperator.inthispath"));
+        assertEquals("", Paths.getPath("/noseperator.inthispath"));
+        assertEquals("", Paths.getPath("\\noseperator.inthispath"));
+        assertEquals("a/b/", Paths.getPath("a/b/c.txt"));
+        assertEquals("a/b/", Paths.getPath("a/b/c"));
+        assertEquals("a/b/c/", Paths.getPath("a/b/c/"));
+        assertEquals("a\\b\\", Paths.getPath("a\\b\\c"));
+        
+        assertEquals(null, Paths.getPath(":"));
+        assertEquals(null, Paths.getPath("1:/a/b/c.txt"));
+        assertEquals(null, Paths.getPath("1:"));
+        assertEquals(null, Paths.getPath("1:a"));
+        assertEquals(null, Paths.getPath("///a/b/c.txt"));
+        assertEquals(null, Paths.getPath("//a"));
+        
+        assertEquals("", Paths.getPath(""));
+        assertEquals("", Paths.getPath("C:"));
+        assertEquals("", Paths.getPath("C:/"));
+        assertEquals("", Paths.getPath("//server/"));
+        assertEquals("", Paths.getPath("~"));
+        assertEquals("", Paths.getPath("~/"));
+        assertEquals("", Paths.getPath("~user"));
+        assertEquals("", Paths.getPath("~user/"));
+        
+        assertEquals("a/b/", Paths.getPath("a/b/c.txt"));
+        assertEquals("a/b/", Paths.getPath("/a/b/c.txt"));
+        assertEquals("", Paths.getPath("C:a"));
+        assertEquals("a/b/", Paths.getPath("C:a/b/c.txt"));
+        assertEquals("a/b/", Paths.getPath("C:/a/b/c.txt"));
+        assertEquals("a/b/", Paths.getPath("//server/a/b/c.txt"));
+        assertEquals("a/b/", Paths.getPath("~/a/b/c.txt"));
+        assertEquals("a/b/", Paths.getPath("~user/a/b/c.txt"));
+    }
+
+	@Test
+    public void testGetFullPath() {
+        assertEquals(null, Paths.getFullPath(null));
+        assertEquals("", Paths.getFullPath("noseperator.inthispath"));
+        assertEquals("a/b/", Paths.getFullPath("a/b/c.txt"));
+        assertEquals("a/b/", Paths.getFullPath("a/b/c"));
+        assertEquals("a/b/c/", Paths.getFullPath("a/b/c/"));
+        assertEquals("a\\b\\", Paths.getFullPath("a\\b\\c"));
+        
+        assertEquals(null, Paths.getFullPath(":"));
+        assertEquals(null, Paths.getFullPath("1:/a/b/c.txt"));
+        assertEquals(null, Paths.getFullPath("1:"));
+        assertEquals(null, Paths.getFullPath("1:a"));
+        assertEquals(null, Paths.getFullPath("///a/b/c.txt"));
+        assertEquals(null, Paths.getFullPath("//a"));
+        
+        assertEquals("", Paths.getFullPath(""));
+        assertEquals("C:", Paths.getFullPath("C:"));
+        assertEquals("C:/", Paths.getFullPath("C:/"));
+        assertEquals("//server/", Paths.getFullPath("//server/"));
+        assertEquals("~/", Paths.getFullPath("~"));
+        assertEquals("~/", Paths.getFullPath("~/"));
+        assertEquals("~user/", Paths.getFullPath("~user"));
+        assertEquals("~user/", Paths.getFullPath("~user/"));
+        
+        assertEquals("a/b/", Paths.getFullPath("a/b/c.txt"));
+        assertEquals("/a/b/", Paths.getFullPath("/a/b/c.txt"));
+        assertEquals("C:", Paths.getFullPath("C:a"));
+        assertEquals("C:a/b/", Paths.getFullPath("C:a/b/c.txt"));
+        assertEquals("C:/a/b/", Paths.getFullPath("C:/a/b/c.txt"));
+        assertEquals("//server/a/b/", Paths.getFullPath("//server/a/b/c.txt"));
+        assertEquals("~/a/b/", Paths.getFullPath("~/a/b/c.txt"));
+        assertEquals("~user/a/b/", Paths.getFullPath("~user/a/b/c.txt"));
+    }	
 }

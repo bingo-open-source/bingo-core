@@ -23,14 +23,14 @@ import java.io.File;
  * 
  * @see FileChangeObserver
  */
-public class FileChangeListenerAdaptor implements FileChangeListener {
+public class FileChangeListenerAdaptor1 implements FileChangeListener {
 
     /**
      * File system observer started checking event.
      *
      * @param observer The file system observer (ignored)
      */
-    public void onStart(final FileChangeObserver observer) {
+    public final void onStart(final FileChangeObserver observer) {
     }
 
     /**
@@ -39,6 +39,7 @@ public class FileChangeListenerAdaptor implements FileChangeListener {
      * @param directory The directory created (ignored)
      */
     public void onDirectoryCreate(final FileChangeObserver observer,final File directory) {
+    	onDirectoryChanged(observer,FileChangeEvent.DirectoryCreate, directory);
     }
 
     /**
@@ -47,6 +48,7 @@ public class FileChangeListenerAdaptor implements FileChangeListener {
      * @param directory The directory changed (ignored)
      */
     public void onDirectoryChange(final FileChangeObserver observer,final File directory) {
+    	onDirectoryChanged(observer,FileChangeEvent.DirectoryChange, directory);
     }
 
     /**
@@ -55,6 +57,7 @@ public class FileChangeListenerAdaptor implements FileChangeListener {
      * @param directory The directory deleted (ignored)
      */
     public void onDirectoryDelete(final FileChangeObserver observer,final File directory) {
+    	onDirectoryChanged(observer,FileChangeEvent.DirectoryDelete, directory);
     }
 
     /**
@@ -63,6 +66,7 @@ public class FileChangeListenerAdaptor implements FileChangeListener {
      * @param file The file created (ignored)
      */
     public void onFileCreate(final FileChangeObserver observer,final File file) {
+    	onFileChanged(observer,FileChangeEvent.FileCreate, file);
     }
 
     /**
@@ -71,6 +75,7 @@ public class FileChangeListenerAdaptor implements FileChangeListener {
      * @param file The file changed (ignored)
      */
     public void onFileChange(final FileChangeObserver observer,final File file) {
+    	onFileChanged(observer,FileChangeEvent.FileChange, file);
     }
 
     /**
@@ -79,6 +84,7 @@ public class FileChangeListenerAdaptor implements FileChangeListener {
      * @param file The file deleted (ignored)
      */
     public void onFileDelete(final FileChangeObserver observer,final File file) {
+    	onFileChanged(observer, FileChangeEvent.FileDelete, file);
     }
 
     /**
@@ -88,8 +94,16 @@ public class FileChangeListenerAdaptor implements FileChangeListener {
      */
     public void onStop(final FileChangeObserver observer) {
     }
+    
+    public boolean onError(FileChangeObserver observer, Throwable e) {
+	    return false;
+    }
 
-	public boolean onError(FileChangeObserver observer, Throwable e) {
-		return false;
+	protected void onFileChanged(final FileChangeObserver observer,FileChangeEvent event,File file){
+    	
+    }
+    
+    protected void onDirectoryChanged(final FileChangeObserver observer,FileChangeEvent event,File directory){
+    	
     }
 }

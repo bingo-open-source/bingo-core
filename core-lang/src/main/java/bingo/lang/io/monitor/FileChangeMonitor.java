@@ -20,6 +20,10 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ThreadFactory;
 
+import bingo.lang.Exceptions;
+import bingo.lang.logging.Log;
+import bingo.lang.logging.LogFactory;
+
 /**
  * A runnable that spawns a monitoring thread triggering any
  * registered {@link FileChangeObserver} at a specified interval.
@@ -27,6 +31,10 @@ import java.util.concurrent.ThreadFactory;
  * @see FileChangeObserver
  */
 public final class FileChangeMonitor implements Runnable {
+	
+	private static final Log log = LogFactory.get(FileChangeMonitor.class);
+	
+	private static final long ERROR_SLEEP_INTERVAL = 10000;
 
     private final long interval;
     private final List<FileChangeObserver> observers = new CopyOnWriteArrayList<FileChangeObserver>();
@@ -34,6 +42,7 @@ public final class FileChangeMonitor implements Runnable {
     private ThreadFactory threadFactory;
     private boolean daemon = true;
     private volatile boolean running = false;
+    private boolean errorStop;
 
     /**
      * Construct a monitor with a default interval of 10 seconds.
@@ -79,6 +88,10 @@ public final class FileChangeMonitor implements Runnable {
     
     public void setDaemon(boolean daemon){
     	this.daemon = daemon;
+    }
+    
+    public void setErrorStop(boolean errorStop){
+    	this.errorStop = errorStop;
     }
 
     /**
@@ -182,9 +195,22 @@ public final class FileChangeMonitor implements Runnable {
      */
     public void run() {
         while (running) {
-            for (FileChangeObserver observer : observers) {
-                observer.checkAndNotify();
-            }
+            try {
+	            for (FileChangeObserver observer : observers) {
+	                observer.checkAndNotify();
+	            }
+            } catch (Throwable e) {
+            	if(errorStop){
+            		throw Exceptions.uncheck(e);	
+            	}else{
+            		log.error("Error invoking observer.checkAndNotify",e);
+            		
+                    try {
+                        Thread.sleep(ERROR_SLEEP_INTERVAL);
+                    } catch (final InterruptedException ignored) {
+                    }            	
+                 }
+            } 
             if (!running) {
                 break;
             }

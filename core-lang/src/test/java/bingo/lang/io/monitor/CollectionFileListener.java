@@ -128,7 +128,7 @@ class CollectionFileListener implements FileChangeListener, Serializable {
      * 
      * @param directory The directory created
      */
-    public void onDirectoryCreate(final File directory) {
+    public void onDirectoryCreate(final FileChangeObserver observer,final File directory) {
         createdDirectories.add(directory);
     }
 
@@ -137,7 +137,7 @@ class CollectionFileListener implements FileChangeListener, Serializable {
      * 
      * @param directory The directory changed
      */
-    public void onDirectoryChange(final File directory) {
+    public void onDirectoryChange(final FileChangeObserver observer,final File directory) {
         changedDirectories.add(directory);
     }
 
@@ -146,7 +146,7 @@ class CollectionFileListener implements FileChangeListener, Serializable {
      * 
      * @param directory The directory deleted
      */
-    public void onDirectoryDelete(final File directory) {
+    public void onDirectoryDelete(final FileChangeObserver observer,final File directory) {
         deletedDirectories.add(directory);
     }
 
@@ -155,7 +155,7 @@ class CollectionFileListener implements FileChangeListener, Serializable {
      * 
      * @param file The file created
      */
-    public void onFileCreate(final File file) {
+    public void onFileCreate(final FileChangeObserver observer,final File file) {
         createdFiles.add(file);
     }
 
@@ -164,7 +164,7 @@ class CollectionFileListener implements FileChangeListener, Serializable {
      * 
      * @param file The file changed
      */
-    public void onFileChange(final File file) {
+    public void onFileChange(final FileChangeObserver observer,final File file) {
         changedFiles.add(file);
     }
 
@@ -173,7 +173,7 @@ class CollectionFileListener implements FileChangeListener, Serializable {
      * 
      * @param file The file deleted
      */
-    public void onFileDelete(final File file) {
+    public void onFileDelete(final FileChangeObserver observer,final File file) {
         deletedFiles.add(file);
     }
 
@@ -185,4 +185,7 @@ class CollectionFileListener implements FileChangeListener, Serializable {
     public void onStop(final FileChangeObserver observer) {
     }
 
+	public boolean onError(FileChangeObserver observer, Throwable e) {
+	    return false;
+    }
 }

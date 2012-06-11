@@ -24,10 +24,13 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import bingo.lang.exceptions.UncheckedIOException;
 import bingo.lang.io.Comparators;
 import bingo.lang.io.FileInfo;
 import bingo.lang.io.Files;
 import bingo.lang.io.IOCase;
+import bingo.lang.logging.Log;
+import bingo.lang.logging.LogFactory;
 
 /**
  * {@link FileChangeObserver} represents the state of files below a root directory,
@@ -121,6 +124,8 @@ import bingo.lang.io.IOCase;
 public class FileChangeObserver implements Serializable {
 
     private static final long serialVersionUID = -8746490040819712555L;
+    
+    private static final Log log = LogFactory.get(FileChangeObserver.class);
     
 	private final List<FileChangeListener> listeners = new CopyOnWriteArrayList<FileChangeListener>();
     private final FileInfo rootEntry;
@@ -240,10 +245,11 @@ public class FileChangeObserver implements Serializable {
      *
      * @param listener The file system listener
      */
-    public void addListener(final FileChangeListener listener) {
+    public FileChangeObserver addListener(final FileChangeListener listener) {
         if (listener != null) {
             listeners.add(listener);
         }
+        return this;
     }
 
     /**
@@ -251,11 +257,12 @@ public class FileChangeObserver implements Serializable {
      *
      * @param listener The file system listener
      */
-    public void removeListener(final FileChangeListener listener) {
+    public FileChangeObserver removeListener(final FileChangeListener listener) {
         if (listener != null) {
             while (listeners.remove(listener)) {
             }
         }
+        return this;
     }
 
     /**
@@ -285,24 +292,40 @@ public class FileChangeObserver implements Serializable {
     		initialize();
     	}
 
-        /* fire onStart() */
-        for (FileChangeListener listener : listeners) {
-            listener.onStart(this);
-        }
+        try {
+	        /* fire onStart() */
+	        for (FileChangeListener listener : listeners) {
+	            listener.onStart(this);
+	        }
 
-        /* fire directory/file events */
-        File rootFile = rootEntry.getFile();
-        if (rootFile.exists()) {
-            checkAndNotify(rootEntry, rootEntry.getChildren(), listFiles(rootFile));
-        } else if (rootEntry.isExists()) {
-            checkAndNotify(rootEntry, rootEntry.getChildren(), Files.EMPTY_FILE_ARRAY);
-        } else {
-            // Didn't exist and still doesn't
-        }
+	        /* fire directory/file events */
+	        File rootFile = rootEntry.getFile();
+	        if (rootFile.exists()) {
+	            checkAndNotify(rootEntry, rootEntry.getChildren(), listFiles(rootFile));
+	        } else if (rootEntry.isExists()) {
+	            checkAndNotify(rootEntry, rootEntry.getChildren(), Files.EMPTY_FILE_ARRAY);
+	        } else {
+	            // Didn't exist and still doesn't
+	        }
 
-        /* fire onStop() */
-        for (FileChangeListener listener : listeners) {
-            listener.onStop(this);
+	        /* fire onStop() */
+	        for (FileChangeListener listener : listeners) {
+	            listener.onStop(this);
+	        }
+        } catch (Throwable e) {
+        	
+        	log.info("Error on checkAndNotify : {}",e.getMessage(),e);
+        	
+        	boolean handled = false;
+	        for (FileChangeListener listener : listeners) {
+	            if(listener.onError(this, e)){
+	            	handled = true;
+	            }
+	        }
+	        
+	        if(!handled){
+	        	throw new UncheckedIOException("Error on checkAndNotify : {0}",e.getMessage(),e);
+	        }
         }
     }
 
@@ -382,9 +405,9 @@ public class FileChangeObserver implements Serializable {
     private void doCreate(FileInfo entry) {
         for (FileChangeListener listener : listeners) {
             if (entry.isDirectory()) {
-                listener.onDirectoryCreate(entry.getFile());
+                listener.onDirectoryCreate(this,entry.getFile());
             } else {
-                listener.onFileCreate(entry.getFile());
+                listener.onFileCreate(this,entry.getFile());
             }
         }
         FileInfo[] children = entry.getChildren();
@@ -403,9 +426,9 @@ public class FileChangeObserver implements Serializable {
         if (entry.refresh(file)) {
             for (FileChangeListener listener : listeners) {
                 if (entry.isDirectory()) {
-                    listener.onDirectoryChange(file);
+                    listener.onDirectoryChange(this,file);
                 } else {
-                    listener.onFileChange(file);
+                    listener.onFileChange(this,file);
                 }
             }
         }
@@ -419,9 +442,9 @@ public class FileChangeObserver implements Serializable {
     private void doDelete(FileInfo entry) {
         for (FileChangeListener listener : listeners) {
             if (entry.isDirectory()) {
-                listener.onDirectoryDelete(entry.getFile());
+                listener.onDirectoryDelete(this,entry.getFile());
             } else {
-                listener.onFileDelete(entry.getFile());
+                listener.onFileDelete(this,entry.getFile());
             }
         }
     }

@@ -111,6 +111,34 @@ public class ArraysTest extends ConcurrentTestCase {
 		assertTrue(Arrays.equals(c,Arrays.concat(a, b)));
 	}
 	
+	@Test
+	public void testToList1(){
+		
+		B[] array = new B[]{new B()};
+		
+		List<A> list = Arrays.toList(array);
+		
+		assertNotNull(list);
+		
+		Object list1 = Arrays.toList(array);
+		
+		assertNotNull(list1);
+		
+		onList(Arrays.<A,B>toList(array));
+	}
+	
+	private static void onList(List<A> list){
+		
+	}
+	
+	private static class A {
+		
+	}
+	
+	private static final class B extends A {
+		
+	}
+	
 	private static class SubArrays extends Arrays {
 		public SubArrays(){
 			super();

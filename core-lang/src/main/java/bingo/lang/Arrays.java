@@ -1550,34 +1550,30 @@ public class Arrays {
 	/**
 	 * Converts a T[] array to a Iterable<T>.
 	 */
-	public static <T> Iterable<T> toIterable(T... elements){
-		return null == elements || elements.length == 0 ? new EmptyIterable<T>() : new ArrayIterable<T>(elements);
+	public static <E,T extends E> Iterable<E> toIterable(T... elements){
+		return null == elements || elements.length == 0 ? new EmptyIterable<E>() : new ArrayIterable<E>(elements);
 	}
 
-	/**
-	 * Converts a T[] array to a List<T> collection.
-	 * 
-	 * @param <T> elements type
-	 * 
-	 * @param elements object array to convert.
-	 * 
-	 * @return List<T> collection contains all the elements in T[] array.
-	 */
-	public static <T> List<T> toList(T... elements) {
-		if (null == elements) {
-			return new ArrayList<T>();
+	public static <E,T extends E> List<E> toList(T... elements) {
+		List<E> list = new ArrayList<E>();
+		
+		if (null != elements) {
+			for(T e : elements){
+				list.add(e);
+			}
 		}
-		return java.util.Arrays.asList(elements);
+		
+		return list;
 	}
 	
 	/**
 	 * Converts a T[] array to a {@link Set}<T>.
 	 */
-	public static <T> Set<T> toSet(T... elements){
+	public static <E,T extends E> Set<E> toSet(T... elements){
 		if(null == elements || elements.length == 0) {
-			return new LinkedHashSet<T>();
+			return new LinkedHashSet<E>();
 		}else{
-			LinkedHashSet<T> set = new LinkedHashSet<T>();
+			LinkedHashSet<E> set = new LinkedHashSet<E>();
 			for(T e : elements){
 				set.add(e);
 			}

@@ -29,6 +29,14 @@ public class Exceptions {
 		
 	}
 	
+	public static RuntimeException uncheck(Throwable e) {
+		if(e instanceof RuntimeException){
+			return (RuntimeException)e;
+		}else{
+			return new RuntimeException(e.getMessage(),e);
+		}
+	}
+	
 	public static UncheckedIOException uncheck(IOException e) throws UncheckedIOException {
 		throw new UncheckedIOException(e.getMessage(),e);
 	}
