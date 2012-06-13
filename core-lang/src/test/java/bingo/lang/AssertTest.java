@@ -143,11 +143,11 @@ public class AssertTest extends ConcurrentTestCase {
 
 	@Test(expected = IllegalStateException.class)
 	public void stateWithFalseExpressionThrowsException() throws Exception {
-		Assert.stateValid(false);
+		Assert.isValidState(false);
 	}
 
 	@Test
 	public void stateWithTrueExpressionSunnyDay() throws Exception {
-		Assert.stateValid(true);
+		Assert.isValidState(true);
 	}
 }

@@ -43,6 +43,24 @@ public interface XmlWriter extends Closeable {
 	XmlWriter attribute(String namespaceURI,String localName,String value);
 	
 	XmlWriter attribute(String prefix,String namespaceURI,String localName,String value);
+
+	XmlWriter attributeOptional(String localName,String value);
+	
+	XmlWriter attributeOptional(String namespaceURI,String localName,String value);
+	
+	XmlWriter attributeOptional(String prefix,String namespaceURI,String localName,String value);
+	
+	XmlWriter element(String localName,String text);
+	
+	XmlWriter element(String namespaceURI,String localName,String text);
+	
+	XmlWriter element(String prefix,String namespaceURI,String localName,String text);
+
+	XmlWriter elementOptional(String localName,String text);
+	
+	XmlWriter elementOptional(String namespaceURI,String localName,String text);
+	
+	XmlWriter elementOptional(String prefix,String namespaceURI,String localName,String text);
 	
 	/**
 	 * escape the text and write to output.

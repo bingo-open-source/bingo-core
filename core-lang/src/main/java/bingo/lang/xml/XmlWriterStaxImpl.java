@@ -21,7 +21,7 @@ import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
-class XmlWriterStaxImpl implements XmlWriter {
+class XmlWriterStaxImpl extends XmlWriterBase implements XmlWriter {
 	
 	private static XMLOutputFactory factory = XMLOutputFactory.newInstance();
 	

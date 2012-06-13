@@ -31,7 +31,7 @@ import javax.xml.namespace.NamespaceContext;
 //from com.bea.xml.stream
 
 @SuppressWarnings("unchecked")
-public class XmlWriterBaseImpl implements XmlWriter {
+public class XmlWriterBaseImpl extends XmlWriterBase implements XmlWriter {
 
 	protected static final String	DEFAULTNS = "";
 
@@ -193,7 +193,7 @@ public class XmlWriterBaseImpl implements XmlWriter {
 		write("\"");
 		return this;
 	}
-	
+
 	public XmlWriter text(String text) throws XmlException {
 		return text(text,true);
 	}

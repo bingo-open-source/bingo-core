@@ -30,7 +30,7 @@ public class ReflectEnum {
 	
 	public static ReflectEnum get(Class<?> enumType){
 		Assert.notNull(enumType,"enumType must not be null");
-		Assert.stateValid(enumType.isEnum(),Strings.format("{0} is not an enum type", enumType.getName()));
+		Assert.isValidState(enumType.isEnum(),Strings.format("{0} is not an enum type", enumType.getName()));
 		
 		ReflectEnum reflectEnum = cache.get(enumType);
 		

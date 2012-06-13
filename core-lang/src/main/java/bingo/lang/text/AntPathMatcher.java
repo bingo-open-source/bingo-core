@@ -269,7 +269,7 @@ public class AntPathMatcher implements PathMatcher {
 	public Map<String, String> extractUriTemplateVariables(String pattern, String path) {
 		Map<String, String> variables = new LinkedHashMap<String, String>();
 		boolean result = doMatch(pattern, path, true, variables);
-		Assert.stateValid(result, "Pattern \"" + pattern + "\" is not a match for \"" + path + "\"");
+		Assert.isValidState(result, "Pattern \"" + pattern + "\" is not a match for \"" + path + "\"");
 		return variables;
 	}
 

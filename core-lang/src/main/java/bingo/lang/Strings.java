@@ -1453,6 +1453,21 @@ public class Strings {
 		return out.toString();
 	}
 	
+	public static String lowerCamel(String... parts){
+		StringBuilder out   = new StringBuilder();
+		for (String part : parts) {
+			if(null == part || part.length() == 0){
+				continue;
+			}
+			if (out.length() == 0) {
+				out.append(part.toLowerCase());
+			}else {
+				out.append(part.substring(0, 1).toUpperCase() + part.substring(1).toLowerCase());
+			}
+		}
+		return out.toString();
+	}
+	
 	/**
 	 * <pre>
 	 * Strings.upperCamel(null) 	      = ""
@@ -1473,6 +1488,17 @@ public class Strings {
 		return out.toString();
 	}
 
+	public static String upperCamel(String... parts) {
+		StringBuilder out = new StringBuilder();
+		for (String part : parts) {
+			if(null == part || part.length() == 0){
+				continue;
+			}
+			out.append(part.substring(0, 1).toUpperCase() + part.substring(1).toLowerCase());
+		}
+		return out.toString();
+	}
+	
 	// IndexOf
 	//-----------------------------------------------------------------------
 	/**
