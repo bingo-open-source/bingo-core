@@ -17,9 +17,11 @@ package bingo.lang;
 
 import java.util.List;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import bingo.lang.collections.WrappedImmutableList;
 import bingo.lang.collections.WrappedImmutableSet;
+import bingo.lang.tuple.ImmutableEntry;
 
 public class Immutables {
 
@@ -51,4 +53,7 @@ public class Immutables {
 		return new WrappedImmutableSet<E>(Arrays.toSet(array));
 	}
 
+	public static <K,V> Entry<K, V> entryOf(K key,V value) {
+		return new ImmutableEntry<K, V>(key, value);
+	}
 }
