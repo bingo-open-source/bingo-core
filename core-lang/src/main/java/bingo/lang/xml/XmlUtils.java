@@ -2,11 +2,11 @@ package bingo.lang.xml;
 
 import java.util.Stack;
 
+import bingo.lang.Enumerable;
 import bingo.lang.Func1;
 import bingo.lang.Out;
 import bingo.lang.Predicate;
 import bingo.lang.Strings;
-import bingo.lang.enumerable.IteratedEnumerable;
 import bingo.lang.iterable.ImmutableIteratorBase;
 
 final class XmlUtils {
@@ -22,10 +22,10 @@ final class XmlUtils {
 	
 	static class DepthFirstIterator<T> extends ImmutableIteratorBase<T> {
 
-		private final Func1<T, IteratedEnumerable<T>> childrenFn;
+		private final Func1<T, Enumerable<T>> childrenFn;
 		private final Stack<T> stack = new Stack<T>();
 
-		public DepthFirstIterator(T startingNode, Func1<T, IteratedEnumerable<T>> childrenFn) {
+		public DepthFirstIterator(T startingNode, Func1<T, Enumerable<T>> childrenFn) {
 			this.childrenFn = childrenFn;
 			this.stack.add(startingNode);
 		}

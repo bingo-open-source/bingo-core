@@ -22,6 +22,7 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.ProcessingInstruction;
 import org.w3c.dom.Text;
 
+import bingo.lang.Enumerable;
 import bingo.lang.Enumerables;
 import bingo.lang.Func;
 import bingo.lang.Func1;
@@ -33,8 +34,8 @@ import bingo.lang.xml.XmlUtils.Predicates;
 
 abstract class XmlContainer extends XmlNode {
 
-	private static final Func1<XmlElement, IteratedEnumerable<XmlElement>> CHILD_ELEMENTS = new Func1<XmlElement, IteratedEnumerable<XmlElement>>() {
-		public IteratedEnumerable<XmlElement> apply(XmlElement input) {
+	private static final Func1<XmlElement, Enumerable<XmlElement>> CHILD_ELEMENTS = new Func1<XmlElement, Enumerable<XmlElement>>() {
+		public Enumerable<XmlElement> apply(XmlElement input) {
 			return input.childElements();
 		}
 	};
@@ -49,11 +50,11 @@ abstract class XmlContainer extends XmlNode {
 		return !childNodes.isEmpty();
 	}
 
-	public IteratedEnumerable<XmlElement> childElements() {
+	public Enumerable<XmlElement> childElements() {
 		return childNodes().ofType(XmlElement.class);
 	}
 
-	public IteratedEnumerable<XmlElement> childElements(String name) {
+	public Enumerable<XmlElement> childElements(String name) {
 		return childNodes().ofType(XmlElement.class).where(Predicates.<XmlElement> xnameEquals(name));
 	}
 
@@ -65,23 +66,23 @@ abstract class XmlContainer extends XmlNode {
 		return childElements().firstOrNull();
 	}
 
-	public IteratedEnumerable<XmlNode> childNodes() {
-		return IteratedEnumerable.of(childNodes);
+	public Enumerable<XmlNode> childNodes() {
+		return Enumerables.of(childNodes);
 	}
 	
 	public XmlNode firstChildNode(){
 		return Enumerables.firstOrNull(childNodes);
 	}
 
-	public IteratedEnumerable<XmlElement> descendantElements() {
-		return IteratedEnumerable.of(new Func<Iterator<XmlElement>>() {
-			public Iterator<XmlElement> apply() {
+	public Enumerable<XmlElement> descendantElements() {
+		return Enumerables.of(new Iterable<XmlElement>(){
+			public Iterator<XmlElement> iterator() {
 				return new DepthFirstIterator<XmlElement>(element(), CHILD_ELEMENTS);
-			}
+            }
 		});
 	}
 
-	public IteratedEnumerable<XmlElement> descendantElements(final String name) {
+	public Enumerable<XmlElement> descendantElements(final String name) {
 		return descendantElements().where(Predicates.<XmlElement> xnameEquals(name));
 	}
 

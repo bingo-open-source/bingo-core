@@ -254,4 +254,27 @@ public class Objects {
 
 		return null;
 	}
+	
+	/**
+	 * <pre>
+	 * 
+	 * Object o1 = null;
+	 * Object o2 = new Object();
+	 * Object o2 = new Object();
+	 * 
+	 * Objects.firstNotNull(o1,o2,o3) = o2;
+	 * Objects.firstNotNull(o2,o1,o3) = o2;
+	 * 
+	 * </pre>
+	 */
+	public static <T> T firstNotNull(T... objects) {
+		if(null != objects){
+			for(T o : objects){
+				if(null != o){
+					return o;
+				}
+			}
+		}
+		return null;
+	}
 }

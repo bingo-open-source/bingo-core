@@ -13,30 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.utils.codec.digest;
+package bingo.utils.mail;
 
+public class Recipient {
 
-public class MD5 {
+	private final String name;
+	private final String address;
 	
-	/**
-	 * Calculates the MD5 digest and returns the value as a base64 string.
-	 */
-	public static String digest(String text) {
-		return Digests.md5Base64(text);
-	}
-	
-	/**
-	 * Calculates the MD5 digest and returns the value as a base64 string.
-	 */
-	public static String digest(byte[] data) {
-		return Digests.md5Base64(data);
-	}
-	
-	/**
-	 * Calculates the MD5 digest and returns the value as a hex string.
-	 */
-	public static String hex(byte[] data){
-		return Digests.md5Hex(data);
+	public Recipient(String name,String address){
+		this.name = name;
+		this.address = address;
 	}
 
+	public String getName() {
+    	return name;
+    }
+
+	public String getAddress() {
+    	return address;
+    }
 }

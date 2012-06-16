@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mail>
+	<host>localhost</host>
+	<port></port>
+	<username></username>
+	<password></password>
+	<debug></debug>
+	<from></from>
+	<charset></charset>
+	<connectionTimeout></connectionTimeout>
+	<socketTimeout></socketTimeout>
+	<properties>
+	</properties>
+</mail>

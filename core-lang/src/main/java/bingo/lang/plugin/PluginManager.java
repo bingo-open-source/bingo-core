@@ -200,7 +200,7 @@ public class PluginManager {
 			
 			for(XmlElement prop : properties.childElements()){
 				String propName  = prop.requiredAttributeValue("name");
-				String propValue = Strings.trimToNull(prop.attributeOrText("value"));
+				String propValue = Strings.trimToNull(prop.attributeValueOrText("value"));
 				
 				plugin.setProperty(propName, propValue);
 

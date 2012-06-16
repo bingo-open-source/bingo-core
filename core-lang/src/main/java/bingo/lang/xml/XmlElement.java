@@ -57,7 +57,7 @@ public class XmlElement extends XmlContainer implements XNameable {
 		return null == attr ? null : attr.value(); 
 	}
 	
-	public String attributeOrText(String attributeName){
+	public String attributeValueOrText(String attributeName){
 		XmlAttribute attr = attribute(attributeName);
 		
 		return attr == null ? text() : attr.value();
@@ -77,6 +77,10 @@ public class XmlElement extends XmlContainer implements XNameable {
 		}
 		
 		return e;
+	}
+	
+	public String requiredChildElementText(String name) {
+		return requiredChildElement(name).requiredText();
 	}
 	
 	public String requiredText() throws XmlValidationException {
@@ -109,6 +113,16 @@ public class XmlElement extends XmlContainer implements XNameable {
 		}
 		
 		return value;
+	}
+	
+	public String requiredAttributeValueOrText(String attributeName) throws XmlValidationException {
+		XmlAttribute attr = attribute(attributeName);
+
+		if(null != attr){
+			return attr.required().value();
+		}
+		
+		return requiredText();
 	}
 	
 	@Override

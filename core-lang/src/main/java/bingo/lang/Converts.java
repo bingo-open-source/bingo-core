@@ -184,6 +184,18 @@ public class Converts {
 		throw new ConvertUnsupportedException("Cannot convert '{0}' to '{1}', value : {2}",sourceType.getName(),targetType.getName(),value.toString());
 	}
 	
+	public static int toInt(Object value){
+		return null == value ? 0 : convert(value,Integer.class);
+	}
+	
+	public static long toLong(Object value){
+		return null == value ? 0L : convert(value,Long.class);
+	}
+	
+	public static boolean toBoolean(Object value){
+		return null == value ? false : convert(value,Boolean.class);
+	}
+	
 	public static String toString(Object value) {
 		if(null == value){
 			return null;

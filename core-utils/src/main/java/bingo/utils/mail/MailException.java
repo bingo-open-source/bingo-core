@@ -13,30 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.utils.codec.digest;
+package bingo.utils.mail;
 
+import bingo.lang.exceptions.NestedRuntimeException;
 
-public class MD5 {
-	
-	/**
-	 * Calculates the MD5 digest and returns the value as a base64 string.
-	 */
-	public static String digest(String text) {
-		return Digests.md5Base64(text);
-	}
-	
-	/**
-	 * Calculates the MD5 digest and returns the value as a base64 string.
-	 */
-	public static String digest(byte[] data) {
-		return Digests.md5Base64(data);
-	}
-	
-	/**
-	 * Calculates the MD5 digest and returns the value as a hex string.
-	 */
-	public static String hex(byte[] data){
-		return Digests.md5Hex(data);
+public class MailException extends NestedRuntimeException {
+
+	private static final long serialVersionUID = -384719521074322516L;
+
+	public MailException() {
+		
 	}
 
+	public MailException(String message) {
+		super(message);
+	}
+
+	public MailException(String message, Throwable cause) {
+		super(message, cause);
+	}
+
+	public MailException(Throwable cause) {
+		super(cause);
+	}
+
+	public MailException(String message, Object... args) {
+		super(message, args);
+	}
 }

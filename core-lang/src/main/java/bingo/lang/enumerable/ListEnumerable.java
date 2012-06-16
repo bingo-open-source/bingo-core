@@ -20,6 +20,8 @@ import java.util.List;
 
 import bingo.lang.Collections;
 import bingo.lang.Enumerable;
+import bingo.lang.Enumerables;
+import bingo.lang.Predicate;
 import bingo.lang.collections.AbstractListWrapper;
 import bingo.lang.exceptions.EmptyDataException;
 import bingo.lang.exceptions.TooManyDataException;
@@ -48,6 +50,10 @@ public class ListEnumerable<E> extends AbstractListWrapper<E> implements Enumera
 	    return list.get(0);
     }
 	
+	public E firstOrNull(Predicate<E> predicate) {
+	    return Enumerables.firstOrNull(this, predicate);
+    }	
+	
 	public E single() throws EmptyDataException, TooManyDataException {
 		int size = list.size();
 	    if(size == 0){
@@ -57,6 +63,14 @@ public class ListEnumerable<E> extends AbstractListWrapper<E> implements Enumera
 	    	throw new TooManyDataException();
 	    }
 	    return list.get(0);
+    }
+	
+	public Enumerable<E> where(Predicate<E> predicate) {
+	    return Enumerables.of(Enumerables.where(this, predicate));
+    }
+
+	public <T> Enumerable<T> ofType(Class<T> type) {
+	    return Enumerables.of(Enumerables.ofType(this, type));
     }
 	
 	public List<E> list(){

@@ -21,6 +21,8 @@ import java.util.List;
 
 import bingo.lang.Arrays;
 import bingo.lang.Enumerable;
+import bingo.lang.Enumerables;
+import bingo.lang.Predicate;
 import bingo.lang.exceptions.EmptyDataException;
 import bingo.lang.exceptions.TooManyDataException;
 import bingo.lang.iterable.EmptyIterator;
@@ -35,6 +37,10 @@ public final class EmptyEnumerable<E> implements Enumerable<E> {
 	public E firstOrNull() {
         return null;
     }
+	
+	public E firstOrNull(Predicate<E> predicate) {
+	    return null;
+    }
 
 	public boolean isEmpty() {
         return true;
@@ -42,6 +48,14 @@ public final class EmptyEnumerable<E> implements Enumerable<E> {
 
 	public E single() throws EmptyDataException, TooManyDataException {
 		throw new EmptyDataException();
+    }
+	
+	public <T> Enumerable<T> ofType(Class<T> type) {
+	    return Enumerables.empty();
+    }
+
+	public Enumerable<E> where(Predicate<E> predicate) {
+	    return this;
     }
 
 	public int size() {

@@ -21,6 +21,8 @@ import java.util.Set;
 
 import bingo.lang.Collections;
 import bingo.lang.Enumerable;
+import bingo.lang.Enumerables;
+import bingo.lang.Predicate;
 import bingo.lang.collections.AbstractSetWrapper;
 import bingo.lang.exceptions.EmptyDataException;
 import bingo.lang.exceptions.TooManyDataException;
@@ -49,6 +51,10 @@ public class SetEnumerable<E> extends AbstractSetWrapper<E> implements Enumerabl
 	    return set.iterator().next();
     }
 	
+	public E firstOrNull(Predicate<E> predicate) {
+	    return Enumerables.firstOrNull(this, predicate);
+    }
+	
 	public E single() throws EmptyDataException, TooManyDataException {
 		int size = set.size();
 	    if(size == 0){
@@ -58,6 +64,14 @@ public class SetEnumerable<E> extends AbstractSetWrapper<E> implements Enumerabl
 	    	throw new TooManyDataException();
 	    }
 	    return set.iterator().next();
+    }
+	
+	public Enumerable<E> where(Predicate<E> predicate) {
+	    return Enumerables.of(Enumerables.where(this, predicate));
+    }
+
+	public <T> Enumerable<T> ofType(Class<T> type) {
+	    return Enumerables.of(Enumerables.ofType(this, type));
     }
 	
 	public E[] toArray(Class<E> type) {

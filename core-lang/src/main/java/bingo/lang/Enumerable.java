@@ -30,7 +30,13 @@ public interface Enumerable<E> extends Iterable<E> {
 	
 	E firstOrNull();
 	
+	E firstOrNull(Predicate<E> predicate);
+	
 	E single() throws EmptyDataException,TooManyDataException;
+	
+	Enumerable<E> where(Predicate<E> predicate);
+	
+	<T> Enumerable<T> ofType(Class<T> type);
 	
 	Object[] toArray();
 	

@@ -339,6 +339,21 @@ public class Enumerables {
 
 		return list;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public static <E,T> List<T> ofType(Iterable<E> iterable,Class<T> type){
+		List<T> list = new ArrayList<T>();
+		
+		if(null != iterable){
+			for(E e : iterable){
+				if(null != e && type.isAssignableFrom(e.getClass())){
+					list.add((T)e);
+				}
+			}
+		}
+		
+		return list;
+	}
 
 	public static <T, R> List<R> selectMany(Iterable<T> iterable, Func1<T,Collection<R>> func) {
 		List<R> list = new ArrayList<R>();
