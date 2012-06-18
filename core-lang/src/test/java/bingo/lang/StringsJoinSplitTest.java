@@ -27,6 +27,7 @@ import static bingo.lang.StringsTest.SEPARATOR_CHAR;
 import static bingo.lang.StringsTest.TEXT_LIST;
 import static bingo.lang.StringsTest.TEXT_LIST_CHAR;
 import static bingo.lang.StringsTest.TEXT_LIST_NOSEP;
+import static org.junit.Assert.assertEquals;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -37,8 +38,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import bingo.lang.testing.junit.ConcurrentTestCase;
-
-import static org.junit.Assert.*;
 
 /**
  * {@link TestCase} of {@link Strings}
@@ -211,11 +210,62 @@ public class StringsJoinSplitTest extends ConcurrentTestCase {
         assertEquals("b", res[1]);
         assertEquals("c", res[2]);
         
-        str = "a^_^b^_^c";
+        str = "a^_^b^_^c^__^";
         res = Strings.split(str,"^_^");
         assertEquals(3, res.length);
         assertEquals("a", res[0]);
         assertEquals("b", res[1]);
-        assertEquals("c", res[2]);        
+        assertEquals("c^__^", res[2]);        
+        
+        str = "abstemiouslyaeiouyabstemiously" ;
+        res = Strings.split(str, "aeiouy");
+        
+        assertEquals(2,res.length);
+        assertEquals("abstemiously", res[0]);
+        assertEquals("abstemiously", res[1]);
     }
+    
+    @Test
+    public void testSplit_Chars() {
+    	Assert.assertArrayEquals(Arrays.EMPTY_STRING_ARRAY, Strings.split(null, '.',','));
+        assertEquals(0, Strings.split("", '.',',').length);
+
+        String str = "a.b,. c";
+        String[] res = Strings.split(str, '.',',');
+        assertEquals(3, res.length);
+        assertEquals("a", res[0]);
+        assertEquals("b", res[1]);
+        assertEquals("c", res[2]);
+        
+        str = "a.b,. c";
+        res = Strings.split(str, new char[]{'.',','}, false);
+        assertEquals(3, res.length);
+        assertEquals("a", res[0]);
+        assertEquals("b", res[1]);
+        assertEquals(" c", res[2]);        
+            
+        str = ".a,";
+        res = Strings.split(str, '.',',');
+        assertEquals(1, res.length);
+        assertEquals("a", res[0]);
+        
+        str = "a b.c";
+        res = Strings.split(str,' ','.');
+        assertEquals(3, res.length);
+        assertEquals("a", res[0]);
+        assertEquals("b", res[1]);
+        assertEquals("c", res[2]);
+        
+        str = "a^_^b^_^c^__^";
+        res = Strings.split(str,"^_^".toCharArray());
+        assertEquals(3, res.length);
+        assertEquals("a", res[0]);
+        assertEquals("b", res[1]);
+        assertEquals("c", res[2]);        
+        
+        str = "abstemiouslyaeiouyabstemiously" ;
+        res = Strings.split(str, "aeiouy".toCharArray());
+        
+        assertEquals(6,res.length);
+    }    
 }

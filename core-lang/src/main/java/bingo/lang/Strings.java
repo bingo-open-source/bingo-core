@@ -38,6 +38,8 @@ public class Strings {
 	private static final int	PADDING_LIMIT	= 8192;
 
 	private static final int	INDEX_NOT_FOUND	= -1;
+	
+	private static final char[] DEFAULT_SPLIT_CHARS = new char[]{','};
 
 	protected Strings() {
 
@@ -957,6 +959,17 @@ public class Strings {
 	}
 	
 	/**
+	 * <pre>
+	 * Strings.split(null, *)         = []
+	 * Strings.split("", *)           = []
+	 * Strings.split("a.b,c", '.','.')    = ["a", "b", "c"]
+	 * </pre>
+	 */
+	public static String[] split(String string, char... separators) {
+		return splitWorker(string,-1,false, true, true, separators);
+	}
+	
+	/**
 	 * <p>
 	 * Splits the provided text into an array, separators specified. This is an alternative to using StringTokenizer.
 	 * </p>
@@ -976,12 +989,12 @@ public class Strings {
 	 * 
 	 * @param string the String to parse, may be null
 	 * 
-	 * @param separator the characters used as the delimiters, {@code null} splits on whitespace
+	 * @param separator the characters used as the delimiters, {@code null} splits on ","
 	 * 
 	 * @return an array of parsed Strings, [] if null String input
 	 */
 	public static String[] split(String string, String separator) {
-		return splitWorker(string, separator, -1, false, true, true);
+		return splitByWholeSeparatorWorker(string, separator, -1, false, true, true);
 	}	
 
 	/**
@@ -1008,6 +1021,10 @@ public class Strings {
 	public static String[] split(String string, char separator, boolean trim) {
 		return splitWorker(string, separator, false, trim, true);
 	}
+	
+	public static String[] split(String string, char[] separators, boolean trim) {
+		return splitWorker(string, -1, false, trim, true, separators);
+	}	
 
 	/**
 	 * <p>
@@ -1024,14 +1041,14 @@ public class Strings {
 	 * 
 	 * @param string the String to parse, may be null
 	 * 
-	 * @param separator the characters used as the delimiters, {@code null} splits on whitespace
+	 * @param separator the characters used as the delimiters, {@code null} splits on ","
 	 * 
 	 * @param trim if true then trim all the elements string in array
 	 * 
 	 * @return an array of parsed Strings, [] if null String input
 	 */
 	public static String[] split(String string, String separator, boolean trim) {
-		return splitWorker(string, separator, -1, false, trim, true);
+		return splitByWholeSeparatorWorker(string, separator, -1, false, trim, true);
 	}
 	
 	/**
@@ -1049,7 +1066,7 @@ public class Strings {
 	 * 
 	 * @param string the String to parse, may be null
 	 * 
-	 * @param separator the characters used as the delimiters, {@code null} splits on whitespace
+	 * @param separator the characters used as the delimiters, {@code null} splits on ","
 	 * 
 	 * @param trim if true then trim all the elements string in array
 	 * 
@@ -1058,8 +1075,12 @@ public class Strings {
 	 * @return an array of parsed Strings, [] if null String input
 	 */
 	public static String[] split(String string, String separator, boolean trim,boolean ignoreEmpty) {
-		return splitWorker(string, separator, -1, !ignoreEmpty, trim, ignoreEmpty);
+		return splitByWholeSeparatorWorker(string, separator, -1, !ignoreEmpty, trim, ignoreEmpty);
 	}
+	
+	public static String[] split(String string, char[] separators, boolean trim,boolean ignoreEmpty) {
+		return splitWorker(string, -1, !ignoreEmpty, trim, ignoreEmpty,separators);
+	}	
 
 	// Substring
 	//-----------------------------------------------------------------------
@@ -3907,6 +3928,99 @@ public class Strings {
 		}
 		return list.toArray(new String[list.size()]);
 	}
+	
+    /**
+     * Performs the logic for the {@code splitByWholeSeparatorPreserveAllTokens} methods.
+     *
+     * @param str  the String to parse, may be {@code null}
+     * @param separator  String containing the String to be used as a delimiter,
+     *  {@code null} splits on whitespace
+     * @param max  the maximum number of elements to include in the returned
+     *  array. A zero or negative value implies no limit.
+     * @param preserveAllTokens if {@code true}, adjacent separators are
+     * treated as empty token separators; if {@code false}, adjacent
+     * separators are treated as one separator.
+     * @return an array of parsed Strings, {@code null} if null String input
+     */
+    private static String[] splitByWholeSeparatorWorker(String str, String separator, int max, boolean preserveAllTokens,
+    													 boolean trimTokens,boolean ignoreEmptyTokens) {
+        if (str == null) {
+            return null;
+        }
+
+        int len = str.length();
+
+        if (len == 0) {
+            return Arrays.EMPTY_STRING_ARRAY;
+        }
+
+        if (separator == null || EMPTY.equals(separator)) {
+            // Split on whitespace.
+            return splitWorker(str, max, preserveAllTokens,trimTokens,ignoreEmptyTokens);
+        }
+
+        int separatorLength = separator.length();
+
+        ArrayList<String> substrings = new ArrayList<String>();
+        int numberOfSubstrings = 0;
+        int beg = 0;
+        int end = 0;
+        
+        while (end < len) {
+            end = str.indexOf(separator, beg);
+
+            String token = null;
+            
+            if (end > -1) {
+                if (end > beg) {
+                    numberOfSubstrings += 1;
+
+                    if (numberOfSubstrings == max) {
+                        end = len;
+                        
+                        token = str.substring(beg);
+                    } else {
+                        // The following is OK, because String.substring( beg, end ) excludes
+                        // the character at the position 'end'.
+                        token = str.substring(beg, end);
+
+                        // Set the starting point for the next search.
+                        // The following is equivalent to beg = end + (separatorLength - 1) + 1,
+                        // which is the right calculation:
+                        beg = end + separatorLength;
+                    }
+                } else {
+                    // We found a consecutive occurrence of the separator, so skip it.
+                    if (preserveAllTokens) {
+                        numberOfSubstrings += 1;
+                        if (numberOfSubstrings == max) {
+                            end = len;
+                            token = str.substring(beg);
+                        } else{
+                            token = EMPTY;
+                        }
+                    }
+                    beg = end + separatorLength;
+                }
+            } else {
+                // String.substring( beg ) goes from 'beg' to the end of the String.
+                token = str.substring(beg);
+                end = len;
+            }
+            
+            if(null != token){
+            	if(trimTokens){
+            		token = trim(token);
+            	}
+            	
+				if (!ignoreEmptyTokens || token.length() > 0) {
+					substrings.add(token);
+				}
+            }
+        }
+
+        return substrings.toArray(new String[substrings.size()]);
+    }	
 
 	/**
 	 * Performs the logic for the {@code split} and {@code splitPreserveAllTokens} methods that return a maximum array
@@ -3919,8 +4033,7 @@ public class Strings {
 	 *            false}, adjacent separators are treated as one separator.
 	 * @return an array of parsed Strings, {@code null} if null String input
 	 */
-	private static String[] splitWorker(String str, String separatorChars, int max, boolean preserveAllTokens, boolean trimTokens,
-	        boolean ignoreEmptyTokens) {
+	private static String[] splitWorker(String str,int max, boolean preserveAllTokens,boolean trimTokens,boolean ignoreEmptyTokens,char... chars) {
 		// Performance tuned for 2.0 (JDK1.4)
 		// Direct code is quicker than StringTokenizer.
 		// Also, StringTokenizer uses isSpace() not isWhitespace()
@@ -3929,8 +4042,8 @@ public class Strings {
 			return Arrays.EMPTY_STRING_ARRAY;
 		}
 
-		if (null == separatorChars) {
-			separatorChars = COMMA;
+		if (null == chars || chars.length == 0) {
+			chars = DEFAULT_SPLIT_CHARS;
 		}
 
 		int len = str.length();
@@ -3975,9 +4088,9 @@ public class Strings {
 		//				i++;
 		//			}
 		//		} else
-		if (separatorChars.length() == 1) {
+		if (chars.length == 1) {
 			// Optimise 1 character case
-			char sep = separatorChars.charAt(0);
+			char sep = chars[0];
 			while (i < len) {
 				if (str.charAt(i) == sep) {
 					if (match || preserveAllTokens) {
@@ -4007,7 +4120,7 @@ public class Strings {
 		} else {
 			// standard case
 			while (i < len) {
-				if (separatorChars.indexOf(str.charAt(i)) >= 0) {
+				if (Arrays.indexOf(chars, str.charAt(i)) >= 0) {
 					if (match || preserveAllTokens) {
 						lastMatch = true;
 						if (sizePlus1++ == max) {
@@ -4037,11 +4150,11 @@ public class Strings {
 			String token = str.substring(start, i);
 
 			if (trimTokens) {
-				token = trim(str);
+				token = trim(token);
 			}
 
 			if (!ignoreEmptyTokens || token.length() > 0) {
-				list.add(str.substring(start, i));
+				list.add(token);
 			}
 		}
 		return list.toArray(new String[list.size()]);

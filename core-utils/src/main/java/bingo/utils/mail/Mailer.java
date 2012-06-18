@@ -163,7 +163,9 @@ public class Mailer {
         	throw new MailException("Error creating mail message : {0}",e.getMessage(),e);
         }
 		
-		log.debug("Sent an email [{}] used {}ms",sw.stop().getElapsedMilliseconds());
+        if(log.isDebugEnabled()){
+        	log.debug("Sent an email [{}] used {}ms",email.getSubject(),sw.stop().getElapsedMilliseconds());	
+        }
 	}
 	
 	protected void send(MimeMessage message) throws MailException {

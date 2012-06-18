@@ -31,4 +31,6 @@ final class MailConstants {
 
 	public static final String	TEXT_HTML	                = "text/html";
 	public static final String	TEXT_PLAIN	                = "text/plain";
+	
+	static final char[] ADDRESS_SEPERATORS = new char[]{',',';'};
 }

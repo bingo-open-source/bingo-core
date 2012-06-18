@@ -21,6 +21,7 @@ import java.util.List;
 
 import bingo.lang.Enumerable;
 import bingo.lang.Enumerables;
+import bingo.lang.Strings;
 
 public class Email {
 
@@ -50,14 +51,14 @@ public class Email {
 	
 	public Email(String to,String subject){
 		this.subject = subject;
-		this.addTo(to);
+		this.setTo(to);
 	}
 	
 	public Email(String from,String to,String subject){
 		this.setFrom(from);
 		this.subject = subject;
-		this.addTo(to);
-	}	
+		this.setTo(to);
+	}
 	
 	public String getSubject(){
 		return subject;
@@ -147,4 +148,11 @@ public class Email {
     	this.sentDate = sentDate;
     	return this;
     }
+	
+	protected void setTo(String to){
+		String[] addresses = Strings.split(to,MailConstants.ADDRESS_SEPERATORS);
+		for(String addr : addresses){
+			this.addTo(addr);
+		}
+	}
 }
