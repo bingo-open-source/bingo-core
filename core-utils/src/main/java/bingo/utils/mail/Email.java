@@ -44,12 +44,16 @@ public class Email {
 		
 	}
 	
-	public Email(String subject,String to){
+	public Email(String subject){
+		this.subject = subject;
+	}
+	
+	public Email(String to,String subject){
 		this.subject = subject;
 		this.addTo(to);
 	}
 	
-	public Email(String from,String subject,String to){
+	public Email(String from,String to,String subject){
 		this.setFrom(from);
 		this.subject = subject;
 		this.addTo(to);

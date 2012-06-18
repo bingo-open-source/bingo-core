@@ -121,7 +121,7 @@ public class Mailer {
     }
 	
 	public Email sendText(String to,String subject,String text) throws MailException {
-		Email email = new Email(subject,to).setText(text);
+		Email email = new Email(to,subject).setText(text);
 		
 		send(email);
 		
@@ -129,7 +129,7 @@ public class Mailer {
 	}
 	
 	public Email sendText(String from,String to,String subject,String text) throws MailException {
-		Email email = new Email(from,subject,to).setText(text);
+		Email email = new Email(from,to,subject).setText(text);
 		
 		send(email);
 		
@@ -137,7 +137,7 @@ public class Mailer {
 	}
 	
 	public Email sendHtml(String to,String subject,String html) throws MailException {
-		Email email = new Email(subject,to).setHtml(html);
+		Email email = new Email(to,subject).setHtml(html);
 		
 		send(email);
 		
@@ -145,7 +145,7 @@ public class Mailer {
 	}
 	
 	public Email sendHtml(String from,String to,String subject,String html) throws MailException {
-		Email email = new Email(from,subject,to).setHtml(html);
+		Email email = new Email(from,to,subject).setHtml(html);
 		
 		send(email);
 		
