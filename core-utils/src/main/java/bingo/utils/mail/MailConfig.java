@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import bingo.lang.Charsets;
+import bingo.lang.Strings;
 import bingo.lang.exceptions.NotFoundException;
 import bingo.lang.exceptions.UncheckedIOException;
 import bingo.lang.xml.XmlException;
@@ -33,6 +34,7 @@ public class MailConfig {
 	
 	private final String              host;
 	private final int                 port;
+	private final boolean			    auth;
 	private final boolean            debug;
 	private final String              username;
 	private final String              password;
@@ -46,6 +48,7 @@ public class MailConfig {
 		this.host       = host;
 		this.port       = 0;
 		this.debug      = false;
+		this.auth       = false;
 		this.username   = null;
 		this.password   = null;
 		this.from       = null;
@@ -60,6 +63,7 @@ public class MailConfig {
 		this.host       = host;
 		this.port       = port;
 		this.debug      = false;
+		this.auth       = false;
 		this.username   = null;
 		this.password   = null;
 		this.from       = null;
@@ -74,6 +78,7 @@ public class MailConfig {
 		this.host       = host;
 		this.port       = port;
 		this.debug      = false;
+		this.auth       = !Strings.isEmpty(username) && !Strings.isEmpty(password);
 		this.username   = username;
 		this.password   = password;
 		this.from       = null;
@@ -84,10 +89,11 @@ public class MailConfig {
 		this.properties = new HashMap<String, String>();		
 	}
 	
-	public MailConfig(String host,int port,String username,String password,boolean debug){
+	public MailConfig(String host,int port,boolean auth,boolean debug,String username,String password){
 		this.host       = host;
 		this.port       = port;
 		this.debug      = debug;
+		this.auth       = auth;
 		this.username   = username;
 		this.password   = password;
 		this.from       = null;
@@ -98,8 +104,8 @@ public class MailConfig {
 		this.properties = new HashMap<String, String>();		
 	}
 	
-	public MailConfig(String host,int port,String username,String password,Recipient from,
-					   boolean debug,
+	public MailConfig(String host,int port,boolean auth,boolean debug,String username,String password,
+					   Recipient from,
 					   Charset charset,
 					   int connectionTimeout,
 					   int socketTimeout,
@@ -107,6 +113,7 @@ public class MailConfig {
 		
 		this.host       = host;
 		this.port       = port;
+		this.auth       = auth;
 		this.debug      = debug;
 		this.username   = username;
 		this.password   = password;
@@ -125,6 +132,10 @@ public class MailConfig {
 	public int getPort(){
 		return port;
 	}
+	
+	public boolean isAuth() {
+    	return auth;
+    }
 
 	public boolean isDebug() {
     	return debug;

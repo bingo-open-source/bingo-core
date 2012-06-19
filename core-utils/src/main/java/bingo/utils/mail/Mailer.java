@@ -15,7 +15,6 @@
  */
 package bingo.utils.mail;
 
-import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.MimeMessage;
@@ -54,7 +53,7 @@ public class Mailer {
 	}
 	
 	public static Mailer get() {
-		Assert.notNull(mailer,"there is no default mailer config has been found");
+		Assert.notNull(mailer,"default mailer config file '{0}' not found","mail.conf.xml");
 		return mailer;
 	}
 
@@ -159,7 +158,7 @@ public class Mailer {
 		
 		try {
 	        send(Utils.createMailMessage(this, email));
-        } catch (MessagingException e) {
+        } catch (Throwable e) {
         	throw new MailException("Error creating mail message : {0}",e.getMessage(),e);
         }
 		

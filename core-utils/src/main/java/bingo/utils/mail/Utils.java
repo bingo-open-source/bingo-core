@@ -23,11 +23,13 @@ import java.util.Properties;
 import java.util.Map.Entry;
 
 import javax.mail.Address;
+import javax.mail.AuthenticationFailedException;
 import javax.mail.Authenticator;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
+import javax.mail.Transport;
 import javax.mail.Message.RecipientType;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
@@ -44,12 +46,16 @@ import bingo.lang.Objects;
 import bingo.lang.Strings;
 import bingo.lang.config.XmlProperties;
 import bingo.lang.exceptions.NotFoundException;
+import bingo.lang.logging.Log;
+import bingo.lang.logging.LogFactory;
 import bingo.lang.resource.Resource;
 import bingo.lang.resource.Resources;
 import bingo.lang.xml.XmlDocument;
 import bingo.lang.xml.XmlElement;
 
 final class Utils {
+	
+	private static final Log log = LogFactory.get(Utils.class);
 
 	static final String	INVALID_ENCODING	= "Encoding not accepted: %s";
 	static final String	INVALID_RECIPIENT	= "Invalid TO address: %s";
@@ -73,6 +79,7 @@ final class Utils {
 
 		String host     = root.requiredChildElementText("host");
 		int    port     = Converts.toInt(root.childElementText("port"));
+		String auth     = root.childElementText("auth");
 		String username = root.childElementText("username");
 		String password = root.childElementText("password");
 		String charset  = root.childElementText("charset");
@@ -102,11 +109,17 @@ final class Utils {
 			}
 		}
 		
+		boolean isAuth = !Strings.isEmpty(username) && !Strings.isEmpty(password);
+		
+		if(!Strings.isEmpty(auth)){
+			isAuth = Boolean.valueOf(auth);
+		}
+		
 		XmlElement propsElement = root.childElement("properties");
 		
 		Map<String, String> properties = (null == propsElement ? new HashMap<String, String>() : XmlProperties.load(propsElement).toMap());
 		
-		return new MailConfig(host, port, username, password, from, debug, Charsets.getOrDefault(charset), connectionTimeout, socketTimeout, properties);
+		return new MailConfig(host, port, isAuth,debug, username, password, from, Charsets.getOrDefault(charset), connectionTimeout, socketTimeout, properties);
 	}
 	
 	static Session createMailSession(final MailConfig config) {
@@ -135,23 +148,55 @@ final class Utils {
         if (config.getConnectionTimeout() > 0)
         {
             properties.setProperty(MailConstants.MAIL_SMTP_CONNECTIONTIMEOUT, Integer.toString(config.getConnectionTimeout()));
-        }		
-		
-		if (!Strings.isEmpty(config.getUsername())) {
-			properties.setProperty(MailConstants.MAIL_SMTP_USER, config.getUsername());
-		}
-
-		if (!Strings.isEmpty(config.getPassword())) {
+        }
+        
+        Session session = null;
+        
+        if(!config.isAuth() || Strings.isEmpty(config.getUsername())){
+        	session = Session.getDefaultInstance(properties);
+        }else{
 			properties.setProperty(MailConstants.MAIL_SMTP_AUTH, "true");
-			return Session.getInstance(properties, new Authenticator() {
+        	
+    		if (!Strings.isEmpty(config.getUsername())) {
+    			properties.setProperty(MailConstants.MAIL_SMTP_USER, config.getUsername());
+    		}
+
+			session = Session.getInstance(properties, new Authenticator() {
 				@Override
 				protected PasswordAuthentication getPasswordAuthentication() {
 					return new PasswordAuthentication(config.getUsername(), config.getPassword());
 				}
 			});
-		} else {
-			return Session.getDefaultInstance(properties);
-		}
+        }
+        
+        //try connect to smtp server
+        Transport transport = null;
+        boolean isDebug = session.getDebug();
+        try {
+        	session.setDebug(false);
+	        transport = session.getTransport();
+	        transport.connect();
+        } catch (AuthenticationFailedException e){
+        	if(null != e.getMessage() && e.getMessage().equals("No authentication mechansims supported by both server and client")){
+        		log.warn("No authentication mechansims supported by both server and client, try to using default session");
+        		properties.remove(MailConstants.MAIL_SMTP_AUTH);
+        		session = Session.getDefaultInstance(properties);
+        	}else{
+        		throw new MailException("Error authenticating to server : {}",e.getMessage(),e);
+        	}
+        } catch (Throwable e) {
+        	throw new MailException("Error creating transport and trying connect to server : {}",e.getMessage(),e);
+        } finally {
+        	if(null != transport){
+        		try {
+	                transport.close();
+                } catch (Throwable e) {
+                	log.warn("Error closing transport : {}",e.getMessage(),e);
+                }
+        	}
+        }
+        session.setDebug(isDebug);
+        return session;
 	}
 
 	static MimeMessage createMailMessage(final Mailer mailer, final Email email) throws MessagingException {
