@@ -46,29 +46,29 @@ import bingo.lang.iterable.ImmutableIteratorBase;
 import bingo.lang.iterable.PredicateIterable;
 
 //From org.core4j, under Apache License 2.0
-public class IteratedEnumerable<T> implements Enumerable<T> {
+public class IterableEnumerable<T> implements Enumerable<T> {
 
-	public static <T> IteratedEnumerable<T> of(T... values) {
-		return new IteratedEnumerable<T>(new ArrayIterable<T>(values));
+	public static <T> IterableEnumerable<T> of(T... values) {
+		return new IterableEnumerable<T>(new ArrayIterable<T>(values));
 	}
 
-	public static <T> IteratedEnumerable<T> of(Iterable<T> values) {
-		return new IteratedEnumerable<T>(values);
+	public static <T> IterableEnumerable<T> of(Iterable<T> values) {
+		return new IterableEnumerable<T>(values);
 	}
 
-	public static <T> IteratedEnumerable<T> of(final Func<Iterator<T>> fn) {
-		return new IteratedEnumerable<T>(makeIterable(fn));
+	public static <T> IterableEnumerable<T> of(final Func<Iterator<T>> fn) {
+		return new IterableEnumerable<T>(makeIterable(fn));
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static <T> IteratedEnumerable<T> emptyOf(Class<T> clazz) {
-		return IteratedEnumerable.of();
+	public static <T> IterableEnumerable<T> emptyOf(Class<T> clazz) {
+		return IterableEnumerable.of();
 	}
 	
 	private final Iterable<T> values;
 	private int size = -1;
 	
-	public IteratedEnumerable(Iterable<T> values) {
+	public IterableEnumerable(Iterable<T> values) {
 		Assert.notNull(values,"values must not be null");
 		this.values = values;
 	}
@@ -156,49 +156,49 @@ public class IteratedEnumerable<T> implements Enumerable<T> {
 		return rt;
 	}
 	
-	public IteratedEnumerable<T> reverse() {
+	public IterableEnumerable<T> reverse() {
 		List<T> rt = this.toList();
 		Collections.reverse(rt);
-		return new IteratedEnumerable<T>(rt);
+		return new IterableEnumerable<T>(rt);
 	}
 	
-	public IteratedEnumerable<T> distinct() {
-		return IteratedEnumerable.of(new Func<Iterator<T>>() {
+	public IterableEnumerable<T> distinct() {
+		return IterableEnumerable.of(new Func<Iterator<T>>() {
 			public Iterator<T> apply() {
-				return new DistinctIterator<T>(IteratedEnumerable.this);
+				return new DistinctIterator<T>(IterableEnumerable.this);
 			}
 		});
 	}	
 
 	@SuppressWarnings("unchecked")
-	public IteratedEnumerable<T> concat(Iterable<T> other) {
+	public IterableEnumerable<T> concat(Iterable<T> other) {
 		return concat(new Iterable[] { other });
 	}
 
-	public IteratedEnumerable<T> concat(Iterable<T>... others) {
+	public IterableEnumerable<T> concat(Iterable<T>... others) {
 		List<Iterable<T>> rt = thisThenOthers(others);
-		return new IteratedEnumerable<T>(new ConcatIterable<T>(rt));
+		return new IterableEnumerable<T>(new ConcatIterable<T>(rt));
 	}
 
 	@SuppressWarnings("unchecked")
-	public IteratedEnumerable<T> concat(T... others) {
-		return concat(new IteratedEnumerable[] { IteratedEnumerable.of(others) });
+	public IterableEnumerable<T> concat(T... others) {
+		return concat(new IterableEnumerable[] { IterableEnumerable.of(others) });
 	}
 
-	public IteratedEnumerable<T> take(final int count) {
+	public IterableEnumerable<T> take(final int count) {
 		return of(new Func<Iterator<T>>() {
 			public Iterator<T> apply() {
-				return new TakeIterator<T>(IteratedEnumerable.this, count);
+				return new TakeIterator<T>(IterableEnumerable.this, count);
 			}
 		});
 	}
 	
-	public IteratedEnumerable<T> where(Predicate<T> predicate) {
-		return new IteratedEnumerable<T>(new PredicateIterable<T>(this, predicate));
+	public IterableEnumerable<T> where(Predicate<T> predicate) {
+		return new IterableEnumerable<T>(new PredicateIterable<T>(this, predicate));
 	}
 
-	public <O> IteratedEnumerable<O> select(Func1<T, O> projection) {
-		return new IteratedEnumerable<O>(new FuncIterable<T, O>(this, projection));
+	public <O> IterableEnumerable<O> select(Func1<T, O> projection) {
+		return new IterableEnumerable<O>(new FuncIterable<T, O>(this, projection));
 	}
 	
 	public boolean any(Predicate<T> predicate) {
@@ -303,11 +303,11 @@ public class IteratedEnumerable<T> implements Enumerable<T> {
 	}
 
 	protected <R> R sum(Class<R> clazz, Func1<T, R> projection) {
-		IteratedEnumerable<R> rt = this.select(projection);
+		IterableEnumerable<R> rt = this.select(projection);
 		return rt.sum(clazz);
 	}
 
-	protected <K extends Comparable<K>> IteratedEnumerable<T> orderBy(final Func1<T, K> projection) {
+	protected <K extends Comparable<K>> IterableEnumerable<T> orderBy(final Func1<T, K> projection) {
 		return orderBy(new Comparator<T>() {
 			public int compare(T o1, T o2) {
 				K lhs = projection.apply(o1);
@@ -317,13 +317,13 @@ public class IteratedEnumerable<T> implements Enumerable<T> {
 		});
 	}
 
-	public IteratedEnumerable<T> orderBy(Comparator<T> comparator) {
+	public IterableEnumerable<T> orderBy(Comparator<T> comparator) {
 		List<T> rt = this.toList();
 		Collections.sort(rt, comparator);
-		return IteratedEnumerable.of(rt);
+		return IterableEnumerable.of(rt);
 	}
 
-	public IteratedEnumerable<T> orderBy() {
+	public IterableEnumerable<T> orderBy() {
 		return orderBy(new Comparator<T>() {
 			@SuppressWarnings("unchecked")
 			public int compare(T o1, T o2) {
@@ -347,7 +347,7 @@ public class IteratedEnumerable<T> implements Enumerable<T> {
 		return rt.toString();
 	}
 
-	public static IteratedEnumerable<Integer> range(final int start, final int count) {
+	public static IterableEnumerable<Integer> range(final int start, final int count) {
 		return of(new Func<Iterator<Integer>>() {
 			public Iterator<Integer> apply() {
 				return new RangeIterator(start, count);
@@ -355,7 +355,7 @@ public class IteratedEnumerable<T> implements Enumerable<T> {
 		});
 	}
 
-	public <O> IteratedEnumerable<O> cast(Class<O> clazz) {
+	public <O> IterableEnumerable<O> cast(Class<O> clazz) {
 		return this.select(new Func1<T, O>() {
 			@SuppressWarnings("unchecked")
 			public O apply(T input) {
@@ -364,7 +364,7 @@ public class IteratedEnumerable<T> implements Enumerable<T> {
 		});
 	}
 
-	public <O> IteratedEnumerable<O> ofType(Class<O> clazz) {
+	public <O> IterableEnumerable<O> ofType(Class<O> clazz) {
 		final Class<O> finalClazz = clazz;
 		return this.where(new Predicate<T>() {
 			public boolean apply(T input) {
@@ -373,11 +373,11 @@ public class IteratedEnumerable<T> implements Enumerable<T> {
 		}).cast(clazz);
 	}
 
-	public IteratedEnumerable<T> skip(int count) {
-		return IteratedEnumerable.of(new SkipEnumerable<T>(this, count));
+	public IterableEnumerable<T> skip(int count) {
+		return IterableEnumerable.of(new SkipEnumerable<T>(this, count));
 	}
 
-	public IteratedEnumerable<T> skipWhile(final Predicate<T> predicate) {
+	public IterableEnumerable<T> skipWhile(final Predicate<T> predicate) {
 		final Boolean[] skipping = new Boolean[] { true };
 		return this.where(new Predicate<T>() {
 			public boolean apply(T input) {
@@ -393,10 +393,10 @@ public class IteratedEnumerable<T> implements Enumerable<T> {
 		});
 	}
 
-	public <R> IteratedEnumerable<R> selectMany(final Func1<T, IteratedEnumerable<R>> selector) {
-		return IteratedEnumerable.of(new Func<Iterator<R>>() {
+	public <R> IterableEnumerable<R> selectMany(final Func1<T, IterableEnumerable<R>> selector) {
+		return IterableEnumerable.of(new Func<Iterator<R>>() {
 			public Iterator<R> apply() {
-				return new SelectManyIterator<T, R>(IteratedEnumerable.this, selector);
+				return new SelectManyIterator<T, R>(IterableEnumerable.this, selector);
 			}
 		});
 	}
@@ -462,38 +462,38 @@ public class IteratedEnumerable<T> implements Enumerable<T> {
 	// Protected Methods
 	//------------------------------------------------------------------------------------------------------------
 	@SuppressWarnings("unchecked")
-	protected IteratedEnumerable<T> intersect(IteratedEnumerable<T> other) {
-		return intersect(new IteratedEnumerable[] { other });
+	protected IterableEnumerable<T> intersect(IterableEnumerable<T> other) {
+		return intersect(new IterableEnumerable[] { other });
 	}
 
-	protected IteratedEnumerable<T> intersect(IteratedEnumerable<T>... others) {
+	protected IterableEnumerable<T> intersect(IterableEnumerable<T>... others) {
 		List<T> rt = this.distinct().toList();
-		for (IteratedEnumerable<T> other : others) {
+		for (IterableEnumerable<T> other : others) {
 			Set<T> set = other.toSet();
-			for (T value : IteratedEnumerable.of(rt).toList()) {
+			for (T value : IterableEnumerable.of(rt).toList()) {
 				if (!set.contains(value)) {
 					rt.remove(value);
 				}
 			}
 		}
-		return IteratedEnumerable.of(rt);
+		return IterableEnumerable.of(rt);
 	}	
 	
 	@SuppressWarnings("unchecked")
-	protected IteratedEnumerable<T> union(IteratedEnumerable<T> other) {
-		return union(new IteratedEnumerable[] { other });
+	protected IterableEnumerable<T> union(IterableEnumerable<T> other) {
+		return union(new IterableEnumerable[] { other });
 	}
 
-	protected IteratedEnumerable<T> union(IteratedEnumerable<T>... others) {
+	protected IterableEnumerable<T> union(IterableEnumerable<T>... others) {
 		final List<Iterable<T>> rt = thisThenOthers(others);
-		return IteratedEnumerable.of(makeIterable(new Func<Iterator<T>>() {
+		return IterableEnumerable.of(makeIterable(new Func<Iterator<T>>() {
 			public Iterator<T> apply() {
 				return new UnionIterator<T>(rt);
 			}
 		}));
 	}
 
-	protected <K> IteratedEnumerable<Grouping<K, T>> groupBy(Func1<T, K> keySelector) {
+	protected <K> IterableEnumerable<Grouping<K, T>> groupBy(Func1<T, K> keySelector) {
 		List<K> ordering = new ArrayList<K>();
 		final Map<K, List<T>> map = new HashMap<K, List<T>>();
 		for (T value : this) {
@@ -505,9 +505,9 @@ public class IteratedEnumerable<T> implements Enumerable<T> {
 			map.get(key).add(value);
 		}
 
-		return IteratedEnumerable.of(ordering).select(new Func1<K, Grouping<K, T>>() {
+		return IterableEnumerable.of(ordering).select(new Func1<K, Grouping<K, T>>() {
 			public Grouping<K, T> apply(K input) {
-				return new Grouping<K, T>(input, IteratedEnumerable.of(map.get(input)));
+				return new Grouping<K, T>(input, IterableEnumerable.of(map.get(input)));
 			}
 		});
 	}
@@ -587,11 +587,11 @@ public class IteratedEnumerable<T> implements Enumerable<T> {
 	//------------------------------------------------------------------------------------------------------------
 
 	@SuppressWarnings("unused")
-	private static class Grouping<TKey, TElement> extends IteratedEnumerable<TElement> {
+	private static class Grouping<TKey, TElement> extends IterableEnumerable<TElement> {
 
 		private final TKey key;
 
-		public Grouping(TKey key, IteratedEnumerable<TElement> values) {
+		public Grouping(TKey key, IterableEnumerable<TElement> values) {
 			super(values);
 			this.key = key;
 		}
@@ -603,10 +603,10 @@ public class IteratedEnumerable<T> implements Enumerable<T> {
 
 	private static class SkipEnumerable<T> implements Iterable<T> {
 
-		private final IteratedEnumerable<T> target;
+		private final IterableEnumerable<T> target;
 		private final int count;
 
-		public SkipEnumerable(IteratedEnumerable<T> target, int count) {
+		public SkipEnumerable(IterableEnumerable<T> target, int count) {
 			this.target = target;
 			this.count = count;
 		}
@@ -728,10 +728,10 @@ public class IteratedEnumerable<T> implements Enumerable<T> {
 	private static class SelectManyIterator<TSource, TResult> extends ImmutableIteratorBase<TResult> {
 
 		private final Iterator<TSource> sourceIterator;
-		private final Func1<TSource, IteratedEnumerable<TResult>> selector;
+		private final Func1<TSource, IterableEnumerable<TResult>> selector;
 		private Iterator<TResult> resultIterator;
 
-		public SelectManyIterator(Iterable<TSource> source, Func1<TSource, IteratedEnumerable<TResult>> selector) {
+		public SelectManyIterator(Iterable<TSource> source, Func1<TSource, IterableEnumerable<TResult>> selector) {
 			this.selector = selector;
 			this.sourceIterator = source.iterator();
 		}
@@ -766,7 +766,7 @@ public class IteratedEnumerable<T> implements Enumerable<T> {
 		}
 
 		public Iterator<T> iterator() {
-			return new ConcatIterator<T>(IteratedEnumerable.of(iterables).select(new Func1<Iterable<T>, Iterator<T>>() {
+			return new ConcatIterator<T>(IterableEnumerable.of(iterables).select(new Func1<Iterable<T>, Iterator<T>>() {
 				public Iterator<T> apply(Iterable<T> x) {
 					return x.iterator();
 				}

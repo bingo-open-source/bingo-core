@@ -25,8 +25,14 @@ import java.util.Set;
 import bingo.lang.enumerable.ArrayEnumerable;
 import bingo.lang.enumerable.CollectionEnumerable;
 import bingo.lang.enumerable.EmptyEnumerable;
-import bingo.lang.enumerable.IteratedEnumerable;
+import bingo.lang.enumerable.IterableEnumerable;
 import bingo.lang.enumerable.ListEnumerable;
+import bingo.lang.enumerable.NamedArrayEnumerable;
+import bingo.lang.enumerable.NamedCollectionEnumerable;
+import bingo.lang.enumerable.NamedEmptyEnumerable;
+import bingo.lang.enumerable.NamedIterableEnumerable;
+import bingo.lang.enumerable.NamedListEnumerable;
+import bingo.lang.enumerable.NamedSetEnumerable;
 import bingo.lang.enumerable.SetEnumerable;
 import bingo.lang.exceptions.EmptyDataException;
 
@@ -40,6 +46,10 @@ public class Enumerables {
 	
 	public static final <E> Enumerable<E> empty(){
 		return new EmptyEnumerable<E>();
+	}
+	
+	public static final <E extends Named> NamedEnumerable<E> emptyNamed(){
+		return new NamedEmptyEnumerable<E>();
 	}
 	
 	public static final <E> Enumerable<E> of(E... array){
@@ -59,7 +69,27 @@ public class Enumerables {
 	}
 	
 	public static final <E> Enumerable<E> of(Iterable<E> iterable){ 
-		return null == iterable ? new EmptyEnumerable<E>() : IteratedEnumerable.of(iterable);
+		return null == iterable ? new EmptyEnumerable<E>() : IterableEnumerable.of(iterable);
+	}
+	
+	public static final <E extends Named> NamedEnumerable<E> namedOf(E... array){
+		return null == array || array.length == 0 ? new NamedEmptyEnumerable<E>() : new NamedArrayEnumerable<E>(array);
+	}
+	
+	public static final <E extends Named> NamedEnumerable<E> namedOf(Collection<E> collection){
+		return null == collection || collection.isEmpty() ? new NamedEmptyEnumerable<E>() :  new NamedCollectionEnumerable<E>(collection);
+	}
+	
+	public static final <E extends Named> NamedEnumerable<E> namedOf(List<E> list){
+		return null == list || list.isEmpty() ? new NamedEmptyEnumerable<E>() :  new NamedListEnumerable<E>(list);
+	}
+
+	public static final <E extends Named> NamedEnumerable<E> namedOf(Set<E> set){
+		return null == set || set.isEmpty() ? new NamedEmptyEnumerable<E>() :  new NamedSetEnumerable<E>(set);
+	}
+	
+	public static final <E extends Named> NamedEnumerable<E> namedOf(Iterable<E> iterable){ 
+		return null == iterable ? new NamedEmptyEnumerable<E>() : new NamedIterableEnumerable<E>(iterable);
 	}
 	
 	//isEmpty

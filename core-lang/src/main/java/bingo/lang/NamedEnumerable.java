@@ -15,6 +15,14 @@
  */
 package bingo.lang;
 
-public interface NamedValue<V> extends Named, Valued<V> {
+public interface NamedEnumerable<E extends Named> extends Enumerable<E> {
 
+	boolean contains(String name);
+	
+	boolean containsIgnoreCase(String name);
+	
+	E get(String name);
+	
+	E getIgnoreCase(String name);
+	
 }

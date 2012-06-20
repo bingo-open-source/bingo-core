@@ -13,8 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.lang;
+package bingo.lang.enumerable;
 
-public interface NamedValue<V> extends Named, Valued<V> {
+import bingo.lang.Named;
+import bingo.lang.NamedEnumerable;
 
+public class NamedEmptyEnumerable<E extends Named> extends EmptyEnumerable<E> implements NamedEnumerable<E> {
+
+	public boolean contains(String name) {
+	    return false;
+    }
+
+	public boolean containsIgnoreCase(String name) {
+	    return false;
+    }
+
+	public E get(String name) {
+	    return null;
+    }
+
+	public E getIgnoreCase(String name) {
+	    return null;
+    }
 }

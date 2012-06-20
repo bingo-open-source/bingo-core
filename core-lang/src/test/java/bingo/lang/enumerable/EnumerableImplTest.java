@@ -11,35 +11,35 @@ import bingo.lang.Func;
 import bingo.lang.Func1;
 import bingo.lang.Out;
 import bingo.lang.Predicate;
-import bingo.lang.enumerable.IteratedEnumerable;
+import bingo.lang.enumerable.IterableEnumerable;
 import bingo.lang.iterable.ImmutableIteratorBase;
 import bingo.lang.testing.junit.ConcurrentTestCase;
 
 /**
- * {@link TestCase} of {@link IteratedEnumerable}
+ * {@link TestCase} of {@link IterableEnumerable}
  */
 public class EnumerableImplTest extends ConcurrentTestCase {
 
 	@Test
 	public void testEnumerable() {
 
-		Assert.assertEquals(5, IteratedEnumerable.range(1, 5).size());
-		Assert.assertEquals((Integer) 1, IteratedEnumerable.range(1, 5).first());
-		Assert.assertEquals((Integer) 5, IteratedEnumerable.range(1, 5).last());
-		Assert.assertEquals((Integer) 3, IteratedEnumerable.range(1, 5).elementAt(2));
-		Assert.assertEquals(null, IteratedEnumerable.emptyOf(Integer.class).firstOrNull());
-		Assert.assertEquals("1", IteratedEnumerable.of(1).join(","));
+		Assert.assertEquals(5, IterableEnumerable.range(1, 5).size());
+		Assert.assertEquals((Integer) 1, IterableEnumerable.range(1, 5).first());
+		Assert.assertEquals((Integer) 5, IterableEnumerable.range(1, 5).last());
+		Assert.assertEquals((Integer) 3, IterableEnumerable.range(1, 5).elementAt(2));
+		Assert.assertEquals(null, IterableEnumerable.emptyOf(Integer.class).firstOrNull());
+		Assert.assertEquals("1", IterableEnumerable.of(1).join(","));
 
-		Assert.assertEquals("1,2,3,4,5", IteratedEnumerable.range(1, 5).join(","));
-		Assert.assertEquals("5,4,3,2,1", IteratedEnumerable.range(1, 5).reverse().join(","));
-		Assert.assertEquals("10", IteratedEnumerable.range(10, 1).join(","));
-		Assert.assertEquals("1", IteratedEnumerable.range(1, 1000000).take(1).join(","));
-		Assert.assertEquals("3,4,5", IteratedEnumerable.range(1, 5).skip(2).join(","));
-		Assert.assertEquals("2,3,4,5", IteratedEnumerable.range(1, 5).skipWhile(IS_ODD).join(","));
-		Assert.assertEquals((Integer) 10, IteratedEnumerable.range(1, 4).sum(Integer.class));
+		Assert.assertEquals("1,2,3,4,5", IterableEnumerable.range(1, 5).join(","));
+		Assert.assertEquals("5,4,3,2,1", IterableEnumerable.range(1, 5).reverse().join(","));
+		Assert.assertEquals("10", IterableEnumerable.range(10, 1).join(","));
+		Assert.assertEquals("1", IterableEnumerable.range(1, 1000000).take(1).join(","));
+		Assert.assertEquals("3,4,5", IterableEnumerable.range(1, 5).skip(2).join(","));
+		Assert.assertEquals("2,3,4,5", IterableEnumerable.range(1, 5).skipWhile(IS_ODD).join(","));
+		Assert.assertEquals((Integer) 10, IterableEnumerable.range(1, 4).sum(Integer.class));
 
-		IteratedEnumerable<Integer> one = IteratedEnumerable.of(5, 3, 9, 7, 5, 9, 3, 7);
-		IteratedEnumerable<Integer> two = IteratedEnumerable.of(8, 3, 6, 4, 4, 9, 1, 0);
+		IterableEnumerable<Integer> one = IterableEnumerable.of(5, 3, 9, 7, 5, 9, 3, 7);
+		IterableEnumerable<Integer> two = IterableEnumerable.of(8, 3, 6, 4, 4, 9, 1, 0);
 
 		Assert.assertEquals((Integer) 0, two.min(IDENTITY));
 		Assert.assertEquals((Integer) 9, two.max(IDENTITY));
@@ -50,9 +50,9 @@ public class EnumerableImplTest extends ConcurrentTestCase {
 
 		Assert.assertEquals("3,9,1", two.where(IS_ODD).join(","));
 		Assert.assertEquals("8,6,4,4,0", two.where(not(IS_ODD)).join(","));
-		Assert.assertEquals("2,4,6,8,10", IteratedEnumerable.range(1, 5).select(TIMES_TWO).join(","));
+		Assert.assertEquals("2,4,6,8,10", IterableEnumerable.range(1, 5).select(TIMES_TWO).join(","));
 
-		Assert.assertEquals("onetwothree", IteratedEnumerable.of("one", "two", "three").selectMany(CHARS).join(""));
+		Assert.assertEquals("onetwothree", IterableEnumerable.of("one", "two", "three").selectMany(CHARS).join(""));
 
 		// test using an infinite iterator - none of these methods should materialize the enumerable
 		Assert.assertEquals("1,1", infinite(1).skip(100).take(2).join(","));
@@ -67,8 +67,8 @@ public class EnumerableImplTest extends ConcurrentTestCase {
 		Assert.assertEquals("1,1", infinite(1).concat(infinite(1)).take(2).join(","));
 	}
 
-	private static <T> IteratedEnumerable<T> infinite(final T value) {
-		return IteratedEnumerable.of(new Func<Iterator<T>>() {
+	private static <T> IterableEnumerable<T> infinite(final T value) {
+		return IterableEnumerable.of(new Func<Iterator<T>>() {
 			public Iterator<T> apply() {
 				return new InfiniteIterator<T>(value);
 			}
@@ -104,22 +104,22 @@ public class EnumerableImplTest extends ConcurrentTestCase {
 		}
 	};
 
-	private static final Func1<String, IteratedEnumerable<Character>> CHARS = new Func1<String, IteratedEnumerable<Character>>() {
-		public IteratedEnumerable<Character> apply(String input) {
+	private static final Func1<String, IterableEnumerable<Character>> CHARS = new Func1<String, IterableEnumerable<Character>>() {
+		public IterableEnumerable<Character> apply(String input) {
 			return chars(input);
 		}
 	};
 
-	private static IteratedEnumerable<Character> chars(String value) {
+	private static IterableEnumerable<Character> chars(String value) {
 		return chars(value.toCharArray());
 	}
 
-	private static IteratedEnumerable<Character> chars(char[] chars) {
+	private static IterableEnumerable<Character> chars(char[] chars) {
 		Character[] rt = new Character[chars.length];
 		for (int i = 0; i < chars.length; i++) {
 			rt[i] = chars[i];
 		}
-		return IteratedEnumerable.of(rt);
+		return IterableEnumerable.of(rt);
 	}
 
 	private static <T> Predicate<T> not(final Predicate<T> predicate) {

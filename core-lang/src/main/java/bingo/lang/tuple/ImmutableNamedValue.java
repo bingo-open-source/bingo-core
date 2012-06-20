@@ -15,45 +15,31 @@
  */
 package bingo.lang.tuple;
 
-import bingo.lang.NamedValue;
-import bingo.lang.exceptions.ReadonlyException;
+import java.io.Serializable;
 
-public class ImmutableNamedValue<V> extends Pair<String, V>  implements NamedValue<V> {
+import bingo.lang.NamedValue;
+
+public class ImmutableNamedValue<V> implements NamedValue<V>,Serializable {
 	
-	private static final long serialVersionUID = -426792841413872323L;
-	
-	protected final String name;
-	protected final V      value;
+	private static final long serialVersionUID = -1823968924127617848L;
+
+	public static <V> ImmutableNamedValue<V> of(String name,V value){
+		return new ImmutableNamedValue<V>(name, value);
+	}
+
+	private final String name;
+	private final V value;
 	
 	public ImmutableNamedValue(String name,V value){
-		this.name  = name;
+		this.name = name;
 		this.value = value;
 	}
-	
-	@Override
-    protected String getLeft() {
-	    return name;
-    }
 
-	@Override
-    protected V getRight() {
-	    return value;
-    }
-	
-	@Override
-    public String getKey() {
-	    return name;
+	public String getName() {
+    	return name;
     }
 
 	public V getValue() {
-	    return value;
-    }
-
-	public String getName() {
-	    return name;
-    }
-	
-	public V setValue(V value) {
-	    throw new ReadonlyException();
+    	return value;
     }
 }

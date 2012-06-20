@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import bingo.lang.Strings;
-import bingo.lang.enumerable.IteratedEnumerable;
+import bingo.lang.enumerable.IterableEnumerable;
 import bingo.lang.xml.XmlUtils.Predicates;
 
 public class XmlElement extends XmlContainer implements XNameable {
@@ -43,8 +43,8 @@ public class XmlElement extends XmlContainer implements XNameable {
 		return !attributes.isEmpty();
 	}
 	
-	public IteratedEnumerable<XmlAttribute> attributes() {
-		return IteratedEnumerable.of(attributes);
+	public IterableEnumerable<XmlAttribute> attributes() {
+		return IterableEnumerable.of(attributes);
 	}
 
 	public XmlAttribute attribute(String name) {

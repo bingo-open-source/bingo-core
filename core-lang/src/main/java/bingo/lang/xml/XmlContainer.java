@@ -27,7 +27,7 @@ import bingo.lang.Enumerables;
 import bingo.lang.Func;
 import bingo.lang.Func1;
 import bingo.lang.Out;
-import bingo.lang.enumerable.IteratedEnumerable;
+import bingo.lang.enumerable.IterableEnumerable;
 import bingo.lang.iterable.ImmutableIteratorBase;
 import bingo.lang.xml.XmlUtils.DepthFirstIterator;
 import bingo.lang.xml.XmlUtils.Predicates;
@@ -106,7 +106,7 @@ abstract class XmlContainer extends XmlNode {
 	}
 
 	public void addFirst(Object... content) {
-		for (Object obj : IteratedEnumerable.of(content).reverse()) {
+		for (Object obj : IterableEnumerable.of(content).reverse()) {
 			addFirst(obj);
 		}
 	}
@@ -186,8 +186,8 @@ abstract class XmlContainer extends XmlNode {
 		throw new UnsupportedOperationException("implement " + domNode);
 	}
 
-	protected static IteratedEnumerable<Node> domNodes(final NodeList nodes) {
-		return IteratedEnumerable.of(new Func<Iterator<Node>>() {
+	protected static IterableEnumerable<Node> domNodes(final NodeList nodes) {
+		return IterableEnumerable.of(new Func<Iterator<Node>>() {
 			public Iterator<Node> apply() {
 				return new NodeListIterator(nodes);
 			}
@@ -218,7 +218,7 @@ abstract class XmlContainer extends XmlNode {
 	}
 	
 	@SuppressWarnings("unused")
-	private static IteratedEnumerable<Element> domElements(Element parent) {
+	private static IterableEnumerable<Element> domElements(Element parent) {
 		return domNodes(parent.getChildNodes()).ofType(Element.class);
 	}
 	

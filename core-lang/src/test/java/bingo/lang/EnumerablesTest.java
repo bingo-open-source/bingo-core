@@ -22,7 +22,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-import bingo.lang.enumerable.IteratedEnumerable;
+import bingo.lang.enumerable.IterableEnumerable;
 import bingo.lang.testing.Perf;
 import bingo.lang.testing.junit.Concurrent;
 
@@ -31,9 +31,9 @@ public class EnumerablesTest {
 	@Test
 	@Concurrent(2)
 	public void testPerformanceComparesToEnumerable() {
-		final List<Integer> list = IteratedEnumerable.of(1, 3, 2, 4, 100, 1, 2, 3, 5, 531).toList();
+		final List<Integer> list = IterableEnumerable.of(1, 3, 2, 4, 100, 1, 2, 3, 5, 531).toList();
 
-		final IteratedEnumerable<Integer> enumerable = IteratedEnumerable.of(list);
+		final IterableEnumerable<Integer> enumerable = IterableEnumerable.of(list);
 		
 		final Predicate<Integer> where = new Predicate<Integer>() {
 			public boolean apply(Integer object) {

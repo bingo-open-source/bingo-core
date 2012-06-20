@@ -21,16 +21,11 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map.Entry;
 
 import org.junit.Test;
-
-import bingo.lang.tuple.ImmutablePair;
-import bingo.lang.tuple.MutablePair;
-import bingo.lang.tuple.Pair;
 
 /**
  * Test the Pair class.
@@ -43,25 +38,25 @@ public class PairTest {
     public void testPairOf() throws Exception {
         Pair<Integer, String> pair = ImmutablePair.of(0, "foo");
         assertTrue(pair instanceof ImmutablePair<?, ?>);
-        assertEquals(0, ((ImmutablePair<Integer, String>) pair).left.intValue());
-        assertEquals("foo", ((ImmutablePair<Integer, String>) pair).right);
+        assertEquals(0, ((ImmutablePair<Integer, String>) pair).getLeft().intValue());
+        assertEquals("foo", ((ImmutablePair<Integer, String>) pair).getRight());
         Pair<Object, String> pair2 = ImmutablePair.of(null, "bar");
         assertTrue(pair2 instanceof ImmutablePair<?, ?>);
-        assertNull(((ImmutablePair<Object, String>) pair2).left);
-        assertEquals("bar", ((ImmutablePair<Object, String>) pair2).right);
+        assertNull(((ImmutablePair<Object, String>) pair2).getLeft());
+        assertEquals("bar", ((ImmutablePair<Object, String>) pair2).getRight());
     }
 
     @Test
     public void testCompatibilityBetweenPairs() throws Exception {
-        Pair<Integer, String> pair = ImmutablePair.of(0, "foo");
-        Pair<Integer, String> pair2 = MutablePair.of(0, "foo");
+        PairBase<Integer, String> pair = ImmutablePair.of(0, "foo");
+        MutablePair<Integer, String> pair2 = MutablePair.of(0, "foo");
         assertEquals(pair, pair2);
         assertEquals(pair.hashCode(), pair2.hashCode());
-        HashSet<Pair<Integer, String>> set = new HashSet<Pair<Integer, String>>();
+        HashSet<PairBase<Integer, String>> set = new HashSet<PairBase<Integer, String>>();
         set.add(pair);
         assertTrue(set.contains(pair2));
 
-        pair2.setValue("bar");
+        pair2.setRight("bar");
         assertFalse(pair.equals(pair2));
         assertFalse(pair.hashCode() == pair2.hashCode());
     }
@@ -78,8 +73,8 @@ public class PairTest {
 
     @Test
     public void testComparable1() throws Exception {
-        Pair<String, String> pair1 = ImmutablePair.of("A", "D");
-        Pair<String, String> pair2 = ImmutablePair.of("B", "C");
+        PairBase<String, String> pair1 = ImmutablePair.of("A", "D");
+        PairBase<String, String> pair2 = ImmutablePair.of("B", "C");
         assertTrue(pair1.compareTo(pair1) == 0);
         assertTrue(pair1.compareTo(pair2) < 0);
         assertTrue(pair2.compareTo(pair2) == 0);
@@ -88,8 +83,8 @@ public class PairTest {
 
     @Test
     public void testComparable2() throws Exception {
-        Pair<String, String> pair1 = ImmutablePair.of("A", "C");
-        Pair<String, String> pair2 = ImmutablePair.of("A", "D");
+        PairBase<String, String> pair1 = ImmutablePair.of("A", "C");
+        PairBase<String, String> pair2 = ImmutablePair.of("A", "D");
         assertTrue(pair1.compareTo(pair1) == 0);
         assertTrue(pair1.compareTo(pair2) < 0);
         assertTrue(pair2.compareTo(pair2) == 0);
@@ -103,14 +98,6 @@ public class PairTest {
     }
 
     @Test
-    public void testToStringCustom() throws Exception {
-        Calendar date = Calendar.getInstance();
-        date.set(2011, Calendar.APRIL, 25);
-        Pair<String, Calendar> pair = ImmutablePair.of("DOB", date);
-        assertEquals("Test created on " + "04-25-2011", pair.toString("Test created on %2$tm-%2$td-%2$tY"));
-    }
-
-    @Test
     public void testFormattable_simple() throws Exception {
         Pair<String, String> pair = ImmutablePair.of("Key", "Value");
         assertEquals("(Key,Value)", String.format("%1$s", pair));
@@ -121,5 +108,4 @@ public class PairTest {
         Pair<String, String> pair = ImmutablePair.of("Key", "Value");
         assertEquals("         (Key,Value)", String.format("%1$20s", pair));
     }
-
 }

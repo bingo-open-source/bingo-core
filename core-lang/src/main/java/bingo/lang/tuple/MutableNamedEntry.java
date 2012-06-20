@@ -15,39 +15,47 @@
  */
 package bingo.lang.tuple;
 
-import java.io.Serializable;
-
+import bingo.lang.NamedEntry;
 import bingo.lang.NamedValue;
 
-public class MutableNamedValue<V> implements NamedValue<V>, Serializable {
+public class MutableNamedEntry<V> extends PairBase<String, V> implements NamedEntry<V>, NamedValue<V> {
+	
+	private static final long serialVersionUID = -8052820161777994131L;
+	
+	private final String name;
+	private V 	value;
+	
+	public MutableNamedEntry(String name) {
+	    this.name = name;
+    }	
 
-	private static final long serialVersionUID = -2912015831594766650L;
-	
-	private String	name;
-	private V	   value;
-	
-	public MutableNamedValue(){
-		
-	}
-	
-	public MutableNamedValue(String name,V value){
+	public MutableNamedEntry(String name, V value) {
 		this.name  = name;
 		this.value = value;
-	}
-
+    }
+	
 	public String getName() {
-		return name;
-	}
+	    return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public V getValue() {
-		return value;
-	}
-
-	public void setValue(V value) {
+	public V setValue(V value) {
 		this.value = value;
-	}
+	    return value;
+    }
+	
+    public String getKey() {
+	    return name;
+    }
+
+    public V getValue() {
+	    return value;
+    }
+
+	public String getLeft() {
+	    return name;
+    }
+
+	public V getRight() {
+	    return value;
+    }
 }

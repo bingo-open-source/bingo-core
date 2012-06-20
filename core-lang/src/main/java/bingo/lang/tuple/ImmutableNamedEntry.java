@@ -15,42 +15,46 @@
  */
 package bingo.lang.tuple;
 
-import java.util.Map.Entry;
-
+import bingo.lang.NamedEntry;
+import bingo.lang.NamedValue;
 import bingo.lang.exceptions.ReadonlyException;
 
-public class ImmutableEntry<K,V> extends PairBase<K, V> implements Entry<K, V> {
+public class ImmutableNamedEntry<V> extends PairBase<String, V> implements NamedEntry<V>, NamedValue<V> {
 	
-	private static final long serialVersionUID = 6333097634226450971L;
+	private static final long serialVersionUID = -426792841413872323L;
 	
-	public static <K,V> ImmutableEntry<K,V> of(K key,V value){
-		return new ImmutableEntry<K, V>(key, value);
+	public static <V> ImmutableNamedEntry<V> of(String name,V value){
+		return new ImmutableNamedEntry<V>(name, value);
 	}
 	
-	private final K key;
-	private final V value;
+	protected final String name;
+	protected final V      value;
 	
-	public ImmutableEntry(K key,V value){
-		this.key   = key;
+	public ImmutableNamedEntry(String name,V value){
+		this.name  = name;
 		this.value = value;
 	}
-
-	public K getLeft() {
-	    return key;
+	
+	public String getLeft() {
+	    return name;
     }
 
 	public V getRight() {
 	    return value;
     }
 	
-    public K getKey() {
-	    return key;
+    public String getKey() {
+	    return name;
     }
 
-    public V getValue() {
+	public V getValue() {
 	    return value;
     }
 
+	public String getName() {
+	    return name;
+    }
+	
 	public V setValue(V value) {
 	    throw new ReadonlyException();
     }

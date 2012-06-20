@@ -27,7 +27,8 @@ import bingo.lang.exceptions.EmptyDataException;
 import bingo.lang.exceptions.TooManyDataException;
 import bingo.lang.iterable.EmptyIterator;
 
-public final class EmptyEnumerable<E> implements Enumerable<E> {
+public class EmptyEnumerable<E> implements Enumerable<E> {
+	
 	private EmptyIterator<E> iterator = null;
 
 	public E first() throws EmptyDataException {
