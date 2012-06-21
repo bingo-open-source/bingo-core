@@ -36,7 +36,7 @@ public class JSONEncodeTest extends ConcurrentTestCase {
 	@Test
 	public void testSimpleValue() throws Exception{
 		//null
-		assertEquals(JSONWriter.NULL_STRING,encode(null));
+		assertEquals(JSONWriterImpl.NULL_STRING,encode(null));
 		
 		//simple type
 		assertEquals("\"test\"", encode("test"));

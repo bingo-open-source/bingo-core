@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 the original author or authors.
+ * Copyright 2012 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,152 +17,85 @@ package bingo.utils.json;
 
 import java.util.Date;
 
-class JSONWriter {
-    
-    static final char[] HEX_CHARS = new char[]{
-        '0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'
-    }; 
-    
-    static final String HEX_PREFIX = "0x";
-    
-	static final String NULL_STRING   = "null";
-	static final String EMPTY_STRING  = "\"\"";
-	static final char   OPEN_ARRAY    = '[';
-	static final char   CLOSE_ARRAY   = ']';
-	static final char   OPEN_OBJECT   = '{';
-	static final char   CLOSE_OBJECT  = '}';
-	static final char   CLOSE_NAME    = ':';
-	static final char   DOUBLE_QUOTE  = '"';
-	static final char   COMMA_CHAR    = ',';
+public interface JSONWriter {
 	
-	private boolean isKeyQuoted;
+	JSONWriter nullValue();
 	
-	JSONWriter(JSONSettings settings){
-	    this.isKeyQuoted = settings.isKeyQuoted();
-	}
+	JSONWriter key(String key);
 	
-    public void writeBoolean(Boolean bool, StringBuilder out) {
-        out.append(String.valueOf(bool));
-    }
-    
-    public void writeByte(Byte b, StringBuilder out) {
-        out.append(HEX_PREFIX);
-        out.append(HEX_CHARS[(b >>> 4) & 0x0F]);
-        out.append(HEX_CHARS[b & 0x0F]);
-    }
-    
-    public void writeBytes(Byte[] bytes, StringBuilder out) {
-        out.append(HEX_PREFIX);
-        for(Byte b : bytes){
-            out.append(HEX_CHARS[(b >>> 4) & 0x0F]);
-            out.append(HEX_CHARS[b & 0x0F]);
-        }
-    }
-    
-    public void writeCharacter(Character c, StringBuilder out) {
-        writeString(String.valueOf(c),out);
-    }
-    
-    public void writeNumber(Number number, StringBuilder out) {
-        out.append(String.valueOf(number));
-    }
-    
-    public void writeDate(Date date, StringBuilder out) {
-//        StringBuffer temp = new StringBuffer(RFC_DATE_FORMAT.format(date)); //rfc3339
-//        temp.insert(temp.length() - 2, ':');    
-//        writeString(temp.toString(),out) ;      
-        out.append(String.valueOf(date.getTime()));
-    }
-	
-	public void openArray(StringBuilder out) {
-		out.append(OPEN_ARRAY);
-    }
-	
-	public void closeArray(StringBuilder out) {
-		out.append(CLOSE_ARRAY);
-    }
-	
-	public void openObject(StringBuilder out) {
-		out.append(OPEN_OBJECT);
-    }
-	
-	public void closeObject(StringBuilder out) {
-		out.append(CLOSE_OBJECT);
-    }
-	
-	public void openName(StringBuilder out) {
-		//do nothing
-	}
-	
-    public void writeName(String name, StringBuilder out) {
-        if(isKeyQuoted){
-            writeString(name,out);    
-        }else{
-            out.append(name);
-        }
-    }
-	
-	public void closeName(StringBuilder out) {
-		out.append(CLOSE_NAME);
-    }
-	
-	public void openValue(String name, StringBuilder out) {
-		//do nothing
-    }
-	public void closeValue(String name, StringBuilder out) {
-		//do nothing
-    }
+	JSONWriter value(boolean bool);
 
-	public void writeNull(StringBuilder out) {
-		out.append(NULL_STRING);
-    }
-	
-	public void writeArrayValueSeperator(StringBuilder out) {
-		out.append(COMMA_CHAR);
-    }
-	
-	public void writePropertyValueSeperator(StringBuilder out) {
-		out.append(COMMA_CHAR);
-    }
-	public void writeString(String string, StringBuilder out) {
-        if (string == null) {
-        	writeNull(out);
-        }else if(string.length() == 0){
-        	out.append(EMPTY_STRING);
-        }else{
-            char c   = 0;
-            int  len = string.length();
+	JSONWriter value(byte b);
 
-            out.append(DOUBLE_QUOTE);
-            for (int i = 0; i < len; i++) {
-                c = string.charAt(i);
-                switch (c) {
-                case '\\':
-                    out.append("\\\\");
-                    break;
-                case '"':
-                	out.append("\\\"");
-                    break;
-                case '\b':
-                	out.append("\\b");
-                    break;
-                case '\t':
-                	out.append("\\t");
-                    break;
-                case '\n':
-                	out.append("\\n");
-                    break;
-                case '\f':
-                	out.append("\\f");
-                    break;
-                case '\r':
-                	out.append("\\r");
-                    break;
-                default:
-                	out.append(c);
-                }
-            }
-            out.append(DOUBLE_QUOTE);
-        }
-    }
+	JSONWriter value(byte[] bytes);
+
+	JSONWriter value(char c);
+	
+	JSONWriter value(short s);
+	
+	JSONWriter value(int i);
+	
+	JSONWriter value(long l);
+	
+	JSONWriter value(float f);
+	
+	JSONWriter value(double d);
+
+	JSONWriter value(Number number);
+
+	JSONWriter value(Date date);
+
+	JSONWriter value(String string);
+	
+	JSONWriter seperator();
+	
+	JSONWriter raw(String string);
+
+	JSONWriter startObject();
+
+	JSONWriter property(String key, String stringValue);
+	
+	JSONWriter propertyOptional(String key, String stringValue);
+
+	JSONWriter property(String key, boolean boolValue);
+
+	JSONWriter property(String key, byte byteValue);
+
+	JSONWriter property(String key, short shortValue);
+
+	JSONWriter property(String key, int intValue);
+
+	JSONWriter property(String key, long longValue);
+
+	JSONWriter property(String key, float floatValue);
+
+	JSONWriter property(String key, double doubleValue);
+	
+	JSONWriter property(String key, Number numberValue);
+
+	JSONWriter property(String key, Date dateValue);
+
+	JSONWriter endObject();
+	
+	JSONWriter array(String... stringArray);
+	
+	JSONWriter arrayIgnoreEmpty(String... stringArray);
+	
+	JSONWriter array(short... array);
+	
+	JSONWriter array(int... array);
+	
+	JSONWriter array(long... array);
+	
+	JSONWriter array(float... array);
+	
+	JSONWriter array(double... array);
+	
+	JSONWriter array(Number... array);
+	
+	JSONWriter array(Date... array);
+	
+	JSONWriter startArray();
+
+	JSONWriter endArray();
 }

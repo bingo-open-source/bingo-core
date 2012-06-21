@@ -31,44 +31,37 @@ class JSONEncoder {
 	private static final Integer zero = new Integer(0);
 	private static final int MAX_DEEP = 100;
     
-    private JSONWriter 						 writer;
-    private boolean   						 ignoreNull;
-    private boolean   						 ignoreEmpty;
     private IdentityHashMap<Object,Integer> references = new IdentityHashMap<Object, Integer>();
     private int					 		 deep       = 0;
+    private JSONSettings				     settings ;
     
     public JSONEncoder(){
         this(new JSONSettings());
     }
     
     public JSONEncoder(JSONSettings settings){
-        this.writer = new JSONWriter(settings);
-        this.setting(settings);
+    	this.settings = settings;
     }
-    
-    private void setting(JSONSettings settings){
-        this.ignoreNull  = settings.isIgnoreNull();
-        this.ignoreEmpty = settings.isIgnoreEmpty();
-    }
-    
+    	
     public String encode(Object value){
         if (null == value) {
             return encodeNull();
         } else {
-            StringBuilder out = new StringBuilder();
-            encode(null,value, out);
+        	JSONWriterImpl writer = new JSONWriterImpl(new StringBuilder(128),settings.isKeyQuoted(),settings.isIgnoreNull());
+        	
+            encode(null,value, writer);
+            
             references.clear();
-            return out.toString();
+            
+            return writer.toString();
         }
     }
 
     private String encodeNull() {
-        StringBuilder out = new StringBuilder();
-        writer.writeNull(out);
-        return out.toString();
+    	return JSONWriterImpl.NULL_STRING;
     }
 
-    private void encode(String name,Object value, StringBuilder out) {
+    private void encode(String name,Object value, JSONWriterImpl writer) {
     	deep++;
     	
     	if(deep >= MAX_DEEP){
@@ -76,21 +69,21 @@ class JSONEncoder {
     	}
     	
         if (null == value) {
-            writer.writeNull(out);
+            writer.nullValue();
         } else if (value instanceof String) {
-            writer.writeString((String) value, out);
+            writer.value((String) value);
         } else if (value instanceof Byte) {
-            writer.writeByte((Byte) value, out);
-        } else if (value instanceof Number) {
-            writer.writeNumber((Number) value, out);
+            writer.value(((Byte) value).byteValue());
         } else if (value instanceof Boolean) {
-            writer.writeBoolean((Boolean) value, out);
+            writer.value(((Boolean) value).booleanValue());
         } else if (value instanceof Character) {
-            writer.writeCharacter((Character) value, out);
-        } else if (value instanceof Class<?>) {
-            writer.writeString(((Class<?>) value).getName(), out);
+            writer.value(((Character) value).charValue());
+        } else if (value instanceof Number) {
+            writer.value((Number) value);
         } else if (value instanceof Date) {
-            writer.writeDate((Date) value, out);
+            writer.value((Date) value);
+        } else if (value instanceof Class<?>) {
+            writer.value(((Class<?>) value).getName());
         } else {
             //detect cyclic references
             if(references.containsKey(value)){
@@ -100,27 +93,27 @@ class JSONEncoder {
         	references.put(value, zero);
         	
             if (value instanceof Object[]) {
-                encode(name,(Object[]) value, out);
+                encode(name,(Object[]) value, writer);
             } else if (value.getClass().isArray()) {
-                encodeArray(name,value, out);
+                encodeArray(name,value, writer);
             } else if (value instanceof Map<?, ?>) {
-                encode(name,(Map<?, ?>) value, out);
+                encode(name,(Map<?, ?>) value, writer);
             } else if (value instanceof Iterable<?>) {
-                encode(name,(Iterable<?>) value, out);
+                encode(name,(Iterable<?>) value, writer);
             } else if (value instanceof Enumeration<?>) {
-                encode(name,(Enumeration<?>) value, out);
+                encode(name,(Enumeration<?>) value, writer);
             } else if (value instanceof Enum<?>) {
-                encode(name,Enums.getValue(((Enum<?>) value)), out);
+                encode(name,Enums.getValue(((Enum<?>) value)), writer);
             } else {
-                encodeBean(name,value, out);
+                encodeBean(name,value, writer);
             }
         }
         
         deep--;
     }
 
-    private void encode(String name,Object[] array, StringBuilder out) {
-        writer.openArray(out);
+    private void encode(String name,Object[] array, JSONWriterImpl writer) {
+        writer.startArray();
         for (int i = 0; i < array.length; i++) {
         	Object value = array[i];
         	
@@ -130,18 +123,18 @@ class JSONEncoder {
             }
             
             if (i > 0) {
-                writer.writeArrayValueSeperator(out);
+                writer.seperator();
             }
             
-            encode(name,array[i], out);
+            encode(name,array[i], writer);
         }
-        writer.closeArray(out);
+        writer.endArray();
     }
 
-    private void encodeArray(String name,Object array, StringBuilder out) {
+    private void encodeArray(String name,Object array, JSONWriterImpl writer) {
     	ReflectClass<?> reflectClass = ReflectClass.get(array.getClass().getComponentType());
     	
-        writer.openArray(out);
+        writer.startArray();
         
         int len = reflectClass.getArrayLength(array);
         for (int i = 0; i < len; i++) {
@@ -153,16 +146,18 @@ class JSONEncoder {
             }
             
             if (i > 0) {
-                writer.writeArrayValueSeperator(out);
+                writer.seperator();
             }
             
-            encode(name,value, out);
+            encode(name,value, writer);
         }
-        writer.closeArray(out);
+        
+        writer.endArray();
     }
     
-    private void encode(String name,Iterable<?> iterable, StringBuilder out) {
-        writer.openArray(out);
+    private void encode(String name,Iterable<?> iterable, JSONWriterImpl writer) {
+        writer.startArray();
+        
         int index = 0;
         for (Object value : iterable) {
             //detect cyclic references
@@ -173,16 +168,17 @@ class JSONEncoder {
             if (index == 0) {
                 index++;
             } else {
-                writer.writeArrayValueSeperator(out);
+                writer.seperator();
             }
             
-            encode(name,value, out);
+            encode(name,value, writer);
         }
-        writer.closeArray(out);
+        
+        writer.endArray();
     }
 
-    private void encode(String name,Enumeration<?> enumeration, StringBuilder out) {
-        writer.openArray(out);
+    private void encode(String name,Enumeration<?> enumeration, JSONWriterImpl writer) {
+        writer.startArray();
         
         int index = 0;
         while (enumeration.hasMoreElements()) {
@@ -197,27 +193,27 @@ class JSONEncoder {
             if (index == 0) {
                 index++;
             } else {
-                writer.writeArrayValueSeperator(out);
+                writer.seperator();
             }
             
-            encode(name,value, out);
+            encode(name,value, writer);
         }
-        writer.closeArray(out);
+        writer.endArray();
     }
 
-    private void encode(String name,Map<?, ?> map, StringBuilder out) {
-        writer.openObject(out);
+    private void encode(String name,Map<?, ?> map, JSONWriterImpl writer) {
+        writer.startObject();
 
         int index = 0;
         for (Object key : map.keySet()) {
             String prop = String.valueOf(key);
             Object propValue = map.get(key);
             
-            if(null == propValue && ignoreNull){
+            if(null == propValue && settings.isIgnoreNull()){
                 continue;
             }
             
-            if(ignoreEmpty && (propValue instanceof String) && ((String)propValue).trim().equals("")){
+            if(settings.isIgnoreEmpty() && (propValue instanceof String) && ((String)propValue).trim().equals("")){
                 continue;
             }
             
@@ -229,18 +225,18 @@ class JSONEncoder {
             if (index == 0) {
                 index++;
             } else {
-                writer.writePropertyValueSeperator(out);
+                writer.seperator();
             }
 
-            encodeNamedValue(prop, map.get(key), out);
+            encodeNamedValue(prop, map.get(key), writer);
         }
 
-        writer.closeObject(out);
+        writer.endObject();
     }
 
-    private void encodeBean(String name,Object bean, StringBuilder out) {
+    private void encodeBean(String name,Object bean, JSONWriterImpl writer) {
         Class<?> clazz = bean.getClass();
-        writer.openObject(out);
+        writer.startObject();
         
         try {
             BeanClass<?> beanClass = BeanClass.get(clazz);
@@ -258,11 +254,11 @@ class JSONEncoder {
                     
                     Object propValue = prop.getValue(bean);
                     
-                    if(null == propValue && ignoreNull){
+                    if(null == propValue && settings.isIgnoreNull()){
                         continue;
                     }
                     
-                    if(ignoreEmpty && Strings.isBlank(propValue)){
+                    if(settings.isIgnoreEmpty() && Strings.isBlank(propValue)){
                         continue;
                     }
                     
@@ -274,10 +270,10 @@ class JSONEncoder {
                     if (index == 0) {
                         index++;
                     } else {
-                        writer.writePropertyValueSeperator(out);
+                        writer.seperator();
                     }
 
-                    encodeNamedValue(propName, propValue, out);
+                    encodeNamedValue(propName, propValue, writer);
                 }
             }
         } catch (JSONException e){
@@ -286,16 +282,11 @@ class JSONEncoder {
             throw new JSONException("error encoding for value : " + bean.getClass().getName(), e);
         }
         
-        writer.closeObject(out);
+        writer.endObject();
     }
 
-    private void encodeNamedValue(String name, Object value, StringBuilder out) {
-        writer.openName(out);
-        writer.writeName(name, out);
-        writer.closeName(out);
-
-        writer.openValue(name, out);
-        encode(name,value, out);
-        writer.closeValue(name, out);
+    private void encodeNamedValue(String name, Object value, JSONWriterImpl writer) {
+        writer.key(name);
+        encode(name,value, writer);
     }
 }

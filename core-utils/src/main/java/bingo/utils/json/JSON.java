@@ -30,6 +30,10 @@ public class JSON {
     private static final int ENCODE_KEY_QUOTED    = JSONSettings.IGNORE_NULL | JSONSettings.IGNORE_EMPTY;
     private static final int ENCODE_KEY_NON_QUOTE = JSONSettings.IGNORE_NULL | JSONSettings.IGNORE_EMPTY | JSONSettings.KEY_NON_QUOTE;
     
+    public static JSONWriter createWriter(Appendable out) {
+    	return new JSONWriterImpl(out, true, false);
+    }
+    
 	public static String encode(Object object){
 	    return new JSONEncoder(new JSONSettings(ENCODE_KEY_NON_QUOTE)).encode(object);
 	}
