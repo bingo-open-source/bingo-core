@@ -1546,6 +1546,17 @@ public class Arrays {
 		System.arraycopy(original, 0, copy, 0, Math.min(original.length, newLength));
 		return copy;
 	}
+
+	/**
+	 * Copies the specified array to an new array.
+	 * 
+	 * @param original the array to be copied
+	 * 
+	 * @throws NullPointerException if <tt>original</tt> is null
+	 */
+	public static <T> T[] copyOf(T[] original) {
+		return copyOf(original,original.length);
+	}
 	
 	/**
 	 * Converts a T[] array to a Iterable<T>.

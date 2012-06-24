@@ -23,12 +23,10 @@ import java.util.List;
 import java.util.Set;
 
 import bingo.lang.enumerable.ArrayEnumerable;
-import bingo.lang.enumerable.CollectionEnumerable;
 import bingo.lang.enumerable.EmptyEnumerable;
 import bingo.lang.enumerable.IterableEnumerable;
 import bingo.lang.enumerable.ListEnumerable;
 import bingo.lang.enumerable.NamedArrayEnumerable;
-import bingo.lang.enumerable.NamedCollectionEnumerable;
 import bingo.lang.enumerable.NamedEmptyEnumerable;
 import bingo.lang.enumerable.NamedIterableEnumerable;
 import bingo.lang.enumerable.NamedListEnumerable;
@@ -57,7 +55,7 @@ public class Enumerables {
 	}
 	
 	public static final <E> Enumerable<E> of(Collection<E> collection){
-		return null == collection || collection.isEmpty() ? new EmptyEnumerable<E>() :  new CollectionEnumerable<E>(collection);
+		return null == collection || collection.isEmpty() ? new EmptyEnumerable<E>() :  new ListEnumerable<E>(collection);
 	}
 	
 	public static final <E> Enumerable<E> of(List<E> list){
@@ -77,7 +75,7 @@ public class Enumerables {
 	}
 	
 	public static final <E extends Named> NamedEnumerable<E> namedOf(Collection<E> collection){
-		return null == collection || collection.isEmpty() ? new NamedEmptyEnumerable<E>() :  new NamedCollectionEnumerable<E>(collection);
+		return null == collection || collection.isEmpty() ? new NamedEmptyEnumerable<E>() :  new NamedListEnumerable<E>(collection);
 	}
 	
 	public static final <E extends Named> NamedEnumerable<E> namedOf(List<E> list){

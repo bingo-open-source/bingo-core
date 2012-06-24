@@ -15,7 +15,8 @@
  */
 package bingo.lang.enumerable;
 
-import java.util.Set;
+import java.util.Collection;
+import java.util.HashSet;
 
 import bingo.lang.Enumerables;
 import bingo.lang.Named;
@@ -24,12 +25,8 @@ import bingo.lang.Predicates;
 
 public class NamedSetEnumerable<E extends Named> extends SetEnumerable<E> implements NamedEnumerable<E> {
 
-	public NamedSetEnumerable() {
-	    super();
-    }
-
-	public NamedSetEnumerable(Set<E> set) {
-	    super(set);
+	public NamedSetEnumerable(Collection<E> c) {
+	    super(new HashSet<E>(c));
     }
 
 	public boolean contains(String name) {

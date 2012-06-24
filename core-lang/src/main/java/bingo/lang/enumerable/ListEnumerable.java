@@ -16,6 +16,7 @@
 package bingo.lang.enumerable;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import bingo.lang.Collections;
@@ -28,12 +29,8 @@ import bingo.lang.exceptions.TooManyDataException;
 
 public class ListEnumerable<E> extends AbstractListWrapper<E> implements Enumerable<E>,List<E>  {
 	
-	public ListEnumerable() {
-	    this.list = new ArrayList<E>();
-    }
-
-	public ListEnumerable(List<E> list) {
-	    super(list);
+	public ListEnumerable(Collection<E> c) {
+	    super(new ArrayList<E>(c));
     }
 	
 	public E first() throws EmptyDataException {

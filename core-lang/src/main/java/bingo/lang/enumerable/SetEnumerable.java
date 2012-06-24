@@ -16,8 +16,9 @@
 package bingo.lang.enumerable;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import bingo.lang.Collections;
 import bingo.lang.Enumerable;
@@ -29,12 +30,8 @@ import bingo.lang.exceptions.TooManyDataException;
 
 public class SetEnumerable<E> extends AbstractSetWrapper<E> implements Enumerable<E> {
 
-	public SetEnumerable() {
-	    super();
-    }
-
-	public SetEnumerable(Set<E> set) {
-	    super(set);
+	public SetEnumerable(Collection<E> c) {
+	    super(new HashSet<E>(c));
     }
 	
 	public E first() throws EmptyDataException {

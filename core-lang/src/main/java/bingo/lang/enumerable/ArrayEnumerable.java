@@ -34,7 +34,7 @@ public class ArrayEnumerable<E> implements Enumerable<E> {
 	
 	public ArrayEnumerable(E... array) {
 		Assert.notNull(array);
-		this.array = array;
+		this.array = Arrays.copyOf(array);
 		this.iterator = new ArrayIterator<E>(array);
 	}
 	

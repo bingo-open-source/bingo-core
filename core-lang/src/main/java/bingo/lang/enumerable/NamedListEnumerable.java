@@ -15,7 +15,8 @@
  */
 package bingo.lang.enumerable;
 
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import bingo.lang.Enumerables;
 import bingo.lang.Named;
@@ -24,12 +25,8 @@ import bingo.lang.Predicates;
 
 public class NamedListEnumerable<E extends Named> extends ListEnumerable<E> implements NamedEnumerable<E> {
 
-	public NamedListEnumerable() {
-	    super();
-    }
-
-	public NamedListEnumerable(List<E> list) {
-	    super(list);
+	public NamedListEnumerable(Collection<E> c) {
+	    super(new ArrayList<E>(c));
     }
 
 	public boolean contains(String name) {
