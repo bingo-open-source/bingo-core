@@ -89,6 +89,33 @@ class XmlWriterStaxImpl extends XmlWriterBase implements XmlWriter {
 	    return this;
     }
 	
+	public XmlWriter emptyElement(String localName) {
+	    try {
+	        writer.writeEmptyElement(localName);
+        } catch (XMLStreamException e) {
+        	throw wrap(e);
+        }
+	    return this;
+    }
+	
+	public XmlWriter emptyElement(String namespaceURI, String localName) {
+	    try {
+	        writer.writeEmptyElement(namespaceURI, localName);
+        } catch (XMLStreamException e) {
+        	throw wrap(e);
+        }
+	    return this;
+    }
+	
+	public XmlWriter emptyElement(String prefix, String namespaceURI, String localName) {
+	    try {
+	        writer.writeEmptyElement(prefix, localName, namespaceURI);
+        } catch (XMLStreamException e) {
+        	throw wrap(e);
+        }
+	    return this;
+    }
+
 	public XmlWriter namespace(String namespaceURI) {
 	    try {
 	        writer.writeDefaultNamespace(namespaceURI);

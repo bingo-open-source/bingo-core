@@ -19,6 +19,7 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
+import java.util.EmptyStackException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -243,15 +244,19 @@ public class XmlWriterBaseImpl extends XmlWriterBase implements XmlWriter {
 		if (isOpen()) {
 			closeStartElement();
 		}
-		String prefix = (String) prefixStack.pop();
-		String local = (String) localNameStack.pop();
-		uriStack.pop();
-		//if(!wasEmpty) {
-		openEndTag();
-		writeName(prefix, "", local);
-		closeEndTag();
-		//}
-		context.closeScope();
+		try {
+	        String prefix = (String) prefixStack.pop();
+	        String local = (String) localNameStack.pop();
+	        uriStack.pop();
+	        //if(!wasEmpty) {
+	        openEndTag();
+	        writeName(prefix, "", local);
+	        closeEndTag();
+	        //}
+	        context.closeScope();
+        } catch (EmptyStackException e) {
+        	throw new XmlException("there is no start element to end",e);
+        }
 		
 		return this;
 	}
@@ -457,10 +462,11 @@ public class XmlWriterBaseImpl extends XmlWriterBase implements XmlWriter {
 	}
 
 	private void openStartElement() throws XmlException {
-		if (startElementOpened)
+		if (startElementOpened) {
 			closeStartTag();
-		else
+		} else {
 			startElementOpened = true;
+		}
 	}
 
 	protected String writeName(String prefix, String namespaceURI, String localName) throws XmlException {

@@ -39,15 +39,18 @@ public class XmlFactory {
 	}
 	
 	public static XmlWriter createWriter(Writer out) {
-		return FOUND_STAX_WRITER ? createStaxXmlWriter(out) : createBaseXmlWriter(out);
+		return FOUND_STAX_WRITER ? createStaxWriter(out) : createBaseWriter(out);
 	}
 	
-	private static XmlWriter createBaseXmlWriter(Writer writer){
-		return new XmlWriterBaseImpl(writer);
+	public static XmlWriter createBaseWriter(Writer out){
+		return new XmlWriterBaseImpl(out);
 	}
 	
-	private static XmlWriter createStaxXmlWriter(Writer writer){
-		return new XmlWriterStaxImpl(writer);
+	public static XmlWriter createStaxWriter(Writer out) throws XmlException {
+		if(!FOUND_STAX_WRITER){
+			throw new XmlException("cannot create stax writer : 'javax.xml.stream.XMLOutputFactory' is invalid");
+		}
+		return new XmlWriterStaxImpl(out);
 	}
 	
 	private static void tryToFoundValidStaxWriter(){

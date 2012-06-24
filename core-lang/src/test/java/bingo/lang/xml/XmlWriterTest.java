@@ -46,10 +46,14 @@ public class XmlWriterTest {
 		XmlWriter writer = XmlFactory.createWriter(out);
 		
 		writer.startDocument();
+		
 		writer.startElement("root")
 			   .namespace("http://a").namespace("b","http://b").attribute("attr1","val1")
 			   .startElement("b", "http://b", "b").text("hello").endElement()
+			   .emptyElement("empty")
+			   .startElement("empty").endElement()
 			  .endElement();
+		
 		writer.endDocument();
 		
 		writer.close();

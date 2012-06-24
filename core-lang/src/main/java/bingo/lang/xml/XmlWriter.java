@@ -31,6 +31,12 @@ public interface XmlWriter extends Closeable {
 	
 	XmlWriter startElement(String prefix,String namespaceURI,String localName);
 	
+	XmlWriter emptyElement(String localName);
+	
+	XmlWriter emptyElement(String namespaceURI,String localName);
+	
+	XmlWriter emptyElement(String prefix,String namespaceURI,String localName);
+	
 	/**
 	 * Writes the default namespace to the stream.
 	 */
