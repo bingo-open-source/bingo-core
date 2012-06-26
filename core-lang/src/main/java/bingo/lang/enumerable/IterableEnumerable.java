@@ -92,6 +92,29 @@ public class IterableEnumerable<T> implements Enumerable<T> {
 	public boolean isEmpty() {
 		return size() <= 0;
 	}
+	
+	public T get(int index) throws IndexOutOfBoundsException {
+		int size = size();
+		
+		if(size <= 0){
+			throw new IndexOutOfBoundsException("index:" + index);
+		}
+		
+		if(index < 0 || index >= size){
+			throw new IndexOutOfBoundsException("index:" + index);
+		}
+
+		int i=0;
+		
+		for(T e : this){
+			if(i == index){
+				return e;
+			}
+			i++;
+		}
+		
+		throw new IllegalStateException();
+    }
 
 	public T first() throws EmptyDataException {
 		for (T value : values) {

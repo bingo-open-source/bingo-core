@@ -34,6 +34,29 @@ public class SetEnumerable<E> extends AbstractSetWrapper<E> implements Enumerabl
 	    super(new HashSet<E>(c));
     }
 	
+	public E get(int index) throws IndexOutOfBoundsException {
+		int size = size();
+		
+		if(size <= 0){
+			throw new IndexOutOfBoundsException("index:" + index);
+		}
+		
+		if(index < 0 || index >= size){
+			throw new IndexOutOfBoundsException("index:" + index);
+		}
+
+		int i=0;
+		
+		for(E e : this){
+			if(i == index){
+				return e;
+			}
+			i++;
+		}
+		
+		throw new IllegalStateException();
+    }
+
 	public E first() throws EmptyDataException {
 	    if(set.size() == 0){
 	    	throw new EmptyDataException();

@@ -15,17 +15,24 @@
  */
 package bingo.lang;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 import java.nio.CharBuffer;
 
 import junit.framework.TestCase;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import bingo.lang.testing.junit.ConcurrentTestCase;
-
-import static org.junit.Assert.*;
 
 /**
  * {@link TestCase} of {@link Strings}
@@ -626,40 +633,107 @@ public class StringsTest extends ConcurrentTestCase {
     public void testSubstring_StringInt() {
         assertEquals("", Strings.substring(null, 0));
         assertEquals("", Strings.substring("", 0));
-        assertEquals("", Strings.substring("", 2));
         
-        assertEquals("", Strings.substring(SENTENCE, 80));
+        try {
+	        assertEquals("", Strings.substring("", 2));
+	        Assert.fail("IndexOutOfBoundsException should have been thrown");
+        } catch (IndexOutOfBoundsException e) {
+        }
+        
         assertEquals(BAZ, Strings.substring(SENTENCE, 8));
-        assertEquals(BAZ, Strings.substring(SENTENCE, -3));
         assertEquals(SENTENCE, Strings.substring(SENTENCE, 0));
-        assertEquals("abc", Strings.substring("abc", -4));
-        assertEquals("abc", Strings.substring("abc", -3));
-        assertEquals("bc", Strings.substring("abc", -2));
-        assertEquals("c", Strings.substring("abc", -1));
+        
+        try {
+        	assertEquals("abc", Strings.substring("abc", -4));
+	        Assert.fail("IndexOutOfBoundsException should have been thrown");
+        } catch (IndexOutOfBoundsException e) {
+        }
+
         assertEquals("abc", Strings.substring("abc", 0));
         assertEquals("bc", Strings.substring("abc", 1));
         assertEquals("c", Strings.substring("abc", 2));
         assertEquals("", Strings.substring("abc", 3));
-        assertEquals("", Strings.substring("abc", 4));
     }
     
 	@Test
     public void testSubstring_StringIntInt() {
-        assertEquals("", Strings.substring(null, 0, 0));
-        assertEquals("", Strings.substring(null, 1, 2));
+        assertEquals("", Strings.substring((String)null, 0, 0));
+        assertEquals("", Strings.substring((String)null, 1, 2));
         assertEquals("", Strings.substring("", 0, 0));
-        assertEquals("", Strings.substring("", 1, 2));
-        assertEquals("", Strings.substring("", -2, -1));
+
+        try {
+        	assertEquals("", Strings.substring("", 1, 2));
+	        Assert.fail("IndexOutOfBoundsException should have been thrown");
+        } catch (IndexOutOfBoundsException e) {
+        }
         
-        assertEquals("", Strings.substring(SENTENCE, 8, 6));
+        try {
+        	assertEquals("", Strings.substring("", -2, -1));
+	        Assert.fail("IndexOutOfBoundsException should have been thrown");
+        } catch (IndexOutOfBoundsException e) {
+        }
+        
+        try {
+        	assertEquals("", Strings.substring(SENTENCE, 8, 6));
+	        Assert.fail("IndexOutOfBoundsException should have been thrown");
+        } catch (IndexOutOfBoundsException e) {
+        }
+        
         assertEquals(foo, Strings.substring(SENTENCE, 0, 3));
-        assertEquals("o", Strings.substring(SENTENCE, -9, 3));
-        assertEquals(foo, Strings.substring(SENTENCE, 0, -8));
-        assertEquals("o", Strings.substring(SENTENCE, -9, -8));
-        assertEquals(SENTENCE, Strings.substring(SENTENCE, 0, 80));
         assertEquals("", Strings.substring(SENTENCE, 2, 2));
-        assertEquals("b",Strings.substring("abc", -2, -1));
     }
+	
+    @Test
+    public void testSubstringChars() {
+        char[] buffer = " name:  value    ".toCharArray();
+
+        Assert.assertEquals(" name", Strings.substring(buffer,0, 5));
+        Assert.assertEquals("  value    ", Strings.substring(buffer,6,buffer.length));
+        Assert.assertEquals("name", Strings.substringTrimmed(buffer,0, 5));
+        Assert.assertEquals("value", Strings.substringTrimmed(buffer, 6, buffer.length));
+        Assert.assertEquals("", Strings.substringTrimmed(buffer, 13, buffer.length));
+    }
+
+    @Test
+    public void testSubstringCharsIndexOfOutBound() {
+        char[] buffer = "stuff".toCharArray();
+        try {
+            Strings.substring(buffer,-2, 10);
+            Assert.fail("IndexOutOfBoundsException should have been thrown");
+        } catch (IndexOutOfBoundsException ex) {
+            // expected
+        }
+        try {
+        	Strings.substringTrimmed(buffer,-2, 10);
+            Assert.fail("IndexOutOfBoundsException should have been thrown");
+        } catch (IndexOutOfBoundsException ex) {
+            // expected
+        }
+        try {
+        	Strings.substring(buffer,12, 10);
+            Assert.fail("IndexOutOfBoundsException should have been thrown");
+        } catch (IndexOutOfBoundsException ex) {
+            // expected
+        }
+        try {
+        	Strings.substringTrimmed(buffer,12, 10);
+            Assert.fail("IndexOutOfBoundsException should have been thrown");
+        } catch (IndexOutOfBoundsException ex) {
+            // expected
+        }
+        try {
+        	Strings.substring(buffer,2, 1);
+            Assert.fail("IndexOutOfBoundsException should have been thrown");
+        } catch (IndexOutOfBoundsException ex) {
+            // expected
+        }
+        try {
+        	Strings.substringTrimmed(buffer,2, 1);
+            Assert.fail("IndexOutOfBoundsException should have been thrown");
+        } catch (IndexOutOfBoundsException ex) {
+            // expected
+        }
+    }	
            
 	@Test
     public void testLeft_String() {

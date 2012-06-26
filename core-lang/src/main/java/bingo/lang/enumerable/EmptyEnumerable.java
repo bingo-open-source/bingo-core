@@ -30,6 +30,10 @@ import bingo.lang.iterable.EmptyIterator;
 public class EmptyEnumerable<E> implements Enumerable<E> {
 	
 	private EmptyIterator<E> iterator = null;
+	
+	public E get(int index) throws IndexOutOfBoundsException {
+	    throw new IndexOutOfBoundsException("index:" + index);
+    }
 
 	public E first() throws EmptyDataException {
         throw new EmptyDataException();

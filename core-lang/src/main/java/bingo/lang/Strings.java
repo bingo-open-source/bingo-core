@@ -1090,117 +1090,105 @@ public class Strings {
 	 * </p>
 	 * 
 	 * <p>
-	 * A negative start position can be used to start {@code n} characters from the end of the String.
-	 * </p>
-	 * 
-	 * <p>
 	 * A {@code null} String will return "". An empty ("") String will return "".
 	 * </p>
 	 * 
 	 * <pre>
-	 * StringUtils.substring(null, *)   = ""
-	 * StringUtils.substring("", *)     = ""
-	 * StringUtils.substring("abc", 0)  = "abc"
-	 * StringUtils.substring("abc", 2)  = "c"
-	 * StringUtils.substring("abc", 4)  = ""
-	 * StringUtils.substring("abc", -2) = "bc"
-	 * StringUtils.substring("abc", -4) = "abc"
+	 * Strings.substring(null, *)   = ""
+	 * Strings.substring("", *)     = ""
+	 * Strings.substring("abc", 0)  = "abc"
+	 * Strings.substring("abc", 2)  = "c"
 	 * </pre>
 	 * 
 	 * @param string the String to get the substring from, may be null
-	 * @param start the position to start from, negative means count back from the end of the String by this many
-	 *            characters
+	 * @param start the position to start from
 	 * @return substring from start position, "" if null String input
+	 * 
+	 * @exception IndexOutOfBoundsException
 	 */
-	public static String substring(String string, int start) {
+	public static String substring(String string, int start) throws IndexOutOfBoundsException{
 		if (string == null) {
-			return EMPTY;
-		}
-
-		// handle negatives, which means last n characters
-		if (start < 0) {
-			start = string.length() + start; // remember start is negative
-		}
-
-		if (start < 0) {
-			start = 0;
-		}
-		if (start > string.length()) {
 			return EMPTY;
 		}
 
 		return string.substring(start);
 	}
-
+	
 	/**
 	 * <p>
 	 * Gets a substring from the specified String avoiding exceptions.
 	 * </p>
 	 * 
-	 * <p>
-	 * A negative start position can be used to start/end {@code n} characters from the end of the String.
-	 * </p>
-	 * 
-	 * <p>
-	 * The returned substring starts with the character in the {@code start} position and ends before the {@code end}
-	 * position. All position counting is zero-based -- i.e., to start at the beginning of the string use {@code start =
-	 * 0}. Negative start and end positions can be used to specify offsets relative to the end of the String.
-	 * </p>
-	 * 
-	 * <p>
-	 * If {@code start} is not strictly to the left of {@code end}, "" is returned.
-	 * </p>
-	 * 
 	 * <pre>
-	 * StringUtils.substring(null, *, *)    = ""
-	 * StringUtils.substring("", * ,  *)    = "";
-	 * StringUtils.substring("abc", 0, 2)   = "ab"
-	 * StringUtils.substring("abc", 2, 0)   = ""
-	 * StringUtils.substring("abc", 2, 4)   = "c"
-	 * StringUtils.substring("abc", 4, 6)   = ""
-	 * StringUtils.substring("abc", 2, 2)   = ""
-	 * StringUtils.substring("abc", -2, -1) = "b"
-	 * StringUtils.substring("abc", -4, 2)  = "ab"
+	 * Strings.substring(null, *, *)    = ""
+	 * Strings.substring("", * ,  *)    = "";
+	 * Strings.substring("abc", 0, 2)   = "ab"
+	 * Strings.substring("abc", 2, 4)   = "c"
+	 * Strings.substring("abc", 4, 6)   = ""
+	 * Strings.substring("abc", 2, 2)   = ""
 	 * </pre>
 	 * 
 	 * @param string the String to get the substring from, may be null
-	 * @param start the position to start from, negative means count back from the end of the String by this many
-	 *            characters
-	 * @param end the position to end at (exclusive), negative means count back from the end of the String by this many
-	 *            characters
-	 * @return substring from start position to end position, "" if null String input
+	 * @param start the position to start from
+	 * @param end the position to end at (exclusive)
+	 * @return substring from start position to end position,"" if null String input
+	 * 
+	 * @exception IndexOutOfBoundsException
 	 */
-	public static String substring(String string, int start, int end) {
+	public static String substring(String string, int start, int end) throws IndexOutOfBoundsException {
 		if (string == null) {
 			return EMPTY;
 		}
-
-		// handle negatives
-		if (end < 0) {
-			end = string.length() + end; // remember end is negative
-		}
-		if (start < 0) {
-			start = string.length() + start; // remember start is negative
-		}
-
-		// check length next
-		if (end > string.length()) {
-			end = string.length();
-		}
-
-		// if start is greater than end, return ""
-		if (start > end) {
+		
+		return string.substring(start, end);
+	}
+	
+	public static String substring(char[] chars, int start, int end) throws IndexOutOfBoundsException {
+		if(null == chars){
 			return EMPTY;
 		}
-
-		if (start < 0) {
-			start = 0;
+		
+        if (start < 0) {
+            throw new IndexOutOfBoundsException("Negative start index : " + start);
+        }
+        
+        if (end > chars.length) {
+            throw new IndexOutOfBoundsException("end index : " + end + " > length : " + chars.length);
+        }
+        
+        if (start > end) { 
+            throw new IndexOutOfBoundsException("start index : " + start + " > end index : " + end);
+        }
+        
+        return new String(chars, start, end - start);
+	}	
+	
+	public static String substringTrimmed(char[] chars, int start, int end) throws IndexOutOfBoundsException {
+		if(null == chars){
+			return EMPTY;
 		}
-		if (end < 0) {
-			end = 0;
-		}
-
-		return string.substring(start, end);
+		
+        if (start < 0) {
+            throw new IndexOutOfBoundsException("Negative start index : " + start);
+        }
+        
+        if (end > chars.length) {
+            throw new IndexOutOfBoundsException("end index : " + end + " > length : " + chars.length);
+        }
+        
+        if (start > end) { 
+            throw new IndexOutOfBoundsException("start index : " + start + " > end index : " + end);
+        }
+        
+        while (start < end && Character.isWhitespace(chars[start])) {
+            start++;
+        }
+        
+        while (end > start && Character.isWhitespace(chars[end - 1])) {
+            end--;
+        }        
+        
+        return new String(chars, start, end - start);
 	}
 
 	// Left/Right/Mid
@@ -1216,12 +1204,12 @@ public class Strings {
 	 * </p>
 	 * 
 	 * <pre>
-	 * StringUtils.left(null, *)    = ""
-	 * StringUtils.left(*, -ve)     = ""
-	 * StringUtils.left("", *)      = ""
-	 * StringUtils.left("abc", 0)   = ""
-	 * StringUtils.left("abc", 2)   = "ab"
-	 * StringUtils.left("abc", 4)   = "abc"
+	 * Strings.left(null, *)    = ""
+	 * Strings.left(*, -ve)     = ""
+	 * Strings.left("", *)      = ""
+	 * Strings.left("abc", 0)   = ""
+	 * Strings.left("abc", 2)   = "ab"
+	 * Strings.left("abc", 4)   = "abc"
 	 * </pre>
 	 * 
 	 * @param string the String to get the leftmost characters from, may be null
@@ -1252,12 +1240,12 @@ public class Strings {
 	 * </p>
 	 * 
 	 * <pre>
-	 * StringUtils.right(null, *)    = ""
-	 * StringUtils.right(*, -ve)     = ""
-	 * StringUtils.right("", *)      = ""
-	 * StringUtils.right("abc", 0)   = ""
-	 * StringUtils.right("abc", 2)   = "bc"
-	 * StringUtils.right("abc", 4)   = "abc"
+	 * Strings.right(null, *)    = ""
+	 * Strings.right(*, -ve)     = ""
+	 * Strings.right("", *)      = ""
+	 * Strings.right("abc", 0)   = ""
+	 * Strings.right("abc", 2)   = "bc"
+	 * Strings.right("abc", 4)   = "abc"
 	 * </pre>
 	 * 
 	 * @param string the String to get the rightmost characters from, may be null
@@ -1368,10 +1356,10 @@ public class Strings {
 	 * </p>
 	 * 
 	 * <pre>
-	 * StringUtils.replaceChars(null, *, *)        = ""
-	 * StringUtils.replaceChars("", *, *)          = ""
-	 * StringUtils.replaceChars("abcba", 'b', 'y') = "aycya"
-	 * StringUtils.replaceChars("abcba", 'z', 'y') = "abcba"
+	 * Strings.replaceChars(null, *, *)        = ""
+	 * Strings.replaceChars("", *, *)          = ""
+	 * Strings.replaceChars("abcba", 'b', 'y') = "aycya"
+	 * Strings.replaceChars("abcba", 'z', 'y') = "abcba"
 	 * </pre>
 	 * 
 	 * @param text String to replace characters in, may be null
@@ -1533,10 +1521,10 @@ public class Strings {
 	 * </p>
 	 * 
 	 * <pre>
-	 * StringUtils.indexOf(null, *)         = -1
-	 * StringUtils.indexOf("", *)           = -1
-	 * StringUtils.indexOf("aabaabaa", 'a') = 0
-	 * StringUtils.indexOf("aabaabaa", 'b') = 2
+	 * Strings.indexOf(null, *)         = -1
+	 * Strings.indexOf("", *)           = -1
+	 * Strings.indexOf("aabaabaa", 'a') = 0
+	 * Strings.indexOf("aabaabaa", 'b') = 2
 	 * </pre>
 	 * 
 	 * @param string the CharSequence to check, may be null
@@ -1562,12 +1550,12 @@ public class Strings {
 	 * </p>
 	 * 
 	 * <pre>
-	 * StringUtils.indexOf(null, *, *)          = -1
-	 * StringUtils.indexOf("", *, *)            = -1
-	 * StringUtils.indexOf("aabaabaa", 'b', 0)  = 2
-	 * StringUtils.indexOf("aabaabaa", 'b', 3)  = 5
-	 * StringUtils.indexOf("aabaabaa", 'b', 9)  = -1
-	 * StringUtils.indexOf("aabaabaa", 'b', -1) = 2
+	 * Strings.indexOf(null, *, *)          = -1
+	 * Strings.indexOf("", *, *)            = -1
+	 * Strings.indexOf("aabaabaa", 'b', 0)  = 2
+	 * Strings.indexOf("aabaabaa", 'b', 3)  = 5
+	 * Strings.indexOf("aabaabaa", 'b', 9)  = -1
+	 * Strings.indexOf("aabaabaa", 'b', -1) = 2
 	 * </pre>
 	 * 
 	 * @param string the CharSequence to check, may be null
@@ -1593,14 +1581,14 @@ public class Strings {
 	 * </p>
 	 * 
 	 * <pre>
-	 * StringUtils.indexOf(null, *)          = -1
-	 * StringUtils.indexOf(*, null)          = -1
-	 * StringUtils.indexOf("", "")           = 0
-	 * StringUtils.indexOf("", *)            = -1 (except when * = "")
-	 * StringUtils.indexOf("aabaabaa", "a")  = 0
-	 * StringUtils.indexOf("aabaabaa", "b")  = 2
-	 * StringUtils.indexOf("aabaabaa", "ab") = 1
-	 * StringUtils.indexOf("aabaabaa", "")   = 0
+	 * Strings.indexOf(null, *)          = -1
+	 * Strings.indexOf(*, null)          = -1
+	 * Strings.indexOf("", "")           = 0
+	 * Strings.indexOf("", *)            = -1 (except when * = "")
+	 * Strings.indexOf("aabaabaa", "a")  = 0
+	 * Strings.indexOf("aabaabaa", "b")  = 2
+	 * Strings.indexOf("aabaabaa", "ab") = 1
+	 * Strings.indexOf("aabaabaa", "")   = 0
 	 * </pre>
 	 * 
 	 * @param string the CharSequence to check, may be null
@@ -1627,18 +1615,18 @@ public class Strings {
 	 * </p>
 	 * 
 	 * <pre>
-	 * StringUtils.indexOf(null, *, *)          = -1
-	 * StringUtils.indexOf(*, null, *)          = -1
-	 * StringUtils.indexOf("", "", 0)           = 0
-	 * StringUtils.indexOf("", *, 0)            = -1 (except when * = "")
-	 * StringUtils.indexOf("aabaabaa", "a", 0)  = 0
-	 * StringUtils.indexOf("aabaabaa", "b", 0)  = 2
-	 * StringUtils.indexOf("aabaabaa", "ab", 0) = 1
-	 * StringUtils.indexOf("aabaabaa", "b", 3)  = 5
-	 * StringUtils.indexOf("aabaabaa", "b", 9)  = -1
-	 * StringUtils.indexOf("aabaabaa", "b", -1) = 2
-	 * StringUtils.indexOf("aabaabaa", "", 2)   = 2
-	 * StringUtils.indexOf("abc", "", 9)        = 3
+	 * Strings.indexOf(null, *, *)          = -1
+	 * Strings.indexOf(*, null, *)          = -1
+	 * Strings.indexOf("", "", 0)           = 0
+	 * Strings.indexOf("", *, 0)            = -1 (except when * = "")
+	 * Strings.indexOf("aabaabaa", "a", 0)  = 0
+	 * Strings.indexOf("aabaabaa", "b", 0)  = 2
+	 * Strings.indexOf("aabaabaa", "ab", 0) = 1
+	 * Strings.indexOf("aabaabaa", "b", 3)  = 5
+	 * Strings.indexOf("aabaabaa", "b", 9)  = -1
+	 * Strings.indexOf("aabaabaa", "b", -1) = 2
+	 * Strings.indexOf("aabaabaa", "", 2)   = 2
+	 * Strings.indexOf("abc", "", 9)        = 3
 	 * </pre>
 	 * 
 	 * @param string the CharSequence to check, may be null
@@ -1665,12 +1653,12 @@ public class Strings {
 	 * </p>
 	 * 
 	 * <pre>
-	 * StringUtils.indexOfIgnoreCase(null, *)          = -1
-	 * StringUtils.indexOfIgnoreCase(*, null)          = -1
-	 * StringUtils.indexOfIgnoreCase("", "")           = 0
-	 * StringUtils.indexOfIgnoreCase("aabaabaa", "a")  = 0
-	 * StringUtils.indexOfIgnoreCase("aabaabaa", "b")  = 2
-	 * StringUtils.indexOfIgnoreCase("aabaabaa", "ab") = 1
+	 * Strings.indexOfIgnoreCase(null, *)          = -1
+	 * Strings.indexOfIgnoreCase(*, null)          = -1
+	 * Strings.indexOfIgnoreCase("", "")           = 0
+	 * Strings.indexOfIgnoreCase("aabaabaa", "a")  = 0
+	 * Strings.indexOfIgnoreCase("aabaabaa", "b")  = 2
+	 * Strings.indexOfIgnoreCase("aabaabaa", "ab") = 1
 	 * </pre>
 	 * 
 	 * @param string the CharSequence to check, may be null
@@ -1693,17 +1681,17 @@ public class Strings {
 	 * </p>
 	 * 
 	 * <pre>
-	 * StringUtils.indexOfIgnoreCase(null, *, *)          = -1
-	 * StringUtils.indexOfIgnoreCase(*, null, *)          = -1
-	 * StringUtils.indexOfIgnoreCase("", "", 0)           = 0
-	 * StringUtils.indexOfIgnoreCase("aabaabaa", "A", 0)  = 0
-	 * StringUtils.indexOfIgnoreCase("aabaabaa", "B", 0)  = 2
-	 * StringUtils.indexOfIgnoreCase("aabaabaa", "AB", 0) = 1
-	 * StringUtils.indexOfIgnoreCase("aabaabaa", "B", 3)  = 5
-	 * StringUtils.indexOfIgnoreCase("aabaabaa", "B", 9)  = -1
-	 * StringUtils.indexOfIgnoreCase("aabaabaa", "B", -1) = 2
-	 * StringUtils.indexOfIgnoreCase("aabaabaa", "", 2)   = 2
-	 * StringUtils.indexOfIgnoreCase("abc", "", 9)        = 3
+	 * Strings.indexOfIgnoreCase(null, *, *)          = -1
+	 * Strings.indexOfIgnoreCase(*, null, *)          = -1
+	 * Strings.indexOfIgnoreCase("", "", 0)           = 0
+	 * Strings.indexOfIgnoreCase("aabaabaa", "A", 0)  = 0
+	 * Strings.indexOfIgnoreCase("aabaabaa", "B", 0)  = 2
+	 * Strings.indexOfIgnoreCase("aabaabaa", "AB", 0) = 1
+	 * Strings.indexOfIgnoreCase("aabaabaa", "B", 3)  = 5
+	 * Strings.indexOfIgnoreCase("aabaabaa", "B", 9)  = -1
+	 * Strings.indexOfIgnoreCase("aabaabaa", "B", -1) = 2
+	 * Strings.indexOfIgnoreCase("aabaabaa", "", 2)   = 2
+	 * Strings.indexOfIgnoreCase("abc", "", 9)        = 3
 	 * </pre>
 	 * 
 	 * @param string the CharSequence to check, may be null
@@ -1745,13 +1733,13 @@ public class Strings {
 	 * </p>
 	 * 
 	 * <pre>
-	 * StringUtils.indexOfAny(null, *)                = -1
-	 * StringUtils.indexOfAny("", *)                  = -1
-	 * StringUtils.indexOfAny(*, null)                = -1
-	 * StringUtils.indexOfAny(*, [])                  = -1
-	 * StringUtils.indexOfAny("zzabyycdxx",['z','a']) = 0
-	 * StringUtils.indexOfAny("zzabyycdxx",['b','y']) = 3
-	 * StringUtils.indexOfAny("aba", ['z'])           = -1
+	 * Strings.indexOfAny(null, *)                = -1
+	 * Strings.indexOfAny("", *)                  = -1
+	 * Strings.indexOfAny(*, null)                = -1
+	 * Strings.indexOfAny(*, [])                  = -1
+	 * Strings.indexOfAny("zzabyycdxx",['z','a']) = 0
+	 * Strings.indexOfAny("zzabyycdxx",['b','y']) = 3
+	 * Strings.indexOfAny("aba", ['z'])           = -1
 	 * </pre>
 	 * 
 	 * @param string the CharSequence to check, may be null
@@ -1794,13 +1782,13 @@ public class Strings {
 	 * </p>
 	 * 
 	 * <pre>
-	 * StringUtils.indexOfAny(null, *)            = -1
-	 * StringUtils.indexOfAny("", *)              = -1
-	 * StringUtils.indexOfAny(*, null)            = -1
-	 * StringUtils.indexOfAny(*, "")              = -1
-	 * StringUtils.indexOfAny("zzabyycdxx", "za") = 0
-	 * StringUtils.indexOfAny("zzabyycdxx", "by") = 3
-	 * StringUtils.indexOfAny("aba","z")          = -1
+	 * Strings.indexOfAny(null, *)            = -1
+	 * Strings.indexOfAny("", *)              = -1
+	 * Strings.indexOfAny(*, null)            = -1
+	 * Strings.indexOfAny(*, "")              = -1
+	 * Strings.indexOfAny("zzabyycdxx", "za") = 0
+	 * Strings.indexOfAny("zzabyycdxx", "by") = 3
+	 * Strings.indexOfAny("aba","z")          = -1
 	 * </pre>
 	 * 
 	 * @param string the CharSequence to check, may be null
@@ -1925,10 +1913,10 @@ public class Strings {
 	 * </p>
 	 * 
 	 * <pre>
-	 * StringUtils.lastIndexOf(null, *)         = -1
-	 * StringUtils.lastIndexOf("", *)           = -1
-	 * StringUtils.lastIndexOf("aabaabaa", 'a') = 7
-	 * StringUtils.lastIndexOf("aabaabaa", 'b') = 5
+	 * Strings.lastIndexOf(null, *)         = -1
+	 * Strings.lastIndexOf("", *)           = -1
+	 * Strings.lastIndexOf("aabaabaa", 'a') = 7
+	 * Strings.lastIndexOf("aabaabaa", 'b') = 5
 	 * </pre>
 	 * 
 	 * @param string the CharSequence to check, may be null
@@ -1954,14 +1942,14 @@ public class Strings {
 	 * </p>
 	 * 
 	 * <pre>
-	 * StringUtils.lastIndexOf(null, *, *)          = -1
-	 * StringUtils.lastIndexOf("", *,  *)           = -1
-	 * StringUtils.lastIndexOf("aabaabaa", 'b', 8)  = 5
-	 * StringUtils.lastIndexOf("aabaabaa", 'b', 4)  = 2
-	 * StringUtils.lastIndexOf("aabaabaa", 'b', 0)  = -1
-	 * StringUtils.lastIndexOf("aabaabaa", 'b', 9)  = 5
-	 * StringUtils.lastIndexOf("aabaabaa", 'b', -1) = -1
-	 * StringUtils.lastIndexOf("aabaabaa", 'a', 0)  = 0
+	 * Strings.lastIndexOf(null, *, *)          = -1
+	 * Strings.lastIndexOf("", *,  *)           = -1
+	 * Strings.lastIndexOf("aabaabaa", 'b', 8)  = 5
+	 * Strings.lastIndexOf("aabaabaa", 'b', 4)  = 2
+	 * Strings.lastIndexOf("aabaabaa", 'b', 0)  = -1
+	 * Strings.lastIndexOf("aabaabaa", 'b', 9)  = 5
+	 * Strings.lastIndexOf("aabaabaa", 'b', -1) = -1
+	 * Strings.lastIndexOf("aabaabaa", 'a', 0)  = 0
 	 * </pre>
 	 * 
 	 * @param string the CharSequence to check, may be null
@@ -1987,13 +1975,13 @@ public class Strings {
 	 * </p>
 	 * 
 	 * <pre>
-	 * StringUtils.lastIndexOf(null, *)          = -1
-	 * StringUtils.lastIndexOf(*, null)          = -1
-	 * StringUtils.lastIndexOf("", "")           = 0
-	 * StringUtils.lastIndexOf("aabaabaa", "a")  = 7
-	 * StringUtils.lastIndexOf("aabaabaa", "b")  = 5
-	 * StringUtils.lastIndexOf("aabaabaa", "ab") = 4
-	 * StringUtils.lastIndexOf("aabaabaa", "")   = 8
+	 * Strings.lastIndexOf(null, *)          = -1
+	 * Strings.lastIndexOf(*, null)          = -1
+	 * Strings.lastIndexOf("", "")           = 0
+	 * Strings.lastIndexOf("aabaabaa", "a")  = 7
+	 * Strings.lastIndexOf("aabaabaa", "b")  = 5
+	 * Strings.lastIndexOf("aabaabaa", "ab") = 4
+	 * Strings.lastIndexOf("aabaabaa", "")   = 8
 	 * </pre>
 	 * 
 	 * @param string the CharSequence to check, may be null
@@ -2020,15 +2008,15 @@ public class Strings {
 	 * </p>
 	 * 
 	 * <pre>
-	 * StringUtils.lastIndexOf(null, *, *)          = -1
-	 * StringUtils.lastIndexOf(*, null, *)          = -1
-	 * StringUtils.lastIndexOf("aabaabaa", "a", 8)  = 7
-	 * StringUtils.lastIndexOf("aabaabaa", "b", 8)  = 5
-	 * StringUtils.lastIndexOf("aabaabaa", "ab", 8) = 4
-	 * StringUtils.lastIndexOf("aabaabaa", "b", 9)  = 5
-	 * StringUtils.lastIndexOf("aabaabaa", "b", -1) = -1
-	 * StringUtils.lastIndexOf("aabaabaa", "a", 0)  = 0
-	 * StringUtils.lastIndexOf("aabaabaa", "b", 0)  = -1
+	 * Strings.lastIndexOf(null, *, *)          = -1
+	 * Strings.lastIndexOf(*, null, *)          = -1
+	 * Strings.lastIndexOf("aabaabaa", "a", 8)  = 7
+	 * Strings.lastIndexOf("aabaabaa", "b", 8)  = 5
+	 * Strings.lastIndexOf("aabaabaa", "ab", 8) = 4
+	 * Strings.lastIndexOf("aabaabaa", "b", 9)  = 5
+	 * Strings.lastIndexOf("aabaabaa", "b", -1) = -1
+	 * Strings.lastIndexOf("aabaabaa", "a", 0)  = 0
+	 * Strings.lastIndexOf("aabaabaa", "b", 0)  = -1
 	 * </pre>
 	 * 
 	 * @param string the CharSequence to check, may be null
@@ -2055,11 +2043,11 @@ public class Strings {
 	 * </p>
 	 * 
 	 * <pre>
-	 * StringUtils.lastIndexOfIgnoreCase(null, *)          = -1
-	 * StringUtils.lastIndexOfIgnoreCase(*, null)          = -1
-	 * StringUtils.lastIndexOfIgnoreCase("aabaabaa", "A")  = 7
-	 * StringUtils.lastIndexOfIgnoreCase("aabaabaa", "B")  = 5
-	 * StringUtils.lastIndexOfIgnoreCase("aabaabaa", "AB") = 4
+	 * Strings.lastIndexOfIgnoreCase(null, *)          = -1
+	 * Strings.lastIndexOfIgnoreCase(*, null)          = -1
+	 * Strings.lastIndexOfIgnoreCase("aabaabaa", "A")  = 7
+	 * Strings.lastIndexOfIgnoreCase("aabaabaa", "B")  = 5
+	 * Strings.lastIndexOfIgnoreCase("aabaabaa", "AB") = 4
 	 * </pre>
 	 * 
 	 * @param string the CharSequence to check, may be null
@@ -2088,15 +2076,15 @@ public class Strings {
 	 * </p>
 	 * 
 	 * <pre>
-	 * StringUtils.lastIndexOfIgnoreCase(null, *, *)          = -1
-	 * StringUtils.lastIndexOfIgnoreCase(*, null, *)          = -1
-	 * StringUtils.lastIndexOfIgnoreCase("aabaabaa", "A", 8)  = 7
-	 * StringUtils.lastIndexOfIgnoreCase("aabaabaa", "B", 8)  = 5
-	 * StringUtils.lastIndexOfIgnoreCase("aabaabaa", "AB", 8) = 4
-	 * StringUtils.lastIndexOfIgnoreCase("aabaabaa", "B", 9)  = 5
-	 * StringUtils.lastIndexOfIgnoreCase("aabaabaa", "B", -1) = -1
-	 * StringUtils.lastIndexOfIgnoreCase("aabaabaa", "A", 0)  = 0
-	 * StringUtils.lastIndexOfIgnoreCase("aabaabaa", "B", 0)  = -1
+	 * Strings.lastIndexOfIgnoreCase(null, *, *)          = -1
+	 * Strings.lastIndexOfIgnoreCase(*, null, *)          = -1
+	 * Strings.lastIndexOfIgnoreCase("aabaabaa", "A", 8)  = 7
+	 * Strings.lastIndexOfIgnoreCase("aabaabaa", "B", 8)  = 5
+	 * Strings.lastIndexOfIgnoreCase("aabaabaa", "AB", 8) = 4
+	 * Strings.lastIndexOfIgnoreCase("aabaabaa", "B", 9)  = 5
+	 * Strings.lastIndexOfIgnoreCase("aabaabaa", "B", -1) = -1
+	 * Strings.lastIndexOfIgnoreCase("aabaabaa", "A", 0)  = 0
+	 * Strings.lastIndexOfIgnoreCase("aabaabaa", "B", 0)  = -1
 	 * </pre>
 	 * 
 	 * @param string the CharSequence to check, may be null
@@ -2633,10 +2621,10 @@ public class Strings {
 	 * </p>
 	 * 
 	 * <pre>
-	 * StringUtils.removeBlank(null)         = ""
-	 * StringUtils.removeBlank("")           = ""
-	 * StringUtils.removeBlank("abc")        = "abc"
-	 * StringUtils.removeBlank("   ab  c  ") = "abc"
+	 * Strings.removeBlank(null)         = ""
+	 * Strings.removeBlank("")           = ""
+	 * Strings.removeBlank("abc")        = "abc"
+	 * Strings.removeBlank("   ab  c  ") = "abc"
 	 * </pre>
 	 * 
 	 * @param str the String to delete whitespace from, may be null

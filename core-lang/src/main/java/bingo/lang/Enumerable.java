@@ -26,6 +26,8 @@ public interface Enumerable<E> extends Iterable<E> {
 	
 	boolean isEmpty();
 	
+	E get(int index) throws IndexOutOfBoundsException;
+	
 	E first() throws EmptyDataException;
 	
 	E firstOrNull();
