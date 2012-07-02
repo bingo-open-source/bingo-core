@@ -213,7 +213,8 @@ public class NumberConverterTest extends ConcurrentTestCase {
             "from Integer Zero",
             "from Long",
             "from Float",
-            "from Double"
+            "from Double",
+            "from BigDecimal"
         };
         
         Object[] input = { 
@@ -231,6 +232,7 @@ public class NumberConverterTest extends ConcurrentTestCase {
             new Long(10),
             new Float(11.1),
             new Double(12.2),
+            new BigDecimal("0.5")
         };
         
         Float[] expected = { 
@@ -247,7 +249,8 @@ public class NumberConverterTest extends ConcurrentTestCase {
             new Float(0.0),
             new Float(10),
             new Float(11.1),
-            new Float(12.2)
+            new Float(12.2),
+            new Float("0.5")
         };
         
         for(int i=0;i<expected.length;i++) {
@@ -279,7 +282,8 @@ public class NumberConverterTest extends ConcurrentTestCase {
             "from Integer",
             "from Long",
             "from Float",
-            "from Double"
+            "from Double",
+            "from BigDecimal"
         };
         
         Object[] input = { 
@@ -295,7 +299,8 @@ public class NumberConverterTest extends ConcurrentTestCase {
             new Integer(9),
             new Long(10),
             new Float(11.1),
-            new Double(12.2)
+            new Double(12.2),
+            new BigDecimal("0.5")
         };
         
         Double[] expected = { 
@@ -311,8 +316,11 @@ public class NumberConverterTest extends ConcurrentTestCase {
             new Double(9),
             new Double(10),
             new Double(11.1),
-            new Double(12.2)
+            new Double(12.2),
+            new Double("0.5")
         };
+        
+        assertEquals(new Double("0.5"),Converts.convert(new BigDecimal("0.5"), Double.class));
         
         for(int i=0;i<expected.length;i++) {
             assertEquals(

@@ -51,18 +51,10 @@ public class NumberConverters {
 
 		@Override
 	    protected Float toNumber(Class<?> targetType, Number number) {
-			long longValue = number.longValue();
+			double doubleValue = number.doubleValue();
 			
-			if(longValue == 0l){
-				return new Float(0.0);
-			}
-			
-	        if (longValue > Float.MAX_VALUE) {
-	        	throw new ConvertException("value '{0}' is too large for type '{1}'",longValue,targetType.getName());
-	        }
-	        
-	        if (longValue < Float.MIN_VALUE) {
-	        	throw new ConvertException("value '{0}' is too small for type '{1}'",longValue,targetType.getName());
+	        if (doubleValue > Float.MAX_VALUE) {
+	        	throw new ConvertException("value '{0}' is too large for type '{1}'",doubleValue,targetType.getName());
 	        }
 	        
 	        return Float.valueOf(number.floatValue());
@@ -78,20 +70,6 @@ public class NumberConverters {
 
 		@Override
 	    protected Double toNumber(Class<?> targetType, Number number) {
-			long longValue = number.longValue();
-			
-			if(longValue == 0l){
-				return new Double(0.0);
-			}			
-			
-	        if (longValue > Double.MAX_VALUE) {
-	        	throw new ConvertException("value '{0}' is too large for type '{1}'",longValue,targetType.getName());
-	        }
-	        
-	        if (longValue < Double.MIN_VALUE) {
-	        	throw new ConvertException("value '{0}' is too small for type '{1}'",longValue,targetType.getName());
-	        }
-	        
 	        return Double.valueOf(number.doubleValue());
 	    }
 
