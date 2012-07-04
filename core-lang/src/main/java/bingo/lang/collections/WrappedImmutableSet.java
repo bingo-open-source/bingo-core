@@ -16,18 +16,16 @@
 package bingo.lang.collections;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-
-import bingo.lang.Assert;
 
 public class WrappedImmutableSet<E> extends AbstractImmutableCollection<E> implements Set<E> {
 	
 	private final Set<E> set;
 	
 	public WrappedImmutableSet(Set<E> set){
-		Assert.notNull(set,"wrapped set must not be null");
-		this.set = set;
+		this.set = null == set ? new HashSet<E>() : set;
 	}
 
 	public boolean contains(Object o) {

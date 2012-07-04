@@ -15,20 +15,18 @@
  */
 package bingo.lang.collections;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
-
-import bingo.lang.Assert;
 
 public class WrappedImmutableList<E> extends AbstractImmutableList<E> implements List<E> {
 	
 	private final List<E> list;
 	
 	public WrappedImmutableList(List<E> list){
-		Assert.notNull(list,"the wrapped list must not be null");
-		this.list = list;
+		this.list = null == list ? new ArrayList<E>() : list;
 	}
 	
 	public boolean contains(Object o) {

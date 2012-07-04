@@ -20,6 +20,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import bingo.lang.enumerable.ArrayEnumerable;
@@ -46,10 +47,6 @@ public class Enumerables {
 		return new EmptyEnumerable<E>();
 	}
 	
-	public static final <E extends Named> NamedEnumerable<E> emptyNamed(){
-		return new NamedEmptyEnumerable<E>();
-	}
-	
 	public static final <E> Enumerable<E> of(E... array){
 		return null == array || array.length == 0 ? new EmptyEnumerable<E>() : new ArrayEnumerable<E>(array);
 	}
@@ -66,8 +63,17 @@ public class Enumerables {
 		return null == set || set.isEmpty() ? new EmptyEnumerable<E>() :  new SetEnumerable<E>(set);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static final <E> Enumerable<E> of(Iterable<E> iterable){ 
-		return null == iterable ? new EmptyEnumerable<E>() : IterableEnumerable.of(iterable);
+		return null == iterable ? new EmptyEnumerable<E>() :  (iterable instanceof Enumerable ? (Enumerable<E>)iterable :  IterableEnumerable.of(iterable));
+	}
+	
+	public static final <E extends Named> NamedEnumerable<E> namedEmpty(){
+		return new NamedEmptyEnumerable<E>();
+	}
+	
+	public static final NamedEnumerable<NamedEntry<String>> namedOf(Map<String,String> map) {
+		return namedOf(Maps.toNamedEntryArray(map));
 	}
 	
 	public static final <E extends Named> NamedEnumerable<E> namedOf(E... array){

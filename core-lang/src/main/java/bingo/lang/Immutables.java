@@ -16,13 +16,16 @@
 package bingo.lang;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
 import bingo.lang.collections.WrappedImmutableList;
+import bingo.lang.collections.WrappedImmutableMap;
 import bingo.lang.collections.WrappedImmutableSet;
 import bingo.lang.tuple.ImmutableEntry;
 
+@SuppressWarnings("unchecked")
 public class Immutables {
 
 	protected Immutables(){
@@ -30,11 +33,11 @@ public class Immutables {
 	}
 	
 	public static <E> List<E> listOf(List<E> list) {
-		return new WrappedImmutableList<E>(list);
+		return null != list && list instanceof WrappedImmutableList ? list : new WrappedImmutableList<E>(list);
 	}
 	
 	public static <E> List<E> listOf(Iterable<E> iterable) {
-		return new WrappedImmutableList<E>(Enumerables.toList(iterable));
+		return null != iterable && iterable instanceof WrappedImmutableList ? (List<E>)iterable : new WrappedImmutableList<E>(Enumerables.toList(iterable));
 	}
 	
 	public static <E> List<E> listOf(E... array) {
@@ -42,11 +45,11 @@ public class Immutables {
 	}
 	
 	public static <E> Set<E> setOf(Set<E> set) {
-		return new WrappedImmutableSet<E>(set);
+		return null != set && set instanceof WrappedImmutableSet ? set : new WrappedImmutableSet<E>(set);
 	}
 	
 	public static <E> Set<E> setOf(Iterable<E> iterable) {
-		return new WrappedImmutableSet<E>(Enumerables.toSet(iterable));
+		return null != iterable && iterable instanceof WrappedImmutableSet ? (Set<E>)iterable : new WrappedImmutableSet<E>(Enumerables.toSet(iterable));
 	}
 	
 	public static <E> Set<E> setOf(E... array) {
@@ -55,5 +58,9 @@ public class Immutables {
 
 	public static <K,V> Entry<K, V> entryOf(K key,V value) {
 		return new ImmutableEntry<K, V>(key, value);
+	}
+	
+	public static <K,V> Map<K,V> mapOf(Map<K,V> map){
+		return null != map && map instanceof WrappedImmutableMap ? map : new WrappedImmutableMap<K, V>(map);
 	}
 }

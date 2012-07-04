@@ -16,6 +16,9 @@
 package bingo.lang;
 
 import java.util.Map;
+import java.util.Map.Entry;
+
+import bingo.lang.tuple.ImmutableNamedEntry;
 
 /**
  * <code>null</code> safe {@link Map} utility.
@@ -35,5 +38,24 @@ public class Maps {
 	 */
 	public static boolean isEmpty(Map<?,?> map) {
 		return (map == null || map.isEmpty());
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static <V> NamedEntry<V>[] toNamedEntryArray(Map<String, V> map){
+		if(null == map || map.isEmpty()){
+			return new NamedEntry[]{};
+		}
+		
+		NamedEntry<V>[] a = new NamedEntry[map.size()];
+		
+		int i=0;
+		
+		for(Entry<String, V> entry : map.entrySet()){
+			a[i] = ImmutableNamedEntry.of(entry.getKey(),entry.getValue());
+			
+			i++;
+		}
+		
+		return a;
 	}
 }

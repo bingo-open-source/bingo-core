@@ -30,12 +30,10 @@ import bingo.lang.iterable.ArrayIterator;
 public class ArrayEnumerable<E> implements Enumerable<E> {
 
 	private final E[] array;
-	private final ArrayIterator<E> iterator;
 	
 	public ArrayEnumerable(E... array) {
 		Assert.notNull(array);
 		this.array = Arrays.copyOf(array);
-		this.iterator = new ArrayIterator<E>(array);
 	}
 	
 	public int size() {
@@ -107,6 +105,6 @@ public class ArrayEnumerable<E> implements Enumerable<E> {
     }
 
 	public Iterator<E> iterator() {
-	    return iterator;
+	    return new ArrayIterator<E>(array);
     }
 }
