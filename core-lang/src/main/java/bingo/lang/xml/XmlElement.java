@@ -7,7 +7,7 @@ import bingo.lang.Strings;
 import bingo.lang.enumerable.IterableEnumerable;
 import bingo.lang.xml.XmlUtils.Predicates;
 
-public class XmlElement extends XmlContainer implements XNameable {
+public class XmlElement extends XmlContainer implements XmlNamed {
 
 	private final String name;
 	private final String prefix;

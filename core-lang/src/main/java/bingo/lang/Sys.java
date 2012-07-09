@@ -914,6 +914,11 @@ public class Sys {
      * @since 3.0
      */
     public static final boolean IS_JAVA_1_7 = getJavaVersionMatches("1.7");
+    
+    /**
+     * Is running on android.
+     */
+    public static final boolean IS_ANDROID = Classes.forNameOrNull("android.app.Activity") != null;
 
     // Operating system checks
     // -----------------------------------------------------------------------

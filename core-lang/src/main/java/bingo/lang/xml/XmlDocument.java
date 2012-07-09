@@ -18,7 +18,6 @@ import org.xml.sax.SAXException;
 
 import bingo.lang.Charsets;
 import bingo.lang.Exceptions;
-import bingo.lang.exceptions.ParseException;
 import bingo.lang.exceptions.UncheckedIOException;
 import bingo.lang.io.IO;
 import bingo.lang.resource.Resource;
@@ -38,7 +37,7 @@ public class XmlDocument extends XmlContainer {
 		return parse(new InputStreamReader(inputStream,Charsets.forName(encoding)));
 	}
 	
-	public static XmlDocument parse(Reader reader) throws ParseException{
+	public static XmlDocument parse(Reader reader) throws UncheckedIOException {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		factory.setNamespaceAware(true);
 		try {

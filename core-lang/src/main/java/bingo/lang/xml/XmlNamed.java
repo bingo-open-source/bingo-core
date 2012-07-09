@@ -1,6 +1,7 @@
 package bingo.lang.xml;
 
-interface XNameable {
+
+public interface XmlNamed {
 
 	String name();
 	

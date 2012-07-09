@@ -15,33 +15,32 @@
  */
 package bingo.lang.xml;
 
-import bingo.lang.exceptions.NestedRuntimeException;
+import javax.xml.namespace.QName;
 
-public class XmlException extends NestedRuntimeException {
+abstract class XmlReaderBase implements XmlReader {
 
-	private static final long serialVersionUID = -4932171728372959007L;
-
-	public XmlException() {
-	    super();
+	public boolean nextToChildElement(QName name) {
+		if(isStartElement()){
+			QName currentName = getElementName();
+			
+			while(next()){
+				if(isEndElement(currentName)){
+					break;
+				}
+				
+				if(isStartElement(name)){
+					return true;
+				}
+			}
+		}
+	    return false;
     }
 
-	public XmlException(String message, Object... args) {
-	    super(message, args);
+	public boolean nextIfElementNotEnd(QName elementName) {
+		if(isEndElement(elementName)){
+			return false;
+		}
+		return next();
     }
-
-	public XmlException(String message, Throwable cause) {
-	    super(message, cause);
-    }
-
-	public XmlException(String message) {
-	    super(message);
-    }
-
-	public XmlException(Throwable cause) {
-	    super(cause);
-    }
-	
-	static XmlException wrap(Throwable cause){
-		return new XmlException(cause.getMessage(),cause);
-	}
 }
+

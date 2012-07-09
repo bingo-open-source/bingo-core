@@ -3,7 +3,7 @@ package bingo.lang.xml;
 import bingo.lang.Converts;
 import bingo.lang.Strings;
 
-public class XmlAttribute extends XmlObject implements XNameable {
+public class XmlAttribute extends XmlObject implements XmlNamed {
 
 	private String prefix;
 	private String name;

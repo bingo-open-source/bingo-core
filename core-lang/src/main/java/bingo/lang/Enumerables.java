@@ -400,4 +400,49 @@ public class Enumerables {
 
 		return list;
 	}
+	
+	public static <T> String join(T[] array,char separator,Func1<T, String> func) {
+		if (array == null) {
+			return Strings.EMPTY;
+		}
+
+		int len = array.length;
+
+		StringBuilder buf = new StringBuilder(len * 16);
+
+		for (int i = 0; i < len; i++) {
+			if (i > 0) {
+				buf.append(separator);
+			}
+
+			if (array[i] != null) {
+				buf.append(func.apply(array[i]));
+			}
+		}
+
+		return buf.toString();
+	}	
+	
+	public static <T> String join(Iterable<T> iterable,char separator,Func1<T, String> func) {
+		if(null == iterable){
+			return Strings.EMPTY;
+		}
+
+		StringBuilder buf = new StringBuilder();
+		
+		int i=0;
+
+		for (T e : iterable) {
+			if (i > 0) {
+				buf.append(separator);
+			}
+
+			if (null != e) {
+				buf.append(func.apply(e));
+				i++;
+			}
+		}
+
+		return buf.toString();
+	}
 }

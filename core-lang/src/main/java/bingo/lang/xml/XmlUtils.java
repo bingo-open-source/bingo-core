@@ -2,14 +2,34 @@ package bingo.lang.xml;
 
 import java.util.Stack;
 
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
 import bingo.lang.Enumerable;
 import bingo.lang.Func1;
 import bingo.lang.Out;
 import bingo.lang.Predicate;
 import bingo.lang.Strings;
+import bingo.lang.Sys;
 import bingo.lang.iterable.ImmutableIteratorBase;
 
 final class XmlUtils {
+	
+	static String getElementText(Element element){
+		if(Sys.IS_ANDROID){
+	        StringBuilder buffer = new StringBuilder();
+	        NodeList childList = element.getChildNodes();
+	        for (int i = 0; i < childList.getLength(); i++) {
+	            Node child = childList.item(i);
+	            if (child.getNodeType() == Node.TEXT_NODE)
+	                buffer.append(child.getNodeValue());
+	        }
+	        return buffer.toString();			
+		}else{
+			return element.getTextContent();
+		}
+	}
 
 	public static String escapeAttributeValue(String unescaped) {
 		return escapeElementValue(unescaped); // TODO for now
@@ -79,7 +99,7 @@ final class XmlUtils {
 			};
 		}
 
-		public static <T extends XNameable> Predicate<T> xnameEquals(final XNameable xname) {
+		public static <T extends XmlNamed> Predicate<T> xnameEquals(final XmlNamed xname) {
 			return new Predicate<T>() {
 				public boolean apply(T input) {
 					return Strings.equals(xname.prefix(), xname.prefix()) && Strings.equals(xname.name(), xname.name());
@@ -87,7 +107,7 @@ final class XmlUtils {
 			};
 		}
 
-		public static <T extends XNameable> Predicate<T> xnameEquals(final String name) {
+		public static <T extends XmlNamed> Predicate<T> xnameEquals(final String name) {
 			return new Predicate<T>() {
 				public boolean apply(T input) {
 					return Strings.isEmpty(input.prefix()) && Strings.equals(input.name(), name);

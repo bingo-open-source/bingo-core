@@ -15,6 +15,8 @@
  */
 package bingo.lang.xml;
 
+import javax.xml.namespace.QName;
+
 import bingo.lang.Strings;
 
 abstract class XmlWriterBase implements XmlWriter {
@@ -71,5 +73,41 @@ abstract class XmlWriterBase implements XmlWriter {
 			element(prefix, namespaceURI, localName, text);
 		}
 		return this;
+    }
+	
+	public XmlWriter attribute(QName qName, String value) {
+		return Strings.isEmpty(qName.getPrefix()) ?
+					attribute(qName.getNamespaceURI(), qName.getLocalPart(), value) :
+					attribute(qName.getPrefix(), qName.getNamespaceURI(), qName.getLocalPart(), value);
+    }
+
+	public XmlWriter attributeOptional(QName qName, String value) {
+		return Strings.isEmpty(qName.getPrefix()) ?
+					attributeOptional(qName.getNamespaceURI(), qName.getLocalPart(), value) :
+					attributeOptional(qName.getPrefix(), qName.getNamespaceURI(), qName.getLocalPart(), value);
+    }
+
+	public XmlWriter element(QName qName, String text) {
+		return Strings.isEmpty(qName.getPrefix()) ?
+					element(qName.getNamespaceURI(), qName.getLocalPart(), text) :
+					element(qName.getPrefix(), qName.getNamespaceURI(), qName.getLocalPart(), text);
+    }
+
+	public XmlWriter elementOptional(QName qName, String text) {
+		return Strings.isEmpty(qName.getPrefix()) ?
+					elementOptional(qName.getNamespaceURI(), qName.getLocalPart(), text) :
+					elementOptional(qName.getPrefix(), qName.getNamespaceURI(), qName.getLocalPart(), text);
+    }
+
+	public XmlWriter emptyElement(QName qName) {
+		return Strings.isEmpty(qName.getPrefix()) ?
+					emptyElement(qName.getNamespaceURI(), qName.getLocalPart()) :
+					emptyElement(qName.getPrefix(), qName.getNamespaceURI(), qName.getLocalPart());
+    }
+
+	public XmlWriter startElement(QName qName) {
+		return Strings.isEmpty(qName.getPrefix()) ?
+					startElement(qName.getNamespaceURI(), qName.getLocalPart()) :
+					startElement(qName.getPrefix(), qName.getNamespaceURI(), qName.getLocalPart());
     }
 }

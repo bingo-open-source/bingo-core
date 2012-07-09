@@ -12,6 +12,10 @@
 	<artifactId>bingo-lang</artifactId>
 	<packaging>jar</packaging>
 	
+	<properties>
+		<xmlpull.version>1.1.3.4a</xmlpull.version>
+	</properties>	
+	
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -37,5 +41,13 @@
 			<scope>compile</scope>
 			<optional>true</optional>
 		</dependency>
+		
+		<dependency>
+			<groupId>xmlpull</groupId>
+			<artifactId>xmlpull</artifactId>
+			<version>${xmlpull.version}</version>
+			<scope>compile</scope>
+			<optional>true</optional>
+		</dependency>		
 	</dependencies>
 </project>

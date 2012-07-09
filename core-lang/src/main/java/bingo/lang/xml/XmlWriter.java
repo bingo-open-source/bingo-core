@@ -17,6 +17,8 @@ package bingo.lang.xml;
 
 import java.io.Closeable;
 
+import javax.xml.namespace.QName;
+
 public interface XmlWriter extends Closeable {
 
 	XmlWriter startDocument();
@@ -31,11 +33,15 @@ public interface XmlWriter extends Closeable {
 	
 	XmlWriter startElement(String prefix,String namespaceURI,String localName);
 	
+	XmlWriter startElement(QName qName);
+	
 	XmlWriter emptyElement(String localName);
 	
 	XmlWriter emptyElement(String namespaceURI,String localName);
 	
 	XmlWriter emptyElement(String prefix,String namespaceURI,String localName);
+	
+	XmlWriter emptyElement(QName qName);
 	
 	/**
 	 * Writes the default namespace to the stream.
@@ -49,6 +55,8 @@ public interface XmlWriter extends Closeable {
 	XmlWriter attribute(String namespaceURI,String localName,String value);
 	
 	XmlWriter attribute(String prefix,String namespaceURI,String localName,String value);
+	
+	XmlWriter attribute(QName qName,String value);
 
 	XmlWriter attributeOptional(String localName,String value);
 	
@@ -56,17 +64,23 @@ public interface XmlWriter extends Closeable {
 	
 	XmlWriter attributeOptional(String prefix,String namespaceURI,String localName,String value);
 	
+	XmlWriter attributeOptional(QName qName,String value);
+	
 	XmlWriter element(String localName,String text);
 	
 	XmlWriter element(String namespaceURI,String localName,String text);
 	
 	XmlWriter element(String prefix,String namespaceURI,String localName,String text);
+	
+	XmlWriter element(QName qName,String text);
 
 	XmlWriter elementOptional(String localName,String text);
 	
 	XmlWriter elementOptional(String namespaceURI,String localName,String text);
 	
 	XmlWriter elementOptional(String prefix,String namespaceURI,String localName,String text);
+	
+	XmlWriter elementOptional(QName qName,String text);
 	
 	/**
 	 * escape the text and write to output.
