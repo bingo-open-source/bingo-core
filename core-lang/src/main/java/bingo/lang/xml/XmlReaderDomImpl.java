@@ -138,6 +138,10 @@ final class XmlReaderDomImpl extends XmlReaderBase implements XmlReader {
         }
     }
     
+	public void close() {
+		
+    }
+
 	private boolean startElement(Element element){
 		this.current = element;
 		this.event   = START_ELEMENT;

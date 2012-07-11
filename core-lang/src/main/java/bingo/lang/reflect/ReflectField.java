@@ -185,12 +185,8 @@ public class ReflectField extends ReflectMember {
 		this.setAccessiable();
 	}
 	
-	/**
-	 * 获得此域的修改器方法。
-	 * @return 此域的修改器方法。
-	 */
 	private ReflectMethod findSetter(){
-		String   fieldName  = javaField.getName();
+		String   fieldName  = javaField.getName().startsWith("_") ? javaField.getName().substring(1) : javaField.getName();
 		String   nameToFind = "set" + Character.toUpperCase(fieldName.charAt(0)) + (fieldName.length() > 1 ? fieldName.substring(1) : "");
 		Class<?> fieldType  = Primitives.wrap(javaField.getType());
 		
@@ -209,12 +205,6 @@ public class ReflectField extends ReflectMember {
 		return m;
 	}
 	
-	/**
-	 * 通过返回值的类型和方法名称找到setter方法。
-	 * @param fieldType 返回值的类型。
-	 * @param nameToFind 该方法的名称。
-	 * @return 符合返回值类型以及方法名称的方法。
-	 */
 	private ReflectMethod findSetter(Class<?> fieldType,String nameToFind){
 		//iterate all public methods.
 		for(ReflectMethod rm : reflectClass.getMethods()){
@@ -231,7 +221,7 @@ public class ReflectField extends ReflectMember {
 	}
 	
 	private ReflectMethod findGetter(){
-		String   fieldName  = javaField.getName();
+		String   fieldName  = javaField.getName().startsWith("_") ? javaField.getName().substring(1) : javaField.getName();
 		String   nameToFind = "get" + Character.toUpperCase(fieldName.charAt(0)) + (fieldName.length() > 1 ? fieldName.substring(1) : "");
 		Class<?> fieldType  = Primitives.wrap(javaField.getType());
 		

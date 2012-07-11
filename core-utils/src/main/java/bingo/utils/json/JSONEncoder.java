@@ -123,7 +123,7 @@ class JSONEncoder {
             }
             
             if (i > 0) {
-                writer.seperator();
+                writer.separator();
             }
             
             encode(name,array[i], writer);
@@ -146,7 +146,7 @@ class JSONEncoder {
             }
             
             if (i > 0) {
-                writer.seperator();
+                writer.separator();
             }
             
             encode(name,value, writer);
@@ -168,7 +168,7 @@ class JSONEncoder {
             if (index == 0) {
                 index++;
             } else {
-                writer.seperator();
+                writer.separator();
             }
             
             encode(name,value, writer);
@@ -193,7 +193,7 @@ class JSONEncoder {
             if (index == 0) {
                 index++;
             } else {
-                writer.seperator();
+                writer.separator();
             }
             
             encode(name,value, writer);
@@ -225,7 +225,7 @@ class JSONEncoder {
             if (index == 0) {
                 index++;
             } else {
-                writer.seperator();
+                writer.separator();
             }
 
             encodeNamedValue(prop, map.get(key), writer);
@@ -270,7 +270,7 @@ class JSONEncoder {
                     if (index == 0) {
                         index++;
                     } else {
-                        writer.seperator();
+                        writer.separator();
                     }
 
                     encodeNamedValue(propName, propValue, writer);
@@ -286,7 +286,7 @@ class JSONEncoder {
     }
 
     private void encodeNamedValue(String name, Object value, JSONWriterImpl writer) {
-        writer.key(name);
+        writer.name(name);
         encode(name,value, writer);
     }
 }

@@ -59,52 +59,56 @@ public class JSONWriterImpl implements JSONWriter {
         return this;
     }
 	
+	public JSONWriter startObject(String name) {
+	    return name(name).startObject();
+    }
+
 	public JSONWriter property(String name,String stringValue) {
-		return isIgnoreNull && null == stringValue ? this : key(name).value(stringValue);
+		return isIgnoreNull && null == stringValue ? this : name(name).value(stringValue);
 	}
 	
 	public JSONWriter propertyOptional(String name, String stringValue) {
-	    return Strings.isEmpty(stringValue) ? this : key(name).value(stringValue);
+	    return Strings.isEmpty(stringValue) ? this : name(name).value(stringValue);
     }
 
 	public JSONWriter property(String name,boolean boolValue) {
-		return key(name).value(boolValue);
+		return name(name).value(boolValue);
 	}
 	
 	public JSONWriter property(String name,byte byteValue) {
-		return key(name).value(byteValue);
+		return name(name).value(byteValue);
 	}
 	
 	public JSONWriter property(String name,short shortValue) {
-		return key(name).value(shortValue);
+		return name(name).value(shortValue);
 	}
 	
 	public JSONWriter property(String name,int intValue) {
-		return key(name).value(intValue);
+		return name(name).value(intValue);
 	}
 	
 	public JSONWriter property(String name,long longValue) {
-		return key(name).value(longValue);
+		return name(name).value(longValue);
 	}
 	
 	public JSONWriter property(String name,float floatValue) {
-		return key(name).value(floatValue);
+		return name(name).value(floatValue);
 	}
 	
 	public JSONWriter property(String name,double doubleValue) {
-		return key(name).value(doubleValue);
+		return name(name).value(doubleValue);
 	}
 	
 	public JSONWriter property(String name,BigDecimal decimalValue) {
-		return isIgnoreNull && null == decimalValue ? this : key(name).value(decimalValue);
+		return isIgnoreNull && null == decimalValue ? this : name(name).value(decimalValue);
 	}
 	
 	public JSONWriter property(String key, Number numberValue) {
-	    return isIgnoreNull && null == numberValue ? this : key(key).value(numberValue) ;
+	    return isIgnoreNull && null == numberValue ? this : name(key).value(numberValue) ;
     }
 
 	public JSONWriter property(String name,Date dateValue) {
-		return isIgnoreNull && null == dateValue ? this : key(name).value(dateValue);
+		return isIgnoreNull && null == dateValue ? this : name(name).value(dateValue);
 	}
 	
 	public JSONWriter endObject() {
@@ -121,7 +125,7 @@ public class JSONWriterImpl implements JSONWriter {
 		startArray();
 		for(int i=0;i<len;i++){
 			if(i > 0){
-				seperator();
+				separator();
 			}
 			value(array[i]);
 		}
@@ -134,7 +138,7 @@ public class JSONWriterImpl implements JSONWriter {
 		startArray();
 		for(int i=0;i<len;i++){
 			if(i > 0){
-				seperator();
+				separator();
 			}
 			value(array[i]);
 		}
@@ -147,7 +151,7 @@ public class JSONWriterImpl implements JSONWriter {
 		startArray();
 		for(int i=0;i<len;i++){
 			if(i > 0){
-				seperator();
+				separator();
 			}
 			value(array[i]);
 		}
@@ -160,7 +164,7 @@ public class JSONWriterImpl implements JSONWriter {
 		startArray();
 		for(int i=0;i<len;i++){
 			if(i > 0){
-				seperator();
+				separator();
 			}
 			value(array[i]);
 		}
@@ -173,7 +177,7 @@ public class JSONWriterImpl implements JSONWriter {
 		startArray();
 		for(int i=0;i<len;i++){
 			if(i > 0){
-				seperator();
+				separator();
 			}
 			value(array[i]);
 		}
@@ -186,7 +190,7 @@ public class JSONWriterImpl implements JSONWriter {
 		startArray();
 		for(int i=0;i<len;i++){
 			if(i > 0){
-				seperator();
+				separator();
 			}
 		}
 		endArray();
@@ -198,7 +202,7 @@ public class JSONWriterImpl implements JSONWriter {
 		startArray();
 		for(int i=0;i<len;i++){
 			if(i > 0){
-				seperator();
+				separator();
 			}
 			value(array[i]);
 		}
@@ -211,7 +215,7 @@ public class JSONWriterImpl implements JSONWriter {
 		startArray();
 		for(int i=0;i<len;i++){
 			if(i > 0){
-				seperator();
+				separator();
 			}
 			value(array[i]);
 		}
@@ -230,7 +234,7 @@ public class JSONWriterImpl implements JSONWriter {
 			}
 			
 			if(i > 0){
-				seperator();
+				separator();
 			}
 			value(s);
 		}
@@ -247,6 +251,10 @@ public class JSONWriterImpl implements JSONWriter {
         return this;
     }
 	
+	public JSONWriter startArray(String name) {
+	    return name(name).startArray();
+    }
+
 	public JSONWriter endArray() {
         try {
     		out.append(CLOSE_ARRAY);
@@ -341,7 +349,7 @@ public class JSONWriterImpl implements JSONWriter {
         return this;
     }
 	
-	public JSONWriter key(String key) {
+	public JSONWriter name(String key) {
         try {
         	if(isKeyQuoted){
         		out.append(DOUBLE_QUOTE).append(key).append(DOUBLE_QUOTE);   
@@ -412,7 +420,7 @@ public class JSONWriterImpl implements JSONWriter {
         return this;
     }
 	
-    public JSONWriter seperator() {
+    public JSONWriter separator() {
 		try {
 	        out.append(COMMA_CHAR);
         } catch (IOException e) {

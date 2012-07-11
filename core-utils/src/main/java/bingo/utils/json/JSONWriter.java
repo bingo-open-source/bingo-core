@@ -21,7 +21,7 @@ public interface JSONWriter {
 	
 	JSONWriter nullValue();
 	
-	JSONWriter key(String key);
+	JSONWriter name(String name);
 	
 	JSONWriter value(boolean bool);
 
@@ -47,11 +47,13 @@ public interface JSONWriter {
 
 	JSONWriter value(String string);
 	
-	JSONWriter seperator();
+	JSONWriter separator();
 	
 	JSONWriter raw(String string);
 
 	JSONWriter startObject();
+	
+	JSONWriter startObject(String name);
 
 	JSONWriter property(String key, String stringValue);
 	
@@ -96,6 +98,8 @@ public interface JSONWriter {
 	JSONWriter array(Date... array);
 	
 	JSONWriter startArray();
+	
+	JSONWriter startArray(String name);
 
 	JSONWriter endArray();
 }

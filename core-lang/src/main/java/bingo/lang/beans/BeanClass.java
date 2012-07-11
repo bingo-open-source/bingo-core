@@ -120,7 +120,7 @@ public class BeanClass<T> {
 			
 			if(field.isPublic() || field.hasGetter() || field.hasSetter()){
 			
-				String name = field.getName();
+				String name = field.getName().startsWith("_") ? field.getName().substring(1) : field.getName();
 				
 				if(props.containsKey(name)){
 					continue;
@@ -165,7 +165,7 @@ public class BeanClass<T> {
 				String methodName = rm.getName();
 				
 				if(methodName.startsWith(SETTER_PREFIX) && methodName.length() > SETTER_PREFIX.length()){
-					if(m.getReturnType().equals(Void.class) && m.getParameterTypes().length == 1){
+					if(m.getReturnType().equals(void.class) && m.getParameterTypes().length == 1){
 						BeanProperty prop = getOrCreatePropertyFor(props,methodName,SETTER_PREFIX,m.getParameterTypes()[0]);
 						
 						if(null != prop){
@@ -182,7 +182,7 @@ public class BeanClass<T> {
 					}
 				}else if(methodName.startsWith(GETTER_PREFIX) && methodName.length() > GETTER_PREFIX.length()){
 					
-					if(!m.getReturnType().equals(Void.class) && m.getParameterTypes().length == 0) {
+					if(!m.getReturnType().equals(void.class) && m.getParameterTypes().length == 0) {
 						
 						BeanProperty prop = getOrCreatePropertyFor(props, methodName, GETTER_PREFIX, m.getReturnType());
 

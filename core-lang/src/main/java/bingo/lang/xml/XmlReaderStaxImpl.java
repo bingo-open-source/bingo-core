@@ -93,6 +93,14 @@ final class XmlReaderStaxImpl extends XmlReaderBase implements XmlReader {
         }
     }
 	
+	public void close() {
+		try {
+	        real.close();
+        } catch (XMLStreamException e) {
+        	throw XmlException.wrap(e);
+        }
+    }
+
 	private Attribute attr(QName name){
 		return null == event ? null : event.asStartElement().getAttributeByName(name);
 	}

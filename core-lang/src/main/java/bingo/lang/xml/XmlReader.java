@@ -27,4 +27,6 @@ public interface XmlReader {
     String getAttributeValue(QName name);
     
     String getAttributeValue(String name);
+    
+    void close();
 }

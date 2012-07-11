@@ -112,6 +112,10 @@ final class XmlReaderPullImpl extends XmlReaderBase implements XmlReader {
             throw XmlException.wrap(e);
         }
     }
+	
+	public void close() {
+		
+    }
 
 	private boolean nameEquals(QName name){
 		return Strings.equals(xpp.getName(), name.getLocalPart()) && Strings.equals(xpp.getNamespace(), name.getNamespaceURI());
