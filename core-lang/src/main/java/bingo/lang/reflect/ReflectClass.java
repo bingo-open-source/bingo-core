@@ -37,12 +37,6 @@ public class ReflectClass<T> implements Named {
 	private static final Map<Class<?>, ReflectClass<?>> cache = 
 		java.util.Collections.synchronizedMap(new WeakHashMap<Class<?>, ReflectClass<?>>());
 	
-	/**
-	 * 从缓存中获得相关类型的对应的反射类。如果原先缓存中没有，
-	 * 则为该类型新建一个对应的反射类，再放入缓存中并返回该反射类。
-	 * @param type 欲取得对应反射类的类型。
-	 * @return 所传入类型的对应反射类。
-	 */
 	@SuppressWarnings("unchecked")
 	public static <T> ReflectClass<T> get(Class<T> type) {
 		ReflectClass<?> clazz = cache.get(type);
@@ -75,10 +69,6 @@ public class ReflectClass<T> implements Named {
 	private boolean				 defaultConstructorInner = false;
 	private ReflectInstantiator<T>  instantiator	         = null;
 	
-	/**
-	 * 新建一个 {@link ReflectClass}实例并传入对应此反射类的类型，初始化此反射类的各项信息。
-	 * @param javaClass 对应此反射类的类型。
-	 */
 	protected ReflectClass(Class<T> javaClass){
 		this.javaClass = javaClass;
 		this.metadata  = new ReflectMetadata(javaClass);
@@ -91,22 +81,17 @@ public class ReflectClass<T> implements Named {
 	}
 	
 	/**
-	 * 获取此反射类的名称，与对应此反射类的类型的全限定名一致。
-	 * <p>
-	 * 如 反射类String.class将返回"java.lang.String"；反射类byte.class将返回"byte"。
-	 * </p>
-	 * @return 此反射类的名称。
+	 * 和{@link Class#getName()}一致
 	 */
 	public String getName() {
 	    return javaClass.getName();
     }
 
 	/**
-	 * 新建一个该反射类所对应类的实例。
-	 * @return 该反射类所对应类的实例
+	 * 调用缺省的无参数构造函数创建对象实例并返回
 	 */
 	@SuppressWarnings("unchecked")
-	public T newInstance(){
+	public T newInstance() throws ReflectException{
 		if(null == defaultConstructor){
 			throw new ReflectException("there is no default constructor available in class '{0}'",getName());	
 		}
@@ -122,19 +107,10 @@ public class ReflectClass<T> implements Named {
 		}
 	}
 	
-	/**
-	 * 是否可以在不调用构造器的情况下新建实例。
-	 * @return true如果可以在不调用构造器的情况下新建实例。
-	 */
 	public boolean canNewInstanceWithoutCallingConstructor(){
 		return null != instantiator;
 	}
 	
-	/**
-	 * 在不调用构造器的情况下新建实例。
-	 * @return 新建的实例。
-	 * @throws IllegalStateException 如果无法在不调用构造器的情况下新建实例，则抛出此异常。
-	 */
 	public T newInstanceWithoutCallingConstructor() throws IllegalStateException {
 		if(null == instantiator){
 			throw new IllegalStateException("there is no instantiator can new instance without calling constructor");
@@ -308,9 +284,6 @@ public class ReflectClass<T> implements Named {
 		return metadata;
 	}
 	
-	/**
-	 * 初始化模块，主要初始化构造器、方法以及域。
-	 */
 	private void initialize(){
 		//constructors
 		this.createConstructors();
@@ -321,10 +294,7 @@ public class ReflectClass<T> implements Named {
 		//fields
 		this.createFields();
 	}
-	
-	/**
-	 * 初始化构造器。
-	 */
+
 	@SuppressWarnings("unchecked")
 	private void createConstructors(){
 		//new an empty ArrayList.
@@ -369,9 +339,6 @@ public class ReflectClass<T> implements Named {
 		this.declaredFields = getDeclaredMembers(fieldList).toArray(new ReflectField[]{});
 	}
 	
-	/**
-	 * 初始化方法。
-	 */
 	private void createMethods(){
 		List<ReflectMethod> methodList = New.list();
 		

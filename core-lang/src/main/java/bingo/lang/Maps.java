@@ -40,6 +40,16 @@ public class Maps {
 		return (map == null || map.isEmpty());
 	}
 	
+	public static <V> V getIgnoreCase(Map<String, V> map,final String key){
+		Entry<String, V> entry = Enumerables.firstOrNull(map.entrySet(),new Predicate<Entry<String, V>>(){
+			public boolean apply(Entry<String, V> input) {
+	            return input.getKey().equalsIgnoreCase(key);
+            }
+		});
+		
+		return null == entry ? null : entry.getValue();
+	}
+	
 	@SuppressWarnings("unchecked")
 	public static <V> NamedEntry<V>[] toNamedEntryArray(Map<String, V> map){
 		if(null == map || map.isEmpty()){

@@ -16,7 +16,15 @@
 package bingo.lang;
 
 public interface NamedValues<V> extends Iterable<NamedValue<V>> {
-
+	
+	int size();
+	
+	boolean isEmpty();
+	
+	NamedValue<V> get(int index);
+	
+	V getValue(int index);
+	
 	V getValue(String name);
 	
 	Enumerable<NamedValue<V>> asEnumerable();
