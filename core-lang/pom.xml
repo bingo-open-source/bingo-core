@@ -8,7 +8,6 @@
 		<relativePath>../</relativePath>
 	</parent>
 
-	<groupId>bingo.core</groupId>
 	<artifactId>bingo-lang</artifactId>
 	<packaging>jar</packaging>
 	
@@ -29,8 +28,7 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 			<version>1.6.1</version>
-			<scope>compile</scope>
-			<optional>true</optional>			
+			<scope>provided</scope>
 		</dependency>
 		
 		<dependency>
@@ -38,16 +36,14 @@
 			<artifactId>stax-api</artifactId>
 			<version>1.0-2</version>
 			<type>jar</type>
-			<scope>compile</scope>
-			<optional>true</optional>
+			<scope>provided</scope>
 		</dependency>
 		
 		<dependency>
 			<groupId>xmlpull</groupId>
 			<artifactId>xmlpull</artifactId>
 			<version>${xmlpull.version}</version>
-			<scope>compile</scope>
-			<optional>true</optional>
+			<scope>provided</scope>
 		</dependency>		
 	</dependencies>
 </project>
