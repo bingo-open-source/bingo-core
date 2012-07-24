@@ -41,7 +41,7 @@ import bingo.lang.convert.StringConverter;
 import bingo.lang.exceptions.ConvertException;
 import bingo.lang.exceptions.ConvertUnsupportedException;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked","rawtypes"})
 public class Converts {
 	
 	private static final Map<Class<?>, Converter<?>> converters = new ConcurrentHashMap<Class<?>, Converter<?>>();

@@ -27,6 +27,10 @@ public class New {
 		
 	}
 	
+	public static <T> Out<T> out() {
+		return new OutObject<T>();
+	}
+	
     /**
      * Create a new {@link ArrayList}.
      */
