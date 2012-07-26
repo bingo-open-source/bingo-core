@@ -25,12 +25,12 @@ import bingo.lang.Classes;
 import bingo.lang.Converts;
 import bingo.lang.Out;
 import bingo.lang.annotations.NamedAnnotation;
-import bingo.lang.beans.BeanClass;
+import bingo.lang.beans.BeanModel;
 import bingo.lang.beans.BeanProperty;
 import bingo.lang.reflect.ReflectClass;
 
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"rawtypes"})
 public class BeanConverter extends AbstractConverter<Object>{
 
 	@Override
@@ -55,7 +55,7 @@ public class BeanConverter extends AbstractConverter<Object>{
     }
 
 	protected Object convertFromMap(Class<?> targetType, Type genericType,Map map) {
-		BeanClass<?> beanClass = BeanClass.get(targetType);
+		BeanModel<?> beanClass = BeanModel.get(targetType);
 		
 		Object bean = beanClass.newInstance();
 		
@@ -88,7 +88,7 @@ public class BeanConverter extends AbstractConverter<Object>{
 	}
 
 	protected Map<String,Object> convertToMap(Object bean) {
-		BeanClass<?> beanClass = BeanClass.get(bean.getClass());
+		BeanModel<?> beanClass = BeanModel.get(bean.getClass());
 		
 		Map<String, Object> map = new LinkedHashMap<String, Object>();
 		

@@ -22,6 +22,10 @@ import java.util.Set;
 
 public class WrappedImmutableMap<K,V> extends AbstractImmutableMap<K, V> {
 	
+	public static <K,V> WrappedImmutableMap<K, V> of(Map<K, V> map){
+		return new WrappedImmutableMap<K, V>(map);
+	}
+	
 	private final Map<K, V> map;
 	
 	public WrappedImmutableMap(Map<K, V> map){

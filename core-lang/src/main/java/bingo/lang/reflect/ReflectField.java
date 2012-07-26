@@ -24,9 +24,6 @@ import bingo.lang.Arrays;
 import bingo.lang.Primitives;
 import bingo.lang.exceptions.ReflectException;
 
-/**
- * 反射类中的域。
- */
 public class ReflectField extends ReflectMember {
 	
 	private final Field    javaField;
@@ -41,11 +38,6 @@ public class ReflectField extends ReflectMember {
 	
 	private final ReflectAccessor accessor;
 	
-	/**
-	 * 通过对应的反射类和域初始化。
-	 * @param reflectClass 所对应的反射类。
-	 * @param javaField 所对应的JDK中的 {@link Field}。
-	 */
 	protected ReflectField(ReflectClass<?> reflectClass, Field javaField){
 		super(reflectClass,javaField);
 		
@@ -236,11 +228,7 @@ public class ReflectField extends ReflectMember {
 			
 			m = findGetter(fieldType,nameToFind);
 		}
-		
-		if(null == m){
-			m = findGetter(fieldType,fieldName);
-		}
-		
+
 		return m;
 	}
 	

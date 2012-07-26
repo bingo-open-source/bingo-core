@@ -26,7 +26,7 @@ import bingo.lang.Enumerables;
 import bingo.lang.Predicates;
 import bingo.lang.Reflects;
 import bingo.lang.Strings;
-import bingo.lang.beans.BeanClass;
+import bingo.lang.beans.BeanModel;
 import bingo.lang.beans.BeanProperty;
 import bingo.lang.logging.Log;
 import bingo.lang.logging.LogFactory;
@@ -196,7 +196,7 @@ public class PluginManager {
 		
 		if(null != properties){
 			Object		 bean 	   = plugin.getBean();
-			BeanClass<?> beanClass = BeanClass.get(bean.getClass());
+			BeanModel<?> beanClass = BeanModel.get(bean.getClass());
 			
 			for(XmlElement prop : properties.childElements()){
 				String propName  = prop.requiredAttributeValue("name");

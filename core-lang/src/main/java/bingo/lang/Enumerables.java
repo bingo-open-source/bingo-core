@@ -63,7 +63,6 @@ public class Enumerables {
 		return null == set || set.isEmpty() ? new EmptyEnumerable<E>() :  new SetEnumerable<E>(set);
 	}
 	
-	@SuppressWarnings("unchecked")
 	public static final <E> Enumerable<E> of(Iterable<E> iterable){ 
 		return null == iterable ? new EmptyEnumerable<E>() :  (iterable instanceof Enumerable ? (Enumerable<E>)iterable :  IterableEnumerable.of(iterable));
 	}

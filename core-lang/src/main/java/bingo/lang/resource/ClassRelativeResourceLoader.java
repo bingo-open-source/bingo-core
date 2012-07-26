@@ -26,7 +26,7 @@ import bingo.lang.Assert;
  * @see java.lang.Class#getResource(String)
  * @see ClassPathResource#ClassPathResource(String, Class)
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 class ClassRelativeResourceLoader extends DefaultResourceLoader {
 
 	private final Class clazz;

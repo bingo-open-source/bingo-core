@@ -25,7 +25,6 @@ import bingo.lang.collections.WrappedImmutableMap;
 import bingo.lang.collections.WrappedImmutableSet;
 import bingo.lang.tuple.ImmutableEntry;
 
-@SuppressWarnings("unchecked")
 public class Immutables {
 
 	protected Immutables(){

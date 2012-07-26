@@ -32,14 +32,14 @@ public class BeanProperty implements Named {
 	private ReflectField  field;
 	private ReflectMethod getter;
 	private ReflectMethod setter;
-	private BeanClass<?>  beanClass;
+	private BeanModel<?>  beanClass;
 	private boolean	   readable;
 	private boolean      writable;
 	private boolean      _transient;
 	private Type          genericType;
 	private Annotation[]  annotations = new Annotation[]{};
 	
-	protected BeanProperty(BeanClass<?> beanClass,String name){
+	protected BeanProperty(BeanModel<?> beanClass,String name){
 		this.name      = name;
 		this.beanClass = beanClass;
 	}
@@ -56,7 +56,7 @@ public class BeanProperty implements Named {
 		return genericType;
 	}
 	
-	public BeanClass<?> getBeanClass(){
+	public BeanModel<?> getBeanClass(){
 		return beanClass;
 	}
 	

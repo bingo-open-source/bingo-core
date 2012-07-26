@@ -26,34 +26,35 @@ import bingo.lang.Arrays;
 import bingo.lang.Assert;
 import bingo.lang.Collections;
 import bingo.lang.Enumerables;
+import bingo.lang.Predicate;
 import bingo.lang.Predicates;
 import bingo.lang.reflect.ReflectClass;
 import bingo.lang.reflect.ReflectField;
 import bingo.lang.reflect.ReflectMethod;
 
-public class BeanClass<T> {
+public class BeanModel<T> {
 	
-	private static final Map<Class<?>, BeanClass<?>> cache = 
-		java.util.Collections.synchronizedMap(new WeakHashMap<Class<?>, BeanClass<?>>());
+	private static final Map<Class<?>, BeanModel<?>> cache = 
+		java.util.Collections.synchronizedMap(new WeakHashMap<Class<?>, BeanModel<?>>());
 	
 	@SuppressWarnings("unchecked")
-	public static <T> BeanClass<T> get(T bean){
+	public static <T> BeanModel<T> get(T bean){
 		Assert.notNull(bean);
 		
-		return (BeanClass<T>)get(bean.getClass());
+		return (BeanModel<T>)get(bean.getClass());
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static <T> BeanClass<T> get(Class<T> type) {
-		BeanClass<?> clazz = cache.get(type);
+	public static <T> BeanModel<T> get(Class<T> type) {
+		BeanModel<?> clazz = cache.get(type);
 		
 		if(null == clazz){
-			clazz = new BeanClass<T>(type);
+			clazz = new BeanModel<T>(type);
 			
 			cache.put(type, clazz);
 		}
 		
-		return (BeanClass<T>)clazz;
+		return (BeanModel<T>)clazz;
 	}
 
 	public static final String SETTER_PREFIX = "set";
@@ -63,13 +64,37 @@ public class BeanClass<T> {
 	private ReflectClass<T> clazz;
 	private BeanProperty[]  properties;
 	
-	protected BeanClass(Class<T> javaClass){
+	protected BeanModel(Class<T> javaClass){
 		this.clazz = ReflectClass.get(javaClass);
 		this.initialize();
 	}
 	
 	public T newInstance(){
 		return clazz.newInstance();
+	}
+	
+	public Map<String, Object> toMap(Object bean){
+		Map<String, Object> map = new LinkedHashMap<String, Object>();
+		
+		for(BeanProperty p : properties){
+			if(p.isReadable()){
+				map.put(p.getName(),p.getValue(bean));
+			}
+		}
+		
+		return map;
+	}
+	
+	public Map<String, Object> toMap(Object bean,Predicate<BeanProperty> filter){
+		Map<String, Object> map = new LinkedHashMap<String, Object>();
+		
+		for(BeanProperty p : properties){
+			if(p.isReadable() && filter.apply(p)){
+				map.put(p.getName(),p.getValue(bean));
+			}
+		}
+		
+		return map;
 	}
 	
 	public boolean set(Object bean,String property,Object value){

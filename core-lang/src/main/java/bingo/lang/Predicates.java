@@ -42,4 +42,12 @@ public final class Predicates {
             }
 		};
 	}
+	
+	public static <V> Predicate<Entry<String,V>> entryKeyEqualsIgnoreCase(final String key){
+		return new Predicate<Entry<String,V>>() {
+			public boolean apply(Entry<String, V> entry) {
+	            return entry.getKey().equalsIgnoreCase(key);
+            }
+		};
+	}
 }

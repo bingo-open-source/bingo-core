@@ -23,7 +23,7 @@ import bingo.lang.Out;
 import bingo.lang.Strings;
 import bingo.lang.Types;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked","rawtypes"})
 public abstract class AbstractCollectionConverter<T extends Collection> extends AbstractConverter<T>{
 
 	@Override
@@ -68,7 +68,7 @@ public abstract class AbstractCollectionConverter<T extends Collection> extends 
         return buf.toString();
     }
 
-	protected T toCollection(Class<?> targetType,Class<?> elementType,Iterable iterable) throws Throwable {
+    protected T toCollection(Class<?> targetType,Class<?> elementType,Iterable iterable) throws Throwable {
 		
 		T collection = newInstance(targetType);
 		

@@ -22,7 +22,7 @@ import java.util.Map;
 
 import bingo.lang.Enums;
 import bingo.lang.Strings;
-import bingo.lang.beans.BeanClass;
+import bingo.lang.beans.BeanModel;
 import bingo.lang.beans.BeanProperty;
 import bingo.lang.reflect.ReflectClass;
 
@@ -239,7 +239,7 @@ class JSONEncoder {
         writer.startObject();
         
         try {
-            BeanClass<?> beanClass = BeanClass.get(clazz);
+            BeanModel<?> beanClass = BeanModel.get(clazz);
 
             int index = 0;
             for(BeanProperty prop : beanClass.getProperties()){

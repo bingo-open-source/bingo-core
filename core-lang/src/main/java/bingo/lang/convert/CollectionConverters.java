@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Set;
 
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"rawtypes"})
 public class CollectionConverters {
 	
 	public static class ListConverter extends AbstractCollectionConverter<List> {

@@ -36,9 +36,6 @@ import bingo.lang.logging.LogFactory;
 
 //from spring framework
 
-/**
- * 反射类的元数据
- */
 class ReflectMetadata {
 
 	private static final Log log = LogFactory.get(ReflectMetadata.class);
@@ -76,7 +73,7 @@ class ReflectMetadata {
 	 * @param ctor 欲获取参数名称的构造器。
 	 * @return 参数名称数组。
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	public String[] getParameterNames(Constructor ctor) {
 		Class<?> declaringClass = ctor.getDeclaringClass();
 		Map<Member, String[]> map = this.parameterNamesCache.get(declaringClass);

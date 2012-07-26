@@ -15,7 +15,7 @@
  */
 package bingo.lang;
 
-import bingo.lang.beans.BeanClass;
+import bingo.lang.beans.BeanModel;
 import bingo.lang.beans.BeanProperty;
 import bingo.lang.exceptions.NotFoundException;
 
@@ -25,27 +25,27 @@ public class Beans {
 		
 	}
 	
-	public static <T> BeanClass<T> forType(Class<T> classType) {
-		return BeanClass.get(classType);
+	public static <T> BeanModel<T> forType(Class<T> classType) {
+		return BeanModel.get(classType);
 	}
 	
-	public static BeanClass<?> forName(String className) throws NotFoundException {
-		return BeanClass.get(Classes.forName(className));
+	public static BeanModel<?> forName(String className) throws NotFoundException {
+		return BeanModel.get(Classes.forName(className));
 	}
 	
 	public static BeanProperty[] getProperties(Class<?> beanType) {
-		return BeanClass.get(beanType).getProperties();
+		return BeanModel.get(beanType).getProperties();
 	}
 	
 	public static <T> T newInstance(Class<T> beanType){
-		return BeanClass.get(beanType).newInstance();
+		return BeanModel.get(beanType).newInstance();
 	}
 	
 	public static boolean set(Object bean,String property,Object value){
-		return BeanClass.get(bean.getClass()).set(bean, property, value);
+		return BeanModel.get(bean.getClass()).set(bean, property, value);
 	}
 	
 	public static Object get(Object bean,String property){
-		return BeanClass.get(bean.getClass()).get(bean, property);
+		return BeanModel.get(bean.getClass()).get(bean, property);
 	}
 }

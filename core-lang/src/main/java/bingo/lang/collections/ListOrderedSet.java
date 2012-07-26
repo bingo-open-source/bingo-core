@@ -47,9 +47,6 @@ import bingo.lang.iterable.AbstractIteratorWrapper;
  */
 public class ListOrderedSet<E> extends AbstractSetWrapper<E> implements Set<E> {
 
-	/** Serialization version */
-	private static final long	serialVersionUID	= -228664372470420141L;
-
 	/** Internal list to hold the sequence of objects */
 	protected final List<E>	  setOrder;
 
