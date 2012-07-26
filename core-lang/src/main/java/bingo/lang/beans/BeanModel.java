@@ -145,7 +145,7 @@ public class BeanModel<T> {
 			
 			if(field.isPublic() || field.hasGetter() || field.hasSetter()){
 			
-				String name = field.getName().startsWith("_") ? field.getName().substring(1) : field.getName();
+				String name = getConventionPropertyName(field);
 				
 				if(props.containsKey(name)){
 					continue;
@@ -265,6 +265,25 @@ public class BeanModel<T> {
 		}
 		
 		return null;
+	}
+	
+	private String getConventionPropertyName(ReflectField field) {
+		String name = null;
+		if(field.hasSetter()){
+			name = field.getSetter().getName().substring(SETTER_PREFIX.length());
+		}else if(field.hasGetter()){
+			name = field.getGetter().getName();
+			
+			if(name.startsWith(IS_PREFIX)){
+				name = name.substring(IS_PREFIX.length());
+			}else{
+				name = name.substring(GETTER_PREFIX.length());
+			}
+		}else{
+			name = field.getName().startsWith("_") ? field.getName().substring(1) : field.getName();
+		}
+		
+		return name.length() == 1 ? name.toLowerCase() : Character.toLowerCase(name.charAt(0)) + name.substring(1);
 	}
 
 	@Override
