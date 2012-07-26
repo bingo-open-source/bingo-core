@@ -15,6 +15,8 @@
  */
 package bingo.lang;
 
+import java.util.Map.Entry;
+
 public final class Predicates {
 	
 	public static <T extends Named> Predicate<T> nameEquals(final String name){
@@ -30,6 +32,14 @@ public final class Predicates {
 			public boolean apply(T object) {
 				return Strings.equalsIgnoreCase(object.getName(),name);
 			}
+		};
+	}
+	
+	public static <K,V> Predicate<Entry<K,V>> entryKeyEquals(final K key){
+		return new Predicate<Entry<K,V>>() {
+			public boolean apply(Entry<K, V> entry) {
+	            return entry.getKey().equals(key);
+            }
 		};
 	}
 }
