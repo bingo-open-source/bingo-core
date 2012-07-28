@@ -159,6 +159,10 @@ public class ReflectClass<T> implements Named {
 		return javaClass.isInterface();
 	}
 	
+	public boolean isEnum(){
+		return javaClass.isEnum();
+	}
+	
 	public boolean isConcrete(){
 		return !javaClass.isInterface() && !isAbstract();
 	}
@@ -170,6 +174,10 @@ public class ReflectClass<T> implements Named {
 	public Class<T> getJavaClass() {
     	return javaClass;
     }
+	
+	public ReflectEnum asEnum(){
+		return ReflectEnum.get(this.javaClass);
+	}
 	
 	public ReflectConstructor<T>[] getConstructors(){
 		return constructors;

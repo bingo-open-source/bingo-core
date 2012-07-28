@@ -15,6 +15,7 @@
  */
 package bingo.lang.reflect;
 
+import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.WeakHashMap;
 
@@ -43,9 +44,10 @@ public class ReflectEnum {
 	}
 	
 	private final ReflectClass<?> reflectClass;
-	private ReflectField 		   valueField;
+	private ReflectField 		  valueField;
 	private Class<?>              valueType;
-	private boolean			   hasValueField;
+	private boolean			      hasValueField;
+	private Field[]			      enumConstantFields;
 	
 	protected ReflectEnum(Class<?> type){
 		this.reflectClass = ReflectClass.get(type);
@@ -62,6 +64,19 @@ public class ReflectEnum {
 	
 	public Object getValue(Object enumConstant) {
 		return null != valueField ? valueField.getValue(enumConstant) : enumConstant.toString();	
+	}
+	
+	public Field[] getEnumConstantFields(){
+		if(null == enumConstantFields){
+			Enum<?>[] enums = (Enum<?>[])reflectClass.getJavaClass().getEnumConstants();
+			
+			enumConstantFields = new Field[enums.length];
+			
+			for(int i=0;i<enums.length;i++){
+				enumConstantFields[i] = reflectClass.getField(enums[i].name()).getJavaField();
+			}
+		}
+		return enumConstantFields;
 	}
 	
 	private void initialize(){
