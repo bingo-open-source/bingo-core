@@ -94,8 +94,9 @@ public abstract class Resources {
 	/** Separator between JAR URL and file path within the JAR */
 	public static final String JAR_URL_SEPARATOR = "!/";
 	
-	private static final ResourceLoader 					   loader 	= new DefaultResourceLoader();
-	private static final PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+	private static final ResourceLoader 					 loader 	     = new DefaultResourceLoader();
+	private static final PathMatchingResourcePatternResolver resolver        = new PathMatchingResourcePatternResolver();
+	private static final PathMatchingResourcePatternResolver resolverQuietly = new PathMatchingResourcePatternResolver(true);
 	
 	/**
 	 * Return whether the given resource location is a URL: either a special "classpath" pseudo URL or a standard URL.
@@ -185,8 +186,16 @@ public abstract class Resources {
 	//scan resources
 	//-----------------------------------------------------------------------------
 	public static Resource[] scan(String resourceLocationPattern) throws UncheckedIOException {
+		return scan(resourceLocationPattern,false);
+	}
+	
+	public static Resource[] scanQuietly(String resourceLocationPattern) throws UncheckedIOException {
+		return scan(resourceLocationPattern,true);
+	}
+	
+	public static Resource[] scan(String resourceLocationPattern,boolean quietly) throws UncheckedIOException {
 		try {
-	        Resource[] resources = resolver.getResources(resourceLocationPattern);
+	        Resource[] resources = quietly ? resolverQuietly.getResources(resourceLocationPattern) : resolver.getResources(resourceLocationPattern);
 	        
 	        List<Resource> list = new ArrayList<Resource>();
 	        

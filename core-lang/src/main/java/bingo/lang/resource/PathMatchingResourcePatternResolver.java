@@ -176,6 +176,8 @@ class PathMatchingResourcePatternResolver implements ResourcePatternResolver {
 	}
 
 	private final ResourceLoader resourceLoader;
+	
+	private boolean quietly;
 
 	private PathMatcher pathMatcher = new AntPathMatcher();
 
@@ -187,6 +189,11 @@ class PathMatchingResourcePatternResolver implements ResourcePatternResolver {
 	 */
 	public PathMatchingResourcePatternResolver() {
 		this.resourceLoader = new DefaultResourceLoader();
+	}
+	
+	public PathMatchingResourcePatternResolver(boolean quietly) {
+		this.resourceLoader = new DefaultResourceLoader();
+		this.quietly        = quietly;
 	}
 
 	/**
@@ -209,6 +216,14 @@ class PathMatchingResourcePatternResolver implements ResourcePatternResolver {
 	public PathMatchingResourcePatternResolver(ResourceLoader resourceLoader) {
 		Assert.notNull(resourceLoader, "ResourceLoader must not be null");
 		this.resourceLoader = resourceLoader;
+	}
+	
+	public boolean isQuietly() {
+		return quietly;
+	}
+
+	public void setQuietly(boolean quietly) {
+		this.quietly = quietly;
 	}
 
 	/**
@@ -327,6 +342,11 @@ class PathMatchingResourcePatternResolver implements ResourcePatternResolver {
 		Resource[] rootDirResources = getResources(rootDirPath);
 		Set<Resource> result = new LinkedHashSet<Resource>(16);
 		for (Resource rootDirResource : rootDirResources) {
+			
+			if(isQuietly() && !rootDirResource.exists()){
+				continue;
+			}
+			
 			rootDirResource = resolveRootDirResource(rootDirResource);
 			if (isJarResource(rootDirResource)) {
 				result.addAll(doFindPathMatchingJarResources(rootDirResource, subPattern));

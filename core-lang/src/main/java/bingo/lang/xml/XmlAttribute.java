@@ -1,5 +1,7 @@
 package bingo.lang.xml;
 
+import java.math.BigDecimal;
+
 import bingo.lang.Converts;
 import bingo.lang.Strings;
 
@@ -31,6 +33,14 @@ public class XmlAttribute extends XmlObject implements XmlNamed {
 		return value;
 	}
 	
+	public String valueTrimmed(){
+		return Strings.trim(value);
+	}
+	
+	public boolean isEmptyValue(){
+		return Strings.isEmpty(value);
+	}
+	
 	public XmlAttribute required() throws XmlValidationException {
 		if(Strings.isEmpty(value)) {
 			throw new XmlValidationException("the value of attribute '{0}' is requried",name);
@@ -38,20 +48,44 @@ public class XmlAttribute extends XmlObject implements XmlNamed {
 		return this;
 	}
 	
-	public int intValue(){
-		return Strings.isEmpty(value) ? 0 : Converts.convert(Strings.trimToNull(value), Integer.TYPE);
+	public Integer intValue(){
+		return Strings.isEmpty(value) ? null : Converts.convert(Strings.trim(value), Integer.class);
 	}
 
 	public int intValue(int defaultValue){
-		return Strings.isEmpty(value) ? defaultValue : Converts.convert(Strings.trimToNull(value), Integer.TYPE);
+		Integer intValue = intValue();
+		return null == intValue ? defaultValue : intValue; 
 	}
 	
-	public boolean boolValue(){
-		return Strings.isEmpty(value) ? false : Converts.convert(Strings.trimToNull(value), Boolean.TYPE);
+	public Boolean boolValue(){
+		return isEmptyValue() ? null : Converts.convert(Strings.trim(value), Boolean.class);
 	}
 	
 	public boolean boolValue(boolean defaultValue){
-		return Strings.isEmpty(value) ? defaultValue : Converts.convert(Strings.trimToNull(value), Boolean.TYPE);
+		Boolean boolValue = boolValue();
+		return null == boolValue ? defaultValue : boolValue;
+	}
+	
+	public Float floatValue(){
+		return isEmptyValue() ? null : Converts.convert(Strings.trim(value), Float.class);
+	}
+	
+	public float floatValue(float defaultValue){
+		Float floatValue = floatValue(); 
+		return null == floatValue ? defaultValue : floatValue;
+	}
+	
+	public Double doubleValue(){
+		return isEmptyValue() ? null : Converts.convert(Strings.trim(value), Double.class);
+	}
+	
+	public double doubleValue(double defaultValue){
+		Double doubleValue = doubleValue(); 
+		return null == doubleValue ? defaultValue : doubleValue;
+	}
+	
+	public BigDecimal decimalValue(){
+		return isEmptyValue() ? null : Converts.convert(Strings.trim(value), BigDecimal.class);
 	}
 
 	@Override

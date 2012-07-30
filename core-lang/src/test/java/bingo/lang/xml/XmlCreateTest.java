@@ -14,7 +14,7 @@ public class XmlCreateTest extends ConcurrentTestCase {
 		
 		assertNotNull(doc);
 		
-		assertEquals("foo", doc.root().name()) ;
+		assertEquals("foo", doc.rootElement().name()) ;
 	}
     
 }

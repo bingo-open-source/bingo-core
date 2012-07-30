@@ -118,7 +118,7 @@ public class PluginManager {
 	}
 	
 	protected void load(String location) {
-		Resource[] resources = Resources.scan(location);
+		Resource[] resources = Resources.scanQuietly(location);
 		
 		for(Resource resource : resources){
 			load(XmlDocument.load(resource));
@@ -128,7 +128,7 @@ public class PluginManager {
 	protected void load(XmlDocument doc) {
 		validator.validate(doc);
 		
-		for(XmlElement e : doc.root().childElements()){
+		for(XmlElement e : doc.rootElement().childElements()){
 			if(e.name().equals("add")) {
 				context.adds.add(e);
 			}else if(e.name().equals("set")){

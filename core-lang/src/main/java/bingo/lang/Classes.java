@@ -197,7 +197,7 @@ public class Classes {
 		
 		StopWatch sw = StopWatch.startNew();
 		
-		Resource[] resources = Resources.scan(scanPath);
+		Resource[] resources = Resources.scanQuietly(scanPath);
 		
 		Set<Class<?>> classes = new HashSet<Class<?>>();
 		

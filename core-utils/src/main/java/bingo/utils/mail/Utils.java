@@ -75,7 +75,7 @@ final class Utils {
 		}
 		
 		XmlDocument doc  = XmlDocument.load(res);
-		XmlElement  root = doc.root();
+		XmlElement  root = doc.rootElement();
 
 		String host     = root.requiredChildElementText("host");
 		int    port     = Converts.toInt(root.childElementText("port"));

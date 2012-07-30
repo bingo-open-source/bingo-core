@@ -37,7 +37,7 @@ public class XmlProperties extends Properties {
 	private static final long serialVersionUID = -8603201912690589213L;
 	
 	public static XmlProperties load(XmlDocument properties) {
-		return load(properties.root());
+		return load(properties.rootElement());
 	}
 	
 	public static XmlProperties load(String xmlResourceLocation) {

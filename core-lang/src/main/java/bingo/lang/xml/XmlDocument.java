@@ -99,7 +99,7 @@ public class XmlDocument extends XmlContainer {
 		this.add(documentElement);
 	}
 	
-	public XmlElement root() {
+	public XmlElement rootElement() {
 		return documentElement;
 	}
 	
