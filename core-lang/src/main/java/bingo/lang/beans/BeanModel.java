@@ -126,7 +126,7 @@ public class BeanModel<T> {
 		return Enumerables.firstOrNull(properties,Predicates.<BeanProperty>nameEquals(name));
 	}
 	
-	public BeanProperty getPropertyIgnorecase(String name){
+	public BeanProperty getPropertyIgnoreCase(String name){
 		return Enumerables.firstOrNull(properties,Predicates.<BeanProperty>nameEqualsIgnoreCase(name));
 	}
 
