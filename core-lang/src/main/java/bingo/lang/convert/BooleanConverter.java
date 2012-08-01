@@ -17,6 +17,7 @@ package bingo.lang.convert;
 
 import java.lang.reflect.Type;
 
+import bingo.lang.Converts;
 import bingo.lang.Out;
 
 public class BooleanConverter extends AbstractConverter<Boolean> implements Converter<Boolean> {
@@ -40,6 +41,16 @@ public class BooleanConverter extends AbstractConverter<Boolean> implements Conv
     	this.falseStrings = copyStrings(falseStrings);
     }
     
+	@Override
+    public boolean convertTo(Boolean value, Class<?> targetType, Type genericType, Out<Object> out) throws Throwable {
+		if(Number.class.isAssignableFrom(targetType)){
+			return out.returns(Converts.convert(value.booleanValue() ? 1 : 0, targetType));
+		}else if(Character.class.equals(targetType)){
+			return out.returns(value.booleanValue() ? '1' : '0');
+		}
+		return false;
+    }
+
 	@Override
     public boolean convertFrom(Object value, Class<?> targetType, Type genericType, Out<Object> out) throws Throwable {
 		String stringValue = value.toString().toLowerCase();

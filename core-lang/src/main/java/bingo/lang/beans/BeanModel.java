@@ -25,9 +25,7 @@ import java.util.WeakHashMap;
 import bingo.lang.Arrays;
 import bingo.lang.Assert;
 import bingo.lang.Collections;
-import bingo.lang.Enumerables;
 import bingo.lang.Predicate;
-import bingo.lang.Predicates;
 import bingo.lang.reflect.ReflectClass;
 import bingo.lang.reflect.ReflectField;
 import bingo.lang.reflect.ReflectMethod;
@@ -123,11 +121,21 @@ public class BeanModel<T> {
 	}
 	
 	public BeanProperty getProperty(String name){
-		return Enumerables.firstOrNull(properties,Predicates.<BeanProperty>nameEquals(name));
+		for(BeanProperty p : properties){
+			if(p.getName().equals(name) || (p.isField() && p.getField().getName().equals(name))){
+				return p;
+			}
+		}
+		return null;
 	}
 	
-	public BeanProperty getPropertyIgnorecase(String name){
-		return Enumerables.firstOrNull(properties,Predicates.<BeanProperty>nameEqualsIgnoreCase(name));
+	public BeanProperty getPropertyIgnoreCase(String name){
+		for(BeanProperty p : properties){
+			if(p.getName().equalsIgnoreCase(name) || (p.isField() && p.getField().getName().equalsIgnoreCase(name))){
+				return p;
+			}
+		}
+		return null;
 	}
 
 	private void initialize(){

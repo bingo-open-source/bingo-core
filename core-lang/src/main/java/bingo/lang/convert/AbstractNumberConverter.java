@@ -21,9 +21,11 @@ import bingo.lang.Out;
 
 public abstract class AbstractNumberConverter<T extends Number> extends AbstractConverter<T> {
 
-    private static final Integer ZERO = new Integer(0);
-    private static final Integer ONE  = new Integer(1);
-	
+    private static final Integer ZERO  = new Integer(0);
+    private static final Integer ONE   = new Integer(1);
+	private static final String  TRUE  = "true";
+	private static final String  FALSE = "false";
+    
 	@Override
     public boolean convertFrom(Object value, Class<?> targetType, Type genericType, Out<Object> out) throws Throwable {
 		if(value instanceof Number){
@@ -36,7 +38,15 @@ public abstract class AbstractNumberConverter<T extends Number> extends Abstract
     }
 	
 	protected T toNumber(Class<?> targetType,Object value) {
-		return toNumber(targetType,value.toString());
+		String string = value.toString();
+		
+		if(string.equalsIgnoreCase(TRUE)){
+			return toNumber(targetType, ONE);
+		}else if(string.equalsIgnoreCase(FALSE)){
+			return toNumber(targetType, ZERO);
+		}else{
+			return toNumber(targetType,value.toString());	
+		}
 	}
 
 	protected abstract T toNumber(Class<?> targetType,Number number);
