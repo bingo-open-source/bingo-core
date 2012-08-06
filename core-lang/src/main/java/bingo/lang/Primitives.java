@@ -67,21 +67,6 @@ public class Primitives {
 		backward.put(value, key);
 	}
 	
-	/**
-	 * <p>
-	 * 	返回一个基本类型对应的默认值。
-	 * </p>
-	 * {@link Integer} 的默认值为0；<br>
-	 * {@link Boolean} 的默认值为 <code>false</code>；<br>
-	 * {@link Long} 的默认值为0L；<br>
-	 * {@link Float} 的默认值为0.0f；<br>
-	 * {@link Double} 的默认值为0.0d；<br>
-	 * {@link Short} 的默认值为0；<br>
-	 * {@link Byte} 的默认值为0；<br>
-	 * {@link Character} 的默认值为\u0000。<br>
-	 * @param type 要返回其默认值的类型。
-	 * @return 该类型对应的默认值。
-	 */
 	public static Object defaultValue(Class<?> type){
         if(Integer.TYPE == type){
             return 0;

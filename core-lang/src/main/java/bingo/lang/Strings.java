@@ -68,6 +68,18 @@ public class Strings {
 	public static int length(CharSequence string) {
 		return string == null ? 0 : string.length();
 	}
+	
+	/**
+	 * return the fisrt not empty string
+	 */
+	public static String firstNotEmpty(String... strings){
+		for(String string : strings){
+			if(!isEmpty(string)){
+				return string;
+			}
+		}
+		return EMPTY;
+	}
 
 	// Fomatting
 	// -----------------------------------------------------------------------
