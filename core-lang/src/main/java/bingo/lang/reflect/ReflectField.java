@@ -22,6 +22,7 @@ import java.lang.reflect.Type;
 
 import bingo.lang.Arrays;
 import bingo.lang.Primitives;
+import bingo.lang.Strings;
 import bingo.lang.exceptions.ReflectException;
 
 public class ReflectField extends ReflectMember {
@@ -220,7 +221,15 @@ public class ReflectField extends ReflectMember {
 		ReflectMethod m = findGetter(fieldType,nameToFind);
 		
 		if(null == m && Primitives.isBoolean(fieldType)){
-			if(fieldName.startsWith("is")){
+			if(fieldName.startsWith("is") && fieldName.length() > 2){
+				if(Boolean.class.equals(javaField.getType())){
+					nameToFind = "get" + Strings.upperFirst(fieldName.substring(2));
+					
+					if(null != (m = findGetter(fieldType, nameToFind))){
+						return m;
+					}
+				}
+				
 				nameToFind = fieldName;
 			}else{
 				nameToFind = "is" + Character.toUpperCase(fieldName.charAt(0)) + (fieldName.length() > 1 ? fieldName.substring(1) : "");

@@ -86,6 +86,10 @@ public class ReflectClass<T> implements Named {
 	public String getName() {
 	    return javaClass.getName();
     }
+	
+	public boolean hasDefaultConstructor(){
+		return null != defaultConstructor;
+	}
 
 	/**
 	 * 调用缺省的无参数构造函数创建对象实例并返回

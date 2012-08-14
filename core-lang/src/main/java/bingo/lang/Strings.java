@@ -68,6 +68,18 @@ public class Strings {
 	public static int length(CharSequence string) {
 		return string == null ? 0 : string.length();
 	}
+	
+	/**
+	 * return the fisrt not empty string
+	 */
+	public static String firstNotEmpty(String... strings){
+		for(String string : strings){
+			if(!isEmpty(string)){
+				return string;
+			}
+		}
+		return EMPTY;
+	}
 
 	// Fomatting
 	// -----------------------------------------------------------------------
@@ -1376,6 +1388,18 @@ public class Strings {
 
 	// Case conversion
 	//-----------------------------------------------------------------------
+	public static String upperFirst(String string){
+		if(null == string){
+			return EMPTY;
+		}
+		
+		if(string.length() > 1){
+			return Character.toUpperCase(string.charAt(0)) + string.substring(1);
+		}else{
+			return string;
+		}
+	}
+	
 	/**
 	 * <p>
 	 * Converts a String to upper case as per {@link String#toUpperCase()}.

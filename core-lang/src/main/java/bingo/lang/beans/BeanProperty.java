@@ -28,26 +28,32 @@ import bingo.lang.reflect.ReflectMethod;
 public class BeanProperty implements Named {
 	
 	private String   	   name;
+	private String         traditionalName;
 	private Class<?> 	   type;
-	private ReflectField  field;
-	private ReflectMethod getter;
-	private ReflectMethod setter;
-	private BeanModel<?>  beanClass;
-	private boolean	   readable;
-	private boolean      writable;
-	private boolean      _transient;
-	private Type          genericType;
-	private Annotation[]  annotations = new Annotation[]{};
+	private ReflectField   field;
+	private ReflectMethod  getter;
+	private ReflectMethod  setter;
+	private BeanModel<?>   beanClass;
+	private boolean	   	   readable;
+	private boolean        writable;
+	private boolean        _transient;
+	private Type           genericType;
+	private Annotation[]   annotations = new Annotation[]{};
 	
-	protected BeanProperty(BeanModel<?> beanClass,String name){
-		this.name      = name;
-		this.beanClass = beanClass;
+	protected BeanProperty(BeanModel<?> beanClass,String name,String traditionalName){
+		this.name      		 = name;
+		this.traditionalName = traditionalName;
+		this.beanClass 		 = beanClass;
 	}
 
 	public String getName() {
 	    return name;
     }
 	
+	public String getTraditionalName() {
+		return traditionalName;
+	}
+
 	public Class<?> getType(){
 		return type;
 	}

@@ -18,6 +18,7 @@ package bingo.lang.reflect;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
+import bingo.lang.Primitives;
 import bingo.lang.exceptions.ReflectException;
 
 /**
@@ -72,6 +73,16 @@ public class ReflectMethod extends ReflectMember{
 	
 	public Object invoke(Object instance,Object... args) {
 		try {
+			if(parameters.length != args.length){
+				throw new IllegalArgumentException("argument's length must be " + parameters.length);
+			}
+			
+			for(int i=0;i<args.length;i++){
+				if(null == args[i]) {
+					args[i] = Primitives.defaultValue(parameters[i].type);
+			    }
+			}
+			
 	        if(index == -1){
 	        	return javaMethod.invoke(instance, args);
 	        }else{
@@ -84,6 +95,16 @@ public class ReflectMethod extends ReflectMember{
 	
 	public Object invokeStatic(Object... args) {
 		try {
+			if(parameters.length != args.length){
+				throw new IllegalArgumentException("argument's length must be " + parameters.length);
+			}
+			
+			for(int i=0;i<args.length;i++){
+				if(null == args[i]) {
+					args[i] = Primitives.defaultValue(parameters[i].type);
+			    }
+			}
+			
 	        if(index == -1){
 	        	return javaMethod.invoke(null, args);
 	        }else{

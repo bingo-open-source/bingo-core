@@ -26,6 +26,7 @@ import bingo.lang.Arrays;
 import bingo.lang.Assert;
 import bingo.lang.Collections;
 import bingo.lang.Predicate;
+import bingo.lang.Primitives;
 import bingo.lang.reflect.ReflectClass;
 import bingo.lang.reflect.ReflectField;
 import bingo.lang.reflect.ReflectMethod;
@@ -122,7 +123,7 @@ public class BeanModel<T> {
 	
 	public BeanProperty getProperty(String name){
 		for(BeanProperty p : properties){
-			if(p.getName().equals(name) || (p.isField() && p.getField().getName().equals(name))){
+			if(p.getName().equals(name) || p.getTraditionalName().equals(name)){
 				return p;
 			}
 		}
@@ -131,7 +132,7 @@ public class BeanModel<T> {
 	
 	public BeanProperty getPropertyIgnoreCase(String name){
 		for(BeanProperty p : properties){
-			if(p.getName().equalsIgnoreCase(name) || (p.isField() && p.getField().getName().equalsIgnoreCase(name))){
+			if(p.getName().equalsIgnoreCase(name) || p.getTraditionalName().equalsIgnoreCase(name)){
 				return p;
 			}
 		}
@@ -153,13 +154,14 @@ public class BeanModel<T> {
 			
 			if(field.isPublic() || field.hasGetter() || field.hasSetter()){
 			
-				String name = getConventionPropertyName(field);
+				String tranditionalName = getTranditionalPropertyName(field);
+				String name             = getConventionalPropertyName(tranditionalName,field);
 				
 				if(props.containsKey(name)){
 					continue;
 				}
 				
-				BeanProperty prop = new BeanProperty(this,name);
+				BeanProperty prop = new BeanProperty(this,name,tranditionalName);
 				
 				prop.setType(field.getType());
 				prop.setGenericType(field.getGenericType());
@@ -261,7 +263,7 @@ public class BeanModel<T> {
 			BeanProperty prop = props .get(propName);
 			
 			if(null == prop){
-				prop = new BeanProperty(this, propName);
+				prop = new BeanProperty(this, propName,propName);
 				
 				prop.setType(type);
 				props.put(propName, prop);
@@ -275,7 +277,7 @@ public class BeanModel<T> {
 		return null;
 	}
 	
-	private String getConventionPropertyName(ReflectField field) {
+	private String getTranditionalPropertyName(ReflectField field) {
 		String name = null;
 		if(field.hasSetter()){
 			name = field.getSetter().getName().substring(SETTER_PREFIX.length());
@@ -292,6 +294,17 @@ public class BeanModel<T> {
 		}
 		
 		return name.length() == 1 ? name.toLowerCase() : Character.toLowerCase(name.charAt(0)) + name.substring(1);
+	}
+	
+	private String getConventionalPropertyName(String name, ReflectField field) {
+		if(Primitives.isBoolean(field.getType())){
+			String fieldName = field.getName().startsWith("_") ? field.getName().substring(1) : field.getName();
+			
+			if(("is" + name).equalsIgnoreCase(fieldName)){
+				return fieldName;
+			}
+		}
+		return name;
 	}
 
 	@Override
