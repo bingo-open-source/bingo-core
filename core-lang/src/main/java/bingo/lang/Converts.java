@@ -15,27 +15,33 @@
  */
 package bingo.lang;
 
+import java.io.InputStream;
 import java.lang.reflect.Array;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.sql.Blob;
 import java.sql.Clob;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
 import bingo.lang.convert.ArrayConverter;
 import bingo.lang.convert.BeanConverter;
+import bingo.lang.convert.BlobConverter;
 import bingo.lang.convert.BooleanConverter;
 import bingo.lang.convert.CharacterConverter;
 import bingo.lang.convert.ClassConverter;
+import bingo.lang.convert.ClobConverter;
 import bingo.lang.convert.CollectionConverters;
 import bingo.lang.convert.Converter;
 import bingo.lang.convert.Convertible;
 import bingo.lang.convert.DateTimeConverters;
 import bingo.lang.convert.EnumConverter;
+import bingo.lang.convert.InputStreamConverter;
 import bingo.lang.convert.NumberConverters;
 import bingo.lang.convert.StringConverter;
 import bingo.lang.exceptions.ConvertException;
@@ -45,6 +51,7 @@ import bingo.lang.exceptions.ConvertUnsupportedException;
 public class Converts {
 	
 	private static final Map<Class<?>, Converter<?>> converters = new ConcurrentHashMap<Class<?>, Converter<?>>();
+	private static final Map<Class<?>, Converter> assignableFromConverters = new ConcurrentHashMap<Class<?>, Converter>();
 	
 	private static Converter beanConverter  = new BeanConverter();
 	private static Converter arrayConverter = new ArrayConverter();
@@ -80,6 +87,10 @@ public class Converts {
 		
 		//Class
 		register(Class.class,				new ClassConverter());
+		
+		registerAssignableFrom(Clob.class, new ClobConverter());
+		registerAssignableFrom(Blob.class, new BlobConverter());
+		registerAssignableFrom(InputStream.class, new InputStreamConverter());
 	}
 	
 	protected Converts(){
@@ -88,6 +99,10 @@ public class Converts {
 	
 	public static void register(Class<?> clazz,Converter<?> converter){
 		converters.put(clazz,converter);
+	}
+	
+	public static void registerAssignableFrom(Class<?> superType,Converter<?> converter){
+		assignableFromConverters.put(superType, converter);
 	}
 	
 	public static <T> T convert(Object value,Class<T> targetType) throws ConvertUnsupportedException {
@@ -163,10 +178,24 @@ public class Converts {
 	        	return (T)value;
 	        }
 	        
+	        for(Entry<Class<?>, Converter> entry : assignableFromConverters.entrySet()){
+	        	Class<?> superType = entry.getKey();
+	        
+	        	if(superType.isAssignableFrom(targetType) && entry.getValue().convertFrom(value, targetType, genericType, out)){
+	        		return (T)out.getValue();
+	        	}
+	        	
+	        	if(superType.isAssignableFrom(sourceType) && entry.getValue().convertTo(value, targetType, genericType, out)){
+	        		return (T)out.getValue();
+	        	}
+	        }
+	        
 	        //object type convert
 	        if(targetType.equals(Object.class)){
 	            return (T)value;
 	        }
+	        
+
 	        
 	        if(beanConverter.convertFrom(value, targetType, genericType, out) ){
 	        	return (T)out.getValue();
@@ -260,6 +289,12 @@ public class Converts {
 			
 			if(type.isEnum()){
 				return enumConverter;
+			}
+			
+			for(Entry<Class<?>, Converter> entry : assignableFromConverters.entrySet()){
+				if(entry.getKey().isAssignableFrom(type)){
+					return entry.getValue();
+				}
 			}
 		}
 		
