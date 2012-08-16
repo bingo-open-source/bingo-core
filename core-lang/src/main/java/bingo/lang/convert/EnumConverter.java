@@ -15,6 +15,9 @@
  */
 package bingo.lang.convert;
 
+import java.lang.reflect.Type;
+
+import bingo.lang.Converts;
 import bingo.lang.Enums;
 import bingo.lang.Out;
 
@@ -22,7 +25,6 @@ public class EnumConverter extends AbstractConverter<Enum<?>> implements Convert
 
 	@SuppressWarnings("unchecked")
 	public boolean convertFrom(Object value, Class<?> targetType, Class<?> genericType, Out<Object> out) throws Throwable {
-		
 		Enum<?> enumObject = Enums.valueOf((Class<Enum<?>>)targetType, value);
 		
 		if(null != enumObject){
@@ -31,5 +33,18 @@ public class EnumConverter extends AbstractConverter<Enum<?>> implements Convert
 		
 	    return false;
     }
+	
+	@Override
+    public boolean convertTo(Enum<?> value, Class<?> targetType, Type genericType, Out<Object> out) throws Throwable {
+		Object realValue = Enums.getValue(value);
+		
+	    return out.returns(Converts.convert(realValue, targetType, genericType));
+    }
 
+	@Override
+    public String convertToString(Enum<?> value) throws Throwable {
+		Object realValue = Enums.getValue(value);
+		
+		return Converts.toString(realValue);
+    }
 }
