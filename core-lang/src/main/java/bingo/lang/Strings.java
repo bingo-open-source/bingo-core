@@ -1400,6 +1400,18 @@ public class Strings {
 		}
 	}
 	
+	public static String lowerFirst(String string){
+		if(null == string){
+			return EMPTY;
+		}
+		
+		if(string.length() > 1){
+			return Character.toLowerCase(string.charAt(0)) + string.substring(1);
+		}else{
+			return string;
+		}
+	}
+	
 	/**
 	 * <p>
 	 * Converts a String to upper case as per {@link String#toUpperCase()}.
