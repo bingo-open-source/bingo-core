@@ -255,13 +255,11 @@ public class XmlElement extends XmlContainer implements XmlNamed {
 	public String requiredAttributeValue(String name) throws XmlValidationException {
 		XmlAttribute attr = attribute(name);
 		
-		String value = Strings.trim(attr.value());
-		
-		if(Strings.isEmpty(value)){
+		if(null == attr || Strings.isEmpty(attr.value())){
 			throw new XmlValidationException("attribute '{0}' value of element '{1}' is required in xml : {2}",name,name(),documentUrl());
 		}
 		
-		return value;
+		return attr.value();
 	}
 	
 	public String requiredAttributeValueOrText(String attributeName) throws XmlValidationException {
