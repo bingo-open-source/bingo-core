@@ -134,79 +134,19 @@ public class Primitives {
 	public static boolean isPrimitiveOrWrapper(Class<?> type){
 		return null == type ? false : PRIMITIVE_TO_WRAPPER_TYPE.containsKey(type) || WRAPPER_TO_PRIMITIVE_TYPE.containsKey(type);
 	}
+	
+	public static int intValue(Integer value,int defaultValue){
+		return null == value ? defaultValue : value;
+	}
+	
+	public static long longValue(Long value,long defaultValue){
+		return null == value ? defaultValue : value;
+	}
+	
+	public static boolean boolValue(Boolean value,boolean defaultValue){
+		return null == value ? defaultValue : value;
+	}
 
-	/**
-	 * 判断该类型是否为 {@link Boolean} 。
-	 * @param type 要判断的类型。
-	 * @return 如果是 {@link Boolean} 则返回 <code>true</code> 。
-	 */
-	public static boolean isBoolean(Class<?> type){
-		return Boolean.TYPE == type || Boolean.class == type;
-	}
-	
-	/**
-	 * 判断该类型是否为 {@link Integer} 。
-	 * @param type 要判断的类型。
-	 * @return 如果是 {@link Integer} 则返回 <code>true</code> 。
-	 */
-	public static boolean isInteger(Class<?> type){
-		return Integer.TYPE == type || Integer.class == type;
-	}
-	
-	/**
-	 * 判断类型是否为 {@link Long} 。
-	 * @param type 要判断的类型。
-	 * @return 如果是 {@link Long} 则返回 <code>true</code> 。
-	 */
-	public static boolean isLong(Class<?> type){
-		return Long.TYPE == type || Long.class == type;
-	}
-	
-	/**
-	 * 判断类型是否为 {@link Short} 。
-	 * @param type 要判断的类型。
-	 * @return 如果是 {@link Short} 则返回 <code>true</code> 。
-	 */
-	public static boolean isShort(Class<?> type){
-		return Short.TYPE == type || Short.class == type;
-	}
-	
-	/**
-	 * 判断类型是否为 {@link Byte} 。
-	 * @param type 要判断的类型。
-	 * @return 如果是 {@link Byte} 则返回 <code>true</code> 。
-	 */
-	public static boolean isByte(Class<?> type){
-		return Byte.TYPE == type || Byte.class == type;
-	}	
-	
-	/**
-	 * 判断类型是否为 {@link Character} 。
-	 * @param type 要判断的类型。
-	 * @return 如果是 {@link Character} 则返回 <code>true</code> 。
-	 */
-	public static boolean isCharacter(Class<?> type){
-		return Character.TYPE == type || Character.class == type;
-	}	
-	
-	/**
-	 * 判断类型是否为 {@link Float} 。
-	 * @param type 要判断的类型。
-	 * @return 如果是 {@link Float} 则返回 <code>true</code> 。
-	 */
-	public static boolean isFloat(Class<?> type){
-		return Float.TYPE == type || Float.class == type;
-	}	
-	
-	/**
-	 * 判断类型是否为 {@link Double} 。
-	 * @param type 要判断的类型。
-	 * @return 如果是 {@link Double} 则返回 <code>true</code> 。
-	 */
-	public static boolean isDouble(Class<?> type){
-		return Double.TYPE == type || Double.class == type;
-	}	
-	
 	/**
 	 * Returns the corresponding wrapper type of {@code type} if it is a primitive type; otherwise returns {@code type}
 	 * itself. Idempotent.

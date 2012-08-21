@@ -21,6 +21,7 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 
 import bingo.lang.Arrays;
+import bingo.lang.Classes;
 import bingo.lang.Primitives;
 import bingo.lang.Strings;
 import bingo.lang.exceptions.ReflectException;
@@ -185,7 +186,7 @@ public class ReflectField extends ReflectMember {
 		
 		ReflectMethod m = findSetter(fieldType, nameToFind);
 		
-		if(null == m && Primitives.isBoolean(fieldType) && fieldName.startsWith("is") && fieldName.length() > 2){
+		if(null == m && Classes.isBoolean(fieldType) && fieldName.startsWith("is") && fieldName.length() > 2){
 			nameToFind = "set" + Character.toUpperCase(fieldName.charAt(2)) + (fieldName.length() > 3 ? fieldName.substring(3) : "");
 			
 			m = findSetter(fieldType,nameToFind);
@@ -220,7 +221,7 @@ public class ReflectField extends ReflectMember {
 		
 		ReflectMethod m = findGetter(fieldType,nameToFind);
 		
-		if(null == m && Primitives.isBoolean(fieldType)){
+		if(null == m && Classes.isBoolean(fieldType)){
 			if(fieldName.startsWith("is") && fieldName.length() > 2){
 				if(Boolean.class.equals(javaField.getType())){
 					nameToFind = "get" + Strings.upperFirst(fieldName.substring(2));

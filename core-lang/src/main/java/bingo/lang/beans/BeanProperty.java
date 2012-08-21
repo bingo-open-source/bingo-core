@@ -112,6 +112,10 @@ public class BeanProperty implements Named {
 		return null != field ? field.getJavaField() : null;
 	}
 	
+	public ReflectField getReflectField(){
+		return field;
+	}
+	
 	public Method getSetter(){
 		return null != setter ? setter.getJavaMethod() : null;
 	}

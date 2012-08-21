@@ -24,9 +24,9 @@ import java.util.WeakHashMap;
 
 import bingo.lang.Arrays;
 import bingo.lang.Assert;
+import bingo.lang.Classes;
 import bingo.lang.Collections;
 import bingo.lang.Predicate;
-import bingo.lang.Primitives;
 import bingo.lang.reflect.ReflectClass;
 import bingo.lang.reflect.ReflectField;
 import bingo.lang.reflect.ReflectMethod;
@@ -297,7 +297,7 @@ public class BeanModel<T> {
 	}
 	
 	private String getConventionalPropertyName(String name, ReflectField field) {
-		if(Primitives.isBoolean(field.getType())){
+		if(Classes.isBoolean(field.getType())){
 			String fieldName = field.getName().startsWith("_") ? field.getName().substring(1) : field.getName();
 			
 			if(("is" + name).equalsIgnoreCase(fieldName)){
