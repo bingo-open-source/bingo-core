@@ -22,10 +22,14 @@ import java.lang.reflect.Type;
 
 import bingo.lang.Converts;
 import bingo.lang.Named;
+import bingo.lang.exceptions.ConvertUnsupportedException;
+import bingo.lang.logging.Log;
+import bingo.lang.logging.LogFactory;
 import bingo.lang.reflect.ReflectField;
 import bingo.lang.reflect.ReflectMethod;
 
 public class BeanProperty implements Named {
+	private static final Log log = LogFactory.get(BeanProperty.class);
 	
 	private String   	   name;
 	private String         traditionalName;
@@ -146,6 +150,27 @@ public class BeanProperty implements Named {
 		}else{
 			field.setValue(bean, value);
 		}
+	}
+	
+	public boolean trySetValue(Object bean,Object value) {
+		if(writable){
+			try {
+	            if(null != value && !type.isAssignableFrom(value.getClass())){
+	            	value = Converts.convert(value, type,genericType);
+	            }
+	            
+	    		if(null != setter){
+	    			setter.invoke(bean,value);
+	    		}else{
+	    			field.setValue(bean, value);
+	    		}
+	    		
+	    		return true;
+            } catch (ConvertUnsupportedException e) {
+            	log.info("cannot set property '{}' of bean '{}' : {}",name,beanClass.getJavaClass().getSimpleName(),e.getMessage());
+            }
+		}
+		return false;
 	}
 	
 	protected void setType(Class<?> type){
