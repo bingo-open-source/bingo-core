@@ -315,6 +315,24 @@ public abstract class Assert {
 	public static void notContains(String textToSearch, String substring) {
 		notContains(textToSearch, substring, "[Assertion failed] - this String argument must not contain the substring [" + substring + "]");
 	}
+	
+	public static <K,V> void notContainsKey(Map<K, V> map,K key){
+		if(null != map && map.containsKey(key)){
+			throw new IllegalArgumentException("[Assertion failed] - this map must not contain the key [" + key + "]");
+		}
+	}
+	
+	public static <K,V> void notContainsKey(Map<K, V> map,K key,String message){
+		if(null != map && map.containsKey(key)){
+			throw new IllegalArgumentException(message);
+		}
+	}
+	
+	public static <K,V> void notContainsKey(Map<K, V> map,K key,String messageTemplate,Object... messageArguments){
+		if(null != map && map.containsKey(key)){
+			throw new IllegalArgumentException(Strings.format(messageTemplate, messageArguments));
+		}
+	}
 
 	/**
 	 * Assert that an array has elements; that is, it must not be <code>null</code> and must have at least one element.
