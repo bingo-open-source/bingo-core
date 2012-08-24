@@ -358,8 +358,8 @@ class PathMatchingResourcePatternResolver implements ResourcePatternResolver {
 				result.addAll(doFindPathMatchingFileResources(rootDirResource, subPattern));
 			}
 		}
-		if (logger.isDebugEnabled()) {
-			logger.debug("Resolved location pattern [" + locationPattern + "] to resources " + result);
+		if (logger.isTraceEnabled()) {
+			logger.trace("Resolved location pattern [" + locationPattern + "] to resources " + result);
 		}
 		return result.toArray(new Resource[result.size()]);
 	}
@@ -471,8 +471,8 @@ class PathMatchingResourcePatternResolver implements ResourcePatternResolver {
 		}
 
 		try {
-			if (logger.isDebugEnabled()) {
-				logger.debug("Looking for matching resources in jar file [" + jarFileUrl + "]");
+			if (logger.isTraceEnabled()) {
+				logger.trace("Looking for matching resources in jar file [" + jarFileUrl + "]");
 			}
 			if (!"".equals(rootEntryPath) && !rootEntryPath.endsWith("/")) {
 				// Root entry path must end with slash to allow for proper matching.
@@ -557,8 +557,8 @@ class PathMatchingResourcePatternResolver implements ResourcePatternResolver {
 	 * @see org.springframework.util.PathMatcher
 	 */
 	protected Set<Resource> doFindMatchingFileSystemResources(File rootDir, String subPattern) throws IOException {
-		if (logger.isDebugEnabled()) {
-			logger.debug("Looking for matching resources in directory tree [" + rootDir.getPath() + "]");
+		if (logger.isTraceEnabled()) {
+			logger.trace("Looking for matching resources in directory tree [" + rootDir.getPath() + "]");
 		}
 		Set<File> matchingFiles = retrieveMatchingFiles(rootDir, subPattern);
 		Set<Resource> result = new LinkedHashSet<Resource>(matchingFiles.size());
@@ -580,8 +580,8 @@ class PathMatchingResourcePatternResolver implements ResourcePatternResolver {
 	protected Set<File> retrieveMatchingFiles(File rootDir, String pattern) throws IOException {
 		if (!rootDir.exists()) {
 			// Silently skip non-existing directories.
-			if (logger.isDebugEnabled()) {
-				logger.debug("Skipping [" + rootDir.getAbsolutePath() + "] because it does not exist");
+			if (logger.isTraceEnabled()) {
+				logger.trace("Skipping [" + rootDir.getAbsolutePath() + "] because it does not exist");
 			}
 			return Collections.emptySet();
 		}
@@ -619,8 +619,8 @@ class PathMatchingResourcePatternResolver implements ResourcePatternResolver {
 	 * @throws IOException if directory contents could not be retrieved
 	 */
 	protected void doRetrieveMatchingFiles(String fullPattern, File dir, Set<File> result) throws IOException {
-		if (logger.isDebugEnabled()) {
-			logger.debug("Searching directory [" + dir.getAbsolutePath() +
+		if (logger.isTraceEnabled()) {
+			logger.trace("Searching directory [" + dir.getAbsolutePath() +
 					"] for files matching pattern [" + fullPattern + "]");
 		}
 		File[] dirContents = dir.listFiles();
@@ -634,8 +634,8 @@ class PathMatchingResourcePatternResolver implements ResourcePatternResolver {
 			String currPath = Strings.replace(content.getAbsolutePath(), File.separator, "/");
 			if (content.isDirectory() && getPathMatcher().matchStart(fullPattern, currPath + "/")) {
 				if (!content.canRead()) {
-					if (logger.isDebugEnabled()) {
-						logger.debug("Skipping subdirectory [" + dir.getAbsolutePath() +
+					if (logger.isTraceEnabled()) {
+						logger.trace("Skipping subdirectory [" + dir.getAbsolutePath() +
 								"] because the application is not allowed to read the directory");
 					}
 				}

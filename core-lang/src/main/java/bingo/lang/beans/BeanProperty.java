@@ -167,7 +167,7 @@ public class BeanProperty implements Named {
 	    		
 	    		return true;
             } catch (ConvertUnsupportedException e) {
-            	log.info("cannot set property '{}' of bean '{}' : {}",name,beanClass.getJavaClass().getSimpleName(),e.getMessage());
+            	log.debug("cannot set property '{}' of bean '{}' -> {}",name,beanClass.getJavaClass().getSimpleName(),e.getMessage());
             }
 		}
 		return false;
