@@ -292,10 +292,7 @@ public class Reflects {
         
         for (Class<?> search = clazz; search != null; search = search.getSuperclass()) {
             for(Field field : search.getDeclaredFields()){
-                //exclude synthetic field
-                if(!field.isSynthetic()){
-                    fields.add(field) ;
-                }
+            	fields.add(field) ;
             }
         }
         

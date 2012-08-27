@@ -222,7 +222,7 @@ public class Objects {
 	 * @throws CloneException if the object is cloneable and the clone operation fails
 	 */
 	public static <T> T clone(final T obj) {
-		if (obj instanceof Cloneable) {
+		if (null != obj && obj instanceof Cloneable) {
 			final Object result;
 			if (obj.getClass().isArray()) {
 				final Class<?> componentType = obj.getClass().getComponentType();

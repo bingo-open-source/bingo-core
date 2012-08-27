@@ -1,10 +1,5 @@
 package bingo.lang.cloning;
 
-/**
- * @author kostantinos.kougios
- *
- * 28 Nov 2009
- */
 public class TransientTest
 {
 	protected transient String		tr1		= "x";

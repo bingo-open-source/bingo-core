@@ -28,10 +28,7 @@ import bingo.lang.cloning.beans.G;
  */
 public class TestCloner extends TestCase
 {
-	private final Cloner	cloner	= new Cloner();
-	{
-		cloner.setDumpClonedClasses(false);
-	}
+	private final Cloner cloner	= new Cloner();
 
 	class X
 	{
@@ -41,7 +38,7 @@ public class TestCloner extends TestCase
 		}
 	}
 
-	@Immutable(subClass = true)
+	@CloneImmutable(subClass = true)
 	static public class ATestImmutable
 	{
 	}
@@ -51,7 +48,7 @@ public class TestCloner extends TestCase
 
 	}
 
-	@Immutable
+	@CloneImmutable
 	static public class BTestImmutable
 	{
 	}
@@ -72,7 +69,7 @@ public class TestCloner extends TestCase
 	public void testIgnoreInstanceOf()
 	{
 		final Cloner cloner = new Cloner();
-		cloner.dontCloneInstanceOf(A.class);
+		cloner.registerImmutableInstanceOf(A.class);
 
 		final A a = new A()
 		{
@@ -522,61 +519,25 @@ public class TestCloner extends TestCase
 		assertEquals(4, cloned.size());
 	}
 
-	public void testTransientNullPositive()
-	{
-		final Cloner c = new Cloner();
-		c.setNullTransient(true);
-		final TransientTest tt = new TransientTest();
-		final TransientTest deepClone = c.deepClone(tt);
-		assertNull(deepClone.tr1);
-		assertNull(deepClone.a);
-		assertEquals(0, deepClone.i);
-		assertNotNull(deepClone.nontr);
-	}
+//	public void testTransientNullPositive()
+//	{
+//		final Cloner c = new Cloner();
+//		final TransientTest tt = new TransientTest();
+//		final TransientTest deepClone = c.deepClone(tt);
+//		assertNull(deepClone.tr1);
+//		assertNull(deepClone.a);
+//		assertEquals(0, deepClone.i);
+//		assertNotNull(deepClone.nontr);
+//	}
 
 	public void testTransientNullNegative()
 	{
 		final Cloner c = new Cloner();
-		c.setNullTransient(false);
 		final TransientTest tt = new TransientTest();
 		final TransientTest deepClone = c.deepClone(tt);
 		assertNotNull(deepClone.tr1);
 		assertNotNull(deepClone.a);
 		assertNotNull(deepClone.nontr);
-	}
-
-	public void testCopyPropertiesArrayPrimitive()
-	{
-		final int[] src = new int[] { 5, 6, 7 };
-		final int[] dest = new int[3];
-		cloner.copyPropertiesOfInheritedClass(src, dest);
-		assertEquals(src[0], dest[0]);
-		assertEquals(src[1], dest[1]);
-		assertEquals(src[2], dest[2]);
-	}
-
-	public void testCopyPropertiesArray()
-	{
-		final Object[] src = new Object[] { new Integer(5), new Float(8.5f), new Double(3.5d) };
-		final Object[] dest = new Object[3];
-		cloner.copyPropertiesOfInheritedClass(src, dest);
-		assertEquals(src[0], dest[0]);
-		assertEquals(src[1], dest[1]);
-		assertEquals(src[2], dest[2]);
-	}
-
-	public void testCopyPropertiesInheritedClasses()
-	{
-		final A a = new A();
-		final B b = new B();
-		b.setName("x");
-		b.setX(-1);
-		b.setY(10);
-		cloner.copyPropertiesOfInheritedClass(a, b);
-
-		assertEquals("kostas", b.getName());
-		assertEquals(5, b.getX());
-		assertEquals(10, b.getY());
 	}
 
 	public void testDeepCloneDontCloneInstances()
@@ -616,7 +577,6 @@ public class TestCloner extends TestCase
 	public void testDontCloneSynthetic()
 	{
 		final Cloner cloner = new Cloner();
-		cloner.setCloneSynthetics(false);
 		final SynthOuter outer = new SynthOuter();
 		final Inner inner = outer.getInner();
 		final Inner clonedInner = cloner.deepClone(inner);

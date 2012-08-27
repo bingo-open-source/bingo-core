@@ -147,7 +147,7 @@ public class ListOrderedSet<E> extends AbstractSetWrapper<E> implements Set<E> {
 	}
 
 	//-----------------------------------------------------------------------
-	public Object get(int index) {
+	public E get(int index) {
 		return setOrder.get(index);
 	}
 
@@ -176,8 +176,8 @@ public class ListOrderedSet<E> extends AbstractSetWrapper<E> implements Set<E> {
 		return changed;
 	}
 
-	public Object remove(int index) {
-		Object obj = setOrder.remove(index);
+	public E remove(int index) {
+		E obj = setOrder.remove(index);
 		remove(obj);
 		return obj;
 	}

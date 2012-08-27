@@ -1,12 +1,6 @@
 package bingo.lang.cloning.beans;
 
-/**
- * @author kostantinos.kougios
- *
- * 1 Apr 2011
- */
-public class G
-{
+public class G {
 	private final A	a;
 	private final B	b;
 
@@ -25,5 +19,4 @@ public class G
 	{
 		return b;
 	}
-
 }

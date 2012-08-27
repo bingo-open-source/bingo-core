@@ -51,11 +51,11 @@ public class ReflectClass<T> implements Named {
 	}
 	
 	private final Class<T>	         javaClass;
-	private final ReflectAccessor   accessor;
-	private final ReflectMetadata   metadata;
+	private final ReflectAccessor    accessor;
+	private final ReflectMetadata    metadata;
 	
-	private final boolean 		 isInner;
-	private final boolean          isSimple;
+	private final boolean 		     isInner;
+	private final boolean            isSimple;
 	private final boolean			 isEnumerable;
 	
 	private ReflectConstructor<T>[]	 constructors;
@@ -66,8 +66,8 @@ public class ReflectClass<T> implements Named {
 	private ReflectMethod[]		 	 declaredMethods;	
 	
 	private ReflectConstructor<T>	 defaultConstructor;	
-	private boolean				 defaultConstructorInner = false;
-	private ReflectInstantiator<T>  instantiator	         = null;
+	private boolean				     defaultConstructorInner = false;
+	private ReflectInstantiator<T>   instantiator	         = null;
 	
 	protected ReflectClass(Class<T> javaClass){
 		this.javaClass = javaClass;
@@ -342,9 +342,7 @@ public class ReflectClass<T> implements Named {
 		List<ReflectField> fieldList = New.list();
 		
 		for(Field f : Reflects.getFields(javaClass)){
-			if(!f.isSynthetic() && !Object.class.equals(f.getDeclaringClass())){
-				fieldList.add(new ReflectField(this,f));
-			}
+			fieldList.add(new ReflectField(this,f));
 		}
 		
 		this.fields = fieldList.toArray(new ReflectField[fieldList.size()]);

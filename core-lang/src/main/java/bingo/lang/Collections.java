@@ -117,4 +117,22 @@ public class Collections {
 
 		return list;
 	}
+	
+	public static <T> void addAll(Collection<T> c,T[] array){
+		if(null == c || null == array){
+			return;
+		}
+		for(T t : array){
+			c.add(t);
+		}
+	}
+	
+	public static <T> void addAll(Collection<T> c,Iterable<T> iterable){
+		if(null == c || null == iterable){
+			return;
+		}
+		for(T t : iterable){
+			c.add(t);
+		}
+	}
 }

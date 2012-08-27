@@ -76,6 +76,10 @@ public class ReflectField extends ReflectMember {
 		return javaField.getDeclaringClass();
 	}
 	
+	public boolean isSynthetic(){
+		return javaField.isSynthetic();
+	}
+	
 	public boolean isStatic(){
 		return Modifier.isStatic(javaField.getModifiers());
 	}	
@@ -118,33 +122,27 @@ public class ReflectField extends ReflectMember {
 	}
 	
 	public void setValue(Object instance, Object value) {
-        try {
-            if(setterIndex != -1){
-                reflectClass.getAccessor().invokeMethod(instance, setterIndex, safeValue(value));
-            }else if(fieldIndex != -1){
-            	reflectClass.getAccessor().setField(instance, fieldIndex, safeValue(value));
-            }else{
-                javaField.set(instance, safeValue(value));
-            }
-        } catch (Exception e) {
-        	throw new ReflectException("error setting value '{0}' to field '{1}'",value,getName(),e);
-        }	
+		setValue(instance,value,false);
 	}
 	
-	public void setValue(Object instance, Object value, boolean useSetterIfExists) {
+	public void setValue(Object instance, Object value, boolean useSetter) {
         try {
-        	if(useSetterIfExists && null != setter){
-        		if(setterIndex != -1){
-        			accessor.invokeMethod(instance, setterIndex, safeValue(value));
-        		}else{
-        			setter.invoke(instance, safeValue(value));
-        		}
+        	if(javaField.isSynthetic() || isFinal()){
+        		javaField.set(instance, safeValue(value));
         	}else{
-        		if(fieldIndex != -1){
-                	accessor.setField(instance, fieldIndex, safeValue(value));
-                }else{
-                    javaField.set(instance, safeValue(value));
-                }
+            	if(useSetter && null != setter){
+            		if(setterIndex != -1){
+            			accessor.invokeMethod(instance, setterIndex, safeValue(value));
+            		}else{
+            			setter.invoke(instance, safeValue(value));
+            		}
+            	}else{
+            		if(fieldIndex != -1){
+                    	accessor.setField(instance, fieldIndex, safeValue(value));
+                    }else{
+                        javaField.set(instance, safeValue(value));
+                    }
+            	}
         	}
         } catch (Exception e) {
         	throw new ReflectException("error setting value '{0}' to field '{1}'",value,getName(),e);
@@ -152,12 +150,12 @@ public class ReflectField extends ReflectMember {
 	}
 	
 	public Object getValue(Object instance) {
-		return getValue(instance,true);
+		return getValue(instance,false);
 	}
 	
-	public Object getValue(Object instance,boolean useGetterIfExists) {
+	public Object getValue(Object instance,boolean useGetter) {
         try {
-        	if(useGetterIfExists && null != getter){
+        	if(useGetter && null != getter){
         		if(getterIndex != -1){
         			return accessor.invokeMethod(instance, getterIndex, Arrays.EMPTY_OBJECT_ARRAY);
         		}else{

@@ -124,8 +124,8 @@ public abstract class ReflectAccessor {
             } catch (ClassNotFoundException ignored) {
             }
             
-            Method[] methods = getDeclaredMethods(type);
-            Field[]  fields  = getDelaredFields(type);
+            Method[] methods = getAccessibleMethods(type);
+            Field[]  fields  = getAccessibleFields(type);
             Constructor<?> c = getDefaultConstructor(type,accessorClassName.startsWith(typeClassName));
             
             if (accessorClass == null) {
@@ -796,7 +796,7 @@ public abstract class ReflectAccessor {
     	return null;
     }
     
-    private static Method[] getDeclaredMethods(Class<?> type){
+    private static Method[] getAccessibleMethods(Class<?> type){
         ArrayList<Method> methods = new ArrayList<Method>();
         Class<?> nextClass = type;
         
@@ -819,7 +819,7 @@ public abstract class ReflectAccessor {
         return methods.toArray(new Method[methods.size()]);
     }
     
-    private static Field[] getDelaredFields(Class<?> type){
+    private static Field[] getAccessibleFields(Class<?> type){
         ArrayList<Field> fields = new ArrayList<Field>();
         Class<?> nextClass = type;
         
@@ -830,6 +830,14 @@ public abstract class ReflectAccessor {
                 Field field = declaredFields[i];
                 
                 if (Modifier.isPrivate(field.getModifiers())) {
+                	continue;
+                }
+                
+                if(Modifier.isFinal(field.getModifiers())){
+                	continue;
+                }
+                
+                if(field.isSynthetic()){
                 	continue;
                 }
                 

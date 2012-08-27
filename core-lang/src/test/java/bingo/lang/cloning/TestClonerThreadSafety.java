@@ -13,8 +13,6 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import bingo.lang.cloning.Cloner;
-
 /**
  * test thread safety of cloner
  * 

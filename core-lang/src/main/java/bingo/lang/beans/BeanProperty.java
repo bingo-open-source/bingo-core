@@ -133,7 +133,7 @@ public class BeanProperty implements Named {
 			throw new IllegalStateException("Property '" + name + "' of '" + beanClass.getJavaClass().getName() + "' not readable");
 		}
 		
-		return null != getter ? getter.invoke(bean) : field.getValue(bean);
+		return null != getter ? getter.invoke(bean) : field.getValue(bean,true);
 	}
 	
 	public void setValue(Object bean,Object value){
@@ -148,7 +148,7 @@ public class BeanProperty implements Named {
 		if(null != setter){
 			setter.invoke(bean,value);
 		}else{
-			field.setValue(bean, value);
+			field.setValue(bean, value, true);
 		}
 	}
 	
@@ -162,7 +162,7 @@ public class BeanProperty implements Named {
 	    		if(null != setter){
 	    			setter.invoke(bean,value);
 	    		}else{
-	    			field.setValue(bean, value);
+	    			field.setValue(bean, value, true);
 	    		}
 	    		
 	    		return true;

@@ -21,31 +21,12 @@ import java.lang.reflect.Modifier;
 import bingo.lang.Primitives;
 import bingo.lang.exceptions.ReflectException;
 
-/**
- * 反射类的方法。
- */
 public class ReflectMethod extends ReflectMember{
 	
-	/**
-	 * 该方法在类中的索引。
-	 */
-	private final int    index;
+	private final int          index;
+	private final Method 	   javaMethod;
+	private ReflectParameter[] parameters;
 	
-	/**
-	 * 包裹的原生的java的 {@link Method}。
-	 */
-	private final Method javaMethod;
-	
-	/**
-	 * 该方法的参数列表。
-	 */
-	private ReflectParameter[]   parameters;
-	
-	/**
-	 * 指定反射类reflectClass和原生javaMethod的构造方法。
-	 * @param reflectClass 指定的反射类。
-	 * @param javaMethod 指定的原生javaMethod。
-	 */
 	protected ReflectMethod(ReflectClass<?> reflectClass,Method javaMethod) {
 		super(reflectClass,javaMethod);
 		
@@ -115,9 +96,6 @@ public class ReflectMethod extends ReflectMember{
         }
 	}
 	
-	/**
-	 * 反射类的方法的初始化模块，由构造方法调用。
-	 */
 	private void initialize() {
 		this.parameters = new ReflectParameter[javaMethod.getParameterTypes().length];
 		
