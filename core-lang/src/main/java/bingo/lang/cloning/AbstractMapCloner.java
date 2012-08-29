@@ -7,7 +7,7 @@ import java.util.Set;
 abstract class AbstractMapCloner<T extends Map> implements TypeCloner<T> {
 	public T clone(final Cloner cloner, final T t, final Map<Object, Object> clones, boolean deepClone) throws IllegalAccessException {
 		final T m = (T) t;
-		final T result = getInstance((T) t);
+		final T result = newInstance((T) t);
 		final Set<Map.Entry<Object, Object>> entrySet = m.entrySet();
 		for (final Map.Entry e : entrySet) {
 			final Object key = cloner.clone(e.getKey(), clones, deepClone);
@@ -17,5 +17,5 @@ abstract class AbstractMapCloner<T extends Map> implements TypeCloner<T> {
 		return result;
 	}
 
-	protected abstract T getInstance(T t);
+	protected abstract T newInstance(T t);
 }

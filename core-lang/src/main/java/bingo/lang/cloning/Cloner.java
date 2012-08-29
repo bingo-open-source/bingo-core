@@ -8,11 +8,17 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URI;
 import java.net.URL;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.IdentityHashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +28,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.regex.Pattern;
 
@@ -212,12 +219,28 @@ public class Cloner {
 
 	protected void initObjectCloners() {
 		typeCloners.put(GregorianCalendar.class, new CalendarCloner());
-		typeCloners.put(ArrayList.class, new ArrayListCloner());
-		typeCloners.put(LinkedList.class, new LinkedListCloner());
-		typeCloners.put(HashSet.class, new HashSetCloner());
-		typeCloners.put(HashMap.class, new HashMapCloner());
-		typeCloners.put(TreeMap.class, new TreeMapCloner());
-		typeCloners.put(ConcurrentHashMap.class, new ConcurrentHashMapCloner());
+		
+		typeCloners.put(ArrayList.class, new CollectionCloners.ArrayListCloner());
+		typeCloners.put(LinkedList.class,new CollectionCloners.LinkedListCloner());
+		typeCloners.put(CopyOnWriteArrayList.class,new CollectionCloners.CopyOnWriteArrayListCloner());
+		
+		typeCloners.put(HashSet.class, new CollectionCloners.HashSetCloner());
+		typeCloners.put(LinkedHashSet.class, new CollectionCloners.LinkedHashSetCloner());
+		typeCloners.put(TreeSet.class, new CollectionCloners.TreeSetCloner());
+		typeCloners.put(CopyOnWriteArraySet.class, new CollectionCloners.CopyOnWriteArraySetCloner());
+		
+		typeCloners.put(HashMap.class, new MapCloners.HashMapCloner());
+		typeCloners.put(TreeMap.class, new MapCloners.TreeMapCloner());
+		typeCloners.put(LinkedHashMap.class, new MapCloners.LinkedHashMapCloner());
+		typeCloners.put(ConcurrentHashMap.class, new MapCloners.ConcurrentHashMapCloner());
+		
+		typeCloners.put(Timestamp.class, new DateCloners.SqlTimestampCloner());
+		typeCloners.put(Time.class, new DateCloners.SqlTimeCloner());
+		typeCloners.put(java.sql.Date.class, new DateCloners.SqlDateCloner());
+		typeCloners.put(Date.class, new DateCloners.DateCloner());
+		
+		typeClonerInstanceOf.put(Collection.class, new CollectionCloners.CollectionCloner<Collection>());
+		typeClonerInstanceOf.put(Map.class, new MapCloners.MapCloner<Map>());
 	}
 
 	protected void initImmutableClasses() {

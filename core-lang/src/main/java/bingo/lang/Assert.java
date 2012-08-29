@@ -51,6 +51,14 @@ import java.util.Map;
 //From spring framework, under Apache License 2.0
 public abstract class Assert {
 
+	public static void fail(String message) {
+		throw new IllegalStateException(message);
+	}
+	
+	public static void fail(String template,Object... args) {
+		throw new IllegalStateException(Strings.format(template, args));
+	}
+	
 	/**
 	 * Assert a boolean expression, throwing <code>IllegalArgumentException</code> if the test result is
 	 * <code>false</code>.

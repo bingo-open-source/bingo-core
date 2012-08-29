@@ -18,6 +18,7 @@ package bingo.lang;
 
 import java.text.DateFormat;
 import java.text.ParsePosition;
+import java.util.Calendar;
 import java.util.Date;
 
 import bingo.lang.exceptions.ParseException;
@@ -124,6 +125,16 @@ public class Dates {
 	 */
 	public static Date parseOrNull(String string,String... patterns) {
 		return parse(string,patterns,true,true);
+	}
+	
+	/**
+	 * @param field the given calendar field, see {@link Calendar}
+	 */
+	public static Date zero(Date date,int field){
+		Calendar c = Calendar.getInstance();
+		c.setTime(date);
+		c.set(field, 0);
+		return c.getTime();
 	}
 
 	/**
