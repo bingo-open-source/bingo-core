@@ -13,32 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.lang.plugin;
+package bingo.lang.mailing;
 
 import bingo.lang.exceptions.NestedRuntimeException;
 
-public class PluginException extends NestedRuntimeException {
+public class MailException extends NestedRuntimeException {
 
-	private static final long serialVersionUID = 3537100123722237524L;
+	private static final long serialVersionUID = -384719521074322516L;
 
-	public PluginException() {
+	public MailException() {
 		
 	}
 
-	public PluginException(String message) {
+	public MailException(String message) {
 		super(message);
 	}
 
-	public PluginException(String message, Throwable cause) {
+	public MailException(String message, Throwable cause) {
 		super(message, cause);
 	}
 
-	public PluginException(Throwable cause) {
+	public MailException(Throwable cause) {
 		super(cause);
 	}
 
-	public PluginException(String message, Object... args) {
+	public MailException(String message, Object... args) {
 		super(message, args);
 	}
-
 }

@@ -21,13 +21,13 @@ import java.util.Map;
 
 import bingo.lang.Named;
 
-public class Plugin implements Named{
+public abstract class Plugin implements Named{
 
 	private String   			 name;
-	private Object 			 	 bean;
+	private String				 title;
 	private String   			 summary;
 	private String   			 description;
-	private Map<String, String> properties = new LinkedHashMap<String, String>();
+	private Map<String, String>  properties = new LinkedHashMap<String, String>();
 	
 	protected Plugin(){
 		
@@ -37,24 +37,23 @@ public class Plugin implements Named{
 		return name;
 	}
 
-	@SuppressWarnings("unchecked")
-	public <T> T getBean() {
-		return (T)bean;
+	protected String getTitle() {
+		return title;
 	}
-	
-	public String getSummary() {
+
+	protected String getSummary() {
     	return summary;
     }
 
-	public String getDescription() {
+	protected String getDescription() {
     	return description;
     }
 	
-	public String getProperty(String name){
+	protected String getProperty(String name){
 		return properties.get(name);
 	}
 	
-	public Map<String, String> getProperties(){
+	protected Map<String, String> getProperties(){
 		return new HashMap<String, String>(properties);
 	}
 	
@@ -62,27 +61,19 @@ public class Plugin implements Named{
     	this.name = name;
     }
 	
-	protected void setBean(Object instance) {
-		this.bean = instance;
+	protected void setTitle(String title) {
+		this.title = title;
 	}
 	
-	public void setSummary(String summary) {
+	protected void setSummary(String summary) {
     	this.summary = summary;
     }
 
-	public void setDescription(String description) {
+	protected void setDescription(String description) {
     	this.description = description;
     }
 	
 	protected void setProperty(String name,String value){
 		properties.put(name, value);
-	}
-
-	protected void load() throws Throwable {
-
-	}
-
-	protected void unload() throws Throwable {
-
 	}
 }

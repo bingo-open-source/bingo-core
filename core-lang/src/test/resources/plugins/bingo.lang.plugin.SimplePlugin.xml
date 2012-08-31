@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plugins xmlns="http://schemas.bingosoft.net/java/core/plugin">
+
+	<add name="Simple1" class="bingo.lang.plugin.SimplePlugin1">
+		<document>
+			<summary>summary</summary>
+			<description>description</description>
+		</document>	
+		
+		<properties>
+			<property name="int1" value="100"/>
+			<property name="int2">200</property>
+			<property name="string" value="test"/>
+			<property name="bool1" value="true"/>
+			<property name="bool2" value="0"/>
+			
+			<property name="array1" type="json">
+				[1,2,3]			
+			</property>
+			
+			<property name="map1" type="json">
+			{
+				"k1" : "v1",
+				"k2" : 2			
+			}
+			</property>
+		</properties>
+	</add>
+
+	<add name="Simple2" class="bingo.lang.plugin.SimplePlugin1">
+		<document>
+			<summary>summary</summary>
+			<description>description</description>
+		</document>	
+		
+		<properties>
+			<property name="int1" value="100"/>
+			<property name="int2">200</property>
+			<property name="string" value="test"/>
+			<property name="bool1" value="true"/>
+			<property name="bool2" value="0"/>
+		</properties>
+	</add>
+	
+	<add name="Simple3" class="bingo.lang.plugin.SimplePlugin1">
+		<document>
+			<summary>summary</summary>
+			<description>description</description>
+		</document>	
+		
+		<properties>
+			<property name="int1" value="100"/>
+			<property name="int2">200</property>
+			<property name="string" value="test"/>
+			<property name="bool1" value="true"/>
+			<property name="bool2" value="0"/>
+		</properties>
+	</add>		
+	
+	<set name="Simple2">
+		<properties>
+			<property name="int1" value="200"/>
+		</properties>
+	</set>
+</plugins>

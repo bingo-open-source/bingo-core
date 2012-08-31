@@ -28,64 +28,47 @@ import bingo.lang.Reflects;
 import bingo.lang.Strings;
 import bingo.lang.beans.BeanModel;
 import bingo.lang.beans.BeanProperty;
-import bingo.lang.logging.Log;
-import bingo.lang.logging.LogFactory;
-import bingo.lang.reflect.ReflectClass;
+import bingo.lang.json.JSON;
 import bingo.lang.resource.Resource;
 import bingo.lang.resource.Resources;
 import bingo.lang.xml.XmlDocument;
 import bingo.lang.xml.XmlElement;
 import bingo.lang.xml.XmlValidator;
 
-public class PluginManager {
-	
-	private static final Log log = LogFactory.get(PluginManager.class);
+public class PluginManager<P extends Plugin> {
 	
 	private static final XmlValidator validator = XmlValidator.of(Resources.getInputStream(PluginManager.class,"plugin.xsd"));
 	
 	public static final String[] DEFAULT_PLUGIN_SEARCH_PATHS = new String[]{"/META-INF/plugins","/plugins"};
 	
-	private Class<?> 		 				 beanType;
-	private ReflectClass<? extends Plugin> reflectPlugin;
-	
-	private String		   systemConfigLocation;
-	private String[] 	   locations;
-	private LoadContext	   context = new LoadContext();
-	private List<Plugin>  plugins = new CopyOnWriteArrayList<Plugin>();
+	protected Class<P>    pluginType;
+	protected String[] 	  locations;
+	protected List<P>     plugins = new CopyOnWriteArrayList<P>();
+	private LoadContext	  context = new LoadContext();
 	
 	protected PluginManager(){
 
 	}
 	
-	public PluginManager(Class<?> beanType){
-		this(beanType,Plugin.class);
+	public PluginManager(Class<P> pluginType){
+		this.pluginType = pluginType;
 	}
 	
-	public PluginManager(Class<?> beanType,Class<? extends Plugin> pluginType){
-		this.beanType      		   = beanType;
-		this.reflectPlugin 		   = ReflectClass.get(pluginType);
-		this.systemConfigLocation = Resources.CLASSPATH_URL_PREFIX + "/" + beanType.getName().replace('.', '/') + ".xml";
+	public P[] getPlugins(){
+		return Collections.toArray(plugins, pluginType);
 	}
 	
-	public Plugin[] getPlugins(){
-		return Collections.toArray(plugins, Plugin.class);
+	public P getPlugin(String name){
+		return Enumerables.firstOrNull(plugins,Predicates.<P>nameEqualsIgnoreCase(name));
 	}
 	
-	public Plugin getPlugin(String name){
-		return Enumerables.firstOrNull(plugins,Predicates.<Plugin>nameEqualsIgnoreCase(name));
-	}
-	
-	public synchronized Plugin[] load(){
+	public synchronized P[] load(){
 		if(null == locations){
 			locations = DEFAULT_PLUGIN_SEARCH_PATHS;
 		}
 
-		if(null != systemConfigLocation){
-			load(systemConfigLocation);
-		}
-		
 		for(String location : locations){
-			load(Resources.CLASSPATH_ALL_URL_PREFIX + location + "/" + beanType.getName() + ".xml");
+			load(Resources.CLASSPATH_ALL_URL_PREFIX + location + "/" + pluginType.getName() + ".xml");
 		}
 		
 		try {
@@ -101,20 +84,6 @@ public class PluginManager {
         }
 		
 		return getPlugins();
-	}
-	
-	public synchronized void unload(){
-		try{
-			for(Plugin p : plugins){
-				try {
-		            p.unload();
-	            } catch (Throwable e) {
-	            	log.warn("Unload plugin '{}' of bean '{}' error",p.getBean().getClass().getName(),e);
-	            }
-			}
-		}finally{
-			plugins.clear();
-		}
 	}
 	
 	protected void load(String location) {
@@ -139,6 +108,7 @@ public class PluginManager {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	protected void loadNewPlugin(XmlElement e) throws Throwable{
 		String   name        = e.requiredAttributeValue("name");
 		String   clazzName   = e.requiredAttributeValue("class");
@@ -146,16 +116,15 @@ public class PluginManager {
 		
 		Assert.isFalse(getPlugin(name) != null,"plugin name '{0}' aleady exists, please check the xml : {1}",name,e.documentUrl());
 		
-		Assert.isTrue(beanType.isAssignableFrom(clazzObject),"'class' value of plugin '" + name + "' is invalid in xml : " + e.documentUrl());
+		Assert.isTrue(pluginType.isAssignableFrom(clazzObject),"'class' value of plugin '" + name + "' is invalid in xml : " + e.documentUrl());
 		
-		Plugin plugin = reflectPlugin.newInstance();
+        P plugin = (P)Reflects.newInstance(clazzObject);
 		
 		plugin.setName(name);
-		plugin.setBean(Reflects.newInstance(clazzObject));
-		
-		plugins.add(plugin);
 		
 		loadPlugin(e, plugin);
+		
+		plugins.add(plugin);
 	}
 	
 	protected void loadExistPlugin(XmlElement e) throws Throwable{
@@ -164,10 +133,9 @@ public class PluginManager {
 		
 		Plugin plugin = getPlugin(name);
 
-		if(null == plugin){
-			loadNewPlugin(e);
-			return ;
-		}else if(!Strings.isEmpty(clazz)){
+		Assert.notNull(plugin,"plugin '{0}' not exists, make sure the name is correct or use <add...>",name);
+		
+		if(!Strings.isEmpty(clazz)){
 			plugins.remove(name.toLowerCase());
 			loadNewPlugin(e);
 			return;
@@ -176,12 +144,18 @@ public class PluginManager {
 		loadPlugin(e, plugin);
 	}
 	
-	protected void loadPlugin(XmlElement e,Plugin plugin) throws Throwable{
+	@SuppressWarnings("rawtypes")
+    protected void loadPlugin(XmlElement e,Plugin plugin) throws Throwable{
 		XmlElement document = e.childElement("document");
 
 		if(null != document){
+			String title       = Strings.trim(document.childElementText("title"));
 			String summary     = Strings.trim(document.childElementText("summary"));
 			String description = Strings.trim(document.childElementText("description"));
+			
+			if(!Strings.isEmpty(title)){
+				plugin.setTitle(title);
+			}
 			
 			if(!Strings.isEmpty(summary)){
 				plugin.setSummary(summary);
@@ -195,24 +169,24 @@ public class PluginManager {
 		XmlElement properties = e.childElement("properties");
 		
 		if(null != properties){
-			Object		 bean 	   = plugin.getBean();
-			BeanModel<?> beanClass = BeanModel.get(bean.getClass());
+			BeanModel model = BeanModel.get(plugin.getClass());
 			
 			for(XmlElement prop : properties.childElements()){
 				String propName  = prop.requiredAttributeValue("name");
 				String propValue = Strings.trimToNull(prop.attributeValueOrText("value"));
+				String valueType = prop.attributeValue("type");
 				
-				plugin.setProperty(propName, propValue);
+				BeanProperty p = model.getPropertyIgnoreCase(propName);
 
-				BeanProperty beanProp = beanClass.getProperty(propName);
+				Assert.notNull(p,"property '{0}' not found in plugin type '{1}'",propName,plugin.getClass().getName());
 				
-				if(null != beanProp && beanProp.isWritable()){
-					beanProp.setValue(bean, propValue);
+				if("json".equalsIgnoreCase(valueType)){
+					p.setValue(plugin, JSON.decode(propValue,p.getType()));
+				}else{
+					p.setValue(plugin, propValue);	
 				}
 			}
 		}
-		
-		plugin.load();
 	}
 	
 	private static final class LoadContext {

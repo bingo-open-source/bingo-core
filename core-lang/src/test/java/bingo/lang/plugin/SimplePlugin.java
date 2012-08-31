@@ -15,30 +15,6 @@
  */
 package bingo.lang.plugin;
 
-import bingo.lang.exceptions.NestedRuntimeException;
-
-public class PluginException extends NestedRuntimeException {
-
-	private static final long serialVersionUID = 3537100123722237524L;
-
-	public PluginException() {
-		
-	}
-
-	public PluginException(String message) {
-		super(message);
-	}
-
-	public PluginException(String message, Throwable cause) {
-		super(message, cause);
-	}
-
-	public PluginException(Throwable cause) {
-		super(cause);
-	}
-
-	public PluginException(String message, Object... args) {
-		super(message, args);
-	}
+public abstract class SimplePlugin extends Plugin {
 
 }

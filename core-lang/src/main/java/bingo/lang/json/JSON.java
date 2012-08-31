@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.utils.json;
+package bingo.lang.json;
 
 import java.io.Reader;
 import java.lang.reflect.Array;
@@ -23,10 +23,6 @@ import java.util.Map;
 import bingo.lang.Converts;
 import bingo.lang.Strings;
 
-/**
- * use {@link bingo.lang.json.JSON}
- */
-@Deprecated()
 public class JSON {
 	
     private static final JSONDecoder decoderPermissive = new JSONDecoder();

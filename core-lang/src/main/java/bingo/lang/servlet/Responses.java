@@ -13,32 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.lang.plugin;
+package bingo.lang.servlet;
 
-import bingo.lang.exceptions.NestedRuntimeException;
+public class Responses {
 
-public class PluginException extends NestedRuntimeException {
-
-	private static final long serialVersionUID = 3537100123722237524L;
-
-	public PluginException() {
+	protected Responses(){
 		
 	}
-
-	public PluginException(String message) {
-		super(message);
-	}
-
-	public PluginException(String message, Throwable cause) {
-		super(message, cause);
-	}
-
-	public PluginException(Throwable cause) {
-		super(cause);
-	}
-
-	public PluginException(String message, Object... args) {
-		super(message, args);
-	}
-
+	
 }

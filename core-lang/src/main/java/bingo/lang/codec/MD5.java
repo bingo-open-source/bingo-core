@@ -13,32 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.lang.plugin;
+package bingo.lang.codec;
 
-import bingo.lang.exceptions.NestedRuntimeException;
 
-public class PluginException extends NestedRuntimeException {
-
-	private static final long serialVersionUID = 3537100123722237524L;
-
-	public PluginException() {
-		
+public class MD5 {
+	
+	/**
+	 * Calculates the MD5 digest and returns the value as a base64 string.
+	 */
+	public static String digest(String text) {
+		return Digests.md5Base64(text);
 	}
-
-	public PluginException(String message) {
-		super(message);
+	
+	/**
+	 * Calculates the MD5 digest and returns the value as a base64 string.
+	 */
+	public static String digest(byte[] data) {
+		return Digests.md5Base64(data);
 	}
-
-	public PluginException(String message, Throwable cause) {
-		super(message, cause);
-	}
-
-	public PluginException(Throwable cause) {
-		super(cause);
-	}
-
-	public PluginException(String message, Object... args) {
-		super(message, args);
+	
+	/**
+	 * Calculates the MD5 digest and returns the value as a hex string.
+	 */
+	public static String hex(byte[] data){
+		return Digests.md5Hex(data);
 	}
 
 }

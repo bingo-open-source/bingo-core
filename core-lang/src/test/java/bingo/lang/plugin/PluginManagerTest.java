@@ -17,6 +17,7 @@ package bingo.lang.plugin;
 
 import org.junit.Test;
 
+import bingo.lang.Arrays;
 import bingo.lang.testing.junit.ConcurrentTestCase;
 
 import static org.junit.Assert.*;
@@ -25,42 +26,41 @@ public class PluginManagerTest extends ConcurrentTestCase {
 
 	@Test
 	public void testSimplePlugin(){
-		
-		PluginManager manager = new PluginManager(SimpleProvider.class);
+		PluginManager<SimplePlugin> manager = new PluginManager<SimplePlugin>(SimplePlugin.class);
 		
 		Plugin[] plugins = manager.load();
 		
 		assertEquals(3,plugins.length);
 		
-		Plugin			 plugin = manager.getPlugin("Simple1");
-		SimpleProvider1  bean   = plugin.getBean();
+		SimplePlugin1 plugin = (SimplePlugin1)manager.getPlugin("Simple1");
 		
-		assertNotNull(bean);
-		assertEquals(100, bean.getInt1());
-		assertEquals(new Integer(200), bean.getInt2());
-		assertTrue(bean.isBool1());
-		assertNotNull(bean.getBool2());
-		assertNull(bean.getBool3());
+		assertNotNull(plugin);
+		assertEquals(100, plugin.getInt1());
+		assertEquals(new Integer(200), plugin.getInt2());
+		assertTrue(plugin.isBool1());
+		assertNotNull(plugin.getBool2());
+		assertNull(plugin.getBool3());
+		assertTrue(Arrays.equals(new int[]{1,2,3}, plugin.getArray1()));
+		assertNotNull(plugin.getMap1());
+		assertEquals(2, plugin.getMap1().size());
+		assertEquals("v1", plugin.getMap1().get("k1"));
 		
-		plugin = manager.getPlugin("Simple2");
-		bean   = (SimpleProvider1)plugin.getBean();
+		plugin = (SimplePlugin1)manager.getPlugin("Simple2");
 		
-		assertNotNull(bean);
-		assertEquals(200, bean.getInt1());
-		assertEquals(new Integer(200), bean.getInt2());
-		assertTrue(bean.isBool1());
-		assertNotNull(bean.getBool2());
-		assertNull(bean.getBool3());		
+		assertNotNull(plugin);
+		assertEquals(200, plugin.getInt1());
+		assertEquals(new Integer(200), plugin.getInt2());
+		assertTrue(plugin.isBool1());
+		assertNotNull(plugin.getBool2());
+		assertNull(plugin.getBool3());		
 		
-		plugin = manager.getPlugin("Simple3");
-		bean   = (SimpleProvider1)plugin.getBean();
+		plugin = (SimplePlugin1)manager.getPlugin("Simple3");
 		
-		assertNotNull(bean);
-		assertEquals(100, bean.getInt1());
-		assertEquals(new Integer(200), bean.getInt2());
-		assertTrue(bean.isBool1());
-		assertNotNull(bean.getBool2());
-		assertNull(bean.getBool3());
+		assertNotNull(plugin);
+		assertEquals(100, plugin.getInt1());
+		assertEquals(new Integer(200), plugin.getInt2());
+		assertTrue(plugin.isBool1());
+		assertNotNull(plugin.getBool2());
+		assertNull(plugin.getBool3());
 	}
-
 }

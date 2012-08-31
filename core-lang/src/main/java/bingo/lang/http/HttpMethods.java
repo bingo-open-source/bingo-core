@@ -13,32 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.lang.plugin;
+package bingo.lang.http;
 
-import bingo.lang.exceptions.NestedRuntimeException;
+public class HttpMethods {
 
-public class PluginException extends NestedRuntimeException {
-
-	private static final long serialVersionUID = 3537100123722237524L;
-
-	public PluginException() {
+	public static final String GET    = "GET";
+	
+	public static final String POST   = "POST";
+	
+	public static final String PUT    = "PUT";
+	
+	public static final String DELETE = "DELETE";
+	
+	public static final String PATCH  = "PATCH";
+	
+	public static final String MERGE  = "MERGE";
+	
+	protected HttpMethods(){
 		
 	}
-
-	public PluginException(String message) {
-		super(message);
-	}
-
-	public PluginException(String message, Throwable cause) {
-		super(message, cause);
-	}
-
-	public PluginException(Throwable cause) {
-		super(cause);
-	}
-
-	public PluginException(String message, Object... args) {
-		super(message, args);
-	}
-
+	
 }

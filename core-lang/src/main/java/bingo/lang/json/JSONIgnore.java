@@ -13,32 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.lang.plugin;
+package bingo.lang.json;
 
-import bingo.lang.exceptions.NestedRuntimeException;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-public class PluginException extends NestedRuntimeException {
-
-	private static final long serialVersionUID = 3537100123722237524L;
-
-	public PluginException() {
-		
-	}
-
-	public PluginException(String message) {
-		super(message);
-	}
-
-	public PluginException(String message, Throwable cause) {
-		super(message, cause);
-	}
-
-	public PluginException(Throwable cause) {
-		super(cause);
-	}
-
-	public PluginException(String message, Object... args) {
-		super(message, args);
-	}
+@Retention(RetentionPolicy.RUNTIME)  
+@Target(ElementType.FIELD)
+public @interface JSONIgnore {
 
 }
