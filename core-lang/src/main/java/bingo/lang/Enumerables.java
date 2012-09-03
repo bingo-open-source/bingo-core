@@ -151,6 +151,25 @@ public class Enumerables {
 		return Arrays.EMPTY_OBJECT_ARRAY;
 	}
 	
+	public static String[] toStringArray(Iterable<String> iterable){
+		if(null == iterable){
+			return Arrays.EMPTY_STRING_ARRAY;
+		}
+		
+		Iterator<String> it = iterable.iterator();
+		if(it.hasNext()){
+			ArrayList<String> list = new ArrayList<String>();
+			
+			do{
+				list.add(it.next());
+			}while(it.hasNext());
+			
+			return list.toArray(new String[list.size()]);
+		}
+		
+		return Arrays.EMPTY_STRING_ARRAY;
+	}
+	
 	public static <T> T[] toArray(Iterable<T> iterable, Class<T> elementType) {
 		if (null == iterable) {
 			return Arrays.newInstance(elementType, 0);
