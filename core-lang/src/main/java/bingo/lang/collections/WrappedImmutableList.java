@@ -21,7 +21,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-public class WrappedImmutableList<E> extends AbstractImmutableList<E> implements List<E> {
+import bingo.lang.Immutable;
+
+public class WrappedImmutableList<E> extends AbstractImmutableList<E> implements List<E>,Immutable {
 	
 	private final List<E> list;
 	

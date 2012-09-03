@@ -13,28 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.lang.collections;
+package bingo.lang.annotations;
 
-import java.util.Collection;
-import java.util.List;
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-import bingo.lang.Immutable;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
-public abstract class AbstractImmutableList<E> extends AbstractImmutableCollection<E> implements List<E>,Immutable {
+@Target(TYPE)
+@Retention(RUNTIME)
+public @interface Immutable {
 
-	public void add(int index, E element) {
-		throw readonlyException();
-	}
-
-	public boolean addAll(int index, Collection<? extends E> c) {
-		throw readonlyException();
-	}
-
-	public E remove(int index) {
-		throw readonlyException();
-	}
-
-	public E set(int index, E element) {
-		throw readonlyException();
-	}
 }

@@ -13,28 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.lang.collections;
+package bingo.lang;
 
-import java.util.Collection;
-import java.util.List;
+public interface Immutable {
 
-import bingo.lang.Immutable;
-
-public abstract class AbstractImmutableList<E> extends AbstractImmutableCollection<E> implements List<E>,Immutable {
-
-	public void add(int index, E element) {
-		throw readonlyException();
-	}
-
-	public boolean addAll(int index, Collection<? extends E> c) {
-		throw readonlyException();
-	}
-
-	public E remove(int index) {
-		throw readonlyException();
-	}
-
-	public E set(int index, E element) {
-		throw readonlyException();
-	}
 }

@@ -17,9 +17,10 @@ package bingo.lang.collections;
 
 import java.util.Collection;
 
+import bingo.lang.Immutable;
 import bingo.lang.exceptions.ReadonlyException;
 
-public abstract class AbstractImmutableCollection<E> implements Collection<E> {
+public abstract class AbstractImmutableCollection<E> implements Collection<E>,Immutable {
 	
 	public boolean add(E o) {
 		throw readonlyException();

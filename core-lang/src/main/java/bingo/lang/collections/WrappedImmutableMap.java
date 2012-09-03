@@ -20,7 +20,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class WrappedImmutableMap<K,V> extends AbstractImmutableMap<K, V> {
+import bingo.lang.Immutable;
+
+public class WrappedImmutableMap<K,V> extends AbstractImmutableMap<K, V> implements Immutable {
 	
 	public static <K,V> WrappedImmutableMap<K, V> of(Map<K, V> map){
 		return new WrappedImmutableMap<K, V>(map);

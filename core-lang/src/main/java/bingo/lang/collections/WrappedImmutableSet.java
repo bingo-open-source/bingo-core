@@ -20,7 +20,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-public class WrappedImmutableSet<E> extends AbstractImmutableCollection<E> implements Set<E> {
+import bingo.lang.Immutable;
+
+public class WrappedImmutableSet<E> extends AbstractImmutableCollection<E> implements Set<E>,Immutable {
 	
 	private final Set<E> set;
 	

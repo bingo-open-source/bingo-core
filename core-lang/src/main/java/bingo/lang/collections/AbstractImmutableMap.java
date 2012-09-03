@@ -17,9 +17,10 @@ package bingo.lang.collections;
 
 import java.util.Map;
 
+import bingo.lang.Immutable;
 import bingo.lang.exceptions.ReadonlyException;
 
-public abstract class AbstractImmutableMap<K,V> implements Map<K, V> {
+public abstract class AbstractImmutableMap<K,V> implements Map<K, V>,Immutable {
 
 	public void clear() {
 		throw readonlyException();

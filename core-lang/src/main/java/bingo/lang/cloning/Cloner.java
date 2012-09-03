@@ -36,6 +36,7 @@ import bingo.lang.Assert;
 import bingo.lang.Exceptions;
 import bingo.lang.Objects;
 import bingo.lang.Reflects;
+import bingo.lang.annotations.Immutable;
 import bingo.lang.exceptions.CloneException;
 import bingo.lang.reflect.ReflectClass;
 import bingo.lang.reflect.ReflectField;
@@ -284,7 +285,7 @@ public class Cloner {
 		}
 
 		for (final Annotation annotation : clz.getDeclaredAnnotations()) {
-			if (annotation.annotationType() == CloneImmutable.class) {
+			if (annotation.annotationType() == Immutable.class) {
 				immutableClasses.add(clz);
 				return true;
 			}
@@ -293,12 +294,12 @@ public class Cloner {
 		Class<?> c = clz.getSuperclass();
 		while (c != null && c != Object.class) {
 			for (final Annotation annotation : c.getDeclaredAnnotations()) {
-				if (annotation.annotationType() == CloneImmutable.class) {
-					final CloneImmutable im = (CloneImmutable) annotation;
-					if (im.subClass()) {
+				if (annotation.annotationType() == Immutable.class) {
+//					final Immutable im = (Immutable) annotation;
+//					if (im.subClass()) {
 						immutableClasses.add(clz);
 						return true;
-					}
+//					}
 				}
 			}
 			c = c.getSuperclass();
@@ -342,7 +343,7 @@ public class Cloner {
 			return null;
 		}
 		
-		if (immutables.containsKey(o)) {
+		if (o instanceof bingo.lang.Immutable || immutables.containsKey(o)) {
 			return o;
 		}
 		

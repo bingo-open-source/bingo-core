@@ -15,6 +15,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import junit.framework.TestCase;
+import bingo.lang.annotations.Immutable;
 import bingo.lang.cloning.TestCloner.SynthOuter.Inner;
 import bingo.lang.cloning.beans.A;
 import bingo.lang.cloning.beans.B;
@@ -38,7 +39,7 @@ public class TestCloner extends TestCase
 		}
 	}
 
-	@CloneImmutable(subClass = true)
+	@Immutable
 	static public class ATestImmutable
 	{
 	}
@@ -47,8 +48,16 @@ public class TestCloner extends TestCase
 	{
 
 	}
+	
+	static public class BTestImmutable implements bingo.lang.Immutable
+	{
+	}
 
-	@CloneImmutable
+	static public class BTestImmutableSubclass extends BTestImmutable
+	{
+	}	
+
+	/*
 	static public class BTestImmutable
 	{
 	}
@@ -56,6 +65,7 @@ public class TestCloner extends TestCase
 	static public class BTestImmutableSubclass extends BTestImmutable
 	{
 	}
+	*/
 
 	public void testIssue7()
 	{
@@ -78,12 +88,12 @@ public class TestCloner extends TestCase
 		assertSame(a, cloner.deepClone(a));
 	}
 
-	public void testImmutableSubclassNotEnabled()
-	{
-		final BTestImmutableSubclass a = new BTestImmutableSubclass();
-		final BTestImmutableSubclass ca = cloner.deepClone(a);
-		assertNotSame(a, ca);
-	}
+//	public void testImmutableSubclassNotEnabled()
+//	{
+//		final BTestImmutableSubclass a = new BTestImmutableSubclass();
+//		final BTestImmutableSubclass ca = cloner.deepClone(a);
+//		assertNotSame(a, ca);
+//	}
 
 	public void testImmutableSubclass()
 	{
@@ -97,6 +107,14 @@ public class TestCloner extends TestCase
 		final ATestImmutable a = new ATestImmutable();
 		final ATestImmutable ca = cloner.deepClone(a);
 		assertSame(a, ca);
+		
+		final BTestImmutable b = new BTestImmutable();
+		final BTestImmutable cb = cloner.deepClone(b);
+		assertSame(b,cb);
+		
+		final BTestImmutableSubclass sb = new BTestImmutableSubclass();
+		final BTestImmutableSubclass csb = cloner.deepClone(sb);
+		assertSame(sb,csb);
 	}
 
 	/**
