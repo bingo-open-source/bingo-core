@@ -32,11 +32,11 @@ public class Immutables {
 	}
 	
 	public static <E> List<E> listOf(List<E> list) {
-		return null != list && list instanceof WrappedImmutableList ? list : new WrappedImmutableList<E>(list);
+		return null != list && list instanceof Immutable ? list : new WrappedImmutableList<E>(list);
 	}
 	
 	public static <E> List<E> listOf(Iterable<E> iterable) {
-		return null != iterable && iterable instanceof WrappedImmutableList ? (List<E>)iterable : new WrappedImmutableList<E>(Enumerables.toList(iterable));
+		return null != iterable && iterable instanceof Immutable ? (List<E>)iterable : new WrappedImmutableList<E>(Enumerables.toList(iterable));
 	}
 	
 	public static <E> List<E> listOf(E... array) {
@@ -44,11 +44,11 @@ public class Immutables {
 	}
 	
 	public static <E> Set<E> setOf(Set<E> set) {
-		return null != set && set instanceof WrappedImmutableSet ? set : new WrappedImmutableSet<E>(set);
+		return null != set && set instanceof Immutable ? set : new WrappedImmutableSet<E>(set);
 	}
 	
 	public static <E> Set<E> setOf(Iterable<E> iterable) {
-		return null != iterable && iterable instanceof WrappedImmutableSet ? (Set<E>)iterable : new WrappedImmutableSet<E>(Enumerables.toSet(iterable));
+		return null != iterable && iterable instanceof Immutable ? (Set<E>)iterable : new WrappedImmutableSet<E>(Enumerables.toSet(iterable));
 	}
 	
 	public static <E> Set<E> setOf(E... array) {
@@ -60,6 +60,6 @@ public class Immutables {
 	}
 	
 	public static <K,V> Map<K,V> mapOf(Map<K,V> map){
-		return null != map && map instanceof WrappedImmutableMap ? map : new WrappedImmutableMap<K, V>(map);
+		return null != map && map instanceof Immutable ? map : new WrappedImmutableMap<K, V>(map);
 	}
 }
