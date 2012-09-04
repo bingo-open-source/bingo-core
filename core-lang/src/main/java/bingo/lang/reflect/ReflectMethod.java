@@ -52,6 +52,10 @@ public class ReflectMethod extends ReflectMember{
 		return Modifier.isStatic(javaMethod.getModifiers());
 	}
 	
+	public boolean isSynthetic(){
+		return javaMethod.isSynthetic();
+	}
+	
 	public Object invoke(Object instance,Object... args) {
 		try {
 			if(parameters.length != args.length){

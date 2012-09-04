@@ -15,9 +15,11 @@
  */
 package bingo.lang.testing.junit;
 
+import junit.framework.Assert;
+
 import org.junit.Rule;
 
-public abstract class ConcurrentTestCase {
+public abstract class ConcurrentTestCase extends Assert {
 
 	@Rule
 	public ConcurrentRule concurrentRule = new ConcurrentRule();

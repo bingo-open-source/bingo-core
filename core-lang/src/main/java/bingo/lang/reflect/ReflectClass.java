@@ -353,7 +353,7 @@ public class ReflectClass<T> implements Named {
 		List<ReflectMethod> methodList = New.list();
 		
 		for(Method m : Reflects.getMethods(javaClass)){
-			if(m.isSynthetic() || Modifier.isAbstract(m.getModifiers()) || Object.class.equals(m.getDeclaringClass())){
+			if(Object.class.equals(m.getDeclaringClass())){
 				continue;
 			}
 			
