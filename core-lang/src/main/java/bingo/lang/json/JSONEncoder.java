@@ -22,9 +22,8 @@ import java.util.Map;
 
 import bingo.lang.Enums;
 import bingo.lang.Strings;
-import bingo.lang.beans.BeanModel;
-import bingo.lang.beans.BeanProperty;
 import bingo.lang.reflect.ReflectClass;
+import bingo.lang.reflect.ReflectField;
 
 class JSONEncoder {
 	
@@ -239,11 +238,16 @@ class JSONEncoder {
         writer.startObject();
         
         try {
-            BeanModel<?> beanClass = BeanModel.get(clazz);
+            ReflectClass<?> beanClass = ReflectClass.get(clazz);
 
             int index = 0;
-            for(BeanProperty prop : beanClass.getProperties()){
-                if(prop.isReadable() && prop.isField() && !prop.isAnnotationPresent(JSONIgnore.class) && !prop.isTransient()){
+            for(ReflectField prop : beanClass.getFields()){
+            	if(prop.isStatic() || prop.isSynthetic()){
+            		continue;
+            	}
+            	JSONField jsonField = prop.getAnnotation(JSONField.class);
+            	
+                if(null != jsonField || ((!prop.isAnnotationPresent(JSONIgnore.class) && !prop.isTransient()) && (prop.isPublic() || prop.hasGetter()))){
                     String propName = prop.getName();
                     
                     JSONNamed named = prop.getAnnotation(JSONNamed.class);

@@ -15,6 +15,7 @@
  */
 package bingo.lang.reflect;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -74,6 +75,14 @@ public class ReflectField extends ReflectMember {
 	
 	public Class<?> getDeclaringClass(){
 		return javaField.getDeclaringClass();
+	}
+	
+	public boolean isAnnotationPresent(Class<? extends Annotation> annotationType){
+		return javaField.isAnnotationPresent(annotationType);
+	}
+	
+	public <T extends Annotation> T getAnnotation(Class<T> annotationType) {
+		return javaField.getAnnotation(annotationType);
 	}
 	
 	public boolean isSynthetic(){
