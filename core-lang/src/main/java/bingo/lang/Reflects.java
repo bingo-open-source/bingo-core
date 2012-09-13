@@ -165,7 +165,7 @@ public class Reflects {
 	 * @return the Method object, or <code>null</code> if none found
 	 */
 	public static Method findMethod(Class<?> clazz, String name) {
-		return findMethod(clazz, name, new Class[0]);
+		return findMethod(clazz, name, bingo.lang.Arrays.EMPTY_CLASS_ARRAY);
 	}
 
 	/**

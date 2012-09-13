@@ -17,6 +17,7 @@ package bingo.lang;
 
 import java.io.InputStream;
 import java.lang.reflect.Array;
+import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -42,6 +43,7 @@ import bingo.lang.convert.Convertible;
 import bingo.lang.convert.DateTimeConverters;
 import bingo.lang.convert.EnumConverter;
 import bingo.lang.convert.InputStreamConverter;
+import bingo.lang.convert.MethodConverter;
 import bingo.lang.convert.NumberConverters;
 import bingo.lang.convert.StringConverter;
 import bingo.lang.exceptions.ConvertException;
@@ -87,6 +89,7 @@ public class Converts {
 		
 		//Class
 		register(Class.class,				new ClassConverter());
+		register(Method.class,				new MethodConverter());
 		
 		registerAssignableFrom(Clob.class, new ClobConverter());
 		registerAssignableFrom(Blob.class, new BlobConverter());

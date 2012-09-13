@@ -23,6 +23,7 @@ import bingo.lang.Collections;
 import bingo.lang.Enumerable;
 import bingo.lang.Enumerables;
 import bingo.lang.Predicate;
+import bingo.lang.Strings;
 import bingo.lang.collections.AbstractListWrapper;
 import bingo.lang.exceptions.EmptyDataException;
 import bingo.lang.exceptions.TooManyDataException;
@@ -62,6 +63,10 @@ public class ListEnumerable<E> extends AbstractListWrapper<E> implements Enumera
 	    return list.get(0);
     }
 	
+	public String join(String seperator) {
+	    return Strings.join(this,seperator);
+    }
+
 	public Enumerable<E> where(Predicate<E> predicate) {
 	    return Enumerables.of(Enumerables.where(this, predicate));
     }

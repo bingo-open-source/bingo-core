@@ -268,7 +268,7 @@ public class Enumerables {
 		return null;
 	}
 	
-	public static <T> T firstOrNull(Iterable<T> iterable, Predicate<T> predicate) {
+	public static <T> T firstOrNull(Iterable<? extends T> iterable, Predicate<T> predicate) {
 		if(null == iterable){
 			return null;
 		}
@@ -295,7 +295,7 @@ public class Enumerables {
 		return null;
 	}
 
-	public static <T, O> O firstOrNull(Iterable<T> iterable, OutPredicate<T, O> predicate) {
+	public static <T, O> O firstOrNull(Iterable<? extends T> iterable, OutPredicate<T, O> predicate) {
 		if(null == iterable){
 			return null;
 		}
@@ -327,7 +327,7 @@ public class Enumerables {
 		return null;
 	}
 
-	public static <T> List<T> where(Iterable<T> iterable,Predicate<T> where){
+	public static <T> List<T> where(Iterable<? extends T> iterable,Predicate<T> where){
 		List<T> list = new ArrayList<T>();
 		
 		if(null != iterable){
@@ -355,7 +355,7 @@ public class Enumerables {
 		return list;
 	}
 	
-	public static <T> boolean any(Iterable<T> iterable,Predicate<T> predicate) {
+	public static <T> boolean any(Iterable<? extends T> iterable,Predicate<T> predicate) {
 		if(null == iterable){
 			return false;
 		}
@@ -368,7 +368,7 @@ public class Enumerables {
 		return false;
 	}
 
-	public static <T, O> List<O> select(Iterable<T> iterable, Func1<T, O> func) {
+	public static <T, O> List<O> select(Iterable<? extends T> iterable, Func1<T, O> func) {
 		List<O> list = new ArrayList<O>();
 
 		if(null != iterable){

@@ -23,6 +23,7 @@ import bingo.lang.Arrays;
 import bingo.lang.Enumerable;
 import bingo.lang.Enumerables;
 import bingo.lang.Predicate;
+import bingo.lang.Strings;
 import bingo.lang.exceptions.EmptyDataException;
 import bingo.lang.exceptions.TooManyDataException;
 import bingo.lang.iterable.EmptyIterator;
@@ -55,6 +56,10 @@ public class EmptyEnumerable<E> implements Enumerable<E> {
 		throw new EmptyDataException();
     }
 	
+	public String join(String seperator) {
+	    return Strings.EMPTY;
+    }
+
 	public <T> Enumerable<T> ofType(Class<T> type) {
 	    return Enumerables.empty();
     }

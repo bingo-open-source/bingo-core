@@ -24,6 +24,7 @@ import bingo.lang.Collections;
 import bingo.lang.Enumerable;
 import bingo.lang.Enumerables;
 import bingo.lang.Predicate;
+import bingo.lang.Strings;
 import bingo.lang.collections.AbstractSetWrapper;
 import bingo.lang.exceptions.EmptyDataException;
 import bingo.lang.exceptions.TooManyDataException;
@@ -86,6 +87,10 @@ public class SetEnumerable<E> extends AbstractSetWrapper<E> implements Enumerabl
 	    return set.iterator().next();
     }
 	
+	public String join(String seperator) {
+	    return Strings.join(this,seperator);
+    }
+
 	public Enumerable<E> where(Predicate<E> predicate) {
 	    return Enumerables.of(Enumerables.where(this, predicate));
     }

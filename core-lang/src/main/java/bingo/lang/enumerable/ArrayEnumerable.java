@@ -23,6 +23,7 @@ import bingo.lang.Assert;
 import bingo.lang.Enumerable;
 import bingo.lang.Enumerables;
 import bingo.lang.Predicate;
+import bingo.lang.Strings;
 import bingo.lang.exceptions.EmptyDataException;
 import bingo.lang.exceptions.TooManyDataException;
 import bingo.lang.iterable.ArrayIterator;
@@ -62,6 +63,10 @@ public class ArrayEnumerable<E> implements Enumerable<E> {
 	    return Enumerables.firstOrNull(this, predicate);
     }
 	
+	public String join(String seperator) {
+	    return Strings.join(array,seperator);
+    }
+
 	public Enumerable<E> where(Predicate<E> predicate) {
 	    return Enumerables.of(Enumerables.where(this, predicate));
     }

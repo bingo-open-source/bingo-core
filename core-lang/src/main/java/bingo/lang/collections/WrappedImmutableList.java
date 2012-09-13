@@ -27,6 +27,10 @@ public class WrappedImmutableList<E> extends AbstractImmutableList<E> implements
 	
 	private final List<E> list;
 	
+	protected WrappedImmutableList(){
+		this.list = new ArrayList<E>();
+	}
+	
 	public WrappedImmutableList(List<E> list){
 		this.list = null == list ? new ArrayList<E>() : list;
 	}
