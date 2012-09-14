@@ -463,4 +463,32 @@ public class Enumerables {
 
 		return buf.toString();
 	}
+	
+	public static boolean contains(Iterable<? extends Named> iterable,String name){
+		if(null == iterable){
+			return false;
+		}
+		
+		for(Named item : iterable){
+			if(Strings.equals(item.getName(), name)){
+				return true;
+			}
+		}
+		
+		return false;
+	}	
+	
+	public static boolean containsIgnoreCase(Iterable<? extends Named> iterable,String name){
+		if(null == iterable){
+			return false;
+		}
+		
+		for(Named item : iterable){
+			if(Strings.equalsIgnoreCase(item.getName(), name)){
+				return true;
+			}
+		}
+		
+		return false;
+	}
 }
