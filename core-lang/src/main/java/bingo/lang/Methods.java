@@ -16,6 +16,8 @@
 package bingo.lang;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 import bingo.lang.exceptions.NotFoundException;
 
@@ -61,5 +63,17 @@ public class Methods {
 		}
 		
 		throw new NotFoundException("method '{0}' not found",methodFullName);
+	}
+	
+	public static Enumerable<Method> findMany(Class<?> clazz,String name) {
+		List<Method> methods = new ArrayList<Method>();
+		
+		for(Method m : Reflects.getMethods(clazz)){
+			if(m.getName().equals(name)){
+				methods.add(m);
+			}
+		}
+		
+		return Enumerables.of(methods);
 	}
 }

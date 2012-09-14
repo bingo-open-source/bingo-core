@@ -248,6 +248,15 @@ public class ReflectClass<T> implements Named {
 		return Enumerables.firstOrNull(methods, Predicates.<ReflectMethod>nameEquals(name));
 	}
 	
+	public ReflectMethod getMethod(final Method m){
+		for(ReflectMethod rm : methods){
+			if(rm.getJavaMethod().equals(m)){
+				return rm;
+			}
+		}
+		return null;
+	}
+	
 	public ReflectMethod getMethod(final String name,final Class<?>... argumentTypes){
 		return Enumerables.firstOrNull(methods, new Predicate<ReflectMethod>() {
 			public boolean apply(ReflectMethod object) {

@@ -106,11 +106,6 @@ public abstract class ReflectAccessor {
         return -1;
     }
     
-    /**
-     * 为类型type创建一个 {@link ReflectAccessor}。
-     * @param type 指定的类型。
-     * @return 根据指定类型创建的 {@link ReflectAccessor}。
-     */
     static ReflectAccessor createFor(Class<?> type){
     	synchronized (type) {
             ReflectLoader loader = new ReflectLoader(type.getClassLoader());
