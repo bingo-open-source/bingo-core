@@ -464,7 +464,7 @@ public class Enumerables {
 		return buf.toString();
 	}
 	
-	public static <T extends Named> T find(Iterable<T> iterable,String name){
+	public static <T extends Named> T get(Iterable<T> iterable,String name){
 		if(null == iterable){
 			return null;
 		}
@@ -477,7 +477,7 @@ public class Enumerables {
 		return null;
 	}
 	
-	public static <T extends Named> T findIgnoreCase(Iterable<T> iterable,String name){
+	public static <T extends Named> T find(Iterable<T> iterable,String name){
 		if(null == iterable){
 			return null;
 		}

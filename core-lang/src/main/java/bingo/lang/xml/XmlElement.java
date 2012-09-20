@@ -272,6 +272,14 @@ public class XmlElement extends XmlContainer implements XmlNamed {
 		return requiredText();
 	}
 	
+	public void error(String message) throws XmlValidationException {
+		throw new XmlValidationException("found error \"{0}\" in element '{1}', xml file '{2}'",message,this.name,documentUrl());
+	}
+	
+	public void error(String template,Object... args) throws XmlValidationException{
+		error(Strings.format(template, args));
+	}
+	
 	@Override
 	public void add(Object content) {
 		if (content instanceof XmlAttribute) {
