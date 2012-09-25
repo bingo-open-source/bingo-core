@@ -46,6 +46,7 @@ import bingo.lang.convert.InputStreamConverter;
 import bingo.lang.convert.MethodConverter;
 import bingo.lang.convert.NumberConverters;
 import bingo.lang.convert.StringConverter;
+import bingo.lang.convert.CollectionConverters.ListConverter;
 import bingo.lang.exceptions.ConvertException;
 import bingo.lang.exceptions.ConvertUnsupportedException;
 
@@ -58,6 +59,7 @@ public class Converts {
 	private static Converter beanConverter  = new BeanConverter();
 	private static Converter arrayConverter = new ArrayConverter();
 	private static Converter enumConverter  = new EnumConverter();
+	private static ListConverter listConverter = new ListConverter();
 	
 	static {
 		//String , Charracter , Boolean
@@ -198,8 +200,6 @@ public class Converts {
 	            return (T)value;
 	        }
 	        
-
-	        
 	        if(beanConverter.convertFrom(value, targetType, genericType, out) ){
 	        	return (T)out.getValue();
 	        }
@@ -271,6 +271,28 @@ public class Converts {
         } catch (Throwable e) {
         	throw new ConvertException("error converting '{0}' to String",sourceType.getName(),e);
         }
+	}
+	
+	public static <E> List<E> toList(Class<E> elementType,Object value){
+		if(null == value){
+			return null;
+		}
+		
+		try {
+			if(value instanceof String){
+				return listConverter.toCollection(List.class, elementType, (String)value);
+			}else if(value instanceof Iterable){
+	        	return listConverter.toCollection(List.class, elementType, (Iterable)value);
+	        }else if(value.getClass().isArray()){
+	        	return listConverter.toCollectionFromArray(List.class, elementType, value);
+	        }
+		} catch (ConvertException e){
+			throw e;
+        } catch (Throwable e) {
+        	throw new ConvertException("Error converting '{0}' to List, value : {1}",value.getClass().getName(),value,e);
+        }
+		
+        throw new ConvertUnsupportedException("Cannot convert '{0}' to List, value : {1}",value.getClass().getName(),value.toString());
 	}
 	
 	static <T> T toPrimitive(Object value,Class<T> targetType) {

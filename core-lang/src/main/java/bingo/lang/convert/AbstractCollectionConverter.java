@@ -15,6 +15,7 @@
  */
 package bingo.lang.convert;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Type;
 import java.util.Collection;
 
@@ -68,7 +69,7 @@ public abstract class AbstractCollectionConverter<T extends Collection> extends 
         return buf.toString();
     }
 
-    protected T toCollection(Class<?> targetType,Class<?> elementType,Iterable iterable) throws Throwable {
+    public T toCollection(Class<?> targetType,Class<?> elementType,Iterable iterable) throws Throwable {
 		
 		T collection = newInstance(targetType);
 		
@@ -79,7 +80,7 @@ public abstract class AbstractCollectionConverter<T extends Collection> extends 
 		return collection;
 	}
 	
-	protected T toCollection(Class<?> targetType,Class<?> elementType,Object[] array) throws Throwable {
+    public T toCollection(Class<?> targetType,Class<?> elementType,Object[] array) throws Throwable {
 		
 		T collection = newInstance(targetType);
 		
@@ -88,10 +89,19 @@ public abstract class AbstractCollectionConverter<T extends Collection> extends 
 		}
 		
 		return collection;
-		
 	}
+    
+    public T toCollectionFromArray(Class<?> targetType,Class<?> elementType,Object array) throws Throwable {
+    	T collection = newInstance(targetType);
+    	
+    	for(int i=0;i<Array.getLength(array);i++){
+    		collection.add(Converts.convert(Array.get(array, i),elementType));
+    	}
+    	
+    	return collection;
+    }
 	
-	protected T toCollection(Class<?> targetType,Class<?> elementType,String stringValue) throws Throwable {
+    public T toCollection(Class<?> targetType,Class<?> elementType,String stringValue) throws Throwable {
 		
 		String[] stringArray = Strings.split(stringValue);
 		
