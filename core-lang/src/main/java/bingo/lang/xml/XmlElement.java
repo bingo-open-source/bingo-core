@@ -122,6 +122,10 @@ public class XmlElement extends XmlContainer implements XmlNamed {
 		return null == attr ? null : attr.value(); 
 	}
 	
+	public String attributeValueTrimToNull(String name){
+		return Strings.trimToNull(attributeValue(name));
+	}
+	
 	public Boolean attributeValueForBool(String name){
 		XmlAttribute attr = attribute(name);
 		return attr == null ? null : attr.boolValue();
