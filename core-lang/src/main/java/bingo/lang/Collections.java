@@ -96,6 +96,19 @@ public class Collections {
 		}
 	}
 	
+	public static int[] toIntArray(Collection<Integer> collection){
+		if(null == collection || collection.isEmpty()){
+			return Arrays.EMPTY_INT_ARRAY;
+		}
+		int[] array = new int[collection.size()];
+		
+		int i=0;
+		for(Integer value : collection){
+			array[i++] = value;
+		}
+		return array;
+	}
+	
 	/**
 	 * concatenate lists into one list.
 	 * 

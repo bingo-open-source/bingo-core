@@ -116,9 +116,8 @@ public class Converts {
 	
 	public static <T> T convert(Object value,Class<T> targetType, Type genericType) throws ConvertUnsupportedException {
 		Assert.notNull(targetType);
-        
-        //trim to null if value is String
-        value = Strings.trimToNull(value);
+		
+		value = trimToNull(value);
         
         //primitive target type
         if(targetType.isPrimitive()){
@@ -233,6 +232,8 @@ public class Converts {
 			return null;
 		}
 		
+		value = trimToNull(value);
+		
 		Class<?> sourceType = value.getClass();
 		
         try {
@@ -278,6 +279,8 @@ public class Converts {
 			return null;
 		}
 		
+		value = trimToNull(value);
+		
 		try {
 			if(value instanceof String){
 				return listConverter.toCollection(List.class, elementType, (String)value);
@@ -296,6 +299,7 @@ public class Converts {
 	}
 	
 	static <T> T toPrimitive(Object value,Class<T> targetType) {
+		value = trimToNull(value);
 		if(null == value){
 			return (T)Primitives.defaultValue(targetType);
 		}else{
@@ -324,5 +328,13 @@ public class Converts {
 		}
 		
 		return converter;
+	}
+	
+	static Object trimToNull(Object value){
+		if(Null.is(value)){
+			return null;
+		}else{
+			return Strings.trimToNull(value);
+		}
 	}
 }
