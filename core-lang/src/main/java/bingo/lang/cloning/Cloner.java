@@ -240,6 +240,9 @@ public class Cloner {
 		typeCloners.put(java.sql.Date.class, new DateCloners.SqlDateCloner());
 		typeCloners.put(Date.class, new DateCloners.DateCloner());
 		
+		typeCloners.put(StringBuilder.class, new BaseCloners.StringBuilderCloner());
+		typeCloners.put(StringBuffer.class, new BaseCloners.StringBufferCloner());
+		
 		typeClonerInstanceOf.put(Collection.class, new CollectionCloners.CollectionCloner<Collection>());
 		typeClonerInstanceOf.put(Map.class, new MapCloners.MapCloner<Map>());
 	}
@@ -262,6 +265,8 @@ public class Cloner {
 		registerImmutableClass(URL.class);
 		registerImmutableClass(UUID.class);
 		registerImmutableClass(Pattern.class);
+		registerImmutableInstanceOf(ClassLoader.class);
+		registerImmutableInstanceOf(ThreadLocal.class);
 	}
 
 	protected void initImmutableConstants() {
