@@ -438,7 +438,15 @@ public class Classes {
         } catch (NotFoundException e) {
         	return null;
         }
-	}	
+	}
+	
+	public static Class<?> forNameOrNull(Class<?> loaderClass, String className) {
+		try {
+	        return forName(loaderClass, className);
+        } catch (NotFoundException e) {
+        	return null;
+        }
+	}
 	
     // Inner class
     // ----------------------------------------------------------------------
