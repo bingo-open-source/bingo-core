@@ -18,10 +18,13 @@ package bingo.lang.collections;
 import java.util.Map;
 
 import bingo.lang.Named;
+import bingo.lang.NamedEntry;
 
-public interface NamedValueMap extends Map<String, Object>{
+public interface NamedValueMap<NE extends NamedEntry<Object>> extends Map<String, Object>{
 	
 	boolean contains(String name);
+	
+	boolean contains(Named named);
 	
 	Object get(Named named);
 	
@@ -29,11 +32,41 @@ public interface NamedValueMap extends Map<String, Object>{
 
 	Object get(int index) throws IndexOutOfBoundsException;
 	
-	Object put(int index,Object value) throws IndexOutOfBoundsException;
+	/**
+	 * same as {@link #put(int, Object)}
+	 */
+	NamedValueMap<NE> set(int index,Object value);
 	
-	Entry<String, Object> getEntry(int index) throws IndexOutOfBoundsException;
+	/**
+	 * same as {@link #put(String, Object)}
+	 */
+	NamedValueMap<NE> set(String name,Object value);
 	
-	Entry<String, Object> getEntry(String name);
+	/**
+	 * same as {@link #put(Named, Object)}
+	 */
+	NamedValueMap<NE> set(Named named,Object value);
+	
+	boolean trySet(int index,Object value);
+	
+	boolean trySet(String name,Object value);
+	
+	boolean trySet(Named named,Object value);
+	
+	/**
+	 * same as {@link #putAll(Map)}
+	 */
+	NamedValueMap<NE> setAll(Map<? extends String,? extends Object> map);
+	
+	Object remove(int index);
+	
+	Object remove(Named named);
+	
+	NE getEntry(int index) throws IndexOutOfBoundsException;
+	
+	NE getEntry(String name);
+	
+	NE getEntry(Named named);
 	
 	<T> T toObject(Class<T> type);
 }

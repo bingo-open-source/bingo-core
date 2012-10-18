@@ -25,20 +25,21 @@ import bingo.lang.Assert;
 import bingo.lang.Enumerables;
 import bingo.lang.Func1;
 import bingo.lang.Named;
+import bingo.lang.NamedEntry;
 import bingo.lang.beans.BeanModel;
 import bingo.lang.beans.BeanProperty;
-import bingo.lang.tuple.MutableEntry;
+import bingo.lang.tuple.MutableNamedEntry;
 
-public class MutableNamedValueMap implements NamedValueMap {
+public class MutableNamedValueMap<NE extends NamedEntry<Object>> implements NamedValueMap<NE> {
 	
-	protected final LinkedHashMap<String, Entry<String, Object>> _map;
+	protected final LinkedHashMap<String, NE> _map;
 	
 	public MutableNamedValueMap(){
-		this._map = new LinkedHashMap<String, Map.Entry<String,Object>>();
+		this._map = new LinkedHashMap<String, NE>();
 	}
 	
 	public MutableNamedValueMap(int initialCapacity){
-		this._map = new LinkedHashMap<String, Map.Entry<String,Object>>(initialCapacity);
+		this._map = new LinkedHashMap<String,NE>(initialCapacity);
 	}
 	
 	public MutableNamedValueMap(Map<? extends String,? extends Object> map){
@@ -60,7 +61,13 @@ public class MutableNamedValueMap implements NamedValueMap {
     }
 	
 	public boolean contains(String name) {
-	    return containsKey(name);
+		Assert.notNull(name);
+	    return _map.containsKey(name.toLowerCase());
+    }
+	
+	public boolean contains(Named named) {
+		Assert.notNull(named);
+	    return contains(named.getName());
     }
 
 	public boolean containsValue(Object value) {
@@ -97,10 +104,10 @@ public class MutableNamedValueMap implements NamedValueMap {
 		return null == entry ? null : entry.getValue();
 	}
 	
-	public Entry<String, Object> getEntry(int index) throws IndexOutOfBoundsException {
+	public NE getEntry(int index) throws IndexOutOfBoundsException {
 		if(index >= 0){
 			int i=0;
-			for(Entry<String, Object> entry : _map.values()){
+			for(NE entry : _map.values()){
 				if(i == index){
 					return entry;
 				}
@@ -110,10 +117,45 @@ public class MutableNamedValueMap implements NamedValueMap {
 		throw new IndexOutOfBoundsException(String.valueOf(index));
     }
 
-	public Entry<String, Object> getEntry(String name) {
+	public NE getEntry(String name) {
 		Assert.notNull(name);
 		String key = name.toLowerCase();
 		return _map.get(key);
+    }
+	
+	public NamedValueMap<NE> set(int index, Object value) {
+		put(index,value);
+		return this;
+    }
+
+	public NamedValueMap<NE> set(String name, Object value) {
+		put(name,value);
+		return this;
+    }
+
+	public NamedValueMap<NE> set(Named named, Object value) {
+		put(named,value);
+		return this;
+    }
+	
+	public boolean trySet(int index, Object value) {
+		put(index,value);
+	    return true;
+    }
+
+	public boolean trySet(String name, Object value) {
+	    put(name,value);
+	    return true;
+    }
+
+	public boolean trySet(Named named, Object value) {
+		put(named,value);
+		return true;
+    }
+
+	public NamedValueMap<NE> setAll(Map<? extends String, ? extends Object> map) {
+		putAll(map);
+		return this;
     }
 
 	public Object put(int index, Object value) throws IndexOutOfBoundsException {
@@ -121,25 +163,45 @@ public class MutableNamedValueMap implements NamedValueMap {
 		return value;
     }
 
-	public Object put(String name, Object value) {
+    public Object put(String name, Object value) {
 		Assert.notNull(name);
 		
 		String key = name.toLowerCase();
-		Entry<String, Object> entry = _map.get(key);
+		NE entry = _map.get(key);
 		
 		if(null != entry){
 			entry.setValue(value);
 		}else{
-			_map.put(key, new MutableEntry<String,Object>(name, value));
+			_map.put(key,newEntry(name, value));
 		}
 		
 	    return value;
     }
 	
+	public Object put(Named named, Object value) {
+		Assert.notNull(named);
+	    return put(named.getName(),value);
+    }
+
+	public NE getEntry(Named named) {
+		Assert.notNull(named);
+	    return getEntry(named.getName());
+    }
+
 	public Object remove(String name) {
 		Assert.notNull(name);
-		Entry<String, Object> entry = _map.remove(name.toLowerCase());
+		NE entry = _map.remove(name.toLowerCase());
 		return null == entry ? null : entry.getValue();
+    }
+	
+	public Object remove(int index) {
+		Entry<String, Object> entry = getEntry(index);
+	    return null == entry ? null : remove(entry.getKey());
+    }
+
+	public Object remove(Named named) {
+		Assert.notNull(named);
+	    return remove(named.getName());
     }
 
 	public Object remove(Object key) {
@@ -194,4 +256,9 @@ public class MutableNamedValueMap implements NamedValueMap {
         
         return bean;
     }
+	
+	@SuppressWarnings("unchecked")
+    protected NE newEntry(String name,Object value){
+		return (NE)new MutableNamedEntry<Object>(name,value);
+	}
 }

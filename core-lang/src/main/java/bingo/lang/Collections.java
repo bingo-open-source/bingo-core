@@ -109,6 +109,18 @@ public class Collections {
 		return array;
 	}
 	
+	public static String[] toStringArray(Collection<String> collection){
+		if(null == collection || collection.isEmpty()){
+			return Arrays.EMPTY_STRING_ARRAY;
+		}
+		String[] array = new String[collection.size()];
+		int i=0;
+		for(String value : collection){
+			array[i++] = value;
+		}
+		return array;
+	}
+	
 	/**
 	 * concatenate lists into one list.
 	 * 
