@@ -42,6 +42,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import bingo.lang.Primitives;
 import bingo.lang.asm.ClassWriter;
@@ -818,11 +820,19 @@ public abstract class ReflectAccessor {
         ArrayList<Field> fields = new ArrayList<Field>();
         Class<?> nextClass = type;
         
+        Set<String> processed = new HashSet<String>();
+        
         while (nextClass != null && nextClass != Object.class) {
             Field[] declaredFields = nextClass.getDeclaredFields();
             
             for (int i = 0, n = declaredFields.length; i < n; i++) {
                 Field field = declaredFields[i];
+                
+                if(processed.contains(field.getName())){
+                	continue;
+                }else{
+                	processed.add(field.getName());
+                }
                 
                 if (Modifier.isPrivate(field.getModifiers())) {
                 	continue;
