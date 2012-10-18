@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -378,6 +379,18 @@ public class Enumerables {
 		}
 
 		return list;
+	}
+	
+	public static <T, O> Set<O> selectForSet(Iterable<? extends T> iterable, Func1<T,O> func){
+		Set<O> set = new LinkedHashSet<O>();
+
+		if(null != iterable){
+			for (T object : iterable) {
+				set.add(func.apply(object));
+			}
+		}
+
+		return set;
 	}
 
 	public static <T, O> List<O> select(T[] array, Func1<T, O> func) {

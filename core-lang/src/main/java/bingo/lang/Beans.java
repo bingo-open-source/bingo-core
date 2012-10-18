@@ -15,6 +15,8 @@
  */
 package bingo.lang;
 
+import java.util.Map;
+
 import bingo.lang.beans.BeanModel;
 import bingo.lang.beans.BeanProperty;
 import bingo.lang.exceptions.NotFoundException;
@@ -47,5 +49,12 @@ public class Beans {
 	
 	public static Object get(Object bean,String property){
 		return BeanModel.get(bean.getClass()).get(bean, property);
+	}
+	
+	public static Map<String, Object> toMap(Object bean) {
+		if(null == bean){
+			return null;
+		}
+		return BeanModel.get(bean.getClass()).toMap(bean);
 	}
 }
