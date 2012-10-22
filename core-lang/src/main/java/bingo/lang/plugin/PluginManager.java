@@ -54,6 +54,16 @@ public class PluginManager<P extends Plugin> {
 		this.pluginType = pluginType;
 	}
 	
+	public PluginManager(Class<P> pluginType,String location){
+		this.pluginType = pluginType;
+		this.locations  = new String[]{location};
+	}
+	
+	public PluginManager(Class<P> pluginType,String[] locations){
+		this.pluginType = pluginType;
+		this.locations  = locations;
+	}
+	
 	public P[] getPlugins(){
 		return Collections.toArray(plugins, pluginType);
 	}
@@ -68,7 +78,15 @@ public class PluginManager<P extends Plugin> {
 		}
 
 		for(String location : locations){
-			load(Resources.CLASSPATH_ALL_URL_PREFIX + location + "/" + pluginType.getName() + ".xml");
+			if(!location.startsWith(Resources.CLASSPATH_URL_PREFIX) || !location.startsWith(Resources.CLASSPATH_ALL_URL_PREFIX)){
+				location = Resources.CLASSPATH_ALL_URL_PREFIX + location;
+			}
+			
+			if(location.endsWith(".xml")){
+				load(location);
+			}else{
+				load(location + "/" + pluginType.getName() + ".xml");	
+			}
 		}
 		
 		try {
