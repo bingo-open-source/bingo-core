@@ -78,7 +78,7 @@ public class PluginManager<P extends Plugin> {
 		}
 
 		for(String location : locations){
-			if(!location.startsWith(Resources.CLASSPATH_URL_PREFIX) || !location.startsWith(Resources.CLASSPATH_ALL_URL_PREFIX)){
+			if(!location.startsWith(Resources.CLASSPATH_URL_PREFIX) && !location.startsWith(Resources.CLASSPATH_ALL_URL_PREFIX)){
 				location = Resources.CLASSPATH_ALL_URL_PREFIX + location;
 			}
 			
@@ -128,9 +128,13 @@ public class PluginManager<P extends Plugin> {
 	
 	@SuppressWarnings("unchecked")
 	protected void loadNewPlugin(XmlElement e) throws Throwable{
-		String   name        = e.requiredAttributeValue("name");
 		String   clazzName   = e.requiredAttributeValue("class");
+		String   name        = e.attributeValue("name");
 		Class<?> clazzObject = Classes.forName(clazzName);
+		
+		if(Strings.isEmpty(name)){
+			name = clazzName;
+		}
 		
 		Assert.isFalse(getPlugin(name) != null,"plugin name '{0}' aleady exists, please check the xml : {1}",name,e.documentUrl());
 		
