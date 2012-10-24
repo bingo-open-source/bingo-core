@@ -50,6 +50,15 @@ public class Maps {
 		return null == entry ? null : entry.getValue();
 	}
 	
+	public static boolean containsKeyIgnoreCase(Map<String,?> map, final String key){
+		for(String k : map.keySet()){
+			if(k.equalsIgnoreCase(key)){
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	@SuppressWarnings("unchecked")
 	public static <V> NamedEntry<V>[] toNamedEntryArray(Map<String, V> map){
 		if(null == map || map.isEmpty()){
