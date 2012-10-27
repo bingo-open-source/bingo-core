@@ -9,7 +9,7 @@
 			<element name="document" type="tns:Document" maxOccurs="1" minOccurs="0"></element>
 			<element name="properties" type="tns:Properties" maxOccurs="1" minOccurs="0"></element>
 		</sequence>
-		<attribute name="name" type="string" use="required"></attribute>
+		<attribute name="name" type="string"></attribute>
 		<attribute name="class" type="string"></attribute>
 	</complexType>
 

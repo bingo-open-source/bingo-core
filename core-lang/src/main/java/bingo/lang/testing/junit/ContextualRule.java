@@ -19,6 +19,9 @@ import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
+import bingo.lang.Named;
+import bingo.lang.Strings;
+
 @SuppressWarnings({"unchecked","rawtypes"})
 public class ContextualRule implements TestRule {
 	
@@ -46,18 +49,41 @@ public class ContextualRule implements TestRule {
 		    		return ;
 		    	}
 		    	
-		    	if(runAnnotatedOnly && description.getAnnotation(Contextual.class) == null){
+		    	Contextual contextual = description.getAnnotation(Contextual.class);
+		    	
+		    	if(runAnnotatedOnly && contextual == null){
 		    		base.evaluate();
 		    		return;
 		    	}
 		    	
-		    	for(Object param : provider.params(description)){
-		    		try{
-		    			provider.beforeTest(description, param);
-		    			base.evaluate();
-		    		}finally{
-		    			provider.afterTest(description,param);
+		    	if(!Strings.isEmpty(contextual.value())){
+		    		String qualifier = contextual.value();
+		    		for(Object param : provider.params(description)){
+		    			if(param instanceof Named && Strings.equalsIgnoreCase(((Named)param).getName(), qualifier)){
+				    		try{
+				    			provider.beforeTest(description, param);
+				    			base.evaluate();
+				    		}finally{
+				    			provider.afterTest(description,param);
+				    		}
+		    			}else if(Strings.equalsIgnoreCase(param.toString(), qualifier)){
+				    		try{
+				    			provider.beforeTest(description, param);
+				    			base.evaluate();
+				    		}finally{
+				    			provider.afterTest(description,param);
+				    		}
+		    			}
 		    		}
+		    	}else{
+			    	for(Object param : provider.params(description)){
+			    		try{
+			    			provider.beforeTest(description, param);
+			    			base.evaluate();
+			    		}finally{
+			    			provider.afterTest(description,param);
+			    		}
+			    	}
 		    	}
 		    	
 		    	provider.finishTests(description);
