@@ -56,7 +56,7 @@ public class ContextualRule implements TestRule {
 		    		return;
 		    	}
 		    	
-		    	if(!Strings.isEmpty(contextual.value())){
+		    	if(null != contextual && !Strings.isEmpty(contextual.value())){
 		    		String qualifier = contextual.value();
 		    		for(Object param : provider.params(description)){
 		    			if(param instanceof Named && Strings.equalsIgnoreCase(((Named)param).getName(), qualifier)){
