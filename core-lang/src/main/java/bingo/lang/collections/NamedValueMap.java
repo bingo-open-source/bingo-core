@@ -58,6 +58,8 @@ public interface NamedValueMap<NE extends NamedEntry<Object>> extends Map<String
 	 */
 	NamedValueMap<NE> setAll(Map<? extends String,? extends Object> map);
 	
+	<T> NamedValueMap<NE> setAll(T beanOrMap);
+	
 	Object remove(int index);
 	
 	Object remove(Named named);

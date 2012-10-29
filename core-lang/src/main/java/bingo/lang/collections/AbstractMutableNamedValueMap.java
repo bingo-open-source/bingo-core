@@ -18,6 +18,7 @@ package bingo.lang.collections;
 import java.util.Map;
 
 import bingo.lang.Assert;
+import bingo.lang.Beans;
 import bingo.lang.Named;
 import bingo.lang.NamedEntry;
 import bingo.lang.beans.BeanModel;
@@ -37,6 +38,20 @@ public abstract class AbstractMutableNamedValueMap<NE extends NamedEntry<Object>
 	    return this;
     }
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+    public <T> NamedValueMap<NE> setAll(T bean) {
+		if(null == bean){
+			return this;
+		}
+		
+		if(bean instanceof Map){
+			setAll((Map)bean);
+		}else{
+			setAll(Beans.toMap(bean));
+		}
+	    return this;
+    }
+
 	public Object remove(Object key) {
 	    return remove(key.toString());
     }

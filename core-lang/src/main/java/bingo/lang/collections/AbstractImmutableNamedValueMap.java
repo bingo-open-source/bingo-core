@@ -57,6 +57,10 @@ public abstract class AbstractImmutableNamedValueMap<NE extends NamedEntry<Objec
 		throw readonlyException();
     }
 	
+	public <T> NamedValueMap<NE> setAll(T bean) {
+		throw readonlyException();
+    }
+
 	public boolean trySet(int index, Object value) {
 	    return false;
     }

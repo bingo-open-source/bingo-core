@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.Set;
 
 import bingo.lang.Assert;
+import bingo.lang.Beans;
 import bingo.lang.Enumerables;
 import bingo.lang.Func1;
 import bingo.lang.Named;
@@ -156,6 +157,20 @@ public class MutableNamedValueMap<NE extends NamedEntry<Object>> implements Name
 	public NamedValueMap<NE> setAll(Map<? extends String, ? extends Object> map) {
 		putAll(map);
 		return this;
+    }
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+    public <T> NamedValueMap<NE> setAll(T bean) {
+		if(null == bean){
+			return this;
+		}
+		
+		if(bean instanceof Map){
+			setAll((Map)bean);
+		}else{
+			setAll(Beans.toMap(bean));
+		}
+	    return this;
     }
 
 	public Object put(int index, Object value) throws IndexOutOfBoundsException {
