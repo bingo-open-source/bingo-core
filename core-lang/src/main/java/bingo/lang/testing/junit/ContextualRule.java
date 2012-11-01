@@ -58,11 +58,15 @@ public class ContextualRule implements TestRule {
 		    	
 		    	if(null != contextual && !Strings.isEmpty(contextual.value())){
 		    		String qualifier = contextual.value();
+		    		
+		    		boolean executed = false;
+		    		
 		    		for(Object param : provider.params(description)){
 		    			if(param instanceof Named && Strings.equalsIgnoreCase(((Named)param).getName(), qualifier)){
 				    		try{
 				    			provider.beforeTest(description, param);
 				    			base.evaluate();
+				    			executed = true;
 				    		}finally{
 				    			provider.afterTest(description,param);
 				    		}
@@ -70,10 +74,15 @@ public class ContextualRule implements TestRule {
 				    		try{
 				    			provider.beforeTest(description, param);
 				    			base.evaluate();
+				    			executed = true;
 				    		}finally{
 				    			provider.afterTest(description,param);
 				    		}
 		    			}
+		    		}
+		    		
+		    		if(!executed){
+		    			throw new IllegalArgumentException("unknow contextual qualifier : " + qualifier);
 		    		}
 		    	}else{
 			    	for(Object param : provider.params(description)){
