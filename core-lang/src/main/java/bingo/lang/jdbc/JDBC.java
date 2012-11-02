@@ -17,7 +17,6 @@ package bingo.lang.jdbc;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 
 import javax.sql.DataSource;
@@ -112,11 +111,31 @@ public class JDBC {
         }
     }
     
+    public static void closeStatementOnly(Statement statement){
+    	if(null != statement){
+    		try{
+    			statement.close();	
+    		}catch(Throwable e){
+    			log.warn("Error closing statement : {} ",e.getMessage(),e);
+    		}
+    	}
+    }
+    
+    public static void closeResultSetOnly(ResultSet rs){
+    	if(null != rs){
+    		try{
+    			rs.close();	
+    		}catch(Throwable e){
+    			log.warn("Error closing result set : {} ",e.getMessage(),e);
+    		}
+    	}
+    }
+    
     public static void close(ResultSet rs,boolean closeConnection) {
         if(null != rs){
             try {
                 rs.close();
-            } catch (SQLException e) {
+            } catch (Throwable e) {
                 log.warn("Error closing result set : {} ",e.getMessage(),e);
             } finally {
                 try {
