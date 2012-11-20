@@ -19,7 +19,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-import bingo.lang.exceptions.NotFoundException;
+import bingo.lang.exceptions.ObjectNotFoundException;
 
 public class Methods {
 
@@ -31,7 +31,7 @@ public class Methods {
 		return m.getDeclaringClass().getName() + "#" + m.getName();
 	}
 	
-	public static Method forName(String methodFullName) throws NotFoundException {
+	public static Method forName(String methodFullName) throws ObjectNotFoundException {
 		int index = methodFullName.lastIndexOf("#");
 		
 		if(index > 0){
@@ -62,7 +62,7 @@ public class Methods {
 			}
 		}
 		
-		throw new NotFoundException("method '{0}' not found",methodFullName);
+		throw new ObjectNotFoundException("method '{0}' not found",methodFullName);
 	}
 	
 	public static Enumerable<Method> findMany(Class<?> clazz,String name) {

@@ -45,7 +45,7 @@ import bingo.lang.Func1;
 import bingo.lang.Objects;
 import bingo.lang.Strings;
 import bingo.lang.config.XmlProperties;
-import bingo.lang.exceptions.NotFoundException;
+import bingo.lang.exceptions.ObjectNotFoundException;
 import bingo.lang.logging.Log;
 import bingo.lang.logging.LogFactory;
 import bingo.lang.resource.Resource;
@@ -71,7 +71,7 @@ final class MailUtils {
 		Resource res = Resources.getResource(xmlResourceLocation);
 		
 		if(!res.exists()){
-			throw new NotFoundException("xml resource '{0}' not found",xmlResourceLocation);
+			throw new ObjectNotFoundException("xml resource '{0}' not found",xmlResourceLocation);
 		}
 		
 		XmlDocument doc  = XmlDocument.load(res);

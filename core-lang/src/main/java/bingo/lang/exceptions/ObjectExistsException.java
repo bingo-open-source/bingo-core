@@ -15,27 +15,27 @@
  */
 package bingo.lang.exceptions;
 
-public class NotFoundException extends NestedRuntimeException {
+public class ObjectExistsException extends NestedRuntimeException {
 
-    private static final long serialVersionUID = -3863052698325938663L;
+	private static final long serialVersionUID = 8809586786360469746L;
 
-	public NotFoundException() {
-
+	public ObjectExistsException() {
+		
 	}
 
-	public NotFoundException(String message) {
+	public ObjectExistsException(String message) {
 		super(message);
 	}
 
-	public NotFoundException(Throwable cause) {
-		super(cause);
-	}
-
-	public NotFoundException(String message, Throwable cause) {
+	public ObjectExistsException(String message, Throwable cause) {
 		super(message, cause);
 	}
 
-	public NotFoundException(String message, Object... args) {
-	    super(message, args);
-    }
+	public ObjectExistsException(Throwable cause) {
+		super(cause);
+	}
+
+	public ObjectExistsException(String message, Object... args) {
+		super(message, args);
+	}
 }

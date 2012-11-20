@@ -22,13 +22,13 @@ import java.util.Map;
 
 import bingo.lang.Charsets;
 import bingo.lang.Strings;
-import bingo.lang.exceptions.NotFoundException;
+import bingo.lang.exceptions.ObjectNotFoundException;
 import bingo.lang.exceptions.UncheckedIOException;
 import bingo.lang.xml.XmlException;
 
 public class MailConfig {
 	
-	public static MailConfig loadFromXml(String xmlResourceLocation) throws NotFoundException,UncheckedIOException,XmlException {
+	public static MailConfig loadFromXml(String xmlResourceLocation) throws ObjectNotFoundException,UncheckedIOException,XmlException {
 		return MailUtils.loadFromXml(xmlResourceLocation);
 	}
 	

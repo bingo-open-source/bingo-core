@@ -27,7 +27,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import bingo.lang.exceptions.NotFoundException;
+import bingo.lang.exceptions.ObjectNotFoundException;
 import bingo.lang.exceptions.ReflectException;
 import bingo.lang.exceptions.UncheckedIOException;
 import bingo.lang.logging.Log;
@@ -116,11 +116,11 @@ public class Classes {
 	
 	//new instance
 	//----------------------------------------------------------------------
-	public static Object newInstance(String className) throws NotFoundException,ReflectException {
+	public static Object newInstance(String className) throws ObjectNotFoundException,ReflectException {
 		return Reflects.newInstance(forName(className));
 	}
 	
-	public static Object newInstance(Class<?> loaderClass, String className) throws NotFoundException,ReflectException {
+	public static Object newInstance(Class<?> loaderClass, String className) throws ObjectNotFoundException,ReflectException {
 		return Reflects.newInstance(forName(loaderClass,className));
 	}
 
@@ -384,16 +384,16 @@ public class Classes {
 	 * @param className the class name
 	 * @return the class represented by {@code className} using the current thread's context class loader
 	 * 
-	 * @throws NotFoundException if the class is not found
+	 * @throws ObjectNotFoundException if the class is not found
 	 */
-	public static Class<?> forName(String className) throws NotFoundException {
+	public static Class<?> forName(String className) throws ObjectNotFoundException {
 		return forName(className, true);
 	}
 	
 	public static Class<?> forNameOrNull(String className) {
 		try {
 	        return forName(className, true);
-        } catch (NotFoundException e) {
+        } catch (ObjectNotFoundException e) {
         	return null;
         }
 	}
@@ -406,9 +406,9 @@ public class Classes {
 	 * @param className the class name
 	 * @param initialize whether the class must be initialized
 	 * @return the class represented by {@code className} using the current thread's context class loader
-	 * @throws NotFoundException if the class is not found
+	 * @throws ObjectNotFoundException if the class is not found
 	 */
-	static Class<?> forName(String className, boolean initialize) throws NotFoundException {
+	static Class<?> forName(String className, boolean initialize) throws ObjectNotFoundException {
 		ClassLoader contextCL = Thread.currentThread().getContextClassLoader();
 		ClassLoader loader = contextCL == null ? Classes.class.getClassLoader() : contextCL;
 		return forName(loader, className, initialize);
@@ -422,20 +422,20 @@ public class Classes {
 	 * @param classLoader the class loader to use to load the class
 	 * @param className the class name
 	 * @return the class represented by {@code className} using the {@code classLoader}
-	 * @throws NotFoundException if the class is not found
+	 * @throws ObjectNotFoundException if the class is not found
 	 */
-	public static Class<?> forName(ClassLoader classLoader, String className) throws NotFoundException {
+	public static Class<?> forName(ClassLoader classLoader, String className) throws ObjectNotFoundException {
 		return forName(classLoader, className, true);
 	}
 	
-	public static Class<?> forName(Class<?> loaderClass,String className) throws NotFoundException {
+	public static Class<?> forName(Class<?> loaderClass,String className) throws ObjectNotFoundException {
 		return forName(getClassLoader(loaderClass),className);
 	}
 	
 	public static Class<?> forNameOrNull(ClassLoader classLoader, String className) {
 		try {
 	        return forName(classLoader, className, true);
-        } catch (NotFoundException e) {
+        } catch (ObjectNotFoundException e) {
         	return null;
         }
 	}
@@ -443,7 +443,7 @@ public class Classes {
 	public static Class<?> forNameOrNull(Class<?> loaderClass, String className) {
 		try {
 	        return forName(loaderClass, className);
-        } catch (NotFoundException e) {
+        } catch (ObjectNotFoundException e) {
         	return null;
         }
 	}
@@ -472,7 +472,7 @@ public class Classes {
 	 * @return the class represented by {@code className} using the {@code classLoader}
 	 * @throws ClassNotFoundException if the class is not found
 	 */
-	static Class<?> forName(ClassLoader classLoader, String className, boolean initialize) throws NotFoundException {
+	static Class<?> forName(ClassLoader classLoader, String className, boolean initialize) throws ObjectNotFoundException {
 		try {
 			Class<?> clazz;
 			if (abbreviationMap.containsKey(className)) {
@@ -490,12 +490,12 @@ public class Classes {
 				try {
 					return forName(classLoader, className.substring(0, lastDotIndex) + INNER_CLASS_SEPARATOR_CHAR
 					        + className.substring(lastDotIndex + 1), initialize);
-				} catch (NotFoundException ex2) { // NOPMD
+				} catch (ObjectNotFoundException ex2) { // NOPMD
 					// ignore exception
 				}
 			}
 
-			throw new NotFoundException("class '{0}' not found",className,ex);
+			throw new ObjectNotFoundException("class '{0}' not found",className,ex);
 		}
 	}
 	
@@ -699,7 +699,7 @@ public class Classes {
 		return className;
 	}
 	
-    private static Class<?> classForResource(Resource resource,String basePath) throws IOException,NotFoundException {
+    private static Class<?> classForResource(Resource resource,String basePath) throws IOException,ObjectNotFoundException {
         String fullPath = resource.getURL().toString();
         
         int baseIndex = fullPath.lastIndexOf(basePath + "/");

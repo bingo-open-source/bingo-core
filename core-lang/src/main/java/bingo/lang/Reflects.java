@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import bingo.lang.exceptions.NotFoundException;
+import bingo.lang.exceptions.ObjectNotFoundException;
 import bingo.lang.exceptions.ReflectException;
 import bingo.lang.reflect.ReflectClass;
 import bingo.lang.reflect.ReflectField;
@@ -37,7 +37,7 @@ public class Reflects {
 		return ReflectClass.get(classType);
 	}
 	
-	public static ReflectClass<?> forName(String className) throws NotFoundException {
+	public static ReflectClass<?> forName(String className) throws ObjectNotFoundException {
 		return ReflectClass.get(Classes.forName(className));
 	}
 	
@@ -74,14 +74,14 @@ public class Reflects {
 		}
 	}
 	
-	public static Object getFieldValue(Object target,String name) throws NotFoundException {
+	public static Object getFieldValue(Object target,String name) throws ObjectNotFoundException {
 		Assert.notNull(target);
 		Assert.notNull(name);
 		
 		ReflectField field = ReflectClass.get(target.getClass()).getField(name);
 		
 		if(null == field){
-			throw new NotFoundException("field name '{0}' not exists in type '{1}'",name,target.getClass().getName());
+			throw new ObjectNotFoundException("field name '{0}' not exists in type '{1}'",name,target.getClass().getName());
 		}
 		
 		return field.getValue(target,false);

@@ -23,7 +23,7 @@ import bingo.lang.Assert;
 import bingo.lang.Objects;
 import bingo.lang.StopWatch;
 import bingo.lang.Strings;
-import bingo.lang.exceptions.NotFoundException;
+import bingo.lang.exceptions.ObjectNotFoundException;
 import bingo.lang.logging.Log;
 import bingo.lang.logging.LogFactory;
 
@@ -37,12 +37,12 @@ public class Mailer {
 		MailConfig config = null;
 		try {
 	        config = MailConfig.loadFromXml("classpath:/mail.conf.xml");
-        } catch (NotFoundException e) {
+        } catch (ObjectNotFoundException e) {
         }
         
 		try {
 	        config = MailConfig.loadFromXml("classpath:/config/mail.conf.xml");
-        } catch (NotFoundException e) {
+        } catch (ObjectNotFoundException e) {
         }
         
         if(null == config){

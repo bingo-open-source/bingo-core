@@ -19,7 +19,7 @@ import java.util.Map;
 
 import bingo.lang.beans.BeanModel;
 import bingo.lang.beans.BeanProperty;
-import bingo.lang.exceptions.NotFoundException;
+import bingo.lang.exceptions.ObjectNotFoundException;
 
 public class Beans {
 
@@ -31,7 +31,7 @@ public class Beans {
 		return BeanModel.get(classType);
 	}
 	
-	public static BeanModel<?> forName(String className) throws NotFoundException {
+	public static BeanModel<?> forName(String className) throws ObjectNotFoundException {
 		return BeanModel.get(Classes.forName(className));
 	}
 	

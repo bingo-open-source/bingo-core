@@ -31,7 +31,7 @@ import bingo.lang.Assert;
 import bingo.lang.Classes;
 import bingo.lang.Collections;
 import bingo.lang.Strings;
-import bingo.lang.exceptions.NotFoundException;
+import bingo.lang.exceptions.ObjectNotFoundException;
 import bingo.lang.exceptions.UncheckedIOException;
 import bingo.lang.io.Paths;
 
@@ -157,16 +157,16 @@ public abstract class Resources {
 	 * @param resourceLocation the resource location to resolve: either a "classpath:" pseudo URL, a "file:" URL, or a
 	 *            plain file path
 	 * @return a corresponding URL object
-	 * @throws NotFoundException if the resource cannot be resolved to a URL
+	 * @throws ObjectNotFoundException if the resource cannot be resolved to a URL
 	 */
-	public static URL getURL(String resourceLocation) throws NotFoundException {
+	public static URL getURL(String resourceLocation) throws ObjectNotFoundException {
 		Assert.notNull(resourceLocation, "Resource location must not be null");
 		if (resourceLocation.startsWith(CLASSPATH_URL_PREFIX)) {
 			String path = resourceLocation.substring(CLASSPATH_URL_PREFIX.length());
 			URL url = Classes.getClassLoader().getResource(path);
 			if (url == null) {
 				String description = "class path resource [" + path + "]";
-				throw new NotFoundException(description + " cannot be resolved to URL because it does not exist");
+				throw new ObjectNotFoundException(description + " cannot be resolved to URL because it does not exist");
 			}
 			return url;
 		}
@@ -178,7 +178,7 @@ public abstract class Resources {
 			try {
 				return new File(resourceLocation).toURI().toURL();
 			} catch (MalformedURLException ex2) {
-				throw new NotFoundException("Resource location [" + resourceLocation + "] is neither a URL not a well-formed file path");
+				throw new ObjectNotFoundException("Resource location [" + resourceLocation + "] is neither a URL not a well-formed file path");
 			}
 		}
 	}
@@ -261,16 +261,16 @@ public abstract class Resources {
 	 * @param resourceLocation the resource location to resolve: either a "classpath:" pseudo URL, a "file:" URL, or a
 	 *            plain file path
 	 * @return a corresponding File object
-	 * @throws NotFoundException if the resource cannot be resolved to a file in the file system
+	 * @throws ObjectNotFoundException if the resource cannot be resolved to a file in the file system
 	 */
-	public static File getFile(String resourceLocation) throws NotFoundException {
+	public static File getFile(String resourceLocation) throws ObjectNotFoundException {
 		Assert.notNull(resourceLocation, "Resource location must not be null");
 		if (resourceLocation.startsWith(CLASSPATH_URL_PREFIX)) {
 			String path = resourceLocation.substring(CLASSPATH_URL_PREFIX.length());
 			String description = "class path resource [" + path + "]";
 			URL url = Classes.getClassLoader().getResource(path);
 			if (url == null) {
-				throw new NotFoundException(description + " cannot be resolved to absolute file path "
+				throw new ObjectNotFoundException(description + " cannot be resolved to absolute file path "
 				        + "because it does not reside in the file system");
 			}
 			return getFile(url, description);
@@ -289,9 +289,9 @@ public abstract class Resources {
 	 * 
 	 * @param resourceUrl the resource URL to resolve
 	 * @return a corresponding File object
-	 * @throws NotFoundException if the URL cannot be resolved to a file in the file system
+	 * @throws ObjectNotFoundException if the URL cannot be resolved to a file in the file system
 	 */
-	public static File getFile(URL resourceUrl) throws NotFoundException {
+	public static File getFile(URL resourceUrl) throws ObjectNotFoundException {
 		return getFile(resourceUrl, "URL");
 	}
 
@@ -300,9 +300,9 @@ public abstract class Resources {
 	 * 
 	 * @param resourceUri the resource URI to resolve
 	 * @return a corresponding File object
-	 * @throws NotFoundException if the URL cannot be resolved to a file in the file system
+	 * @throws ObjectNotFoundException if the URL cannot be resolved to a file in the file system
 	 */
-	public static File getFile(URI resourceUri) throws NotFoundException {
+	public static File getFile(URI resourceUri) throws ObjectNotFoundException {
 		return getFile(resourceUri, "URI");
 	}
 	
@@ -313,12 +313,12 @@ public abstract class Resources {
 	 * @param description a description of the original resource that the URL was created for (for example, a class path
 	 *            location)
 	 * @return a corresponding File object
-	 * @throws NotFoundException if the URL cannot be resolved to a file in the file system
+	 * @throws ObjectNotFoundException if the URL cannot be resolved to a file in the file system
 	 */
-	static File getFile(URL resourceUrl, String description) throws NotFoundException {
+	static File getFile(URL resourceUrl, String description) throws ObjectNotFoundException {
 		Assert.notNull(resourceUrl, "Resource URL must not be null");
 		if (!URL_PROTOCOL_FILE.equals(resourceUrl.getProtocol())) {
-			throw new NotFoundException(description + " cannot be resolved to absolute file path "
+			throw new ObjectNotFoundException(description + " cannot be resolved to absolute file path "
 			        + "because it does not reside in the file system: " + resourceUrl);
 		}
 		try {
@@ -336,12 +336,12 @@ public abstract class Resources {
 	 * @param description a description of the original resource that the URI was created for (for example, a class path
 	 *            location)
 	 * @return a corresponding File object
-	 * @throws NotFoundException if the URL cannot be resolved to a file in the file system
+	 * @throws ObjectNotFoundException if the URL cannot be resolved to a file in the file system
 	 */
-	static File getFile(URI resourceUri, String description) throws NotFoundException {
+	static File getFile(URI resourceUri, String description) throws ObjectNotFoundException {
 		Assert.notNull(resourceUri, "Resource URI must not be null");
 		if (!URL_PROTOCOL_FILE.equals(resourceUri.getScheme())) {
-			throw new NotFoundException(description + " cannot be resolved to absolute file path "
+			throw new ObjectNotFoundException(description + " cannot be resolved to absolute file path "
 			        + "because it does not reside in the file system: " + resourceUri);
 		}
 		return new File(resourceUri.getSchemeSpecificPart());
