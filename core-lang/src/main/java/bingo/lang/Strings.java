@@ -1356,6 +1356,10 @@ public class Strings {
 	public static String replace(String text, String oldString, String newString) {
 		return replace(text, oldString, newString, -1);
 	}
+	
+	public static String replaceIgnoreCase(String text, String oldString, String newString) {
+		return replaceIgnoreCase(text, oldString, newString, -1);
+	}
 
 	/**
 	 * <p>
@@ -3886,6 +3890,36 @@ public class Strings {
 				break;
 			}
 			end = text.indexOf(oldString, start);
+		}
+		buf.append(text.substring(start));
+		return buf.toString();
+	}
+	
+	private static String replaceIgnoreCase(String text, String oldString, String newString, int max) {
+		if (isEmpty(text) || isEmpty(oldString) || newString == null || max == 0) {
+			return safe(text);
+		}
+		
+		String lcText      = text.toLowerCase();
+		String lcOldString = oldString.toLowerCase();
+		
+		int start = 0;
+		int end = lcText.indexOf(lcOldString, start);
+		if (end == -1) {
+			return lcText;
+		}
+		int replLength = lcOldString.length();
+		int increase = newString.length() - replLength;
+		increase = increase < 0 ? 0 : increase;
+		increase *= max < 0 ? 16 : max > 64 ? 64 : max;
+		StringBuilder buf = new StringBuilder(lcText.length() + increase);
+		while (end != -1) {
+			buf.append(text.substring(start, end)).append(newString);
+			start = end + replLength;
+			if (--max == 0) {
+				break;
+			}
+			end = lcText.indexOf(lcOldString, start);
 		}
 		buf.append(text.substring(start));
 		return buf.toString();

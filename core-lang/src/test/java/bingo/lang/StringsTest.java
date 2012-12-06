@@ -183,6 +183,34 @@ public class StringsTest extends ConcurrentTestCase {
 		assertEquals("barbarbar", Strings.replace("foofoofoo", "foo", "bar"));
 		assertEquals("farfarfar", Strings.replace("foofoofoo", "oo", "ar"));
 	}
+	
+	@Test
+	public void testReplaceIgnoreCase_StringStringString() {
+		assertEquals(Strings.EMPTY, Strings.replaceIgnoreCase(null, null, null));
+		assertEquals(Strings.EMPTY, Strings.replaceIgnoreCase(null, null, "any"));
+		assertEquals(Strings.EMPTY, Strings.replaceIgnoreCase(null, "any", null));
+		assertEquals(Strings.EMPTY, Strings.replaceIgnoreCase(null, "any", "any"));
+
+		assertEquals("", Strings.replaceIgnoreCase("", null, null));
+		assertEquals("", Strings.replaceIgnoreCase("", null, "any"));
+		assertEquals("", Strings.replaceIgnoreCase("", "any", null));
+		assertEquals("", Strings.replaceIgnoreCase("", "any", "any"));
+
+		assertEquals("FOO", Strings.replaceIgnoreCase("FOO", "", "any"));
+		assertEquals("FOO", Strings.replaceIgnoreCase("FOO", null, "any"));
+		assertEquals("FOO", Strings.replaceIgnoreCase("FOO", "F", null));
+		assertEquals("FOO", Strings.replaceIgnoreCase("FOO", "f", null));
+		assertEquals("FOO", Strings.replaceIgnoreCase("FOO", null, null));
+
+		assertEquals("", Strings.replaceIgnoreCase("foofoofoo", "foo", ""));
+		assertEquals("", Strings.replaceIgnoreCase("foofooFOo", "FOO", ""));
+		assertEquals("", Strings.replaceIgnoreCase("fooFoofoo", "FoO", ""));
+		assertEquals("barbarbar", Strings.replaceIgnoreCase("foofoofoo", "foo", "bar"));
+		assertEquals("barbarbar", Strings.replaceIgnoreCase("foofooFOo", "fOo", "bar"));
+		assertEquals("barbarbar", Strings.replaceIgnoreCase("fooFoofoo", "FOO", "bar"));
+		assertEquals("farfarfar", Strings.replaceIgnoreCase("foofoofoo", "oo", "ar"));
+		assertEquals("farfarfar", Strings.replaceIgnoreCase("foofoofOo", "oO", "ar"));
+	}
 
 	@Test
 	public void testReplaceOnce_StringStringString() {
