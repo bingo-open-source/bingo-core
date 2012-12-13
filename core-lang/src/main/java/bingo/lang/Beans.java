@@ -16,6 +16,7 @@
 package bingo.lang;
 
 import java.util.Map;
+import java.util.Map.Entry;
 
 import bingo.lang.beans.BeanModel;
 import bingo.lang.beans.BeanProperty;
@@ -45,6 +46,18 @@ public class Beans {
 	
 	public static boolean set(Object bean,String property,Object value){
 		return BeanModel.get(bean.getClass()).set(bean, property, value);
+	}
+	
+	public static void set(Object bean,Map<String, Object> properties){
+		if(null == properties || properties.isEmpty()){
+			return ;
+		}
+		
+		BeanModel<?> model = BeanModel.get(bean.getClass());
+		
+		for(Entry<String, Object> entry : properties.entrySet()){
+			model.set(bean, entry.getKey(), entry.getValue());
+		}
 	}
 	
 	public static Object get(Object bean,String property){
