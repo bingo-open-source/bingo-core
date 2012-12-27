@@ -15,8 +15,6 @@
  */
 package bingo.lang.json;
 
-import static org.junit.Assert.assertEquals;
-
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
@@ -126,6 +124,35 @@ public class JSONEncodeTest extends ConcurrentTestCase {
 		String json = encode(parent);
 		
 		JSON.decode(json);
+	}
+	
+	@Test
+	public void testCyclicObjectInArrayArray() {
+		Category c1 = new Category("1");
+		Category c2 = new Category("2");
+		
+		List<List<Category>> arrayarray = new ArrayList<List<Category>>();
+		List<Category> array1 = new ArrayList<Category>();
+		List<Category> array2 = new ArrayList<Category>();
+		List<Category> array3 = new ArrayList<Category>();
+		
+		array1.add(c1);
+		array2.add(c2);
+		array3.add(c1);
+
+		arrayarray.add(array1);
+		arrayarray.add(array2);
+		arrayarray.add(array3);
+		
+		String jsonString = JSON.encode(arrayarray);
+		
+		JSONObject jsonObject = JSON.decode(jsonString);
+		
+		Object[] jsonArrayArray = jsonObject.array();
+		assertEquals(3, jsonArrayArray.length);
+		
+		List<?> jsonArray3 = (List<?>)jsonArrayArray[2];
+		assertEquals(1, jsonArray3.size());
 	}
 	
 	private static String encode(Object value){

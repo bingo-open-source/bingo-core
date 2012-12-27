@@ -31,8 +31,8 @@ class JSONEncoder {
 	private static final int MAX_DEEP = 100;
     
     private IdentityHashMap<Object,Integer> references = new IdentityHashMap<Object, Integer>();
-    private int					 		 deep       = 0;
-    private JSONSettings				     settings ;
+    private int					 		 	deep       = 0;
+    private JSONSettings				    settings ;
     
     public JSONEncoder(){
         this(new JSONSettings());
@@ -106,6 +106,8 @@ class JSONEncoder {
             } else {
                 encodeBean(name,value, writer);
             }
+            
+            references.remove(value);
         }
         
         deep--;
@@ -140,9 +142,9 @@ class JSONEncoder {
         	Object value = reflectClass.getArrayItem(array, i);
         	
             //detect cyclic references
-            if(references.containsKey(value)){
-            	continue;
-            }
+//            if(references.containsKey(value)){
+//            	continue;
+//            }
             
             if (i > 0) {
                 writer.separator();
@@ -160,9 +162,9 @@ class JSONEncoder {
         int index = 0;
         for (Object value : iterable) {
             //detect cyclic references
-            if(references.containsKey(value)){
-            	continue;
-            }
+//            if(references.containsKey(value)){
+//            	continue;
+//            }
             
             if (index == 0) {
                 index++;
@@ -185,9 +187,9 @@ class JSONEncoder {
         	Object value = enumeration.nextElement();
         	
             //detect cyclic references
-            if(references.containsKey(value)){
-            	continue;
-            }
+//            if(references.containsKey(value)){
+//            	continue;
+//            }
         	
             if (index == 0) {
                 index++;
@@ -217,9 +219,9 @@ class JSONEncoder {
             }
             
             //detect cyclic references
-            if(references.containsKey(propValue)){
-            	continue;
-            }            
+//            if(references.containsKey(propValue)){
+//            	continue;
+//            }            
             
             if (index == 0) {
                 index++;
@@ -267,9 +269,9 @@ class JSONEncoder {
                     }
                     
                     //detect cyclic references
-                    if(references.containsKey(propValue)){
-                    	continue;
-                    }                    
+//                    if(references.containsKey(propValue)){
+//                    	continue;
+//                    }                    
                     
                     if (index == 0) {
                         index++;
