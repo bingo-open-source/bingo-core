@@ -82,7 +82,7 @@ public class XmlValidator {
 	        }
 	        validator.validate(source);
         } catch (SAXException e) {
-        	throw new XmlValidationException("Error validating xml : {0} \n {1}",e.getMessage(),doc.documentUrl(),e);
+        	throw new XmlValidationException("Error validating xml : {0} \n {1}",e.getMessage(),doc.locationOrUnknow(),e);
         } catch (IOException e) {
         	throw Exceptions.uncheck(e);
         }

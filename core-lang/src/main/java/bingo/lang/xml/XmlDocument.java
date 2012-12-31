@@ -17,7 +17,6 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import bingo.lang.Charsets;
-import bingo.lang.Exceptions;
 import bingo.lang.exceptions.UncheckedIOException;
 import bingo.lang.io.IO;
 import bingo.lang.resource.Resource;
@@ -37,7 +36,15 @@ public class XmlDocument extends XmlContainer {
 		return parse(new InputStreamReader(inputStream,Charsets.forName(encoding)));
 	}
 	
+	public static XmlDocument parse(InputStream inputStream,String encoding,String location) throws UncheckedIOException,UnsupportedCharsetException {
+		return parse(new InputStreamReader(inputStream,Charsets.forName(encoding)),location);
+	}
+	
 	public static XmlDocument parse(Reader reader) throws UncheckedIOException {
+		return parse(reader,null);
+	}
+	
+	public static XmlDocument parse(Reader reader,String location) throws UncheckedIOException {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		factory.setNamespaceAware(true);
 		try {
@@ -51,7 +58,7 @@ public class XmlDocument extends XmlContainer {
 			
 			Document document = builder.parse(new InputSource(reader));
 			
-			return new XmlDocument(document);
+			return new XmlDocument(document,location);
 		} catch (Exception e) {
 			throw new UncheckedIOException(e.getMessage(),e);
 		}
@@ -69,7 +76,7 @@ public class XmlDocument extends XmlContainer {
 			XmlDocument doc = parse(inputStream);
 			
 			doc.resource = resource;
-			
+			doc.location = null == resource.getURL() ? null : resource.getURL().toString();
 			return doc;
 		}catch(IOException e){
 			throw new UncheckedIOException(e.getMessage(),e);
@@ -78,11 +85,16 @@ public class XmlDocument extends XmlContainer {
 		}
 	}
 
+	private String     location;
 	private Resource   resource;
 	private Document   domDocument;
 	private XmlElement documentElement;
 	
 	protected XmlDocument(Document document) {
+		this(document,null);
+	}
+	
+	protected XmlDocument(Document document,String location) {
 		for (Node childNode : domNodes(document.getChildNodes())) {
 			XmlNode xchild = parseNode(this,childNode);
 			if (xchild instanceof XmlElement) {
@@ -90,13 +102,19 @@ public class XmlDocument extends XmlContainer {
 			}
 			add(xchild);
 		}
-		this.domDocument = document;;
+		this.domDocument = document;
+		this.location    = location;
 	}
 
 	protected XmlDocument(XmlElement documentElement) {
+		this(documentElement,null);
+	}
+	
+	protected XmlDocument(XmlElement documentElement,String location) {
 		this.documentElement = documentElement;
 		this.documentElement.setDocument(this);
 		this.add(documentElement);
+		this.location = location;
 	}
 	
 	public XmlElement rootElement() {
@@ -108,23 +126,18 @@ public class XmlDocument extends XmlContainer {
 		return XmlNodeType.DOCUMENT;
 	}
 	
-	public String url() {
-		try {
-	        return null == resource ? "unkow source" : resource.getURL().toString();
-        } catch (IOException e) {
-	        throw Exceptions.uncheck(e);
-        }
+	public String location() {
+		return location;
+	}
+	
+	public String locationOrUnknow(){
+		return null == location ? "unknow location" : location;
 	}
 	
 	@Override
     public XmlDocument document() {
 	    return this;
     }
-	
-	@Override
-    public String documentUrl() {
-		return this.url();
-	}
 
 	protected Resource resource(){
 		return resource;

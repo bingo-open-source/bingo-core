@@ -16,8 +16,6 @@
 package bingo.lang.io;
 
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Test;
 
 import bingo.lang.testing.junit.ConcurrentTestCase;
@@ -48,6 +46,20 @@ public class PathsTest extends ConcurrentTestCase {
 		assertEquals("txt", Paths.getFileExtension("myfile.txt"));
 		assertEquals("txt", Paths.getFileExtension("mypath/myfile.txt"));
 		assertEquals("txt", Paths.getFileExtension("/home/user/.m2/settings/myfile.txt"));
+	}
+	
+	@Test
+	public void testGetFileNameWithoutExtension(){
+		assertEquals("", Paths.getFileNameWithoutExtension(null));
+		assertEquals("", Paths.getFileNameWithoutExtension(""));
+		assertEquals("myfile", Paths.getFileNameWithoutExtension("myfile"));
+		assertEquals("myPath/myfile", Paths.getFileNameWithoutExtension("myPath/myfile"));
+		assertEquals("/home/user/.m2/settings/myfile", Paths.getFileNameWithoutExtension("/home/user/.m2/settings/myfile"));
+		assertEquals("myfile", Paths.getFileNameWithoutExtension("myfile."));
+		assertEquals("myPath/myfile", Paths.getFileNameWithoutExtension("myPath/myfile."));
+		assertEquals("myfile", Paths.getFileNameWithoutExtension("myfile.txt"));
+		assertEquals("mypath/myfile", Paths.getFileNameWithoutExtension("mypath/myfile.txt"));
+		assertEquals("/home/user/.m2/settings/myfile", Paths.getFileNameWithoutExtension("/home/user/.m2/settings/myfile.txt"));
 	}
 	
 	@Test

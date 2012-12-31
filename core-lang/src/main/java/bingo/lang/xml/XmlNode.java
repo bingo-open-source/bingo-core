@@ -13,10 +13,6 @@ public abstract class XmlNode extends XmlObject {
 		return document;
 	}
 	
-	public String documentUrl(){
-		return null == document ? "unknow source" : document.url();
-	}
-	
 	public void remove() {
 		if (parent == null) {
 			return;

@@ -128,7 +128,7 @@ public class Paths {
 	 * Extract the filename extension from the given path,
 	 * e.g. "mypath/myfile.txt" -> "txt".
 	 * @param path the file path (may be <code>null</code>)
-	 * @return the extracted filename extension, or <code>null</code> if none
+	 * @return the extracted filename extension, or <code>""</code> if none
 	 */
 	public static String getFileExtension(String path) {
 		if (path == null) {
@@ -146,6 +146,29 @@ public class Paths {
 		}
 		return path.substring(extIndex + 1);
 	}	
+	
+	/**
+	 * Extract the part without extension from the given filename,
+	 * 
+	 * e.g. "myfile.txt" -> "myfile"
+	 */
+	public static String getFileNameWithoutExtension(String filename){
+		if(null == filename){
+			return Strings.EMPTY;
+		}
+		
+		int extIndex = filename.lastIndexOf(EXTENSION_SEPARATOR);
+		if (extIndex == -1) {
+			return filename;
+		}
+		
+		int folderIndex = indexOfLastSeparator(filename);
+		if (folderIndex > extIndex) {
+			return filename;
+		}
+		
+		return filename.substring(0,extIndex);
+	}
 	
     /**
      * Gets the path from a full filename, which excludes the prefix.

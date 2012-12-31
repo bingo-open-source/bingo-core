@@ -121,7 +121,7 @@ public class PluginManager<P extends Plugin> {
 			}else if(e.name().equals("set")){
 				context.sets.add(e);
 			}else{
-				throw new IllegalStateException("found unknow xml element '" + e.name() + "' in : " + doc.url());
+				throw new IllegalStateException("found unknow xml element '" + e.name() + "' in : " + doc.location());
 			}
 		}
 	}
@@ -136,9 +136,9 @@ public class PluginManager<P extends Plugin> {
 			name = clazzName;
 		}
 		
-		Assert.isFalse(getPlugin(name) != null,"plugin name '{0}' aleady exists, please check the xml : {1}",name,e.documentUrl());
+		Assert.isFalse(getPlugin(name) != null,"plugin name '{0}' aleady exists, please check the xml : {1}",name,e.document().locationOrUnknow());
 		
-		Assert.isTrue(pluginType.isAssignableFrom(clazzObject),"'class' value of plugin '" + name + "' is invalid in xml : " + e.documentUrl());
+		Assert.isTrue(pluginType.isAssignableFrom(clazzObject),"'class' value of plugin '" + name + "' is invalid in xml : " + e.document().locationOrUnknow());
 		
         P plugin = (P)Reflects.newInstance(clazzObject);
 		

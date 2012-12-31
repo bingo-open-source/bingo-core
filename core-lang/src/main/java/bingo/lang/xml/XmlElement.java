@@ -226,7 +226,7 @@ public class XmlElement extends XmlContainer implements XmlNamed {
 		XmlElement e = childElement(name);
 		
 		if(null == e){
-			throw new XmlValidationException("child element '{0}' of parent '{1}' is required in xml : {2}",name, name(),documentUrl());
+			throw new XmlValidationException("child element '{0}' of parent '{1}' is required in xml : {2}",name, name(),documentLocation());
 		}
 		
 		return e;
@@ -240,7 +240,7 @@ public class XmlElement extends XmlContainer implements XmlNamed {
 		String string = Strings.trim(text());
 		
 		if(Strings.isEmpty(string)){
-			throw new XmlValidationException("text of element '{0}' is required in xml : {1}",name(),documentUrl());
+			throw new XmlValidationException("text of element '{0}' is required in xml : {1}",name(),documentLocation());
 		}
 		
 		return string;
@@ -250,7 +250,7 @@ public class XmlElement extends XmlContainer implements XmlNamed {
 		XmlAttribute attr = attributes().firstOrNull(Predicates.<XmlAttribute> xnameEquals(name));
 		
 		if(null == attr){
-			throw new XmlValidationException("attribute '{0}' of element '{1}' is required in xml : {2}",name,name(),documentUrl());
+			throw new XmlValidationException("attribute '{0}' of element '{1}' is required in xml : {2}",name,name(),documentLocation());
 		}
 		
 		return attr.required();
@@ -260,7 +260,7 @@ public class XmlElement extends XmlContainer implements XmlNamed {
 		XmlAttribute attr = attribute(name);
 		
 		if(null == attr || Strings.isEmpty(attr.value())){
-			throw new XmlValidationException("attribute '{0}' value of element '{1}' is required in xml : {2}",name,name(),documentUrl());
+			throw new XmlValidationException("attribute '{0}' value of element '{1}' is required in xml : {2}",name,name(),documentLocation());
 		}
 		
 		return attr.value();
@@ -277,7 +277,7 @@ public class XmlElement extends XmlContainer implements XmlNamed {
 	}
 	
 	public void error(String message) throws XmlValidationException {
-		throw new XmlValidationException("found error \"{0}\" in element '{1}', xml file '{2}'",message,this.name,documentUrl());
+		throw new XmlValidationException("found error \"{0}\" in element '{1}', xml file '{2}'",message,this.name,documentLocation());
 	}
 	
 	public void error(String template,Object... args) throws XmlValidationException{
@@ -301,6 +301,10 @@ public class XmlElement extends XmlContainer implements XmlNamed {
 	@Override
 	protected XmlElement element() {
 		return this;
+	}
+	
+	protected String documentLocation(){
+		return null == document() ? "unknow" : document().locationOrUnknow();
 	}
 
 	@Override
