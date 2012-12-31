@@ -1620,6 +1620,26 @@ public class Arrays {
 
 		return strings;
 	}
+	
+	public static final <T> int[] toIntArray(T[] array){
+		if (null == array) {
+			return EMPTY_INT_ARRAY;
+		}
+		
+		int[] ints = new int[array.length];
+		
+		for (int i = 0; i < array.length; i++) {
+			Object object = array[i];
+
+			if (Strings.isEmpty(object)) {
+				ints[i] = 0;
+			} else {
+				ints[i] = Converts.toInt(object);
+			}
+		}
+
+		return ints;
+	}
 
 	/**
 	 * cast the supplied array to an array which it's type is the type of the specific to array.

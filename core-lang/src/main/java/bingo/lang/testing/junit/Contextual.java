@@ -24,4 +24,6 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE, ElementType.METHOD})
 public @interface Contextual {
 	public String value() default "";
+	
+	public String[] values() default {};
 }

@@ -56,21 +56,18 @@ public class ContextualRule implements TestRule {
 		    		return;
 		    	}
 		    	
-		    	if(null != contextual && !Strings.isEmpty(contextual.value())){
-		    		String qualifier = contextual.value();
+		    	if(null != contextual){
+		    		String   qualifier  = contextual.value();
+		    		String[] qualifiers = contextual.values();
+		    		
+		    		if(!Strings.isEmpty(qualifier)){
+		    			qualifiers = new String[]{qualifier};
+		    		}
 		    		
 		    		boolean executed = false;
 		    		
 		    		for(Object param : provider.params(description)){
-		    			if(param instanceof Named && Strings.equalsIgnoreCase(((Named)param).getName(), qualifier)){
-				    		try{
-				    			provider.beforeTest(description, param);
-				    			base.evaluate();
-				    			executed = true;
-				    		}finally{
-				    			provider.afterTest(description,param);
-				    		}
-		    			}else if(Strings.equalsIgnoreCase(param.toString(), qualifier)){
+		    			if(isExecute(param,qualifiers)){
 				    		try{
 				    			provider.beforeTest(description, param);
 				    			base.evaluate();
@@ -99,4 +96,18 @@ public class ContextualRule implements TestRule {
 			}
 		};
     }
+	
+	private boolean isExecute(Object param,String[] qualifiers){
+		if(qualifiers.length == 0){
+			return true;
+		}
+		
+		String name = param instanceof Named ? ((Named)param).getName() : param.toString();
+		for(String qualifier : qualifiers){
+			if(Strings.equalsIgnoreCase(name, qualifier)){
+				return true;
+			}
+		}
+		return false;
+	}
 }
