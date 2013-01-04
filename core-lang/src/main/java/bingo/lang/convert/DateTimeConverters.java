@@ -47,6 +47,10 @@ public class DateTimeConverters {
 	}
 	
 	public static class SqlDateConverter extends AbstractDateConverter<java.sql.Date> {
+		
+		public SqlDateConverter() {
+	        this.patterns = DateFormats.DEFAULT_PATTERNS;
+        }
 
 		@Override
 	    protected java.sql.Date toDate(Class<?> targetType, Calendar calendar) {
@@ -67,6 +71,10 @@ public class DateTimeConverters {
 	
 	public static class SqlTimeConverter extends AbstractDateConverter<Time> {
 		
+		public SqlTimeConverter() {
+	        this.patterns = DateFormats.DEFAULT_PATTERNS;
+        }
+		
 		@Override
 	    protected Time toDate(Class<?> targetType, Calendar calendar) {
 		    return new java.sql.Time(calendar.getTimeInMillis());
@@ -84,6 +92,10 @@ public class DateTimeConverters {
 	}
 	
 	public static class SqlTimestampConverter extends AbstractDateConverter<Timestamp> {
+		
+		public SqlTimestampConverter() {
+	        this.patterns = DateFormats.DEFAULT_PATTERNS;
+        }
 		
 		@Override
 	    protected Timestamp toDate(Class<?> targetType, Calendar calendar) {

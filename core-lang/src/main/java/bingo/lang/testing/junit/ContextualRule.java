@@ -79,7 +79,7 @@ public class ContextualRule implements TestRule {
 		    		}
 		    		
 		    		if(!executed){
-		    			throw new IllegalArgumentException("unknow contextual qualifier : " + qualifier);
+		    			throw new IllegalArgumentException("unknow contextual qualifier : " + Strings.join(qualifiers));
 		    		}
 		    	}else{
 			    	for(Object param : provider.params(description)){
