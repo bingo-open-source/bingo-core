@@ -24,10 +24,11 @@ import java.io.Writer;
 import java.sql.Clob;
 import java.sql.SQLException;
 
+import bingo.lang.convert.StringConvertible;
 import bingo.lang.exceptions.NestedSQLException;
 import bingo.lang.io.ReaderInputStream;
 
-public class ClobImpl implements Clob {
+public class ClobImpl implements Clob,StringConvertible {
 	
 	private String  string;
 	private Reader  reader;
@@ -64,8 +65,9 @@ public class ClobImpl implements Clob {
 			throw new UnsupportedOperationException( "Clob was not created from string; cannot substring" );
 		}
 		// semi-naive implementation
-		int endIndex = Math.min( ((int)pos)+length, string.length() );
-		return string.substring( (int)pos, endIndex );
+		int startIndex = (int)(pos - 1);
+		int endIndex = Math.min( startIndex + length, string.length());
+		return string.substring(startIndex, endIndex );
     }
 
 	public long position(String searchstr, long start) throws SQLException {
@@ -117,4 +119,8 @@ public class ClobImpl implements Clob {
 	private static void unsupported(){
 		throw new UnsupportedOperationException("operation not supported in this clob");
 	}
+
+	public String convertToString() {
+		return string;
+    }
 }

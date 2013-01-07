@@ -21,14 +21,18 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.Blob;
 import java.sql.SQLException;
+import bingo.lang.io.IO;
 
 public class BlobImpl implements Blob {
 
 	private InputStream stream;
 	private long 	    length;
 	private boolean     needsReset = false;
+	
+	private byte[] bytes;
 
 	public BlobImpl(byte[] bytes) {
+		this.bytes  = bytes;
 		this.stream = new ByteArrayInputStream(bytes);
 		this.length = bytes.length;
 	}
@@ -43,14 +47,26 @@ public class BlobImpl implements Blob {
     }
 
 	public byte[] getBytes(long pos, int length) throws SQLException {
-		unsupported();
-		return null;
+		if(null == bytes){
+			try {
+	            bytes = IO.toByteArray(stream);
+            } catch (IOException e) {
+            	throw new SQLException("cloud not get bytes from stream");
+            }
+		}
+		
+		byte[] data = new byte[length];
+		
+		System.arraycopy(bytes,(int)pos-1,(Object)data, 0, length);
+		
+		return data;
     }
 
 	public InputStream getBinaryStream() throws SQLException {
 		try {
 			if (needsReset) {
 				stream.reset();
+				bytes = null;
 			}
 		}
 		catch ( IOException ioe) {

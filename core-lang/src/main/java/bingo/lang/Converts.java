@@ -47,6 +47,7 @@ import bingo.lang.convert.MethodConverter;
 import bingo.lang.convert.NumberConverters;
 import bingo.lang.convert.StringConverter;
 import bingo.lang.convert.CollectionConverters.ListConverter;
+import bingo.lang.convert.StringConvertible;
 import bingo.lang.exceptions.ConvertException;
 import bingo.lang.exceptions.ConvertUnsupportedException;
 
@@ -231,6 +232,14 @@ public class Converts {
 		if(null == value){
 			return null;
 		}
+		
+    	if(value instanceof StringConvertible){
+    		return ((StringConvertible)value).convertToString();
+    	}
+    	
+    	if(value instanceof byte[]){
+    		return Strings.newStringUtf8((byte[])value);
+    	}
 		
 		value = trimToNull(value);
 		
