@@ -24,7 +24,6 @@ import bingo.lang.Strings;
 
 @SuppressWarnings({"unchecked","rawtypes"})
 public class ContextualRule implements TestRule {
-	
 	private final boolean			 runAnnotatedOnly;
 	private final ContextualProvider provider;
 
@@ -69,6 +68,7 @@ public class ContextualRule implements TestRule {
 		    		for(Object param : provider.params(description)){
 		    			if(isExecute(param,qualifiers)){
 				    		try{
+				    			System.out.println("\n******\nrun unit test for contextual qualifier : " + param.toString() + "\n*****\n");
 				    			provider.beforeTest(description, param);
 				    			base.evaluate();
 				    			executed = true;

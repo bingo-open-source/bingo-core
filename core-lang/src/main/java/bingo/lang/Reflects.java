@@ -49,7 +49,7 @@ public class Reflects {
 		return ReflectClass.get(type).newInstanceWithoutCallingConstructor();
 	}
 	
-	public static <T>	T[] newArray(Class<T> type,int length){
+	public static <T> T[] newArray(Class<T> type,int length){
 		return ReflectClass.get(type).newArray(length);
 	}
 	
