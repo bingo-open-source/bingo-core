@@ -232,6 +232,5 @@
 	
 	<modules>
 		<module>core-lang</module>
-		<module>core-utils</module>
 	</modules>
 </project>
