@@ -55,34 +55,34 @@ public class SlfLogTest {
 
 	@Test
 	public void testLevelEnabled() {
-		context.isTraceEnabled = false;
+		context.reset().isTraceEnabled = false;
 		assertFalse(log.isTraceEnabled());
 		
-		context.isDebugEnabled= false;
+		context.reset().isDebugEnabled= false;
 		assertFalse(log.isDebugEnabled());		
 		
-		context.isInfoEnabled= false;
+		context.reset().isInfoEnabled= false;
 		assertFalse(log.isInfoEnabled());
 		
-		context.isWarnEnabled= false;
+		context.reset().isWarnEnabled= false;
 		assertFalse(log.isWarnEnabled());
 
-		context.isErrorEanbled = false;
+		context.reset().isErrorEanbled = false;
 		assertFalse(log.isErrorEnabled());
 		
-		context.isTraceEnabled = true;
+		context.reset().isTraceEnabled = true;
 		assertTrue(log.isTraceEnabled());
 		
-		context.isDebugEnabled = true;
+		context.reset().isDebugEnabled = true;
 		assertTrue(log.isDebugEnabled());
 		
-		context.isInfoEnabled = true;
+		context.reset().isInfoEnabled = true;
 		assertTrue(log.isInfoEnabled());
 		
-		context.isWarnEnabled = true;
+		context.reset().isWarnEnabled = true;
 		assertTrue(log.isWarnEnabled());
 		
-		context.isErrorEanbled = true;
+		context.reset().isErrorEanbled = true;
 		assertTrue(log.isErrorEnabled());
 	}
 	
@@ -108,7 +108,7 @@ public class SlfLogTest {
 		assertEquals(msg2, context.msg());
 		assertSame(t,context.throwable());		
 		
-		context.isTraceEnabled = false;
+		context.reset().isTraceEnabled = false;
 		
 		log.trace("hello");
 		assertNull(context.msg());
@@ -153,7 +153,7 @@ public class SlfLogTest {
 		assertEquals(msg2, context.msg());
 		assertSame(t,context.throwable());		
 		
-		context.isDebugEnabled = false;
+		context.reset().isDebugEnabled = false;
 		
 		log.debug("hello");
 		assertNull(context.msg());
@@ -198,7 +198,7 @@ public class SlfLogTest {
 		assertEquals(msg2, context.msg());
 		assertSame(t,context.throwable());		
 		
-		context.isInfoEnabled = false;
+		context.reset().isInfoEnabled = false;
 		
 		log.info("hello");
 		assertNull(context.msg());
@@ -243,7 +243,7 @@ public class SlfLogTest {
 		assertEquals(msg2, context.msg());
 		assertSame(t,context.throwable());		
 		
-		context.isWarnEnabled = false;
+		context.reset().isWarnEnabled = false;
 		
 		log.warn("hello");
 		assertNull(context.msg());
@@ -288,7 +288,7 @@ public class SlfLogTest {
 		assertEquals(msg2, context.msg());
 		assertSame(t,context.throwable());		
 		
-		context.isErrorEanbled = false;
+		context.reset().isErrorEanbled = false;
 		
 		log.error("hello");
 		assertNull(context.msg());

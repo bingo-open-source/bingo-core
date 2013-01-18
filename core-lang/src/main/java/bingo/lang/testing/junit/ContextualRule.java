@@ -68,7 +68,7 @@ public class ContextualRule implements TestRule {
 		    		for(Object param : provider.params(description)){
 		    			if(isExecute(param,qualifiers)){
 				    		try{
-				    			System.out.println("\n******\nrun unit test for contextual qualifier : " + param.toString() + "\n*****\n");
+				    			System.out.println("\n******\nrun unit test for contextual qualifier : " + toDisplayName(param) + "\n*****\n");
 				    			provider.beforeTest(description, param);
 				    			base.evaluate();
 				    			executed = true;
@@ -109,5 +109,13 @@ public class ContextualRule implements TestRule {
 			}
 		}
 		return false;
+	}
+	
+	private static String toDisplayName(Object params){
+		if(params instanceof Named){
+			return ((Named) params).getName();
+		}else{
+			return params.toString();
+		}
 	}
 }

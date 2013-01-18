@@ -47,7 +47,7 @@ public class SimpleContext {
 		return throwable;
 	}
 	
-	SimpleContext reset() {
+	public SimpleContext reset() {
 		this.msg       = null;
 		this.throwable = null;
 		return this;

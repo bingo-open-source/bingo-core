@@ -25,127 +25,173 @@ final class SlfLog implements Log {
     }
 	
 	public boolean isTraceEnabled() {
-	    return logger.isTraceEnabled();
+		LogLevel level = LogContext.getLevel();
+		return (level == null ? logger.isTraceEnabled() : level.isTraceEnabled());
     }
 	
 	public boolean isDebugEnabled() {
-	    return logger.isDebugEnabled();
+		LogLevel level = LogContext.getLevel();
+		return (level == null ? logger.isDebugEnabled() : level.isDebugEnabled());
     }
 	
 	public boolean isInfoEnabled() {
-	    return logger.isInfoEnabled();
+		LogLevel level = LogContext.getLevel();
+		return (level == null ? logger.isInfoEnabled() : level.isInfoEnabled());
     }
 
 	public boolean isWarnEnabled() {
-	    return logger.isWarnEnabled();
+		LogLevel level = LogContext.getLevel();
+		return (level == null ? logger.isWarnEnabled() : level.isWarnEnabled());
     }
 
 	public boolean isErrorEnabled() {
-	    return logger.isErrorEnabled();
+		LogLevel level = LogContext.getLevel();
+		return (level == null ? logger.isErrorEnabled() : level.isErrorEnabled());
     }
 	
 	public void trace(String msg) {
-	    logger.trace(msg);
+		if(isTraceEnabled()){
+			logger.trace(msg);	
+		}
     }
 	
 	public void trace(Throwable throwable) {
-		if(null == throwable){
-			logNullThrowable();
-		}else{
-			logger.trace(throwable.getMessage(),throwable);
+		if(isTraceEnabled()){
+			if(null == throwable){
+				logNullThrowable();
+			}else{
+				logger.trace(throwable.getMessage(),throwable);
+			}
 		}
     }
 	
 	public void trace(String msg, Throwable throwable) {
-		logger.trace(msg,throwable);
+		if(isTraceEnabled()){
+			logger.trace(msg,throwable);	
+		}
     }
 	
 	public void trace(String msg, Object... args) {
-		logger.trace(msg,args);
+		if(isTraceEnabled()){
+			logger.trace(msg,args);	
+		}
     }
 
 	public void debug(String msg) {
-		logger.debug(msg);
+		if(isDebugEnabled()){
+			logger.debug(msg);	
+		}
     }
 	
 	public void debug(Throwable throwable) {
-		if(null == throwable){
-			logNullThrowable();
-		}else{
-			logger.debug(throwable.getMessage(),throwable);
+		if(isDebugEnabled()){
+			if(null == throwable){
+				logNullThrowable();
+			}else{
+				logger.debug(throwable.getMessage(),throwable);
+			}
 		}
 	}
 	
 	public void debug(String msg, Throwable throwable) {
-	    logger.debug(msg,throwable);
+		if(isDebugEnabled()){
+			logger.debug(msg,throwable);	
+		}
     }
 	
 	public void debug(String msg, Object... args) {
-		logger.debug(msg,args);
+		if(isDebugEnabled()){
+			logger.debug(msg,args);	
+		}
     }
 	
 	public void info(String msg) {
-		logger.info(msg);
+		if(isInfoEnabled()){
+			logger.info(msg);	
+		}
     }
 
 	public void info(Throwable throwable) {
-		if(null == throwable){
-			logNullThrowable();
-		}else{
-			logger.info(throwable.getMessage(),throwable);	
+		if(isInfoEnabled()){
+			if(null == throwable){
+				logNullThrowable();
+			}else{
+				logger.info(throwable.getMessage(),throwable);	
+			}
 		}
     }
 	
 	public void info(String msg, Throwable throwable) {
-		logger.info(msg,throwable);
+		if(isInfoEnabled()){
+			logger.info(msg,throwable);	
+		}
     }
 	
 	public void info(String msg, Object... args) {
-		logger.info(msg,args);
+		if(isInfoEnabled()){
+			logger.info(msg,args);	
+		}
     }
 	
-	
 	public void warn(String msg) {
-		logger.warn(msg);
+		if(isWarnEnabled()){
+			logger.warn(msg);	
+		}
     }
 	
 	public void warn(Throwable throwable) {
-		if(null == throwable){
-			logNullThrowable();
-		}else{
-			logger.warn(throwable.getMessage(),throwable);	
+		if(isWarnEnabled()){
+			if(null == throwable){
+				logNullThrowable();
+			}else{
+				logger.warn(throwable.getMessage(),throwable);	
+			}
 		}
     }
 	
 	public void warn(String msg, Throwable throwable) {
-		logger.warn(msg,throwable);
+		if(isWarnEnabled()){
+			logger.warn(msg,throwable);	
+		}
     }
 
 	public void warn(String msg, Object... args) {
-		logger.warn(msg,args);
+		if(isWarnEnabled()){
+			logger.warn(msg,args);	
+		}
     }
 	
 	public void error(String msg) {
-		logger.error(msg);
+		if(isErrorEnabled()){
+			logger.error(msg);	
+		}
     }
 	
 	public void error(Throwable throwable) {
-		if(null == throwable){
-			logNullThrowable();
-		}else{
-			logger.error(throwable.getMessage(),throwable);
+		if(isErrorEnabled()){
+			if(null == throwable){
+				logNullThrowable();
+			}else{
+				logger.error(throwable.getMessage(),throwable);
+			}
 		}
     }
 	
 	public void error(String msg, Throwable throwable) {
-		logger.error(msg,throwable);
+		if(isErrorEnabled()){
+			logger.error(msg,throwable);	
+		}
     }
 	
 	public void error(String msg, Object... args) {
-		logger.error(msg,args);
+		if(isErrorEnabled()){
+			logger.error(msg,args);	
+		}
     }
 	
 	private void logNullThrowable(){
-		logger.info("null throwable input in logging");
+		if(isInfoEnabled()){
+			logger.info("null throwable input in logging");	
+		}
 	}
 }
