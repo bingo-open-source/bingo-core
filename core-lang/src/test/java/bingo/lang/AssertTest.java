@@ -34,7 +34,27 @@ import bingo.lang.testing.junit.ConcurrentTestCase;
  */
 @SuppressWarnings("unchecked")
 public class AssertTest extends ConcurrentTestCase {
-
+	
+	@Test
+	public void testIsEquals(){
+		Assert.isEquals("s", "s", "xxx");
+		Assert.isEqualsIgnorecase("s", "S", "xxx");
+		
+		try{
+			Assert.isEquals("s","S","xxx");
+			fail();
+		}catch(IllegalArgumentException e){
+			
+		}
+		
+		try{
+			Assert.isEqualsIgnorecase("s","Sx","xxx");
+			fail();
+		}catch(IllegalArgumentException e){
+			
+		}
+	}
+	
 	@Test(expected = IllegalArgumentException.class)
 	public void instanceOf() {
 		final Set set = new HashSet();
