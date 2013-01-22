@@ -59,6 +59,30 @@ public abstract class Assert {
 		throw new IllegalStateException(Strings.format(template, args));
 	}
 	
+	public static void isEquals(String string1,String string2,String message){
+		if(!Strings.equals(string1, string2)){
+			throw new IllegalArgumentException(message);
+		}
+	}
+	
+	public static void isEquals(String string1,String string2,String message,Object... args){
+		if(!Strings.equals(string1, string2)){
+			throw new IllegalArgumentException(Strings.format(message, args));
+		}
+	}
+	
+	public static void isEqualsIgnorecase(String string1,String string2,String message){
+		if(!Strings.equalsIgnoreCase(string1, string2)){
+			throw new IllegalArgumentException(message);
+		}
+	}
+	
+	public static void isEqualsIgnorecase(String string1,String string2,String message,Object... args){
+		if(!Strings.equalsIgnoreCase(string1, string2)){
+			throw new IllegalArgumentException(Strings.format(message, args));
+		}
+	}
+	
 	/**
 	 * Assert a boolean expression, throwing <code>IllegalArgumentException</code> if the test result is
 	 * <code>false</code>.
