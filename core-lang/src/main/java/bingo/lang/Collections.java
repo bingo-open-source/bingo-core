@@ -30,6 +30,26 @@ public class Collections {
 
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+    public static <E> List<E> cast(List list){
+		return (List<E>)list;
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+    public static <E> Set<E> cast(Set set){
+		return (Set<E>)set;
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+    public static <E> Collection<E> cast(Collection c){
+		return (Collection<E>)c;
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+    public static <E> Iterable<E> cast(Iterable i){
+		return (Iterable<E>)i;
+	}
+	
 	public static <E> List<E> listOf(Collection<E> collection) {
 		return new ArrayList<E>(collection);
 	}
