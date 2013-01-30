@@ -15,10 +15,6 @@
  */
 package bingo.lang;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 import java.util.List;
@@ -125,6 +121,15 @@ public class ArraysTest extends ConcurrentTestCase {
 		assertNotNull(list1);
 		
 		onList(Arrays.<A,B>toList(array));
+	}
+	
+	@Test
+	public void testStringEquals(){
+		String[] a = new String[]{"1","s"};
+		String[] b = new String[]{"1","S"};
+		
+		assertTrue(Arrays.equals(a, b, true));
+		assertFalse(Arrays.equals(a, b, false));
 	}
 	
 	private static void onList(List<A> list){

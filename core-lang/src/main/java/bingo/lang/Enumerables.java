@@ -503,6 +503,20 @@ public class Enumerables {
 		return null;
 	}
 	
+	public static <T extends Named> T find(T[] array,String name){
+		if(null == array){
+			return null;
+		}
+		
+		for(T item : array){
+			if(Strings.equalsIgnoreCase(item.getName(), name)){
+				return item;
+			}
+		}
+		
+		return null;
+	}
+	
 	public static boolean contains(Iterable<? extends Named> iterable,String name){
 		if(null == iterable){
 			return false;

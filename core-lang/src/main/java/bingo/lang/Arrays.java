@@ -1700,6 +1700,28 @@ public class Arrays {
 		return true;
 	}
 	
+	public static boolean equals(String[] a,String[] b,boolean ignoreCase){
+		if((null == a && null == b) || (a == b)){
+			return true;
+		}
+		
+		if(null == a || null == b){
+			return false;
+		}
+		
+		if(a.length != b.length){
+			return false;
+		}
+		
+		for(int i=0;i<a.length;i++){
+			if(!Strings.equals(a[i], b[i],ignoreCase)){
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
 	public static boolean equals(int[] a, int[] b){
 		if((null == a && null == b) || (a == b)){
 			return true;
