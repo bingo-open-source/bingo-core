@@ -225,7 +225,11 @@ public class Converts {
 	}
 	
 	public static boolean toBoolean(Object value){
-		return null == value ? false : convert(value,Boolean.class);
+		return null == value || (value instanceof String && value.equals(Strings.EMPTY)) ? false : convert(value,Boolean.class);
+	}
+	
+	public static boolean toBoolean(String stringValue,boolean defaultValue){
+		return Strings.isEmpty(stringValue) ? defaultValue : convert(stringValue,Boolean.class);
 	}
 	
 	public static String toString(Object value) {
