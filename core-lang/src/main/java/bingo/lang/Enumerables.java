@@ -544,4 +544,32 @@ public class Enumerables {
 		
 		return false;
 	}
+	
+	public static <V extends Named> Map<String, V> toMapNamed(Iterable<V> iterable){
+		return toMapNamed(iterable,false);
+	}
+	
+	public static <V extends Named> Map<String, V> toMapNamed(Iterable<V> iterable,boolean lowerCaseName){
+		Map<String,V> map = New.map();
+		
+		if(null != iterable){
+			for(V item : iterable){
+				map.put(lowerCaseName ? item.getName().toLowerCase() : item.getName(),item);
+			}
+		}
+		
+		return map;
+	}
+	
+	public static <K,V> Map<K, V> toMap(Iterable<V> iterable,Func1<V,K> func){
+		Map<K,V> map = New.map();
+		
+		if(null != iterable){
+			for(V item : iterable){
+				map.put(func.apply(item),item);
+			}
+		}
+		
+		return map;
+	}
 }
