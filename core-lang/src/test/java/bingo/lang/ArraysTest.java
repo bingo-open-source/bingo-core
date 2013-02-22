@@ -132,6 +132,16 @@ public class ArraysTest extends ConcurrentTestCase {
 		assertFalse(Arrays.equals(a, b, false));
 	}
 	
+	@Test
+	public void testStringEqualsIgnoreOrder(){
+		String[] a = new String[]{"1","s"};
+		String[] b = new String[]{"S","1"};
+		
+		assertTrue(Arrays.equalsIgnoreOrder(a, b, true));
+		assertFalse(Arrays.equalsIgnoreOrder(a, b, false));
+		assertFalse(Arrays.equals(a, b, true));
+	}
+	
 	private static void onList(List<A> list){
 		
 	}
