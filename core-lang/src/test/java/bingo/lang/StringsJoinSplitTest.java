@@ -69,6 +69,14 @@ public class StringsJoinSplitTest extends ConcurrentTestCase {
         assertEquals(",,foo", Strings.join(MIXED_ARRAY_LIST));
         assertEquals("foo,2", Strings.join(MIXED_TYPE_LIST));
     }
+	
+	@Test
+	public void testJoinObjectArrayIgnoreEmpty(){
+		assertEquals(",1",Strings.join(new Object[]{"",1}, ",",false));
+		assertEquals("1",Strings.join(new Object[]{"",1}, ",",true));
+		assertEquals("1",Strings.join(new Object[]{null,1}, ",",true));
+		assertEquals("1,2",Strings.join(new Object[]{null,1,"","2"}, ",",true));
+	}
         
 	@Test
     public void testJoin_ArrayChar() {

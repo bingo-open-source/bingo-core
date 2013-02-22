@@ -761,6 +761,38 @@ public class Strings {
 
 		return buf.toString();
 	}
+	
+	public static String join(Object[] array,String separator,boolean ignoreEmpty){
+		if(!ignoreEmpty){
+			return join(array,separator);
+		}
+		
+		if (array == null) {
+			return EMPTY;
+		}
+
+		int len = array.length;
+
+		StringBuilder buf = new StringBuilder(len * 16);
+
+		int j=0;
+		for (int i = 0; i < len; i++) {
+			Object value = array[i];
+			
+			if(!isEmpty(value)){
+				if (j > 0 && separator != null) {
+					buf.append(separator);
+				}
+
+				if (array[i] != null) {
+					buf.append(array[i]);
+				}
+				j++;
+			}
+		}
+
+		return buf.toString();
+	}
 
 	/**
 	 * <p>
