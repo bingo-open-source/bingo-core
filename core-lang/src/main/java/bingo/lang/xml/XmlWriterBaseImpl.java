@@ -29,6 +29,8 @@ import java.util.Stack;
 
 import javax.xml.namespace.NamespaceContext;
 
+import bingo.lang.Strings;
+
 //from com.bea.xml.stream
 
 @SuppressWarnings({"unchecked","rawtypes"})
@@ -202,7 +204,7 @@ public class XmlWriterBaseImpl extends XmlWriterBase implements XmlWriter {
 	public XmlWriter text(String text, boolean escape) {
 		closeStartElement();
 		
-		if(escape){
+		if(escape && !Strings.isEmpty(text)){
 			return writeCharactersInternal(text.toCharArray(), 0, text.length(), false);
 		}else{
 			write(text);
@@ -323,7 +325,7 @@ public class XmlWriterBaseImpl extends XmlWriterBase implements XmlWriter {
 
 	protected void write(String s) throws XmlException {
 		try {
-			writer.write(s);
+			writer.write(null == s ? "" : s);
 		} catch (IOException e) {
 			throw new XmlException(e);
 		}
