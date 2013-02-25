@@ -15,6 +15,8 @@
  */
 package bingo.lang;
 
+import java.util.Map;
+
 public interface NamedValues<V> extends Iterable<NamedValue<V>> {
 	
 	int size();
@@ -28,4 +30,6 @@ public interface NamedValues<V> extends Iterable<NamedValue<V>> {
 	V getValue(String name);
 	
 	Enumerable<NamedValue<V>> asEnumerable();
+	
+	Map<String,V> toMap();
 }

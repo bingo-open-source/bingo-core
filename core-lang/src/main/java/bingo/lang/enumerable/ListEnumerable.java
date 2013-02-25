@@ -17,7 +17,9 @@ package bingo.lang.enumerable;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import bingo.lang.Collections;
 import bingo.lang.Enumerable;
@@ -78,6 +80,10 @@ public class ListEnumerable<E> extends AbstractListWrapper<E> implements Enumera
 	public List<E> list(){
 		return list;
 	}
+	
+	public Set<E> toSet() {
+	    return new LinkedHashSet<E>(list);
+    }
 
 	public E[] toArray(Class<E> type) {
 	    return Collections.toArray(this,type);

@@ -16,7 +16,9 @@
 package bingo.lang.tuple;
 
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import bingo.lang.Assert;
@@ -84,5 +86,13 @@ public class ImmutableNamedValues<V> implements NamedValues<V> {
 	public V getValue(String name) {
 		NamedValue<V> nv = enumerable.firstOrNull(Predicates.<NamedValue<V>>nameEquals(name));
 		return null == nv ? null : nv.getValue();
+    }
+
+	public Map<String, V> toMap() {
+		Map<String,V> map = new LinkedHashMap<String, V>();
+		for(NamedValue<V> nv : this){
+			map.put(nv.getName(),nv.getValue());
+		}
+		return map;
     }
 }

@@ -17,6 +17,7 @@ package bingo.lang.enumerable;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import bingo.lang.Arrays;
 import bingo.lang.Assert;
@@ -107,6 +108,10 @@ public class ArrayEnumerable<E> implements Enumerable<E> {
 
 	public List<E> toList() {
 	    return Arrays.toList(array);
+    }
+	
+	public Set<E> toSet() {
+	    return Arrays.toSet(array);
     }
 
 	public Iterator<E> iterator() {

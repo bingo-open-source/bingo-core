@@ -189,8 +189,13 @@ public class HttpHeaders {
     /** RFC 1945 (HTTP/1.0) Section 10.16, RFC 2616 (HTTP/1.1) Section 14.47 */
     public static final String WWW_AUTHENTICATE = "WWW-Authenticate";
     
+    /** odata http method header */
     public static final String X_HTTP_METHOD = "X-HTTP-Method";
     
+    /** rest http method header */
+    public static final String X_HTTP_METHOD_OVERRIDE = "X-HTTP-Method-Override";
+    
+    /** ajax request http method header */
     public static final String X_REQUESTED_WITH = "X-Requested-With";
 
 }

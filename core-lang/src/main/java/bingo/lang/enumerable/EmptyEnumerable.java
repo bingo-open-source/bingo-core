@@ -16,8 +16,10 @@
 package bingo.lang.enumerable;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import bingo.lang.Arrays;
 import bingo.lang.Enumerable;
@@ -82,6 +84,10 @@ public class EmptyEnumerable<E> implements Enumerable<E> {
 
 	public List<E> toList() {
         return new ArrayList<E>();
+    }
+	
+	public Set<E> toSet() {
+		return new HashSet<E>();
     }
 
 	public Iterator<E> iterator() {

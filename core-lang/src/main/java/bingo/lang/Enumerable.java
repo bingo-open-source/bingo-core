@@ -16,6 +16,7 @@
 package bingo.lang;
 
 import java.util.List;
+import java.util.Set;
 
 import bingo.lang.exceptions.EmptyDataException;
 import bingo.lang.exceptions.TooManyDataException;
@@ -47,4 +48,6 @@ public interface Enumerable<E> extends Iterable<E> {
 	E[] toArray(Class<E> type);
 	
 	List<E> toList();
+	
+	Set<E> toSet();
 }
