@@ -187,6 +187,13 @@ public class Strings {
 		}
 		return false;
 	}
+	
+	public static boolean isEmptyOrEquals(String string,String equalsTo){
+		if(null == string || string.length() == 0){
+			return true;
+		}
+		return string.equals(equalsTo);
+	}
 
 	/**
 	 * <p>
