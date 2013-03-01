@@ -477,6 +477,16 @@ public class Enumerables {
 		return buf.toString();
 	}
 	
+	public static <T> Enumerable<T> concat(Iterable<T>... iterables){
+		List<T> list = new ArrayList<T>();
+		
+		for(Iterable<T> iterable : iterables){
+			Collections.addAll(list, iterable);
+		}
+		
+		return Enumerables.of(list);
+	}
+	
 	public static <T extends Named> T get(Iterable<T> iterable,String name){
 		if(null == iterable){
 			return null;
