@@ -15,6 +15,8 @@
  */
 package bingo.lang;
 
-public interface NamedValue<V> extends Named, Valued<V> {
+import java.util.Map.Entry;
+
+public interface NamedValue<V> extends Named, Valued<V>, Entry<String, V> {
 
 }

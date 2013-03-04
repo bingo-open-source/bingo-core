@@ -16,10 +16,11 @@
 package bingo.lang.tuple;
 
 import java.io.Serializable;
+import java.util.Map.Entry;
 
 import bingo.lang.NamedValue;
 
-public class ImmutableNamedValue<V> implements NamedValue<V>,Serializable {
+public class ImmutableNamedValue<V> extends ImmutableEntry<String, V> implements NamedValue<V>,Serializable {
 	
 	private static final long serialVersionUID = -1823968924127617848L;
 
@@ -27,19 +28,15 @@ public class ImmutableNamedValue<V> implements NamedValue<V>,Serializable {
 		return new ImmutableNamedValue<V>(name, value);
 	}
 
-	private final String name;
-	private final V value;
+	public static <V> ImmutableNamedValue<V> of(Entry<String, V> entry){
+		return new ImmutableNamedValue<V>(entry.getKey(), entry.getValue());
+	}
 	
 	public ImmutableNamedValue(String name,V value){
-		this.name = name;
-		this.value = value;
+		super(name,value);
 	}
 
 	public String getName() {
-    	return name;
-    }
-
-	public V getValue() {
-    	return value;
+	    return getKey();
     }
 }

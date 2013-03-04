@@ -19,35 +19,19 @@ import java.io.Serializable;
 
 import bingo.lang.NamedValue;
 
-public class MutableNamedValue<V> implements NamedValue<V>, Serializable {
+public class MutableNamedValue<V> extends MutableEntry<String, V> implements NamedValue<V>, Serializable {
 
 	private static final long serialVersionUID = -2912015831594766650L;
 	
-	private String	name;
-	private V	   value;
-	
 	public MutableNamedValue(){
-		
+		super();
 	}
 	
 	public MutableNamedValue(String name,V value){
-		this.name  = name;
-		this.value = value;
+		super(name,value);
 	}
 
 	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public V getValue() {
-		return value;
-	}
-
-	public void setValue(V value) {
-		this.value = value;
+		return getKey();
 	}
 }
