@@ -237,6 +237,10 @@ public class Converts {
 			return null;
 		}
 		
+		if(value instanceof String){
+			return (String)value;
+		}
+		
     	if(value instanceof StringConvertible){
     		return ((StringConvertible)value).convertToString();
     	}
@@ -244,8 +248,6 @@ public class Converts {
     	if(value instanceof byte[]){
     		return Strings.newStringUtf8((byte[])value);
     	}
-		
-		value = trimToNull(value);
 		
 		Class<?> sourceType = value.getClass();
 		
@@ -288,11 +290,11 @@ public class Converts {
 	}
 	
 	public static <E> List<E> toList(Class<E> elementType,Object value){
+		value = trimToNull(value);
+		
 		if(null == value){
 			return null;
 		}
-		
-		value = trimToNull(value);
 		
 		try {
 			if(value instanceof String){
