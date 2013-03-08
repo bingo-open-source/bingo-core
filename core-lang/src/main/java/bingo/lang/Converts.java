@@ -314,7 +314,6 @@ public class Converts {
 	}
 	
 	static <T> T toPrimitive(Object value,Class<T> targetType) {
-		value = trimToNull(value);
 		if(null == value){
 			return (T)Primitives.defaultValue(targetType);
 		}else{
