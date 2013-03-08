@@ -26,7 +26,6 @@ public enum HttpMethod implements Valued<String>{
 	OPTIONS("OPTIONS"), 
 	PUT("PUT"), 
 	DELETE("DELETE"),
-	TRACE("TRACE"), 
 	PATCH("PATCH");
 	
 	private final String value;

@@ -27,7 +27,9 @@ public class HttpMethods {
 	
 	public static final String PATCH  = "PATCH";
 	
-	public static final String MERGE  = "MERGE";
+	public static final String OPTIONS = "OPTIONS";
+	
+	public static final String HEAD    = "HEAD";
 	
 	protected HttpMethods(){
 		
