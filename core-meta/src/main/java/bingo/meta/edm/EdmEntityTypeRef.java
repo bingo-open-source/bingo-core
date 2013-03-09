@@ -25,6 +25,10 @@ public class EdmEntityTypeRef extends EdmTypeRef {
 	public static EdmEntityTypeRef of(EdmSchemaBuilder schema,EdmEntityTypeBuilder type){
 		return new EdmEntityTypeRef(type.getName(), EdmUtils.fullQualifiedName(schema, type.getName()));
 	}
+	
+	public EdmEntityTypeRef(String name) {
+	    super(name,name);
+    }
 
 	public EdmEntityTypeRef(String name, String fullQualifiedName) {
 	    super(name, fullQualifiedName);
