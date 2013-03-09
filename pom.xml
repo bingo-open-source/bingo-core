@@ -232,5 +232,6 @@
 	
 	<modules>
 		<module>core-lang</module>
+		<module>core-meta</module>
 	</modules>
 </project>
