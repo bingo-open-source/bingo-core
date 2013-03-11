@@ -15,6 +15,7 @@
  */
 package bingo.lang;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -46,6 +47,34 @@ public class Enumerables {
 	
 	public static final <E> Enumerable<E> empty(){
 		return new EmptyEnumerable<E>();
+	}
+	
+	@SuppressWarnings("unchecked")
+    public static final <E> Enumerable<E> ofObject(Object object){
+		if(null == object){
+			return empty();
+		}
+		
+		if(object instanceof Iterable){
+			return of((Iterable<E>)object);
+		}
+		
+		Class<?> clazz = object.getClass();
+		if(clazz.isArray()){
+			if(clazz.getComponentType().isPrimitive()){
+				Class<?> wrapperType = Primitives.wrap(clazz.getComponentType());
+				int len = Array.getLength(object);
+				Object array = Array.newInstance(wrapperType, len);
+				for(int i=0;i<len;i++){
+					Array.set(array, i, Array.get(object, i));
+				}
+				return of((E[])array);
+			}else{
+				return of((E[])object);	
+			}
+		}
+		
+		throw new IllegalArgumentException("not a supported enumerable type '" + object.getClass().getName() + "'");
 	}
 	
 	public static final <E> Enumerable<E> of(E... array){

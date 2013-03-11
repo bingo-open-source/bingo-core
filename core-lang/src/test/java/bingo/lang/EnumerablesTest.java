@@ -23,8 +23,9 @@ import org.junit.Test;
 import bingo.lang.enumerable.IterableEnumerable;
 import bingo.lang.testing.Perf;
 import bingo.lang.testing.junit.Concurrent;
+import bingo.lang.testing.junit.ConcurrentTestCase;
 
-public class EnumerablesTest {
+public class EnumerablesTest extends ConcurrentTestCase {
 
 	@Test
 	@Concurrent(2)
@@ -66,5 +67,11 @@ public class EnumerablesTest {
 			})
 			
 			.run();
+	}
+	
+	@Test
+	public void testOfObject(){
+		assertEquals(1,Enumerables.of(new Integer[]{1}).size());
+		assertEquals(1,Enumerables.of(new int[]{1}).size());
 	}
 }

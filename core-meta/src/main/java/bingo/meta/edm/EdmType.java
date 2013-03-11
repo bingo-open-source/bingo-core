@@ -22,4 +22,40 @@ public abstract class EdmType extends EdmObjectWithDocumentation {
 	public boolean isSimple(){
 		return getTypeKind().equals(EdmTypeKind.Simple);
 	}
+	
+	public boolean isEntity(){
+		return getTypeKind().equals(EdmTypeKind.Entity);
+	}
+	
+	public boolean isEntityRef(){
+		return this instanceof EdmEntityTypeRef;
+	}
+	
+	public boolean isCollection(){
+		return getTypeKind().equals(EdmTypeKind.Collection);
+	}
+	
+	public boolean isComplex(){
+		return getTypeKind().equals(EdmTypeKind.Complex);
+	}
+	
+	public EdmCollectionType asCollection(){
+		return (EdmCollectionType)this;
+	}
+	
+	public EdmSimpleType asSimple(){
+		return (EdmSimpleType)this;
+	}
+	
+	public EdmComplexType asComplex(){
+		return (EdmComplexType)this;
+	}
+	
+	public EdmEntityType asEntity(){
+		return (EdmEntityType)this;
+	}
+	
+	public EdmEntityTypeRef asEntityRef(){
+		return (EdmEntityTypeRef)this;
+	}
 }
