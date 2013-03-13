@@ -18,7 +18,7 @@ package bingo.meta.edm;
 import bingo.lang.Builder;
 
 public class EdmComplexTypeBuilder extends EdmNamedStructualTypeBuilder implements Builder<EdmComplexType> {
-
+	
 	public EdmComplexTypeBuilder() {
 	    super();
     }

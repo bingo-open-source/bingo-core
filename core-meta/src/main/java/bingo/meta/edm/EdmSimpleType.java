@@ -166,4 +166,9 @@ public class EdmSimpleType extends EdmType implements Named {
 		map.put(type.getValueKind(), type);
 		return type;
 	}
+
+	@Override
+    public String toString() {
+		return getFullQualifiedName();
+    }
 }

@@ -66,6 +66,10 @@ public class ReflectEnum {
 		return null != valueField ? valueField.getValue(enumConstant) : enumConstant.toString();	
 	}
 	
+	public Enum<?>[] getEnumConstants(){
+		return (Enum<?>[])reflectClass.getJavaClass().getEnumConstants();
+	}
+	
 	public Field[] getEnumConstantFields(){
 		if(null == enumConstantFields){
 			Enum<?>[] enums = (Enum<?>[])reflectClass.getJavaClass().getEnumConstants();
@@ -80,8 +84,8 @@ public class ReflectEnum {
 	}
 	
 	private void initialize(){
-		this.valueField     = reflectClass.getField(VALUE_FIELD_NAME);
-		this.valueType      = hasValueField ? valueField.getType() : null;
-		this.hasValueField  = null != valueField;
+		this.valueField    = reflectClass.getField(VALUE_FIELD_NAME);
+		this.hasValueField = null != valueField;
+		this.valueType     = hasValueField ? valueField.getType() : null;
 	}
 }
