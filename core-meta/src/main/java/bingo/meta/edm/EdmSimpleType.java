@@ -37,7 +37,7 @@ public class EdmSimpleType extends EdmType implements Named {
 	public static EdmSimpleType BINARY 				= add(EdmSimpleTypeKind.Binary,			byte[].class,Byte[].class);
 	public static EdmSimpleType BOOLEAN 			= add(EdmSimpleTypeKind.Boolean,		Boolean.class,boolean.class);
 	public static EdmSimpleType BYTE 				= add(EdmSimpleTypeKind.Byte,			UnsignedByte.class);
-	public static EdmSimpleType DATETIME 			= add(EdmSimpleTypeKind.DateTime,		Date.class,Timestamp.class);
+	public static EdmSimpleType DATETIME 			= add(EdmSimpleTypeKind.DateTime,		Date.class,Timestamp.class,java.sql.Date.class);
 	public static EdmSimpleType DATETIME_OFFSET 	= add(EdmSimpleTypeKind.DateTimeOffset,	DateTimeOffset.class);
 	public static EdmSimpleType DECIMAL 			= add(EdmSimpleTypeKind.Decimal,		BigDecimal.class);
 	public static EdmSimpleType DOUBLE 				= add(EdmSimpleTypeKind.Double,			Double.class,double.class);
