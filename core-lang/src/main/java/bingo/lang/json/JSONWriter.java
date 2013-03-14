@@ -47,6 +47,8 @@ public interface JSONWriter {
 
 	JSONWriter value(String string);
 	
+	JSONWriter value(Object simpleValue);
+	
 	JSONWriter separator();
 	
 	JSONWriter raw(String string);

@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import bingo.lang.Enums;
 import bingo.lang.Strings;
 
 public class JSONWriterImpl implements JSONWriter {
@@ -419,8 +420,34 @@ public class JSONWriterImpl implements JSONWriter {
         }
         return this;
     }
-	
-    public JSONWriter separator() {
+    
+    public JSONWriter value(Object value) {
+    	if (null == value) {
+            return nullValue();
+        } else if (value instanceof String) {
+            return value((String)value);
+        } else if (value instanceof Byte) {
+            return value(((Byte) value).byteValue());
+        } else if (value instanceof Boolean) {
+            return value(((Boolean) value).booleanValue());
+        } else if (value instanceof Character) {
+            return value(((Character) value).charValue());
+        } else if (value instanceof Number) {
+            return value((Number) value);
+        } else if (value instanceof Date) {
+            return value((Date) value);
+        } else if (value instanceof Class<?>) {
+            return value(((Class<?>) value).getName());
+        } else if (value instanceof byte[]){
+        	return value((byte[])value);
+        } else if(value instanceof Enum<?>){
+        	return value(Enums.getValue((Enum<?>)value));
+        }
+    	
+    	throw new IllegalArgumentException("the value '" + value.getClass().getName() + "' must be simple type");
+    }
+
+	public JSONWriter separator() {
 		try {
 	        out.append(COMMA_CHAR);
         } catch (IOException e) {

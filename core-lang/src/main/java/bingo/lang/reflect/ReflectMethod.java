@@ -15,6 +15,7 @@
  */
 package bingo.lang.reflect;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
@@ -73,7 +74,10 @@ public class ReflectMethod extends ReflectMember{
 	        }else{
 	        	return reflectClass.getAccessor().invokeMethod(instance, index, args);
 	        }
-        } catch (Exception e) {
+        } catch (Throwable e) {
+        	if(e instanceof InvocationTargetException){
+        		e = e.getCause();
+        	}
         	throw new ReflectException("error invoking method '{0}'",getName(),e);
         }
 	}
@@ -90,12 +94,17 @@ public class ReflectMethod extends ReflectMember{
 			    }
 			}
 			
-	        if(index == -1){
-	        	return javaMethod.invoke(null, args);
-	        }else{
-	        	return reflectClass.getAccessor().invokeMethod(null, index, args);
-	        }
-        } catch (Exception e) {
+			return javaMethod.invoke(null, args);
+			
+//	        if(index == -1){
+//	        	return javaMethod.invoke(null, args);
+//	        }else{
+//	        	return reflectClass.getAccessor().invokeMethod(null, index, args);
+//	        }
+        } catch (Throwable e) {
+        	if(e instanceof InvocationTargetException){
+        		e = e.getCause();
+        	}
         	throw new ReflectException("error invoking method '{0}'",getName(),e);
         }
 	}
