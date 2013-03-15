@@ -15,6 +15,8 @@
  */
 package bingo.meta.edm;
 
+import bingo.lang.Strings;
+
 
 public abstract class EdmBuilderWithDocumentation extends EdmBuilder {
 	
@@ -30,12 +32,20 @@ public abstract class EdmBuilderWithDocumentation extends EdmBuilder {
     }
 	
 	public EdmBuilderWithDocumentation setDocumentation(String summary,String longDescription) {
-    	this.documentation = new EdmDocumentation(summary, longDescription);
+		if(Strings.isEmpty(summary) && Strings.isEmpty(longDescription)){
+			this.documentation = null;
+		}else{
+			this.documentation = new EdmDocumentation(summary, longDescription);	
+		}
     	return this;
     }
 	
 	public EdmBuilderWithDocumentation setDocumentation(String title,String summary,String longDescription) {
-    	this.documentation = new EdmDocumentation(title, summary, longDescription);
+		if(Strings.isEmpty(title) && Strings.isEmpty(summary) && Strings.isEmpty(longDescription)){
+			this.documentation = null;
+		}else{
+			this.documentation = new EdmDocumentation(title, summary, longDescription);	
+		}
     	return this;
     }
 }

@@ -43,15 +43,15 @@ abstract class XmlWriterBase implements XmlWriter {
     }
 
 	public XmlWriter element(String localName, String text) {
-	    return emptyElement(localName).text(text).endElement();
+	    return startElement(localName).text(text).endElement();
     }
 
 	public XmlWriter element(String namespaceURI, String localName, String text) {
-	    return emptyElement(namespaceURI, localName).text(text).endElement();
+	    return startElement(namespaceURI, localName).text(text).endElement();
     }
 	
 	public XmlWriter element(String prefix, String namespaceURI, String localName, String text) {
-	    return emptyElement(prefix, namespaceURI, localName).text(text).endElement();
+	    return startElement(prefix, namespaceURI, localName).text(text).endElement();
     }
 
 	public XmlWriter elementOptional(String localName, String text) {
