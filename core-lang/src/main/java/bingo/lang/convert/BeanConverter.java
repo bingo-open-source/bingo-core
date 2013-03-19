@@ -23,6 +23,7 @@ import java.util.Map.Entry;
 
 import bingo.lang.Classes;
 import bingo.lang.Converts;
+import bingo.lang.Objects;
 import bingo.lang.Out;
 import bingo.lang.annotations.NamedAnnotation;
 import bingo.lang.beans.BeanModel;
@@ -62,18 +63,24 @@ public class BeanConverter extends AbstractConverter<Object>{
 		for(BeanProperty prop : beanClass.getProperties()){
 			String name = prop.getName();
 			
+			boolean multiNames = false;
+			
 			for(Annotation a : prop.getAnnotations()){
 				NamedAnnotation namedAnnotation = a.annotationType().getAnnotation(NamedAnnotation.class);
 				
 				if(null != namedAnnotation){
 					name = (String)ReflectClass.get(a.getClass()).getMethod(namedAnnotation.value()).invoke(a);
+					multiNames = true;
+					break;
 				}
 			}
 			
 	        for(Object entryObject : map.entrySet()){
 	            Entry entry = (Entry)entryObject;
 	            
-	            if(entry.getKey().equals(name)){
+	            String key = Objects.toString(entry.getKey());
+	            
+	            if(name.equalsIgnoreCase(key) || (multiNames && prop.getName().equalsIgnoreCase(key))){
 		            Object param = entry.getValue();
 		            
 		            if(null != prop && prop.isWritable()){

@@ -154,8 +154,25 @@ public class JSONDecodeTest extends ConcurrentTestCase {
     public void testDecode1(){
     	JSON.decode("[{ id : \"\", fields:[{ id:\"\",attrs:{}}]}]");
     }
+    
+    @Test
+    public void testDecodeUpperCaseProperties(){
+    	Bean1 bean0 = new Bean1();
+    	bean0.name = "xxx";
+    	
+    	String json = JSON.encode(bean0);
+    	assertEquals("{Name:\"xxx\"}", json);
+    	
+    	Bean1 bean1 = JSON.decode(json,Bean1.class);
+    	assertEquals("xxx",bean1.name);
+    }
 
     private static class Bean {
     	public String name = UUID.randomUUID().toString();
+    }
+    
+    private static class Bean1 {
+    	@JSONNamed("Name")
+    	public String name;
     }
 }
