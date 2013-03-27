@@ -30,7 +30,7 @@ public class EdmUtils {
 		}else if(type instanceof EdmSimpleType){
 			return ((EdmSimpleType)type).getFullQualifiedName();
 		}else if(type instanceof EdmTypeRef){
-			return ((EdmTypeRef)type).getFullQualifiedName();
+			return fullQualifiedName(schema,((EdmTypeRef)type).getName());
 		}else if(type instanceof Named){
 			return fullQualifiedName(schema,((Named)type).getName());		
 		}else if(type instanceof EdmCollectionType){

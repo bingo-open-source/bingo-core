@@ -17,6 +17,8 @@ package bingo.lang.http;
 
 
 public class HttpContentTypes {
+	
+	public static final String  APPLICATION_SOAP_XML		= "application/soap+xml";
 
 	public static final String	APPLICATION_ATOM_XML	    = "application/atom+xml";
 

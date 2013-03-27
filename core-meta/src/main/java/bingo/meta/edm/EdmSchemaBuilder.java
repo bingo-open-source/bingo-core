@@ -54,6 +54,30 @@ public class EdmSchemaBuilder extends EdmBuilderWithDocumentation implements Bui
 	public String getAlias() {
     	return alias;
     }
+	
+	public List<EdmEntityContainer> getEntityContainers() {
+		return entityContainers;
+	}
+
+	public List<EdmEntityType> getEntityTypes() {
+		return entityTypes;
+	}
+
+	public List<EdmAssociation> getAssociations() {
+		return associations;
+	}
+
+	public List<EdmComplexType> getComplexTypes() {
+		return complexTypes;
+	}
+
+	public List<EdmEnumType> getEnumTypes() {
+		return enumTypes;
+	}
+
+	public List<EdmFunction> getFunctions() {
+		return functions;
+	}
 
 	public EdmSchemaBuilder setNamespace(String namespace) {
     	this.namespace = namespace;
