@@ -44,7 +44,7 @@ abstract class XmlReaderBase implements XmlReader {
 			next();
 		}
 		while(next()){
-			String currentName = getLocalElementName();
+			String currentName = getElementLocalName();
 			
 			if(isEndElement(currentName)){
 				break;
@@ -59,7 +59,7 @@ abstract class XmlReaderBase implements XmlReader {
 	
 	public boolean nextToEndElement() {
 		if(isStartElement()){
-			String currentName = getLocalElementName();
+			String currentName = getElementLocalName();
 			while(!isEndElement(currentName)){
 				if(!next()){
 					return false;

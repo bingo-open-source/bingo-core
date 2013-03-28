@@ -94,7 +94,7 @@ final class XmlReaderPullImpl extends XmlReaderBase implements XmlReader {
 	    return new QName(xpp.getNamespace(), xpp.getName());
     }
     
-	public String getLocalElementName() {
+	public String getElementLocalName() {
 		return xpp.getName();
 	}
 

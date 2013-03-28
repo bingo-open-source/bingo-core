@@ -28,7 +28,7 @@ public interface XmlReader {
     
     QName getElementName();
     
-    String getLocalElementName();
+    String getElementLocalName();
 
     String getElementText();
     

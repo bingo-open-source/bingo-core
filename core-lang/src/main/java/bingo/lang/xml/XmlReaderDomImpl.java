@@ -74,7 +74,7 @@ final class XmlReaderDomImpl extends XmlReaderBase implements XmlReader {
 	    return null != current ? new QName(current.getNamespaceURI(),current.getLocalName()) : null;
     }
 
-	public String getLocalElementName() {
+	public String getElementLocalName() {
 		return null != current ? current.getLocalName() : null;
 	}
 

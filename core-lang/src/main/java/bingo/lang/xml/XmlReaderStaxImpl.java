@@ -71,7 +71,7 @@ final class XmlReaderStaxImpl extends XmlReaderBase implements XmlReader {
 	    return event.asStartElement().getName();
     }
     
-	public String getLocalElementName() {
+	public String getElementLocalName() {
 		return event.asStartElement().getName().getLocalPart();
 	}
 
