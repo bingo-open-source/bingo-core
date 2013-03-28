@@ -49,6 +49,15 @@ abstract class XmlContainer extends XmlNode {
 	public boolean hasChilds(){
 		return !childNodes.isEmpty();
 	}
+	
+	public boolean hasChildElements(){
+		for(XmlNode node : childNodes){
+			if(node.nodeType() == XmlNodeType.ELEMENT){
+				return true;
+			}
+		}
+		return false;
+	}
 
 	public Enumerable<XmlElement> childElements() {
 		return childNodes().ofType(XmlElement.class);
