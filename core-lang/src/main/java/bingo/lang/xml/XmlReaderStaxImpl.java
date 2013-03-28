@@ -54,6 +54,14 @@ final class XmlReaderStaxImpl extends XmlReaderBase implements XmlReader {
 	public boolean isStartElement(QName name) {
 	    return isStartElement() && event.asStartElement().getName().equals(name);
     }
+	
+	public boolean isStartElement(String name) {
+		return isStartElement() && event.asStartElement().getName().getLocalPart().equals(name);
+	}
+
+	public boolean isEndElement(String name) {
+		return isEndElement() && event.asEndElement().getName().getLocalPart().equals(name);
+	}
 
 	public boolean isEndDocument() {
 	    return null != event && event.isEndDocument();
@@ -62,6 +70,10 @@ final class XmlReaderStaxImpl extends XmlReaderBase implements XmlReader {
     public QName getElementName() {
 	    return event.asStartElement().getName();
     }
+    
+	public String getLocalElementName() {
+		return event.asStartElement().getName().getLocalPart();
+	}
 
 	public String getElementText() {
         try {

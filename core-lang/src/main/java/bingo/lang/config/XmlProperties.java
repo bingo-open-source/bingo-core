@@ -15,11 +15,6 @@
  */
 package bingo.lang.config;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Properties;
-
-import bingo.lang.Objects;
 import bingo.lang.xml.XmlDocument;
 import bingo.lang.xml.XmlElement;
 
@@ -32,7 +27,7 @@ import bingo.lang.xml.XmlElement;
  * &lt;/properties&gt;
  * </pre>
  */
-public class XmlProperties extends Properties {
+public class XmlProperties extends PropertiesEx {
 
 	private static final long serialVersionUID = -8603201912690589213L;
 	
@@ -59,15 +54,5 @@ public class XmlProperties extends Properties {
 	
 	protected XmlProperties(){
 		
-	}
-	
-	public Map<String, String> toMap() {
-		Map<String, String> map = new LinkedHashMap<String, String>();
-		
-		for(Map.Entry<Object, Object> entry : this.entrySet()){
-			map.put(entry.getKey().toString(),Objects.toString(entry.getValue()));
-		}
-		
-		return map;
 	}
 }

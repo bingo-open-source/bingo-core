@@ -18,14 +18,13 @@ package bingo.lang.xml;
 import java.io.Reader;
 
 import javax.xml.namespace.QName;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
+
+import bingo.lang.Strings;
 
 final class XmlReaderDomImpl extends XmlReaderBase implements XmlReader {
 	
@@ -35,20 +34,12 @@ final class XmlReaderDomImpl extends XmlReaderBase implements XmlReader {
 	
     private final Document document;
     
-    private Element  current;
+    private Element current;
     private boolean down  = true;
-    private Integer  event = null;
+    private Integer event = null;
     
     public XmlReaderDomImpl(Reader in){
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        factory.setNamespaceAware(true);
-        try {
-            DocumentBuilder builder = factory.newDocumentBuilder();
-
-            this.document = builder.parse(new InputSource(in));
-        } catch (Exception e) {
-            throw new XmlException(e.getMessage(),e);
-        }
+    	this.document = XmlDocument.parse(in).domDocument();
     }
     
 	public boolean isEndElement() {
@@ -56,7 +47,7 @@ final class XmlReaderDomImpl extends XmlReaderBase implements XmlReader {
     }
 
 	public boolean isEndElement(QName name) {
-	    return false;
+		 return event == END_ELEMENT && Strings.equals(current.getNamespaceURI(),name.getNamespaceURI()) && current.getNodeName().equals(name.getLocalPart());
     }
 
 	public boolean isStartElement() {
@@ -64,9 +55,17 @@ final class XmlReaderDomImpl extends XmlReaderBase implements XmlReader {
     }
 
 	public boolean isStartElement(QName name) {
-	    return false;
+	    return event == START_ELEMENT && Strings.equals(current.getNamespaceURI(),name.getNamespaceURI()) && current.getNodeName().equals(name.getLocalPart());
     }
 	
+	public boolean isStartElement(String name) {
+		return event == START_ELEMENT && current.getNodeName().equals(name);
+	}
+
+	public boolean isEndElement(String name) {
+		return event == END_ELEMENT && current.getNodeName().equals(name);
+	}
+
 	public boolean isEndDocument() {
 	    return event == END_DOCUMENT;
     }
@@ -74,6 +73,10 @@ final class XmlReaderDomImpl extends XmlReaderBase implements XmlReader {
     public QName getElementName() {
 	    return null != current ? new QName(current.getNamespaceURI(),current.getLocalName()) : null;
     }
+
+	public String getLocalElementName() {
+		return null != current ? current.getLocalName() : null;
+	}
 
 	public String getElementText() {
         return XmlUtils.getElementText(current);
@@ -149,9 +152,7 @@ final class XmlReaderDomImpl extends XmlReaderBase implements XmlReader {
 	}
 	
 	private boolean endElement(){
-		this.event = START_ELEMENT;
+		this.event = END_ELEMENT;
 		return true;
 	}
-
-
 }

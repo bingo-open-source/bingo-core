@@ -74,6 +74,14 @@ final class XmlReaderPullImpl extends XmlReaderBase implements XmlReader {
         return isStartElement() && nameEquals(name);
     }
 	
+	public boolean isStartElement(String name) {
+		return isStartElement() && xpp.getName().equals(name);
+	}
+
+	public boolean isEndElement(String name) {
+		return isEndElement() && xpp.getName().equals(name);
+	}
+
 	public boolean isEndDocument() {
         try {
             return xpp.getEventType() == XmlPullParser.END_DOCUMENT;
@@ -85,6 +93,10 @@ final class XmlReaderPullImpl extends XmlReaderBase implements XmlReader {
     public QName getElementName() {
 	    return new QName(xpp.getNamespace(), xpp.getName());
     }
+    
+	public String getLocalElementName() {
+		return xpp.getName();
+	}
 
 	public String getElementText() {
         try {

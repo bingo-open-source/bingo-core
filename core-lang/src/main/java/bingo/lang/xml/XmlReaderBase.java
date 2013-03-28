@@ -20,6 +20,9 @@ import javax.xml.namespace.QName;
 abstract class XmlReaderBase implements XmlReader {
 
 	public boolean nextToChildElement(QName name) {
+		if(!isStartElement()){
+			next();
+		}
 		if(isStartElement()){
 			QName currentName = getElementName();
 			
@@ -35,12 +38,42 @@ abstract class XmlReaderBase implements XmlReader {
 		}
 	    return false;
     }
-
-	public boolean nextIfElementNotEnd(QName elementName) {
-		if(isEndElement(elementName)){
-			return false;
+	
+	public boolean nextToChildElement(String childElementName) {
+		if(!isStartElement()){
+			next();
 		}
-		return next();
-    }
+		while(next()){
+			String currentName = getLocalElementName();
+			
+			if(isEndElement(currentName)){
+				break;
+			}
+			
+			if(isStartElement(childElementName)){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean nextToEndElement() {
+		if(isStartElement()){
+			String currentName = getLocalElementName();
+			while(!isEndElement(currentName)){
+				if(!next()){
+					return false;
+				}
+			}
+			return true;
+		}else{
+			while(!isEndElement()){
+				if(!next()){
+					return false;
+				}
+			}
+			return true;
+		}
+	}
 }
 
