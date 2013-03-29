@@ -75,5 +75,12 @@ abstract class XmlReaderBase implements XmlReader {
 			return true;
 		}
 	}
+	
+	public boolean nextIfElementNotEnd(QName elementName) {
+		if(isEndElement(elementName)){
+			return false;
+		}
+		return next();
+    }
 }
 

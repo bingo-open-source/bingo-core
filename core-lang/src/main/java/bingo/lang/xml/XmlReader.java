@@ -12,6 +12,8 @@ public interface XmlReader {
     
     boolean nextToEndElement();
     
+    boolean nextIfElementNotEnd(QName elementName);
+    
     boolean isStartElement();
     
     boolean isStartElement(QName name);
