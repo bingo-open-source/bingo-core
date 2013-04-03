@@ -54,7 +54,7 @@ public class JSONEncodeTest extends ConcurrentTestCase {
 		assertEquals("100",    encode(new BigDecimal(100)));
 		assertEquals("100.1",  encode(new BigDecimal("100.1")));
 		assertEquals("100000", encode(new BigInteger("100000")));
-		assertEquals("0x01",   encode((byte)1));
+		assertEquals("1",   encode((byte)1));
 		assertEquals("\"RED\"",  encode(Color.RED));
 		
 		//date type

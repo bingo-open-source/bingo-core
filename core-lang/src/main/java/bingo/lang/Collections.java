@@ -25,6 +25,12 @@ import java.util.Set;
  * <code>null</code> safe {@link Collection} utility.
  */
 public class Collections {
+	
+	@SuppressWarnings("rawtypes")
+	public static final Set EMPTY_SET = new HashSet();
+	
+	@SuppressWarnings("rawtypes")
+	public static final List EMPTY_LIST = new ArrayList();
 
 	protected Collections() {
 

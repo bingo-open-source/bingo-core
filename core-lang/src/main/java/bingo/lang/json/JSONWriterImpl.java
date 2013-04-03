@@ -22,6 +22,7 @@ import java.util.Date;
 
 import bingo.lang.Enums;
 import bingo.lang.Strings;
+import bingo.lang.codec.Base64;
 
 public class JSONWriterImpl implements JSONWriter {
     
@@ -276,9 +277,7 @@ public class JSONWriterImpl implements JSONWriter {
     
 	public JSONWriter value(byte b) {
         try {
-            out.append(HEX_PREFIX);
-            out.append(HEX_CHARS[(b >>> 4) & 0x0F]);
-            out.append(HEX_CHARS[b & 0x0F]);
+        	out.append(String.valueOf(b));
         } catch (IOException e) {
         	wrapAndThrow(e);
         }
@@ -291,15 +290,16 @@ public class JSONWriterImpl implements JSONWriter {
     
 	public JSONWriter value(byte[] bytes) {
         try {
-            out.append(HEX_PREFIX);
-            for(Byte b : bytes){
-                out.append(HEX_CHARS[(b >>> 4) & 0x0F]);
-                out.append(HEX_CHARS[b & 0x0F]);
-            }
+        	if(null == bytes || bytes.length == 0){
+        		out.append(EMPTY_STRING);
+        	}else{
+        		out.append(DOUBLE_QUOTE)
+        		   .append(Base64.encode(bytes))
+        		   .append(DOUBLE_QUOTE);
+        	}
         } catch (IOException e) {
         	wrapAndThrow(e);
         }
-        
         return this;
     }
 	
