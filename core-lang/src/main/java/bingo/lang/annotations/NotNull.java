@@ -23,6 +23,6 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.FIELD})
 @Retention(RUNTIME)
-public @interface Inject {
-	String value() default "";
+public @interface NotNull {
+
 }
