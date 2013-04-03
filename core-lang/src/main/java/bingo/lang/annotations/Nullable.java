@@ -23,6 +23,6 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.FIELD,ElementType.METHOD,ElementType.PARAMETER})
 @Retention(RUNTIME)
-public @interface NotNull {
+public @interface Nullable {
 
 }
