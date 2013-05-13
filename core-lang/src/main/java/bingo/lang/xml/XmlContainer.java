@@ -98,6 +98,10 @@ abstract class XmlContainer extends XmlNode {
 	public boolean remove(XmlNode xNode) {
 		return childNodes.remove(xNode);
 	}
+	
+	public void removeChildNodes(){
+		childNodes.clear();
+	}
 
 	public void add(Object... content) {
 		for (Object obj : content) {
