@@ -102,7 +102,7 @@ final class XmlUtils {
 		public static <T extends XmlNamed> Predicate<T> xnameEquals(final XmlNamed xname) {
 			return new Predicate<T>() {
 				public boolean apply(T input) {
-					return Strings.equals(xname.prefix(), xname.prefix()) && Strings.equals(xname.name(), xname.name());
+					return Strings.equals(xname.prefix(), input.prefix()) && Strings.equals(xname.name(), input.name());
 				}
 			};
 		}
@@ -110,11 +110,19 @@ final class XmlUtils {
 		public static <T extends XmlNamed> Predicate<T> xnameEquals(final String name) {
 			return new Predicate<T>() {
 				public boolean apply(T input) {
-					return Strings.isEmpty(input.prefix()) && Strings.equals(input.name(), name);
+					return Strings.equals(input.name(), name);
 				}
 			};
 		}
-
+		
+		public static <T extends XmlNamed> Predicate<T> xnameEquals(final String prefix,final String name) {
+			return new Predicate<T>() {
+				public boolean apply(T input) {
+					return Strings.equals(prefix, input.prefix()) && Strings.equals(input.name(), name);
+				}
+			};
+		}		
+		
 		public static <T> Predicate<T> not(final Predicate<T> predicate) {
 			return new Predicate<T>() {
 				public boolean apply(T input) {

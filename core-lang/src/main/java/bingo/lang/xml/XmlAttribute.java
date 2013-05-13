@@ -10,25 +10,31 @@ public class XmlAttribute extends XmlObject implements XmlNamed {
 	private String prefix;
 	private String name;
 	private String value;
+	private String qname;
 
 	public XmlAttribute(String name, Object value) {
 		this(null,name,value);
 	}
 
-	public XmlAttribute(String prefix, String name, Object value) {
+	public XmlAttribute(String prefix, String name,Object value) {
 		this.prefix = prefix;
 		this.name   = name;
+		this.qname  = Strings.isEmpty(prefix) ? name : (prefix + ":" + name);
 		this.value = value.toString();
 	}
+	
+	public String qname(){
+		return qname;
+ 	}
+	
+	public String prefix() {
+	    return prefix;
+    }
 	
 	public String name() {
 	    return name;
     }
-
-	public String prefix() {
-	    return prefix;
-    }
-
+	
 	public String value() {
 		return value;
 	}

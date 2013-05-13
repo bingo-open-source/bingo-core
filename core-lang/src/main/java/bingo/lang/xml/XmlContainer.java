@@ -164,7 +164,7 @@ abstract class XmlContainer extends XmlNode {
 		
 		for (int i = 0; i < domElement.getAttributes().getLength(); i++) {
 			Attr attr = (Attr) domElement.getAttributes().item(i);
-			XmlAttribute xatt = new XmlAttribute(attr.getName(), attr.getValue());
+			XmlAttribute xatt = new XmlAttribute(attr.getPrefix(),attr.getLocalName(),attr.getValue());
 			rt.add(xatt);
 		}
 		

@@ -117,9 +117,18 @@ public class XmlElement extends XmlContainer implements XmlNamed {
 		return attributes().firstOrNull(Predicates.<XmlAttribute> xnameEquals(name));
 	}
 	
+	public XmlAttribute attribute(String prefix,String name){
+		return attributes().firstOrNull(Predicates.<XmlAttribute>xnameEquals(prefix,name));
+	}
+	
 	public String attributeValue(String name) {
 		XmlAttribute attr = attribute(name);
 		return null == attr ? null : attr.value(); 
+	}
+	
+	public String attributeValue(String prefix,String name){
+		XmlAttribute attr = attribute(prefix,name);
+		return null == attr ? null : attr.value();
 	}
 	
 	public String attributeValueTrimToNull(String name){
@@ -327,7 +336,7 @@ public class XmlElement extends XmlContainer implements XmlNamed {
 
 		for (XmlAttribute att : attributes) {
 			sb.append(' ');
-			sb.append(att.name());
+			sb.append(att.qname());
 			sb.append("=\"");
 			sb.append(XmlUtils.escapeAttributeValue(att.value()));
 			sb.append('"');
