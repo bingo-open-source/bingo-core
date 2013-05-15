@@ -115,6 +115,14 @@ final class XmlUtils {
 			};
 		}
 		
+		public static <T extends XmlNamed> Predicate<T> xnameEqualsWithPrefix(final String name) {
+			return new Predicate<T>() {
+				public boolean apply(T input) {
+					return !Strings.isEmpty(input.prefix()) && Strings.equals(input.name(), name);
+				}
+			};
+		}
+		
 		public static <T extends XmlNamed> Predicate<T> xnameEquals(final String prefix,final String name) {
 			return new Predicate<T>() {
 				public boolean apply(T input) {

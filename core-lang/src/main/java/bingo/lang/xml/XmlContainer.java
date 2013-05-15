@@ -162,7 +162,7 @@ abstract class XmlContainer extends XmlNode {
 			return null;
 		}
 		
-		XmlElement rt = new XmlElement(domElement.getPrefix(),domElement.getTagName());
+		XmlElement rt = new XmlElement(domElement.getPrefix(),domElement.getLocalName());
 		
 		rt.setDocument(document);
 		

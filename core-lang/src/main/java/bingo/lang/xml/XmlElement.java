@@ -14,6 +14,7 @@ public class XmlElement extends XmlContainer implements XmlNamed {
 
 	private final String name;
 	private final String prefix;
+	private final String qname;
 	private final List<XmlAttribute> attributes = new ArrayList<XmlAttribute>();
 	
 	public XmlElement(String name, Object... content) {
@@ -23,10 +24,15 @@ public class XmlElement extends XmlContainer implements XmlNamed {
 	public XmlElement(String prefix, String name, Object... content) {
 		this.prefix = prefix;
 		this.name   = name;
+		this.qname  = Strings.isEmpty(prefix) ? name : (prefix + ":" + name);
 		
 		for (Object obj : content) {
 			add(obj);
 		}
+	}
+	
+	public String qname(){
+		return qname;
 	}
 	
 	public String name() {
@@ -117,6 +123,10 @@ public class XmlElement extends XmlContainer implements XmlNamed {
 		return attributes().firstOrNull(Predicates.<XmlAttribute> xnameEquals(name));
 	}
 	
+	public XmlAttribute attributeWithPrefix(String name) {
+		return attributes().firstOrNull(Predicates.<XmlAttribute> xnameEqualsWithPrefix(name));
+	}
+	
 	public XmlAttribute attribute(String prefix,String name){
 		return attributes().firstOrNull(Predicates.<XmlAttribute>xnameEquals(prefix,name));
 	}
@@ -128,6 +138,11 @@ public class XmlElement extends XmlContainer implements XmlNamed {
 	
 	public String attributeValue(String prefix,String name){
 		XmlAttribute attr = attribute(prefix,name);
+		return null == attr ? null : attr.value();
+	}
+	
+	public String attributeValueWithPrefix(String name){
+		XmlAttribute attr = attributeWithPrefix(name);
 		return null == attr ? null : attr.value();
 	}
 	
@@ -327,12 +342,10 @@ public class XmlElement extends XmlContainer implements XmlNamed {
 		String indent = enableIndent ? getIndent(format) : "";
 		String newline = enableIndent ? "\n" : "";
 
-		String tagName = name();
-
 		StringBuilder sb = new StringBuilder();
 		sb.append(indent);
 		sb.append('<');
-		sb.append(tagName);
+		sb.append(qname);
 
 		for (XmlAttribute att : attributes) {
 			sb.append(' ');
@@ -361,7 +374,7 @@ public class XmlElement extends XmlContainer implements XmlNamed {
 				sb.append(newline + indent);
 			}
 			sb.append("</");
-			sb.append(tagName);
+			sb.append(qname);
 			sb.append('>');
 		}
 		return sb.toString();
