@@ -46,6 +46,7 @@ import bingo.lang.Objects;
 import bingo.lang.Strings;
 import bingo.lang.config.XmlProperties;
 import bingo.lang.exceptions.ObjectNotFoundException;
+import bingo.lang.http.HttpHeaders;
 import bingo.lang.logging.Log;
 import bingo.lang.logging.LogFactory;
 import bingo.lang.resource.Resource;
@@ -200,27 +201,32 @@ final class MailUtils {
 	}
 
 	static MimeMessage createMailMessage(final Mailer mailer, final Email email) throws MessagingException {
-		final MimeMessageContent content = new MimeMessageContent();
 		final MimeMessage message = new MimeMessage(mailer.getSession());
 		final String charset = mailer.getConfig().getCharset().name();
-
+		
 		message.setSubject(email.getSubject(), charset);
 		message.setFrom(createInternetAddress(Objects.firstNotNull(email.getFrom(),mailer.getFrom()),charset));
-
+		
 		setReplyTo(email, message, charset);
 		
 		setRecipients(RecipientType.TO, email.getTo(), message, charset);
 		
-		setRecipients(RecipientType.CC, email.getCc(), message, charset);
+		setRecipients(RecipientType.CC, email.getCc(), message, charset);		
 		
-		//fill multipart structure
-		setTextAndHtml(email, content.alternativeMessages,charset);
-		
-//		setEmbeddedImages(email, messageRoot.multipartRelated);
-//		setAttachments(email, messageRoot.multipartRoot);
-//		setHeaders(email, message);
-		
-		message.setContent(content.root);
+		if(!Strings.isEmpty(email.getText()) && Strings.isEmpty(email.getHtml())){
+			message.setText(email.getText(),charset);
+			message.setHeader(HttpHeaders.CONTENT_TYPE,"text/plain; charset=\"" + charset + "\"");
+		}else{
+			final MimeMessageContent content = new MimeMessageContent();
+			
+			//fill multipart structure
+			setTextAndHtml(email, content.alternativeMessages,charset);
+			message.setContent(content.root);
+			
+//			setEmbeddedImages(email, messageRoot.multipartRelated);
+//			setAttachments(email, messageRoot.multipartRoot);
+//			setHeaders(email, message);
+		}
 		
 		if(null == email.getSentDate()) {
 			message.setSentDate(new Date());	

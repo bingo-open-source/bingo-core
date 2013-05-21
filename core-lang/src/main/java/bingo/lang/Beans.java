@@ -18,8 +18,12 @@ package bingo.lang;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import bingo.lang.annotations.NotEmpty;
+import bingo.lang.annotations.NotNull;
+import bingo.lang.annotations.Validatable;
 import bingo.lang.beans.BeanModel;
 import bingo.lang.beans.BeanProperty;
+import bingo.lang.exceptions.BeanValidateException;
 import bingo.lang.exceptions.ObjectNotFoundException;
 
 public class Beans {
@@ -70,4 +74,39 @@ public class Beans {
 		}
 		return BeanModel.get(bean.getClass()).toMap(bean);
 	}
+	
+	public static void validate(Object bean) throws BeanValidateException {
+		if(null != bean && bean.getClass().isAnnotationPresent(Validatable.class)){
+			BeanModel<?> model = BeanModel.get(bean.getClass());
+			
+			for(BeanProperty prop : model.getProperties()){
+				checkNotNull(bean,prop);
+				checkNotEmpty(bean,prop);
+			}
+		}
+	}
+	
+	private static void checkNotNull(Object bean,BeanProperty prop) {
+		if(prop.isAnnotationPresent(NotNull.class)){
+			Object value = prop.getValue(bean);
+			
+			if(null != value){
+				return;
+			}
+			
+			throw new BeanValidateException("property '{0}' in bean type '{1}' must not be null",prop.getName(),bean.getClass().getName());
+		}
+	}
+	
+	private static void checkNotEmpty(Object bean,BeanProperty prop) {
+		if(prop.isAnnotationPresent(NotEmpty.class)){
+			Object value = prop.getValue(bean);
+			
+			if(!Objects.isEmpty(value)){
+				return;
+			}
+			
+			throw new BeanValidateException("property '{0}' in bean type '{1}' must not be empty",prop.getName(),bean.getClass().getName());
+		}
+	}	
 }

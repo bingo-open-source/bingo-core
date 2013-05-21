@@ -18,6 +18,8 @@ package bingo.lang;
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Collection;
+import java.util.Map;
 
 import bingo.lang.exceptions.CloneException;
 
@@ -30,6 +32,39 @@ public class Objects {
 	protected Objects() {
 
 	}
+	
+	@SuppressWarnings("rawtypes")
+    public static boolean isEmpty(Object value){
+		if(null == value){
+			return true;
+		}
+		
+		if(value instanceof CharSequence){
+			return ((CharSequence) value).length() == 0;
+		}
+		
+		if(value instanceof Object[]){
+			return ((Object[]) value).length == 0;
+		}
+		
+		if(value instanceof Collection){
+			return ((Collection) value).size() == 0;
+		}
+		
+		if(value instanceof Map){
+			return ((Map) value).isEmpty();
+		}
+		
+		if(value instanceof Enumerable){
+			return ((Enumerable) value).isEmpty();
+		}
+		
+		if(value.getClass().isArray()){
+			return Array.getLength(value) == 0;
+		}
+		
+		return false;
+	}	
 
 	// Null-safe equals/hashCode
 	//-----------------------------------------------------------------------
