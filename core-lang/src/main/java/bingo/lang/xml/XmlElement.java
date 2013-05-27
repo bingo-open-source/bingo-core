@@ -196,6 +196,12 @@ public class XmlElement extends XmlContainer implements XmlNamed {
 		return attr == null ? text() : attr.value();
 	}
 	
+	public String attributeValueOrChildText(String attributeName,String childElementName){
+		XmlAttribute attr = attribute(attributeName);
+		
+		return attr == null ? childElementText(childElementName) : attr.value();
+	}
+	
 	public String childElementText(String name) {
 		XmlElement e = childElement(name);
 		return null == e ? null : e.text();
@@ -298,6 +304,16 @@ public class XmlElement extends XmlContainer implements XmlNamed {
 		}
 		
 		return requiredText();
+	}
+	
+	public String requiredAttributeValueOrChildText(String attributeName,String childElementName) throws XmlValidationException {
+		XmlAttribute attr = attribute(attributeName);
+
+		if(null != attr){
+			return attr.required().value();
+		}
+		
+		return requiredChildElementText(childElementName);
 	}
 	
 	public void error(String message) throws XmlValidationException {
