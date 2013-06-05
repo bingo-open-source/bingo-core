@@ -75,6 +75,15 @@ public class EdmSchemaBuilder extends EdmBuilderWithDocumentation implements Bui
 		}
 		return null;
 	}
+	
+	public EdmEntityType findEntityType(String name){
+		for(EdmEntityType entityType : getEntityTypes()){
+			if(entityType.getName().equals(name)){
+				return entityType;
+			}
+		}
+		return null;
+	}
 
 	public List<EdmComplexType> getComplexTypes() {
 		return complexTypes;
