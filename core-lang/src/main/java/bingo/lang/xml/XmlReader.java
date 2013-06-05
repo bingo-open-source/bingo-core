@@ -14,6 +14,8 @@ public interface XmlReader {
     
     boolean nextIfElementNotEnd(QName elementName);
     
+    boolean nextIfElementNotEnd(String elementName);
+    
     boolean isStartElement();
     
     boolean isStartElement(QName name);
@@ -37,6 +39,12 @@ public interface XmlReader {
     String getAttributeValue(QName name);
     
     String getAttributeValue(String name);
+    
+    String requiredGetAttributeValue(String name);
+    
+    boolean getAttributeValueForBool(String name,boolean defaultValue);
+    
+    int getAttributeValueForInt(String name,int defaultValue);
     
     void close();
 }

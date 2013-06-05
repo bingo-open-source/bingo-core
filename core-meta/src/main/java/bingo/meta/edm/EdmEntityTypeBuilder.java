@@ -38,6 +38,10 @@ public class EdmEntityTypeBuilder extends EdmNamedStructualTypeBuilder implement
 
 	private List<EdmNavigationProperty> navigationProperties = new ArrayList<EdmNavigationProperty>();
 	
+	public EdmEntityTypeBuilder(){
+
+	}	
+	
 	public EdmEntityTypeBuilder(String name,String fullQualifiedName){
 		this.name = name;
 		this.fullQualifiedName = fullQualifiedName;

@@ -17,6 +17,9 @@ package bingo.lang.xml;
 
 import javax.xml.namespace.QName;
 
+import bingo.lang.Converts;
+import bingo.lang.Strings;
+
 abstract class XmlReaderBase implements XmlReader {
 
 	public boolean nextToChildElement(QName name) {
@@ -81,6 +84,33 @@ abstract class XmlReaderBase implements XmlReader {
 			return false;
 		}
 		return next();
+    }
+	
+	public boolean nextIfElementNotEnd(String elementName) {
+		if(isEndElement(elementName)){
+			return false;
+		}
+	    return next();
+    }
+
+	public String requiredGetAttributeValue(String name) {
+		String value = getAttributeValue(name);
+		
+		if(Strings.isEmpty(value)){
+			throw new XmlValidationException("attribute '" + name + "' must not be empty in element '" + getElementLocalName() + "'");
+		}
+		
+	    return value;
+    }
+
+	public boolean getAttributeValueForBool(String name, boolean defaultValue) {
+		String value = getAttributeValue(name);
+		return Strings.isEmpty(value) ? defaultValue : Converts.toBoolean(value);
+    }
+	
+	public int getAttributeValueForInt(String name, int defaultValue) {
+		String value = getAttributeValue(name);
+		return Strings.isEmpty(value) ? defaultValue : Converts.toInt(value);
     }
 }
 
