@@ -66,6 +66,15 @@ public class EdmSchemaBuilder extends EdmBuilderWithDocumentation implements Bui
 	public List<EdmAssociation> getAssociations() {
 		return associations;
 	}
+	
+	public EdmAssociation findAssociation(String name){
+		for(EdmAssociation assoc : getAssociations()){
+			if(assoc.getName().equals(name)){
+				return assoc;
+			}
+		}
+		return null;
+	}
 
 	public List<EdmComplexType> getComplexTypes() {
 		return complexTypes;
