@@ -22,6 +22,9 @@ public class EdmNavigationPropertyBuilder extends EdmNamedBuilder implements Bui
 	private EdmAssociation 	  relationship;
 	private EdmAssociationEnd fromRole;
 	private EdmAssociationEnd toRole;
+	private String			  relationshipFullQualifiedName;
+	private String            fromRoleName;
+	private String			  toRoleName;
 	
 	public EdmNavigationPropertyBuilder() {
 	    super();
@@ -31,8 +34,34 @@ public class EdmNavigationPropertyBuilder extends EdmNamedBuilder implements Bui
 	    super(name);
     }
 	
+	public EdmAssociation getRelationship() {
+		return relationship;
+	}
+	
 	public EdmNavigationPropertyBuilder setRelationship(EdmAssociation relationship) {
 		this.relationship = relationship;
+		return this;
+	}
+	
+	public String getRelationshipFullQualifiedName() {
+		return relationshipFullQualifiedName;
+	}
+
+	public EdmNavigationPropertyBuilder setRelationshipFullQualifiedName(String relationshipFullQualifiedName) {
+		this.relationshipFullQualifiedName = relationshipFullQualifiedName;
+		return this;
+	}
+	
+	public EdmAssociationEnd getFromRole() {
+		return fromRole;
+	}
+	
+	public String getFromRoleName() {
+		return fromRoleName;
+	}
+
+	public EdmNavigationPropertyBuilder setFromRoleName(String fromRoleName) {
+		this.fromRoleName = fromRoleName;
 		return this;
 	}
 
@@ -40,24 +69,25 @@ public class EdmNavigationPropertyBuilder extends EdmNamedBuilder implements Bui
 		this.fromRole = fromRole;
 		return this;
 	}
+	
+	public EdmAssociationEnd getToRole() {
+		return toRole;
+	}
 
 	public EdmNavigationPropertyBuilder setToRole(EdmAssociationEnd toRole) {
 		this.toRole = toRole;
 		return this;
 	}
-
-	public EdmAssociation getRelationship() {
-		return relationship;
-	}
-
-	public EdmAssociationEnd getFromRole() {
-		return fromRole;
-	}
-
-	public EdmAssociationEnd getToRole() {
-		return toRole;
-	}
 	
+	public String getToRoleName() {
+		return toRoleName;
+	}
+
+	public EdmNavigationPropertyBuilder setToRoleName(String toRoleName) {
+		this.toRoleName = toRoleName;
+		return this;
+	}
+
 	@Override
     public EdmNavigationPropertyBuilder setDocumentation(EdmDocumentation documentation) {
 	    super.setDocumentation(documentation);

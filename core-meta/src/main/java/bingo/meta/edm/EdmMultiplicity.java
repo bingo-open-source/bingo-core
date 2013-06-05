@@ -39,4 +39,20 @@ public enum EdmMultiplicity implements Valued<String> {
     public String toString() {
 		return value;
 	}
+	
+	public static EdmMultiplicity parse(String value){
+		if(ZeroOrOne.value.equals(value)){
+			return ZeroOrOne;
+		}
+		
+		if(One.value.equals(value)){
+			return One;
+		}
+		
+		if(Many.value.equals(value)){
+			return Many;
+		}
+		
+		return null;
+	}
 }

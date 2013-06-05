@@ -28,6 +28,10 @@ public class EdmEnumTypeBuilder extends EdmNamedBuilder implements Builder<EdmEn
 	protected EdmSimpleType underlyingType;
 	protected List<EdmEnumMember> members = new ArrayList<EdmEnumMember>();
 	
+	public EdmEnumTypeBuilder(){
+
+	}
+	
 	public EdmEnumTypeBuilder(String name){
 		this.name = name;
 	}
