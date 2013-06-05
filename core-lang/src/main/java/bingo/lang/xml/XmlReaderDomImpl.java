@@ -21,6 +21,7 @@ import javax.xml.namespace.QName;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -47,7 +48,7 @@ final class XmlReaderDomImpl extends XmlReaderBase implements XmlReader {
     }
 
 	public boolean isEndElement(QName name) {
-		 return event == END_ELEMENT && Strings.equals(current.getNamespaceURI(),name.getNamespaceURI()) && current.getNodeName().equals(name.getLocalPart());
+		 return event == END_ELEMENT && Strings.equals(current.getNamespaceURI(),name.getNamespaceURI()) && current.getLocalName().equals(name.getLocalPart());
     }
 
 	public boolean isStartElement() {
@@ -55,15 +56,15 @@ final class XmlReaderDomImpl extends XmlReaderBase implements XmlReader {
     }
 
 	public boolean isStartElement(QName name) {
-	    return event == START_ELEMENT && Strings.equals(current.getNamespaceURI(),name.getNamespaceURI()) && current.getNodeName().equals(name.getLocalPart());
+	    return event == START_ELEMENT && Strings.equals(current.getNamespaceURI(),name.getNamespaceURI()) && current.getLocalName().equals(name.getLocalPart());
     }
 	
 	public boolean isStartElement(String name) {
-		return event == START_ELEMENT && current.getNodeName().equals(name);
+		return event == START_ELEMENT && current.getLocalName().equals(name);
 	}
 
 	public boolean isEndElement(String name) {
-		return event == END_ELEMENT && current.getNodeName().equals(name);
+		return event == END_ELEMENT && current.getLocalName().equals(name);
 	}
 
 	public boolean isEndDocument() {
@@ -87,7 +88,21 @@ final class XmlReaderDomImpl extends XmlReaderBase implements XmlReader {
     }
 	
     public String getAttributeValue(String name) {
-	    return null != current ? current.getAttribute(name) : null;
+    	if(null == current){
+    		return null;
+    	}
+    	
+    	NamedNodeMap attrs = current.getAttributes();
+    	
+    	for(int i=0;i<attrs.getLength();i++){
+    		Node attr = attrs.item(i);
+    	
+    		if(attr.getLocalName().equals(name)){
+    			return attr.getNodeValue();
+    		}
+    	}
+    	
+	    return null;
     }
 
 	public boolean next() {

@@ -16,6 +16,7 @@
 package bingo.lang.xml;
 
 import java.io.Reader;
+import java.util.Iterator;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
@@ -89,8 +90,23 @@ final class XmlReaderStaxImpl extends XmlReaderBase implements XmlReader {
         return attr == null ? null : attr.getValue();
     }
 	
+    @SuppressWarnings("rawtypes")
     public String getAttributeValue(String name) {
-	    return getAttributeValue(new QName(name));
+    	if(null == event){
+    		return null;
+    	}
+    	
+    	Iterator attrs = event.asStartElement().getAttributes();
+    	
+    	while(attrs.hasNext()){
+    		Attribute attr = (Attribute)attrs.next();
+
+    		if(attr.getName().getLocalPart().equals(name)){
+    			return attr.getValue();
+    		}
+    	}
+
+    	return null;
     }
     
 	public boolean next() {
