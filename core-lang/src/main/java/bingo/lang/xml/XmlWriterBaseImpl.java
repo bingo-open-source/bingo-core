@@ -179,7 +179,7 @@ public class XmlWriterBaseImpl extends XmlWriterBase implements XmlWriter {
 		write(" ");
 		writeName("", namespaceURI, localName);
 		write("=\"");
-		writeCharactersInternal(value.toCharArray(), 0, value.length(), true);
+		if(null != value) { writeCharactersInternal(value.toCharArray(), 0, value.length(), true); }
 		write("\"");
 		return this;
 	}
@@ -192,7 +192,7 @@ public class XmlWriterBaseImpl extends XmlWriterBase implements XmlWriter {
 		write(" ");
 		writeName(prefix, namespaceURI, localName);
 		write("=\"");
-		writeCharactersInternal(value.toCharArray(), 0, value.length(), true);
+		if(null != value) { writeCharactersInternal(value.toCharArray(), 0, value.length(), true); }
 		write("\"");
 		return this;
 	}
