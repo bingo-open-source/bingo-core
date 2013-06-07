@@ -21,14 +21,14 @@ public class EdmAssociation extends EdmNamedObject {
 	
 	private final EdmAssociationEnd end2;
 	
-	public EdmAssociation(String name,EdmAssociationEnd end1,EdmAssociationEnd end2) {
-		super(name);
+	public EdmAssociation(String name,String title,EdmAssociationEnd end1,EdmAssociationEnd end2) {
+		super(name,title);
 		this.end1 = end1;
 		this.end2 = end2;
 	}
 
-	public EdmAssociation(String name,EdmAssociationEnd end1,EdmAssociationEnd end2,EdmDocumentation documentation) {
-		super(name,documentation);
+	public EdmAssociation(String name,String title,EdmAssociationEnd end1,EdmAssociationEnd end2,EdmDocumentation documentation) {
+		super(name,title,documentation);
 		this.end1 = end1;
 		this.end2 = end2;
 	}

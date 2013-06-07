@@ -21,15 +21,31 @@ import bingo.lang.Strings;
 public abstract class EdmNamedObject extends EdmObjectWithDocumentation implements Named {
 
 	protected final String name;
+	protected final String title;
 	
 	protected EdmNamedObject(String name)
 	{
-		this.name = name;
+		this.name  = name;
+		this.title = null;
+	}
+	
+	protected EdmNamedObject(String name,String title)
+	{
+		this.name  = name;
+		this.title = title;
 	}
 	
 	protected EdmNamedObject(String name,EdmDocumentation documentation)
 	{
 		this.name          = name;
+		this.title         = null;
+		this.documentation = documentation;
+	}
+	
+	protected EdmNamedObject(String name,String title,EdmDocumentation documentation)
+	{
+		this.name          = name;
+		this.title         = title;
 		this.documentation = documentation;
 	}
 
@@ -37,7 +53,11 @@ public abstract class EdmNamedObject extends EdmObjectWithDocumentation implemen
 		return name;
     }
 	
-	public String getDisplayName(){
+	public String getTitle() {
+		return title;
+	}
+
+	public String getTitleOrName(){
 		return Strings.firstNotEmpty(getTitle(),getName());
 	}
 }

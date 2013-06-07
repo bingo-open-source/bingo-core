@@ -34,6 +34,18 @@ public class EdmAssociationSetBuilder extends EdmNamedBuilder implements Builder
 		this.name = name;
     }
 	
+	@Override
+    public EdmAssociationSetBuilder setName(String name) {
+	    super.setName(name);
+	    return this;
+    }
+
+	@Override
+    public EdmAssociationSetBuilder setTitle(String title) {
+	    super.setTitle(title);
+	    return this;
+    }
+
 	public EdmAssociation getAssociation() {
     	return association;
     }
@@ -83,13 +95,7 @@ public class EdmAssociationSetBuilder extends EdmNamedBuilder implements Builder
 	    return this;
     }
 	
-	@Override
-    public EdmAssociationSetBuilder setDocumentation(String title, String summary, String longDescription) {
-	    super.setDocumentation(title, summary, longDescription);
-	    return this;
-    }
-
 	public EdmAssociationSet build() {
-	    return  new EdmAssociationSet(name, association, end1, end2, documentation);
+	    return  new EdmAssociationSet(name,title, association, end1, end2, documentation);
     }
 }

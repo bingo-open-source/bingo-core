@@ -34,6 +34,18 @@ public class EdmNavigationPropertyBuilder extends EdmNamedBuilder implements Bui
 	    super(name);
     }
 	
+	@Override
+    public EdmNavigationPropertyBuilder setName(String name) {
+	    super.setName(name);
+	    return this;
+    }
+
+	@Override
+    public EdmNavigationPropertyBuilder setTitle(String title) {
+	    super.setTitle(title);
+	    return this;
+    }
+
 	public EdmAssociation getRelationship() {
 		return relationship;
 	}
@@ -99,14 +111,8 @@ public class EdmNavigationPropertyBuilder extends EdmNamedBuilder implements Bui
 	    super.setDocumentation(summary, longDescription);
 	    return this;
     }
-	
-	@Override
-    public EdmNavigationPropertyBuilder setDocumentation(String title, String summary, String longDescription) {
-	    super.setDocumentation(title, summary, longDescription);
-	    return this;
-    }
 
 	public EdmNavigationProperty build() {
-	    return new EdmNavigationProperty(name, relationship, fromRole, toRole,documentation);
+	    return new EdmNavigationProperty(name,title,relationship, fromRole, toRole,documentation);
     }
 }

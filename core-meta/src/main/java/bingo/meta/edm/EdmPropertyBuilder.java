@@ -61,6 +61,12 @@ public class EdmPropertyBuilder extends EdmNamedBuilder implements Builder<EdmPr
 	    super.setName(name);
 	    return this;
     }
+	
+	@Override
+    public EdmPropertyBuilder setTitle(String title) {
+	    super.setTitle(title);
+	    return this;
+    }
 
 	public EdmType getType() {
     	return type;
@@ -176,13 +182,7 @@ public class EdmPropertyBuilder extends EdmNamedBuilder implements Builder<EdmPr
 		return this;
 	}
 	
-	@Override
-    public EdmBuilderWithDocumentation setDocumentation(String title, String summary, String longDescription) {
-	    super.setDocumentation(title, summary, longDescription);
-	    return this;
-    }
-
 	public EdmProperty build() {
-		return new EdmProperty(name, type , nullable, defaultValue, fixedLength, maxLength, precision, scale,fcTargetPath,fcContentKind,fcKeepInContent, documentation);
+		return new EdmProperty(name,title, type , nullable, defaultValue, fixedLength, maxLength, precision, scale,fcTargetPath,fcContentKind,fcKeepInContent, documentation);
 	}
 }

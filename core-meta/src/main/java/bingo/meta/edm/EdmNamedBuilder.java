@@ -20,6 +20,7 @@ import bingo.lang.Named;
 public abstract class EdmNamedBuilder extends EdmBuilderWithDocumentation implements Named {
 
 	protected String name;
+	protected String title;
 	
 	public EdmNamedBuilder() {
 
@@ -35,6 +36,15 @@ public abstract class EdmNamedBuilder extends EdmBuilderWithDocumentation implem
 
 	public EdmNamedBuilder setName(String name) {
 		this.name = name;
+		return this;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public EdmNamedBuilder setTitle(String title) {
+		this.title = title;
 		return this;
 	}
 }

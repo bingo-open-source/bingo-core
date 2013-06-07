@@ -17,18 +17,23 @@ package bingo.meta.edm;
 
 import bingo.lang.Builder;
 
-public class EdmParameterBuilder extends EdmBuilderWithDocumentation implements Builder<EdmParameter> {
+public class EdmParameterBuilder extends EdmNamedBuilder implements Builder<EdmParameter> {
 	
-	protected String           name;
 	protected EdmParameterMode mode;
 	protected EdmType          type;
 	
-	
-	public EdmParameterBuilder setName(String name) {
-		this.name = name;
-		return this;
-	}
-	
+	@Override
+    public EdmParameterBuilder setName(String name) {
+	    super.setName(name);
+	    return this;
+    }
+
+	@Override
+    public EdmParameterBuilder setTitle(String title) {
+	    super.setTitle(title);
+	    return this;
+    }
+
 	public EdmParameterBuilder setMode(EdmParameterMode mode) {
 		this.mode = mode;
 		return this;
@@ -51,13 +56,7 @@ public class EdmParameterBuilder extends EdmBuilderWithDocumentation implements 
 	    return this;
     }
 
-	@Override
-    public EdmParameterBuilder setDocumentation(String title, String summary, String longDescription) {
-	    super.setDocumentation(title, summary, longDescription);
-	    return this;
-    }
-
 	public EdmParameter build() {
-	    return new EdmParameter(name, type, mode, documentation);
+	    return new EdmParameter(name,title, type, mode, documentation);
     }
 }

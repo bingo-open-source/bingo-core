@@ -39,13 +39,4 @@ public abstract class EdmBuilderWithDocumentation extends EdmBuilder {
 		}
     	return this;
     }
-	
-	public EdmBuilderWithDocumentation setDocumentation(String title,String summary,String longDescription) {
-		if(Strings.isEmpty(title) && Strings.isEmpty(summary) && Strings.isEmpty(longDescription)){
-			this.documentation = null;
-		}else{
-			this.documentation = new EdmDocumentation(title, summary, longDescription);	
-		}
-    	return this;
-    }
 }

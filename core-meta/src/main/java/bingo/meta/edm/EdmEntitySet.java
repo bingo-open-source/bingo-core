@@ -20,12 +20,16 @@ public class EdmEntitySet extends EdmNamedObject {
 	private final EdmEntityTypeRef entityType;
 
 	public EdmEntitySet(String name,EdmEntityTypeRef entityType) {
-		super(name);
+		this(name,null,entityType);
+	}
+	
+	public EdmEntitySet(String name,String title,EdmEntityTypeRef entityType) {
+		super(name,title);
 		this.entityType = entityType;
 	}
 	
-	public EdmEntitySet(String name,EdmEntityTypeRef entityType,EdmDocumentation documentation) {
-		this(name,entityType);
+	public EdmEntitySet(String name,String title,EdmEntityTypeRef entityType,EdmDocumentation documentation) {
+		this(name,title,entityType);
 		
 		this.documentation = documentation;
 	}

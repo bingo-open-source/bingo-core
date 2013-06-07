@@ -59,6 +59,17 @@ public class EdmEntityTypeBuilder extends EdmNamedStructualTypeBuilder implement
 		return this;
 	}
 	
+	@Override
+    public EdmEntityTypeBuilder setTitle(String title) {
+	    super.setTitle(title);
+	    return this;
+    }
+
+	public EdmEntityTypeBuilder setFullQualifiedName(String fullQualifiedName) {
+		this.fullQualifiedName = fullQualifiedName;
+		return this;
+	}
+
 	public EdmEntityTypeBuilder setBaseType(EdmEntityType baseType){
 		this.baseType = baseType;
 		return this;
@@ -112,7 +123,7 @@ public class EdmEntityTypeBuilder extends EdmNamedStructualTypeBuilder implement
 	}
 	
 	public EdmEntityTypeBuilder addNavigationProperty(String name,EdmAssociation relationship,EdmAssociationEnd fromRole,EdmAssociationEnd toRole) {
-		navigationProperties.add(new EdmNavigationProperty(name, relationship, fromRole, toRole));
+		navigationProperties.add(new EdmNavigationProperty(name,null, relationship, fromRole, toRole));
 		return this;
 	}
 	
@@ -178,15 +189,9 @@ public class EdmEntityTypeBuilder extends EdmNamedStructualTypeBuilder implement
 		super.setDocumentation(summary, longDescription);
 		return this;
 	}
-	
-	@Override
-    public EdmEntityTypeBuilder setDocumentation(String title, String summary, String longDescription) {
-	    super.setDocumentation(title, summary, longDescription);
-	    return this;
-    }
 
 	public EdmEntityType build() {
-		return new EdmEntityType(name, fullQualifiedName, properties, navigationProperties, keys, isAbstract, hasStream, openType, baseType,documentation);
+		return new EdmEntityType(name,title,fullQualifiedName, properties, navigationProperties, keys, isAbstract, hasStream, openType, baseType,documentation);
 	}
 	
 	public EdmEntityTypeRef buildRef(EdmSchemaBuilder schema){

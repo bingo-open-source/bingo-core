@@ -21,19 +21,19 @@ public class EdmFunctionImport extends EdmFunctionBase {
 	private final String  httpMethod;
 	private final boolean sideEffecting;
 	
-	public EdmFunctionImport(String name,String entitySet, EdmType returnType,Iterable<EdmParameter> parameters) {
-	    super(name,returnType,parameters);
+	public EdmFunctionImport(String name,String title,String entitySet, EdmType returnType,Iterable<EdmParameter> parameters) {
+	    super(name,title,returnType,parameters);
 	    
 	    this.entitySet     = entitySet;
 	    this.httpMethod    = null;
 	    this.sideEffecting = true;
     }
 	
-	public EdmFunctionImport(String name,String entitySet, EdmType returnType,Iterable<EdmParameter> parameters, 
+	public EdmFunctionImport(String name,String title,String entitySet, EdmType returnType,Iterable<EdmParameter> parameters, 
 							 String httpMethod, boolean sideEffecting, 
 							 EdmDocumentation documentation) {
 		
-		super(name,returnType,parameters);
+		super(name,title,returnType,parameters);
 
 		this.entitySet     = entitySet;
 	    this.httpMethod    = httpMethod;

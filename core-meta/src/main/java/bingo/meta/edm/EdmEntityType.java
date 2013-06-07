@@ -28,15 +28,17 @@ public class EdmEntityType extends EdmNamedStructualType {
 	private final Enumerable<String> keys;
 	private final Enumerable<EdmNavigationProperty> navigationProperties;
 	
-	public EdmEntityType(String name,String fullQualifiedName,
-						  Iterable<EdmProperty> properties,
-						  Iterable<EdmNavigationProperty> navigationProperties,
-						  Iterable<String> keys, 
-						  boolean isAbstract,
-						  boolean hasStream,
-						  EdmEntityType baseType){
+	public EdmEntityType(String name,
+						 String title,
+						 String fullQualifiedName,
+						 Iterable<EdmProperty> properties,
+						 Iterable<EdmNavigationProperty> navigationProperties,
+						 Iterable<String> keys, 
+						 boolean isAbstract,
+						 boolean hasStream,
+						 EdmEntityType baseType){
 		
-		super(name,properties,isAbstract);
+		super(name,title,properties,isAbstract);
 		
 		this.fullQualifiedName = fullQualifiedName;
 		this.keys       = Enumerables.of(keys);
@@ -48,17 +50,19 @@ public class EdmEntityType extends EdmNamedStructualType {
 		doCheckValidKeys();
 	}
 	
-	public EdmEntityType(String name,String fullQualifiedName,
-						  Iterable<EdmProperty> properties,
-						  Iterable<EdmNavigationProperty> navigationProperties,
-						  Iterable<String> keys,
-						  boolean isAbstract,
-						  boolean hasStream,
-						  boolean openType,
-						  EdmEntityType baseType,
-						  EdmDocumentation documentation){
+	public EdmEntityType(String name,
+						 String title,
+						 String fullQualifiedName,
+						 Iterable<EdmProperty> properties,
+						 Iterable<EdmNavigationProperty> navigationProperties,
+						 Iterable<String> keys,
+						 boolean isAbstract,
+						 boolean hasStream,
+						 boolean openType,
+						 EdmEntityType baseType,
+						 EdmDocumentation documentation){
 		
-		super(name,properties,isAbstract);
+		super(name,title,properties,isAbstract);
 		
 		this.fullQualifiedName = fullQualifiedName;
 		this.keys       = Enumerables.of(keys);

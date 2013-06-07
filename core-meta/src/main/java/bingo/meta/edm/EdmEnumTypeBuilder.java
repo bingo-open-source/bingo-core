@@ -23,7 +23,6 @@ import bingo.lang.Builder;
 
 public class EdmEnumTypeBuilder extends EdmNamedBuilder implements Builder<EdmEnumType>{
 
-	protected String  name;
 	protected boolean isFlags;
 	protected EdmSimpleType underlyingType;
 	protected List<EdmEnumMember> members = new ArrayList<EdmEnumMember>();
@@ -36,14 +35,17 @@ public class EdmEnumTypeBuilder extends EdmNamedBuilder implements Builder<EdmEn
 		this.name = name;
 	}
 	
-	public String getName() {
-		return name;
-	}
+	@Override
+    public EdmEnumTypeBuilder setName(String name) {
+	    super.setName(name);
+	    return this;
+    }
 
-	public EdmEnumTypeBuilder setName(String name) {
-		this.name = name;
-		return this;
-	}
+	@Override
+    public EdmEnumTypeBuilder setTitle(String title) {
+	    super.setTitle(title);
+	    return this;
+    }
 
 	public boolean isFlags() {
 		return isFlags;
@@ -107,13 +109,7 @@ public class EdmEnumTypeBuilder extends EdmNamedBuilder implements Builder<EdmEn
 	    return this;
     }
 
-	@Override
-    public EdmEnumTypeBuilder setDocumentation(String title, String summary, String longDescription) {
-	    super.setDocumentation(title, summary, longDescription);
-	    return this;
-    }
-
 	public EdmEnumType build() {
-	    return new EdmEnumType(name,underlyingType, isFlags, members, documentation);
+	    return new EdmEnumType(name,title,underlyingType, isFlags, members, documentation);
     }
 }

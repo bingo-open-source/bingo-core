@@ -19,14 +19,14 @@ public class EdmFunction extends EdmFunctionBase {
 
 	private final String definingExpression;
 
-	public EdmFunction(String name,EdmType returnType,Iterable<EdmParameter> parameters,String definingExpression) {
-	    super(name,returnType,parameters);
+	public EdmFunction(String name,String title,EdmType returnType,Iterable<EdmParameter> parameters,String definingExpression) {
+	    super(name,title,returnType,parameters);
 	    
 	    this.definingExpression = definingExpression;
     }
 	
-	public EdmFunction(String name,EdmType returnType,Iterable<EdmParameter> parameters,String definingExpression,EdmDocumentation documentation) {
-		this(name,returnType,parameters,definingExpression);
+	public EdmFunction(String name,String title,EdmType returnType,Iterable<EdmParameter> parameters,String definingExpression,EdmDocumentation documentation) {
+		this(name,title,returnType,parameters,definingExpression);
 		
 		this.documentation = documentation;
 	}

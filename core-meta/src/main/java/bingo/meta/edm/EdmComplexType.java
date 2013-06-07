@@ -25,6 +25,10 @@ public class EdmComplexType extends EdmNamedStructualType {
 	    super(name, properties, isAbstract);
     }
 
+	public EdmComplexType(String name, String title, Iterable<EdmProperty> properties, boolean isAbstract) {
+	    super(name, title, properties, isAbstract);
+    }
+
 	@Override
     public final EdmTypeKind getTypeKind() {
 	    return EdmTypeKind.Complex;

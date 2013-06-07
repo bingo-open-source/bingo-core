@@ -42,6 +42,18 @@ public class EdmFunctionImportBuilder extends EdmNamedBuilder implements Builder
 	    super(name);
     }
 	
+	@Override
+    public EdmFunctionImportBuilder setName(String name) {
+	    super.setName(name);
+	    return this;
+    }
+
+	@Override
+    public EdmFunctionImportBuilder setTitle(String title) {
+	    super.setTitle(title);
+	    return this;
+    }
+
 	public Enumerable<EdmParameter> getParameters() {
     	return Enumerables.of(parameters);
     }
@@ -80,17 +92,17 @@ public class EdmFunctionImportBuilder extends EdmNamedBuilder implements Builder
 	}
 	
 	public EdmFunctionImportBuilder addParameter(String name,EdmType type,EdmParameterMode mode){
-		parameters.add(new EdmParameter(name, type, mode));
+		parameters.add(new EdmParameter(name,null,type, mode));
 		return this;
 	}
 	
 	public EdmFunctionImportBuilder addInParameter(String name,EdmType type){
-		parameters.add(new EdmParameter(name, type, EdmParameterMode.In));
+		parameters.add(new EdmParameter(name, null, type, EdmParameterMode.In));
 		return this;
 	}
 	
 	public EdmFunctionImportBuilder addOutParameter(String name,EdmType type){
-		parameters.add(new EdmParameter(name, type, EdmParameterMode.Out));
+		parameters.add(new EdmParameter(name, null, type, EdmParameterMode.Out));
 		return this;
 	}
 	
@@ -105,14 +117,8 @@ public class EdmFunctionImportBuilder extends EdmNamedBuilder implements Builder
 	    super.setDocumentation(summary, longDescription);
 	    return this;
     }
-	
-	@Override
-    public EdmFunctionImportBuilder setDocumentation(String title, String summary, String longDescription) {
-	    super.setDocumentation(title, summary, longDescription);
-	    return this;
-    }
 
 	public EdmFunctionImport build() {
-	    return new EdmFunctionImport(name, entitySet, returnType, parameters,httpMethod,sideEffecting,documentation);
+	    return new EdmFunctionImport(name,title,entitySet, returnType, parameters,httpMethod,sideEffecting,documentation);
     }
 }

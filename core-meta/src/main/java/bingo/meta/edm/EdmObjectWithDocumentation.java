@@ -28,13 +28,6 @@ public abstract class EdmObjectWithDocumentation extends EdmObject {
 	/**
 	 * may be empty
 	 */
-	public String getTitle(){
-		return null == documentation ? Strings.EMPTY : documentation.getTitle();
-	}
-	
-	/**
-	 * may be empty
-	 */
 	public String getSummary(){
 		return null == documentation ? Strings.EMPTY : documentation.getSummary();
 	}

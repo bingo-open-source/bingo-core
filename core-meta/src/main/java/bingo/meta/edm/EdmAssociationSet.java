@@ -23,15 +23,15 @@ public class EdmAssociationSet extends EdmNamedObject {
 	
 	private final EdmAssociationSetEnd end2;
 	
-	public EdmAssociationSet(String name,EdmAssociation association,EdmAssociationSetEnd end1,EdmAssociationSetEnd end2){
-		super(name);
+	public EdmAssociationSet(String name,String title,EdmAssociation association,EdmAssociationSetEnd end1,EdmAssociationSetEnd end2){
+		super(name,title);
 		this.association = association;
 		this.end1        = end1;
 		this.end2        = end2;
 	}
 	
-	public EdmAssociationSet(String name,EdmAssociation association,EdmAssociationSetEnd end1,EdmAssociationSetEnd end2,EdmDocumentation documentation){
-		this(name,association,end1,end2);
+	public EdmAssociationSet(String name,String title,EdmAssociation association,EdmAssociationSetEnd end1,EdmAssociationSetEnd end2,EdmDocumentation documentation){
+		this(name,title,association,end1,end2);
 		
 		this.documentation = documentation;
 	}

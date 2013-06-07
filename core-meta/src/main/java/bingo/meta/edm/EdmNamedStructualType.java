@@ -16,22 +16,27 @@
 package bingo.meta.edm;
 
 import bingo.lang.Named;
+import bingo.lang.Strings;
 
 public abstract class EdmNamedStructualType extends EdmStructualType implements Named {
 
 	protected final String name;
+	protected final String title;
 	
 	protected final boolean isAbstract;
 	
 	protected EdmNamedStructualType(String name,Iterable<EdmProperty> properties) {
-		super(properties);
-		this.name = name;
-		this.isAbstract = false;
+		this(name,null,properties,false);
 	}
-
+	
 	protected EdmNamedStructualType(String name,Iterable<EdmProperty> properties,boolean isAbstract) {
+		this(name,null,properties,isAbstract);
+	}
+	
+	protected EdmNamedStructualType(String name,String title,Iterable<EdmProperty> properties,boolean isAbstract) {
 		super(properties);
-		this.name = name;
+		this.name       = name;
+		this.title      = title;
 		this.isAbstract = isAbstract;
 	}
 	
@@ -39,6 +44,14 @@ public abstract class EdmNamedStructualType extends EdmStructualType implements 
 	    return name;
     }
 	
+	public String getTitle() {
+		return title;
+	}
+	
+	public String getTitleOrName(){
+		return Strings.firstNotEmpty(title,name);
+	}
+
 	public boolean isAbstract() {
     	return isAbstract;
     }

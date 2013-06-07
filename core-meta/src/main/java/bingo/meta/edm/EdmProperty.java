@@ -41,12 +41,12 @@ public class EdmProperty extends EdmNamedObject {
 	private final String  fcContentKind;  //See EdmFeedCustomization.SyndicationTextContentKind
 	private final boolean fcKeepInContent;
 	
-	public EdmProperty(String name,EdmType type,
+	public EdmProperty(String name,String title,EdmType type,
 					   boolean nullable,String defaultValue,
 					   boolean fixedLength,int maxLength,int precision,int scale,
 					   String fcTargetPath,String fcContentKind,boolean fcKeepInContent) {
 
-		super(name);
+		super(name,title);
 		
 		this.type = type;
 		
@@ -65,13 +65,13 @@ public class EdmProperty extends EdmNamedObject {
 		Assert.notNull(type,"type is required in EdmProperty");
 	}
 	
-	public EdmProperty(String name,EdmType type,
+	public EdmProperty(String name,String title,EdmType type,
 					   boolean nullable,String defaultValue,
 					   boolean fixedLength,int maxLength,int precision,int scale,
 					   String fcTargetPath,String fcContentKind,boolean fcKeepInContent,
 					   EdmDocumentation documentation) {
 		
-		this(name,type,nullable,defaultValue,fixedLength,maxLength,precision,scale,fcTargetPath,fcContentKind,fcKeepInContent);
+		this(name,title,type,nullable,defaultValue,fixedLength,maxLength,precision,scale,fcTargetPath,fcContentKind,fcKeepInContent);
 
 		this.documentation   = documentation;
 	}

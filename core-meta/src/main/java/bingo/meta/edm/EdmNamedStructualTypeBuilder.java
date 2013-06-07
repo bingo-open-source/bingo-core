@@ -19,7 +19,8 @@ import bingo.lang.Named;
 
 public abstract class EdmNamedStructualTypeBuilder extends EdmStructualTypeBuilder implements Named {
 
-	protected String	name;
+	protected String  name;
+	protected String  title;
 	protected boolean isAbstract;
 	
 	protected EdmNamedStructualTypeBuilder(){
@@ -36,6 +37,15 @@ public abstract class EdmNamedStructualTypeBuilder extends EdmStructualTypeBuild
 
 	public EdmNamedStructualTypeBuilder setName(String name) {
 		this.name = name;
+		return this;
+	}
+	
+	public String getTitle() {
+		return title;
+	}
+
+	public EdmNamedStructualTypeBuilder setTitle(String title) {
+		this.title = title;
 		return this;
 	}
 

@@ -40,6 +40,12 @@ public class EdmComplexTypeBuilder extends EdmNamedStructualTypeBuilder implemen
     }
 	
 	@Override
+    public EdmComplexTypeBuilder setTitle(String title) {
+	    super.setTitle(title);
+	    return this;
+    }
+
+	@Override
     public EdmComplexTypeBuilder addProperty(EdmProperty property) {
 	    super.addProperty(property);
 	    return this;
@@ -62,14 +68,8 @@ public class EdmComplexTypeBuilder extends EdmNamedStructualTypeBuilder implemen
 	    super.setDocumentation(summary, longDescription);
 	    return this;
     }
-	
-	@Override
-    public EdmComplexTypeBuilder setDocumentation(String title, String summary, String longDescription) {
-	    super.setDocumentation(title, summary, longDescription);
-	    return this;
-    }
 
 	public EdmComplexType build() {
-	    return new EdmComplexType(name, properties, isAbstract);
+	    return new EdmComplexType(name,title,properties, isAbstract);
     }
 }

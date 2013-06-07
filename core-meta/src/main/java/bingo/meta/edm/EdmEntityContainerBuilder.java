@@ -40,6 +40,18 @@ public class EdmEntityContainerBuilder extends EdmNamedBuilder implements Builde
 		this.name = name;
 	}
 	
+	@Override
+    public EdmEntityContainerBuilder setName(String name) {
+	    super.setName(name);
+	    return this;
+    }
+
+	@Override
+    public EdmEntityContainerBuilder setTitle(String title) {
+	    super.setTitle(title);
+	    return this;
+    }
+
 	public boolean isDefault() {
     	return isDefault;
     }
@@ -71,7 +83,7 @@ public class EdmEntityContainerBuilder extends EdmNamedBuilder implements Builde
     }
 	
 	public EdmEntityContainerBuilder addEntitySet(String name,EdmEntityTypeRef entityType){
-		return addEntitySet(new EdmEntitySet(name, entityType));
+		return addEntitySet(new EdmEntitySet(name,null,entityType));
 	}
 	
 	public EdmEntityContainerBuilder addEntitySet(EdmEntitySet entitySet) {
@@ -127,12 +139,6 @@ public class EdmEntityContainerBuilder extends EdmNamedBuilder implements Builde
 	@Override
     public EdmEntityContainerBuilder setDocumentation(String summary, String longDescription) {
 	    super.setDocumentation(summary, longDescription);
-	    return this;
-    }
-	
-	@Override
-    public EdmEntityContainerBuilder setDocumentation(String title, String summary, String longDescription) {
-	    super.setDocumentation(title, summary, longDescription);
 	    return this;
     }
 

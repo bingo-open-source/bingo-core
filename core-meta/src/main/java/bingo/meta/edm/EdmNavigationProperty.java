@@ -23,15 +23,15 @@ public class EdmNavigationProperty extends EdmNamedObject {
 	
 	private final EdmAssociationEnd toRole;
 	
-	public EdmNavigationProperty(String name,EdmAssociation relationship,EdmAssociationEnd fromRole,EdmAssociationEnd toRole){
-		super(name);
+	public EdmNavigationProperty(String name,String title,EdmAssociation relationship,EdmAssociationEnd fromRole,EdmAssociationEnd toRole){
+		super(name,title);
 		this.relationship = relationship;
 		this.fromRole = fromRole;
 		this.toRole = toRole;
 	}
 	
-	public EdmNavigationProperty(String name,EdmAssociation relationship,EdmAssociationEnd fromRole,EdmAssociationEnd toRole,EdmDocumentation documentation){
-		this(name,relationship,fromRole,toRole);
+	public EdmNavigationProperty(String name,String title,EdmAssociation relationship,EdmAssociationEnd fromRole,EdmAssociationEnd toRole,EdmDocumentation documentation){
+		this(name,title,relationship,fromRole,toRole);
 	
 		this.documentation = documentation;
 	}

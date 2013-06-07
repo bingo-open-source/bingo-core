@@ -17,25 +17,12 @@ package bingo.meta.edm;
 
 public class EdmDocumentation extends EdmObject {
 	
-	//custom attribute ,not defined in edm
-	private final String title;
-
 	private final String summary;
-	
 	private final String longDescription;
 	
 	public EdmDocumentation(String summary,String longDescription){
-		this(null,summary,longDescription);
-	}
-	
-	public EdmDocumentation(String title, String summary,String longDescription){
-		this.title   = title;
 		this.summary = summary;
 		this.longDescription = longDescription;
-	}
-	
-	public String getTitle() {
-		return title;
 	}
 
 	public String getSummary() {

@@ -18,23 +18,27 @@ package bingo.meta.edm;
 import bingo.lang.Enumerable;
 import bingo.lang.Enumerables;
 import bingo.lang.Named;
+import bingo.lang.Strings;
 
 public class EdmEnumType extends EdmType implements Named {
 	
 	protected final String  name;
+	protected final String  title;
 	protected final EdmSimpleType underlyingType;
 	protected final boolean isFlags;
 	protected final Enumerable<EdmEnumMember> members;
 	
-	public EdmEnumType(String name, EdmSimpleType underlyingType, boolean isFlags, Iterable<EdmEnumMember> members) {
+	public EdmEnumType(String name,String title, EdmSimpleType underlyingType, boolean isFlags, Iterable<EdmEnumMember> members) {
 	    this.name = name;
+	    this.title = title;
 	    this.underlyingType = underlyingType;
 	    this.isFlags = isFlags;
 	    this.members = Enumerables.of(members);
     }
 	
-	public EdmEnumType(String name, EdmSimpleType underlyingType, boolean isFlags, Iterable<EdmEnumMember> members,EdmDocumentation documentation) {
+	public EdmEnumType(String name,String title, EdmSimpleType underlyingType, boolean isFlags, Iterable<EdmEnumMember> members,EdmDocumentation documentation) {
 	    this.name = name;
+	    this.title = title;
 	    this.underlyingType = underlyingType;
 	    this.isFlags = isFlags;
 	    this.members = Enumerables.of(members);
@@ -45,6 +49,14 @@ public class EdmEnumType extends EdmType implements Named {
 	    return name;
     }
 	
+	public String getTitle() {
+		return title;
+	}
+	
+	public String getTitleOrName(){
+		return Strings.firstNotEmpty(title,name);
+	}
+
 	public EdmSimpleType getUnderlyingType() {
 		return underlyingType;
 	}
