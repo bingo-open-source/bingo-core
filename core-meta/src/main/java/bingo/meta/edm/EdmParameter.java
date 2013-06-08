@@ -21,8 +21,9 @@ public class EdmParameter extends EdmNamedObject {
 	
 	private final EdmParameterMode mode;
 	
-	//extended property
 	private final Boolean nullable;
+	
+	//extended property
 	private final String  serializeType;
 	private final String  serializeFormat;
 	
