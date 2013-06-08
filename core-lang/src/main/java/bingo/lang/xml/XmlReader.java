@@ -42,7 +42,19 @@ public interface XmlReader {
     
     String requiredGetAttributeValue(String name);
     
+    Boolean getAttributeValueForBool(QName name);
+    
+    Boolean getAttributeValueForBool(String name);
+    
+    boolean getAttributeValueForBool(QName name,boolean defaultValue);
+    
     boolean getAttributeValueForBool(String name,boolean defaultValue);
+    
+    Integer getAttributeValueForInt(QName name);
+    
+    Integer getAttributeValueForInt(String name);
+    
+    int getAttributeValueForInt(QName name,int defaultValue);
     
     int getAttributeValueForInt(String name,int defaultValue);
     

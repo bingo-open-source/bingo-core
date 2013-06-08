@@ -41,10 +41,23 @@ public class EdmProperty extends EdmNamedObject {
 	private final String  fcContentKind;  //See EdmFeedCustomization.SyndicationTextContentKind
 	private final boolean fcKeepInContent;
 	
+	//-------------------------------------------------------------------
+	//Extended properties
+	//-------------------------------------------------------------------
+	private final String serializeType;
+	private final String serializeFormat;
+	
 	public EdmProperty(String name,String title,EdmType type,
 					   boolean nullable,String defaultValue,
-					   boolean fixedLength,int maxLength,int precision,int scale,
-					   String fcTargetPath,String fcContentKind,boolean fcKeepInContent) {
+					   boolean fixedLength,
+					   int     maxLength,
+					   int     precision,
+					   int     scale,
+					   String  fcTargetPath,
+					   String  fcContentKind,
+					   boolean fcKeepInContent,
+					   String  serializeType,
+					   String  serializeFormat) {
 
 		super(name,title);
 		
@@ -59,7 +72,9 @@ public class EdmProperty extends EdmNamedObject {
 		
 		this.fcTargetPath    = fcTargetPath;
 		this.fcContentKind   = fcContentKind;
-		this.fcKeepInContent = fcKeepInContent;		
+		this.fcKeepInContent = fcKeepInContent;	
+		this.serializeType   = serializeType;
+		this.serializeFormat = serializeFormat;
 		
 		Assert.notNull(name,"name is required in EdmProperty");
 		Assert.notNull(type,"type is required in EdmProperty");
@@ -69,9 +84,10 @@ public class EdmProperty extends EdmNamedObject {
 					   boolean nullable,String defaultValue,
 					   boolean fixedLength,int maxLength,int precision,int scale,
 					   String fcTargetPath,String fcContentKind,boolean fcKeepInContent,
+					   String serializeType,String serialzeFormat,
 					   EdmDocumentation documentation) {
 		
-		this(name,title,type,nullable,defaultValue,fixedLength,maxLength,precision,scale,fcTargetPath,fcContentKind,fcKeepInContent);
+		this(name,title,type,nullable,defaultValue,fixedLength,maxLength,precision,scale,fcTargetPath,fcContentKind,fcKeepInContent,serializeType,serialzeFormat);
 
 		this.documentation   = documentation;
 	}
@@ -115,6 +131,14 @@ public class EdmProperty extends EdmNamedObject {
 	public boolean isFcKeepInContent() {
     	return fcKeepInContent;
     }
+	
+	public String getSerializeType() {
+		return serializeType;
+	}
+
+	public String getSerializeFormat() {
+		return serializeFormat;
+	}
 
 	@Override
     public String toString() {

@@ -42,6 +42,10 @@ public class EdmPropertyBuilder extends EdmNamedBuilder implements Builder<EdmPr
 	
 	protected boolean fcKeepInContent;	
 	
+	protected String serializeType;
+	
+	protected String serializeFormat;
+	
 	public EdmPropertyBuilder(){
 		
 	}
@@ -169,6 +173,24 @@ public class EdmPropertyBuilder extends EdmNamedBuilder implements Builder<EdmPr
     	this.fcKeepInContent = fcKeepInContent;
     	return this;
     }
+	
+	public String getSerializeType() {
+		return serializeType;
+	}
+
+	public EdmPropertyBuilder setSerializeType(String serializeType) {
+		this.serializeType = serializeType;
+		return this;
+	}
+
+	public String getSerializeFormat() {
+		return serializeFormat;
+	}
+
+	public EdmPropertyBuilder setSerializeFormat(String serializeFormat) {
+		this.serializeFormat = serializeFormat;
+		return this;
+	}
 
 	@Override
 	public EdmPropertyBuilder setDocumentation(EdmDocumentation documentation) {
@@ -183,6 +205,9 @@ public class EdmPropertyBuilder extends EdmNamedBuilder implements Builder<EdmPr
 	}
 	
 	public EdmProperty build() {
-		return new EdmProperty(name,title, type , nullable, defaultValue, fixedLength, maxLength, precision, scale,fcTargetPath,fcContentKind,fcKeepInContent, documentation);
+		return new EdmProperty(name,title, type , nullable, defaultValue, 
+							   fixedLength, maxLength, precision, scale,
+							   fcTargetPath,fcContentKind,fcKeepInContent,
+							   serializeType,serializeFormat,documentation);
 	}
 }

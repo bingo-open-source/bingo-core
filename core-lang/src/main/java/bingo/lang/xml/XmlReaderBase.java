@@ -103,9 +103,39 @@ abstract class XmlReaderBase implements XmlReader {
 	    return value;
     }
 
+	public Boolean getAttributeValueForBool(QName name) {
+		String value = getAttributeValue(name);
+		return Strings.isEmpty(value) ? null : Converts.toBoolean(value);
+    }
+
+	public Boolean getAttributeValueForBool(String name) {
+		String value = getAttributeValue(name);
+		return Strings.isEmpty(value) ? null : Converts.toBoolean(value);
+    }
+
+	public boolean getAttributeValueForBool(QName name, boolean defaultValue) {
+		String value = getAttributeValue(name);
+		return Strings.isEmpty(value) ? defaultValue : Converts.toBoolean(value);
+    }
+
 	public boolean getAttributeValueForBool(String name, boolean defaultValue) {
 		String value = getAttributeValue(name);
 		return Strings.isEmpty(value) ? defaultValue : Converts.toBoolean(value);
+    }
+	
+	public Integer getAttributeValueForInt(QName name) {
+		String value = getAttributeValue(name);
+		return Strings.isEmpty(value) ? null : Converts.toInt(value);
+    }
+	
+	public Integer getAttributeValueForInt(String name) {
+		String value = getAttributeValue(name);
+		return Strings.isEmpty(value) ? null : Converts.toInt(value);
+    }
+	
+	public int getAttributeValueForInt(QName name, int defaultValue) {
+		String value = getAttributeValue(name);
+		return Strings.isEmpty(value) ? defaultValue : Converts.toInt(value);
     }
 	
 	public int getAttributeValueForInt(String name, int defaultValue) {

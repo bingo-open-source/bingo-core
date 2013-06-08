@@ -47,4 +47,23 @@ public class ReflectParameter implements Named {
 	public final Annotation[] getAnnotations() {
 		return annotations;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public final <T extends Annotation> T getAnnotation(Class<T> annotationType){
+		if(null == annotations){
+			return null;
+		}
+		
+		for(Annotation a : annotations){
+			if(a.annotationType().equals(annotationType)){
+				return (T)a;
+			}
+		}
+		
+		return null;
+	}
+	
+	public final boolean isAnnotationPresent(Class<? extends Annotation> annotationType){
+		return getAnnotation(annotationType) != null;
+	}
 }

@@ -21,6 +21,9 @@ public class EdmParameterBuilder extends EdmNamedBuilder implements Builder<EdmP
 	
 	protected EdmParameterMode mode;
 	protected EdmType          type;
+	protected Boolean		   nullable;
+	protected String		   serializeType;
+	protected String           serializeFormat;
 	
 	@Override
     public EdmParameterBuilder setName(String name) {
@@ -43,6 +46,33 @@ public class EdmParameterBuilder extends EdmNamedBuilder implements Builder<EdmP
 		this.type = type;
 		return this;
 	}
+	
+	public Boolean getNullable() {
+		return nullable;
+	}
+
+	public EdmParameterBuilder setNullable(Boolean nullable) {
+		this.nullable = nullable;
+		return this;
+	}
+
+	public String getSerializeType() {
+		return serializeType;
+	}
+
+	public EdmParameterBuilder setSerializeType(String serializeType) {
+		this.serializeType = serializeType;
+		return this;
+	}
+
+	public String getSerializeFormat() {
+		return serializeFormat;
+	}
+
+	public EdmParameterBuilder setSerializeFormat(String serializeFormat) {
+		this.serializeFormat = serializeFormat;
+		return this;
+	}
 
 	@Override
     public EdmParameterBuilder setDocumentation(EdmDocumentation documentation) {
@@ -57,6 +87,6 @@ public class EdmParameterBuilder extends EdmNamedBuilder implements Builder<EdmP
     }
 
 	public EdmParameter build() {
-	    return new EdmParameter(name,title, type, mode, documentation);
+	    return new EdmParameter(name,title, type, mode, nullable, serializeType, serializeFormat, documentation);
     }
 }

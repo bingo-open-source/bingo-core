@@ -92,17 +92,17 @@ public class EdmFunctionImportBuilder extends EdmNamedBuilder implements Builder
 	}
 	
 	public EdmFunctionImportBuilder addParameter(String name,EdmType type,EdmParameterMode mode){
-		parameters.add(new EdmParameter(name,null,type, mode));
+		parameters.add(new EdmParameter(name,null,type, mode,false,null,null));
 		return this;
 	}
 	
 	public EdmFunctionImportBuilder addInParameter(String name,EdmType type){
-		parameters.add(new EdmParameter(name, null, type, EdmParameterMode.In));
+		parameters.add(new EdmParameter(name, null, type, EdmParameterMode.In,false, null,null));
 		return this;
 	}
 	
 	public EdmFunctionImportBuilder addOutParameter(String name,EdmType type){
-		parameters.add(new EdmParameter(name, null, type, EdmParameterMode.Out));
+		parameters.add(new EdmParameter(name, null, type, EdmParameterMode.Out,false, null,null));
 		return this;
 	}
 	

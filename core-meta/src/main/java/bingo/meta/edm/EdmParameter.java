@@ -21,14 +21,22 @@ public class EdmParameter extends EdmNamedObject {
 	
 	private final EdmParameterMode mode;
 	
-	public EdmParameter(String name,String title,EdmType type,EdmParameterMode mode) {
+	//extended property
+	private final Boolean nullable;
+	private final String  serializeType;
+	private final String  serializeFormat;
+	
+	public EdmParameter(String name,String title,EdmType type,EdmParameterMode mode,Boolean nullable,String serializeType,String serializeFormat) {
 		super(name,title);
 		this.type = type;
 		this.mode = mode;
+		this.nullable		 = nullable;
+		this.serializeType   = serializeType;
+		this.serializeFormat = serializeFormat;
 	}
 	
-	public EdmParameter(String name,String title,EdmType type,EdmParameterMode mode,EdmDocumentation documentation) {
-		this(name,title,type,mode);
+	public EdmParameter(String name,String title,EdmType type,EdmParameterMode mode,Boolean nullable,String serializeType,String serializeFormat,EdmDocumentation documentation) {
+		this(name,title,type,mode,nullable,serializeType,serializeFormat);
 		this.documentation = documentation;
 	}
 
@@ -39,4 +47,16 @@ public class EdmParameter extends EdmNamedObject {
 	public EdmType getType() {
     	return type;
     }
+	
+	public Boolean getNullable() {
+		return nullable;
+	}
+
+	public String getSerializeType() {
+		return serializeType;
+	}
+
+	public String getSerializeFormat() {
+		return serializeFormat;
+	}
 }
