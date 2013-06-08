@@ -54,7 +54,12 @@ public class EdmSimpleType extends EdmType implements Named {
 	public static final Enumerable<EdmSimpleType> ALL = Enumerables.of(map.values());
 	
 	public static EdmSimpleType of(String kindName) {
-		return of(EdmSimpleTypeKind.valueOf(kindName));
+		for(EdmSimpleType type : ALL){
+			if(type.getName().equals(kindName)){
+				return type;
+			}
+		}
+		return null;
 	}
 	
 	public static EdmSimpleType of(EdmSimpleTypeKind kind) {

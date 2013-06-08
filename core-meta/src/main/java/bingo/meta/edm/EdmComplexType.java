@@ -16,21 +16,30 @@
 package bingo.meta.edm;
 
 public class EdmComplexType extends EdmNamedStructualType {
+	
+	private final EdmComplexType baseType;
 
-	public EdmComplexType(String name, Iterable<EdmProperty> properties) {
+	public EdmComplexType(String name,Iterable<EdmProperty> properties,EdmComplexType baseType) {
 	    super(name,properties);
+	    this.baseType = baseType;
     }
 
-	public EdmComplexType(String name, Iterable<EdmProperty> properties, boolean isAbstract) {
+	public EdmComplexType(String name,Iterable<EdmProperty> properties,boolean isAbstract,EdmComplexType baseType) {
 	    super(name, properties, isAbstract);
+	    this.baseType = baseType;
     }
 
-	public EdmComplexType(String name, String title, Iterable<EdmProperty> properties, boolean isAbstract) {
+	public EdmComplexType(String name, String title, Iterable<EdmProperty> properties, boolean isAbstract,EdmComplexType baseType) {
 	    super(name, title, properties, isAbstract);
+	    this.baseType = baseType;
     }
 
 	@Override
     public final EdmTypeKind getTypeKind() {
 	    return EdmTypeKind.Complex;
     }
+
+	public EdmComplexType getBaseType() {
+		return baseType;
+	}
 }

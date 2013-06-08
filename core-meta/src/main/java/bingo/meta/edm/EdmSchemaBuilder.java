@@ -84,6 +84,15 @@ public class EdmSchemaBuilder extends EdmBuilderWithDocumentation implements Bui
 		}
 		return null;
 	}
+	
+	public EdmComplexType findComplexType(String name){
+		for(EdmComplexType complexType : getComplexTypes()){
+			if(complexType.getName().equals(name)){
+				return complexType;
+			}
+		}
+		return null;
+	}
 
 	public List<EdmComplexType> getComplexTypes() {
 		return complexTypes;

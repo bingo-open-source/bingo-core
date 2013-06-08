@@ -19,6 +19,8 @@ import bingo.lang.Builder;
 
 public class EdmComplexTypeBuilder extends EdmNamedStructualTypeBuilder implements Builder<EdmComplexType> {
 	
+	protected EdmComplexType baseType;
+	
 	public EdmComplexTypeBuilder() {
 	    super();
     }
@@ -56,6 +58,15 @@ public class EdmComplexTypeBuilder extends EdmNamedStructualTypeBuilder implemen
 	    super.addProperty(name, type, nullable);
 	    return this;
     }
+	
+	public EdmComplexType getBaseType() {
+		return baseType;
+	}
+
+	public EdmComplexTypeBuilder setBaseType(EdmComplexType baseType) {
+		this.baseType = baseType;
+		return this;
+	}
 
 	@Override
     public EdmComplexTypeBuilder setDocumentation(EdmDocumentation documentation) {
@@ -70,6 +81,6 @@ public class EdmComplexTypeBuilder extends EdmNamedStructualTypeBuilder implemen
     }
 
 	public EdmComplexType build() {
-	    return new EdmComplexType(name,title,properties, isAbstract);
+	    return new EdmComplexType(name,title,properties, isAbstract, baseType);
     }
 }
