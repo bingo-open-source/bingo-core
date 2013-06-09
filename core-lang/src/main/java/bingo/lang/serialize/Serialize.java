@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 the original author or authors.
+ * Copyright 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,22 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bingo.meta.edm;
+package bingo.lang.serialize;
 
-public enum EdmTypeKind {
-	Unresolved,
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
+@Target({ElementType.FIELD,ElementType.METHOD,ElementType.PARAMETER})
+@Retention(RUNTIME)
+public @interface Serialize {
+
+	public String value();
 	
-	Simple,
-	
-	Complex,
-	
-	Entity,
-	
-	Collection,
-	
-	Row,
-	
-	Reference,
-	
-	Enum;
 }

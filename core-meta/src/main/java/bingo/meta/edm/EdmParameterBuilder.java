@@ -36,10 +36,18 @@ public class EdmParameterBuilder extends EdmNamedBuilder implements Builder<EdmP
 	    super.setTitle(title);
 	    return this;
     }
+	
+	public EdmParameterMode getMode() {
+		return mode;
+	}
 
 	public EdmParameterBuilder setMode(EdmParameterMode mode) {
 		this.mode = mode;
 		return this;
+	}
+	
+	public EdmType getType() {
+		return type;
 	}
 
 	public EdmParameterBuilder setType(EdmType type) {

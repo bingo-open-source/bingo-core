@@ -29,6 +29,9 @@ import bingo.lang.annotations.NamedAnnotation;
 import bingo.lang.beans.BeanModel;
 import bingo.lang.beans.BeanProperty;
 import bingo.lang.reflect.ReflectClass;
+import bingo.lang.serialize.Serialize;
+import bingo.lang.serialize.Serializer;
+import bingo.lang.serialize.Serializes;
 
 
 @SuppressWarnings({"rawtypes"})
@@ -75,6 +78,8 @@ public class BeanConverter extends AbstractConverter<Object>{
 				}
 			}
 			
+			Serializer serializer = Serializes.getSerializer(prop.getAnnotation(Serialize.class));
+			
 	        for(Object entryObject : map.entrySet()){
 	            Entry entry = (Entry)entryObject;
 	            
@@ -83,7 +88,11 @@ public class BeanConverter extends AbstractConverter<Object>{
 	            if(name.equalsIgnoreCase(key) || (multiNames && prop.getName().equalsIgnoreCase(key))){
 		            Object param = entry.getValue();
 		            
-		            if(null != prop && prop.isWritable()){
+		            if(null != serializer && null != param && param instanceof String){
+		            	param = serializer.tryDeserialize((String)param);
+		            }
+		            
+		            if(prop.isWritable()){
 		                prop.setValue(bean, Converts.convert(param,prop.getType(),prop.getGenericType()));
 		                break;
 		            }
