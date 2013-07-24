@@ -95,17 +95,39 @@ public class ReflectConstructor<T> extends ReflectMember {
 			if(null == names){
 				names = createUnknowParameterNames(parameters.length);
 			}
-
-			for(int i=0;i<parameters.length;i++){
-				ReflectParameter p = new ReflectParameter();
+			
+			if(javaConstructor.getDeclaringClass().isEnum() && javaConstructor.getGenericParameterTypes().length != this.parameters.length){
+				//enum constructor's parameter size not equals to generic parameter types.
 				
-				p.index       = i+1;
-				p.name        = names[i];
-				p.type        = javaConstructor.getParameterTypes()[i];
-				p.genericType = javaConstructor.getGenericParameterTypes()[i];
-				p.annotations = javaConstructor.getParameterAnnotations()[i];
+				for(int i=0;i<parameters.length;i++){
+					ReflectParameter p = new ReflectParameter();
+					
+					p.index       = i+1;
+					p.name        = names[i];
+					p.type        = javaConstructor.getParameterTypes()[i];
+					p.annotations = javaConstructor.getParameterAnnotations()[i];
+					
+					if(i < 2){
+						p.genericType = p.type;
+					}else{
+						p.genericType = javaConstructor.getGenericParameterTypes()[i-2];
+					}
+					
+					parameters[i] = p;
+				}
 				
-				parameters[i] = p;
+			}else{
+				for(int i=0;i<parameters.length;i++){
+					ReflectParameter p = new ReflectParameter();
+					
+					p.index       = i+1;
+					p.name        = names[i];
+					p.type        = javaConstructor.getParameterTypes()[i];
+					p.genericType = javaConstructor.getGenericParameterTypes()[i];
+					p.annotations = javaConstructor.getParameterAnnotations()[i];
+					
+					parameters[i] = p;
+				}
 			}
 		}
 	}
