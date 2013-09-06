@@ -289,6 +289,10 @@ public class Converts {
         }
 	}
 	
+	public static boolean contains(Class<?> type) {
+		return converters.containsKey(type);
+	}
+	
 	public static <E> List<E> toList(Class<E> elementType,Object value){
 		value = trimToNull(value);
 		
